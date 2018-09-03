@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>新建资产巡查记录</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta charset="utf-8" />
+ <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="../css/weui.css"/>
+    <link rel="stylesheet" href="../css/example.css"/>
+    <script src="../../../js/swiper.js"></script>
+<style type="text/css">
+    body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
+</style>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="../../../js/jquery-weui.js"></script>
+</head>
+<body>
+ <form action="" novalidate>
+	<div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">资产名称</label></div>
+                <div id="address" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    
+    <!--  
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">管理分区</label></div>
+                <div id="manageRegion" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    -->
+    
+    <div class="weui-cells weui-cells_form">
+     <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">检查日期</label></div>
+        <div  class="weui-cell__bd">
+         <input id="happenTime" class="weui-input" type="date"/>
+        </div>
+     </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form">
+     <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">检查结果</label></div>
+        <div id="progress_img" class="weui-cell weui-cell_warn">                  
+            </div>
+        <div class="weui-cell__ft">
+      		<input id="check_name" class="weui-switch" type="checkbox">
+    	</div>
+     </div>
+    </div>
+   	
+ 	<div id="context" >
+    
+    <div class="weui-cells weui-cells_form">
+     <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">备注</label></div>
+        <div  class="weui-cell__bd">
+         <input id="remark" class="weui-input" />
+        </div>
+     </div>
+    </div>
+    
+    <div class="weui-cells__title">检查内容</div>
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                  <textarea id="check_circs" class="weui-textarea" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+    
+    </div> 
+    
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">经营项目</label></div>
+                <div id="fareItem" class="weui-cell__bd">
+                </div>
+               
+        </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form" id="dangerClassification_div">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">房屋等级</label></div>
+                <div id="dangerClassification" class="weui-cell__bd">
+                </div>
+               
+        </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">面积</label></div>
+                <div id="buildArea" class="weui-cell__bd">
+                </div>
+        </div>
+    </div>
+   
+    <div class="weui-cells weui-cells_form" id="hire_div">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">租金</label></div>
+                <div id="hire" class="weui-cell__bd">
+                </div>
+        </div>
+    </div>
+   
+   
+    <div class="weui-cells weui-cells_form" id="charter_div">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">承租人</label></div>
+                <div id="charter" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form" id="phone_div">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">承租人电话</label></div>
+                <div id="phone" class="weui-cell__bd">
+                </div>
+            </div>
+    </div> 
+    
+    
+ </form>
+
+ <div class="weui-cell weui-cell_access">
+           <div class="weui-cell__bd">检查位置</div>
+            <div class="weui-cell__ft" style="font-size: 0">               
+                 <span id="navigation" class="weui-btn weui-btn_mini weui-btn_primary" >导航路线</span>
+            </div>
+     </div>
+ <div id="allmap"></div>   
+ 
+ 
+ <div class="weui-cells__title"></div> 
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                </div>
+            </div>
+        </div>
+   
+    <a href="javascript:;" id="save" class="weui-btn weui-btn_plain-primary">保存</a>   
+
+</body>
+
+<script type="text/javascript">
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+   }
+
+  var longitude=getQueryString("longitude");
+  var latitude=getQueryString("latitude");
+  
+  var guid=getQueryString("guid");
+  
+  $.ajax({
+      type: "POST",
+      url: "/voucher/mobile/asset/getRoomInfoByGUID.do",
+      data: { "guid":guid},
+      dataType: "json",
+      error: function (request){
+   	   console.log(request);
+      },
+      success: function (text) {
+      	console.log(text);
+   	   var obj=text.roomInfo;
+   	   var imgs=text.fileBytes;
+
+           	   var guid=obj.guid;
+
+           	   var distance=null;
+           	 /*
+           	   if(obj.lng!=""&&obj.lat!=""){
+           	   	  distance=getDistance(obj.lng,obj.lat);
+           	   	var point = new BMap.Point(obj.lng,obj.lat);
+           	    var pointEnd=point;
+           	    map.centerAndZoom(point, 12);
+           	    var marker = new BMap.Marker(point); // 创建点
+           		map.addOverlay(marker);    //增加点
+           	   }
+           	  
+           	  navigation(pointStart, pointEnd);
+           	  */
+           
+           	if(obj.lng!=""&&obj.lat!=""){  
+           		var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
+  	    		var pointB = new BMap.Point(obj.lng,obj.lat);  // 创建点坐标B--江北区
+  	    		var d=map.getDistance(pointA,pointB);
+           	  
+  	    		if(d>200){
+  	    			$.alert("新建资产巡查记录必须在资产附近的位置", "错误提示", function() {
+  	    			  //点击确认后的回调函数
+  	    				history.back();
+  	    			});
+  	    		}
+           	}
+   
+           	  
+           	  var address=document.createElement("span");
+           	  address.innerHTML=obj.address;
+              $("#address").append(address);
+              
+              /* 
+              var manageRegion=document.createElement("span");
+              manageRegion.innerHTML=obj.manageRegion;
+              $("#manageRegion").append(manageRegion);
+      		  */
+      		  
+              var buildArea=document.createElement("span");
+              buildArea.innerHTML=obj.buildArea+" m<sup>2</sup>";
+              $("#buildArea").append(buildArea);
+       
+              var fareItem=document.createElement("span");
+              fareItem.innerHTML=obj.fareItem;
+              $("#fareItem").append(fareItem);
+              
+              if(obj.dangerClassification!=null&&obj.dangerClassification!=""){
+               	var dangerClassification=document.createElement("a");
+               	dangerClassification.innerHTML=obj.dangerClassification;
+               	$("#dangerClassification").append(dangerClassification);
+              }else{
+            	  $("#dangerClassification_div").hide();
+              }
+              
+              if(obj.charter!=null&&obj.charter!=""){
+              	var charter=document.createElement("span");
+          	 	charter.innerHTML=obj.charter;
+               	$("#charter").append(charter);
+               	
+               	var hire=document.createElement("span");
+                hire.innerHTML=obj.hire;
+                $("#hire").append(hire);
+               	
+              }else{
+            	  $("#charter_div").hide();
+            	  $("#hire_div").hide();
+              }
+              
+              if(obj.phone!=null&&obj.phone!=""){
+            	  console.log("phone="+obj.phone);
+               	var phone=document.createElement("a");
+               	phone.setAttribute("href","tel:"+obj.phone);
+               	phone.innerHTML=obj.phone;
+               	$("#phone").append(phone);
+              }else{
+            	  $("#phone_div").hide();
+              }
+      		  
+             if(obj.lng!=""&&obj.lat!=""){
+          	  	$("#navigation").on("click",function(){
+          		  location.href="/voucher/mobile/1/navigation.html?latitude="+latitude+"&longitude="+longitude+"&latitude2="+obj.lat+"&longitude2="+obj.lng;
+          	  	});
+             }else{
+          		  $("#navigation").hide();
+           	 }
+      }
+  });
+  
+//百度地图API功能
+  var map = new BMap.Map("allmap");    // 创建Map实例
+  
+  var point = new BMap.Point(longitude, latitude);
+  
+  map.centerAndZoom(point, 12);
+  var marker = new BMap.Marker(point); // 创建点
+	map.addOverlay(marker);
+	var str = "我的位置";
+	var opts = {
+			   position : point,    // 指定文本标注所在的地理位置
+			   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
+			}	
+	var label = new BMap.Label(str, opts);  // 创建文本标注对象
+	label.setStyle({
+					 fontSize : "12px",
+					 height : "20px",
+					 lineHeight : "20px",
+					 fontFamily:"微软雅黑"
+				  });
+  map.addOverlay(label);   
+  map.enableScrollWheelZoom(true);
+
+  
+  var geoc = new BMap.Geocoder();
+ 	
+	function keyDown(e) {   		  
+	　   var keycode = e.which;   //取得对应的键值（数字）  	  
+	　   var realkey = String.fromCharCode(e.which); //取得代表改键的真正字符  
+	   var val = document.getElementById("input").value;
+	　   if(keycode==13){
+		   local.search(val);
+	　   }
+	 }     
+    
+
+   	
+	function actionTime(value){
+  	    var date = new Date(value); 
+  	    Y = date.getFullYear() + '-';
+  	    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+  	  	D = date.getDate()<10?'0'+date.getDate():date.getDate();
+  	    h = date.getHours() + ':';
+  	    m = date.getMinutes() + ':';
+  	    s = date.getSeconds(); 
+  		return Y+M+D;
+  	}
+	
+    
+    function getByteLen(val) {    //传入一个字符串
+        var len = 0;
+        for (var i = 0; i < val.length; i++) {
+            if (val[i].match(/[^\x00-\xff]/ig) != null) //全角 
+                len += 2; //如果是全角，占用两个字节  如果mysql中某字段是text, 如果设置编码为utf-8,那么一个中文是占3个字节, gbk是两个字节
+            else
+                len += 1; //半角占用一个字节
+        }
+        return len;
+     }  
+    
+    function getDistance(lng,lat){
+    	var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
+    	var pointB = new BMap.Point(lng,lat);  // 创建点坐标B--江北区
+    	var d=map.getDistance(pointA,pointB)/1000;
+    	return d.toFixed(2)+' KM';  //获取两点距离,保留小数点后两位
+    }
+    
+   
+ 	//happenTime设置为当前时间
+	var timestamp=actionTime(Date.parse(new Date()));
+    console.log(timestamp);
+    $("#happenTime").val(timestamp); 
+ 
+    $("#context").hide();
+    
+    var progress_img=document.createElement("i");
+    progress_img.setAttribute("class","weui-icon-success");
+    $("#progress_img").append(progress_img);
+    
+    $("#check_name").on("click",function(){
+    	var isChecked = $('#check_name').is(":checked");         
+        console.log(isChecked);
+        if(isChecked){
+        	$("#context").show();
+        	progress_img.setAttribute("class","weui-icon-warn");
+        }else{
+        	$("#context").hide();
+        	progress_img.setAttribute("class","weui-icon-success");
+        }
+    });
+    
+    
+   $("#save").on("click",function(){
+    	
+	  geoc.getLocation(point, function(rs){
+	    var addComp;
+	  	addComp = rs.addressComponents;    	
+	  	
+    	var check_name;
+    	var isChecked = $('#check_name').is(":checked");
+    	if(isChecked){
+    		check_name="异常";
+    	}else{
+    		check_name="正常";
+    	}
+    	var happenTime=$("#happenTime").val();
+    	var remark=$("#remark").val();
+    	var check_circs=$("#check_circs").val();
+    	var addComp1=JSON.stringify(addComp);
+
+    	 $.post("/voucher/mobile/assetCheck/insertAssetCheck.do",
+    		  {
+				guid:guid,
+    		 	check_name:check_name,
+		    	happenTime:happenTime,
+		    	remark:remark,
+		    	check_circs:check_circs,
+		    	addComp:addComp1,
+		    	lng:longitude,
+		    	lat:latitude
+		    }, function(data){
+	        	var obj = $.parseJSON(data);
+		    	if (obj.status == 0) {
+		        	alert("新建"+name+"资产巡查记录失败!");
+		        	console.log(obj.status);
+		        } else if (obj.status == 1) {
+		            //存储到服务器成功后的处理
+		            //
+		            var check_id=obj.check_id;
+		        	//alert("新建"+name+"安全巡查记录成功!");
+		        	
+		        	//location.href="CheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
+		        	
+		        	$.alert("新建"+name+"资产巡查记录成功!","",function(){
+		        		
+		        		 $.confirm("是否上传资产巡查记录"+name+"的照片", function() {
+   	     	    			//点击确认后的回调函数
+   			            	
+   	     	    			location.href="aCheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
+   	     	    			
+   			            	}, function() {
+   	     	    			//点击取消后的回调函数
+   	     	    			
+   	     	    			history.back();
+   	     	    			
+   	     	    		});
+		        		 
+		        	});
+		        }else{
+		        	
+		        	$.alert("新建资产巡查记录失败!");
+		        	
+		        }
+		    });
+	  
+	   }); 
+    	
+    });
+    
+    url=document.location.toString();
+
+	 $.ajax({
+	     url : "../../../wechat/sign.do",
+	     data : {
+	    	 campusId:1,
+	    	 url:url
+	     },
+	     async: false,
+	     type : "GET",
+	     success : function(data) {
+	    	 var ticket=JSON.parse(data);
+       	     /*
+     	      * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
+     	      */  
+       	          
+	    	 
+	    	 wx.config({
+	    		debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	      		appId: ticket.appId,
+	      		timestamp: ticket.timestamp,
+	      		nonceStr: ticket.nonceStr,
+	      		signature: ticket.signature,
+	      		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+	                            'onMenuShareAppMessage', 'onMenuShareQQ',
+	                            'onMenuShareWeibo', 'hideMenuItems',
+	                            'showMenuItems', 'hideAllNonBaseMenuItem',
+	                            'showAllNonBaseMenuItem', 'translateVoice',
+	                            'startRecord', 'stopRecord', 'onRecordEnd',
+	                            'playVoice', 'pauseVoice', 'stopVoice',
+	                            'uploadVoice', 'downloadVoice', 'chooseImage',
+	                            'previewImage', 'uploadImage', 'downloadImage',
+	                            'getNetworkType', 'openLocation', 'getLocation',
+	                            'hideOptionMenu', 'showOptionMenu', 'closeWindow',
+	                            'scanQRCode', 'chooseWXPay',
+	                            'openProductSpecificView', 'addCard', 'chooseCard',
+	                            'openCard' ]
+	      	});
+       	    
+	    	 
+	    	
+       	     
+	      }
+	 });
+
+	 function wxImgCallback(check_id,imagename,serverId) {
+		    //将serverId传给wx_upload.php的upload方法
+		    var url = "../../file/upload.do";
+		    $.get(url,{
+		    	campusId:1,
+		    	imagename:imagename,
+		    	serverId:serverId,
+		    	id:check_id,
+		    	classType:"check"
+		    }, function(data){
+		    	console.log(data);
+		        if (data == 0) {
+		        	alert("上传图片失败!");
+		        	console.log(data.msg);
+		        } else if (data == 1) {
+		            //存储到服务器成功后的处理
+		            //
+		            alert("上传图片"+name+"成功!");
+		            location.href="CheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
+		        }
+		    });
+		}	
+    
+</script>

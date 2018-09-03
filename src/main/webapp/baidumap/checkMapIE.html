@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>安全巡查路线</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta charset="utf-8" />
+ <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+  <script src="json2.js"></script>
+<style type="text/css">
+    body, html,#allmap {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+<link rel="stylesheet" type="text/css" href="../date/css/pikaday.css"/>
+<script type="text/javascript" src="../date/js/pikaday.min.js"></script>
+</head>
+			<span> 巡查人员 : </span> 
+			<select id="select1" onchange="gradeChange()"></select>
+			<span>&nbsp;&nbsp; 快速选择 : </span>
+			<select id="select2" onchange="gradeChange1()"></select>
+			<span>&nbsp;&nbsp; 开始日期 : </span>
+			<input id="datepicker" onchange="checkMap()" />
+			<span>&nbsp;&nbsp; 结束日期 : </span>
+			<input id="datepicker2" onchange="checkMap()" />
+			<span id="total"></span>
+            <div id="allmap"></div>
+<body>
+</body>
+</html>
+<script type="text/javascript">
+    //百度地图API功能
+    var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+    var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+    
+    // 百度地图API功能
+    var map = new BMap.Map("allmap",{enableMapClick:false});    // 创建Map实例
+    var xhm=new ActiveXObject("Microsoft.XMLHttp");
+ 	 xhm.open("GET","../baiduMap/getPosition.do",false);
+ 	 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+ 	 xhm.send();
+ 	var json = JSON.parse(xhm.responseText);
+	var point = new BMap.Point(json.lng, json.lat);
+    map.centerAndZoom(point, 15);  // 初始化地图,设置中心点坐标和地图级别
+
+    
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+    map.addControl(top_left_control);        
+	map.addControl(top_left_navigation); 
+    
+	//配置搜索
+	var local = new BMap.LocalSearch(map,       
+		{renderOptions: {map: map,autoViewport: false},pageCapacity: 1}      
+	); 
+
+	
+	var openId;
+
+	var xhm=new ActiveXObject("Microsoft.XMLHttp");
+	 xhm.open("GET","../mobile/asset/getWetchatAllUsers.do",false);
+	 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	 xhm.send();
+	 var users=JSON.parse(xhm.responseText);
+	
+	 var select1 = document.getElementById("select1");
+
+	var option = document.createElement("option");
+	select1.appendChild(option);
+	for(var i=0;i<users.length;i++){
+			  if(users[i].name!=""){
+			  	var option = document.createElement("option");
+			  	option.innerHTML=users[i].name;
+			  	option.setAttribute("value",users[i].openId);
+			  	select1.appendChild(option);
+			  }
+		  }
+	user=users[0].name;
+		
+
+
+	
+	
+	 function gradeChange(){ 
+	        var objS = document.getElementById("select1"); 
+	        var grade = objS.options[objS.selectedIndex].value; 
+	        //console.log(objS.options[objS.selectedIndex]);
+	        //alert(grade); 
+	        map.clearOverlays();
+	        openId=grade;
+	        
+	        checkMap();
+	        
+	       } 
+	
+	 
+	 var select2 = document.getElementById("select2");
+	 
+	       var v = document.createElement('option');  
+	       v.setAttribute('value', 1);  
+	       var inner = document.createTextNode("今天");   
+	       v.appendChild(inner);  
+	       
+	       var v2 = document.createElement('option');  
+	       v2.setAttribute('value', 2);  
+	       var inner2 = document.createTextNode("一周内");   
+	       v2.appendChild(inner2);  
+	       
+	       var v3 = document.createElement('option');  
+	       v3.setAttribute('value', 3);  
+	       var inner3 = document.createTextNode("一月内");   
+	       v3.appendChild(inner3);  
+	       
+	       select2.appendChild(v);  
+	       select2.appendChild(v2);  
+	       select2.appendChild(v3); 
+
+	
+	function gradeChange1(){
+		
+        var objS = document.getElementById("select2"); 
+        var grade = objS.options[objS.selectedIndex].value; 
+        //console.log(objS.options[objS.selectedIndex]);
+        //alert(grade); 
+        map.clearOverlays();
+       
+        var datepicker;
+        var datepicker2
+
+        if(grade==1){
+        	
+        	var Today=new Date();	    	
+	    	datepicker=Today.getFullYear()+"-"+(Today.getMonth()+1)+"-"+(Today.getDate());	    	
+	    	datepicker2=Today.getFullYear()+"-"+(Today.getMonth()+1)+"-"+Today.getDate();
+	    	
+	    	var picker = document.getElementById("datepicker"); 
+	    	picker.value=datepicker;
+	    	
+	    	var picker2 = document.getElementById("datepicker2"); 
+	    	picker2.value=datepicker2;
+
+        }else if(grade==2){
+        	
+        	var Week=new Date();
+        	datepicker=Week.getFullYear()+"-"+(Week.getMonth()+1)+"-"+(Week.getDate()-7);
+	    	datepicker2=Week.getFullYear()+"-"+(Week.getMonth()+1)+"-"+(Week.getDate());
+	    	
+	    	var picker = document.getElementById("datepicker"); 
+	    	picker.value=datepicker;
+	    	
+	    	var picker2 = document.getElementById("datepicker2"); 
+	    	picker2.value=datepicker2;
+        
+        }else if(grade==3){
+        	
+        	var Month=new Date();		       
+	        datepicker=Month.getFullYear()+"-"+(Month.getMonth())+"-"+(Month.getDate());
+	    	datepicker2=Month.getFullYear()+"-"+(Month.getMonth()+1)+"-"+(Month.getDate());
+	    	
+	    	var picker = document.getElementById("datepicker"); 
+	    	picker.value=datepicker;
+	    	
+	    	var picker2 = document.getElementById("datepicker2"); 
+	    	picker2.value=datepicker2;
+	    	
+        }
+        
+        checkMap();
+
+        
+	}
+	
+	
+   
+      	var input=document.getElementById("datepicker");
+        input.style.cssText = "width:100px;";
+  
+        var picker=new Pikaday(
+		 		    {
+		 		        field: input
+		 		    });
+
+	
+			  
+          
+          var input2=document.getElementById("datepicker2");
+          input2.style.cssText = "width:100px;";
+          
+          var picker2=new Pikaday(
+		 		    {
+		 		        field: input2
+		 		    });
+
+
+
+	function checkMap(){
+		var datepicker=document.getElementById('datepicker').value;
+  	   var datepicker2=document.getElementById('datepicker2').value;
+  	 	var xhm=new ActiveXObject("Microsoft.XMLHttp");
+		    xhm.open("GET","../baiduMap/getAllCheckByOpenId.do?openId="+openId+"&datepicker="+datepicker+"&datepicker2="+datepicker2,false);
+	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	    	xhm.send();
+	    	var ticket=JSON.parse(xhm.responseText);
+	        addDeck(ticket);
+	        
+	}
+	
+	
+	  
+		var xhm=new ActiveXObject("Microsoft.XMLHttp");
+	    xhm.open("GET","../baiduMap/get.do",false);
+	    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	    xhm.send();
+	    var ticket=JSON.parse(xhm.responseText);
+	    
+	 addDeck(ticket);
+	
+	
+  function addDeck(text){	
+
+	  map.clearOverlays();
+	  
+		 var ticket=text.rows;
+		 
+		 var total = document.getElementById("total"); 
+	     total.innerHTML=" &nbsp;&nbsp; "+text.total+"处";
+	     
+   		// console.log(ticket);
+    	var json_data = new Array();
+ 	
+       //console.log(pois);
+	
+    	var pois=[];
+
+    	var n=300;
+    	
+    	if(ticket!=null){
+    		
+    		if(ticket.length<300){
+    			n=ticket.length;
+    		}
+    	
+    		for(var i=0;i<n;i++){
+
+    			pois.push(new BMap.Point(ticket[i].lng,ticket[i].lat));
+
+    		}
+    	}
+    	var polyline =new BMap.Polyline(pois, {
+    		   enableEditing: false,//是否启用线编辑，默认为false
+    		   enableClicking: true,//是否响应点击事件，默认为true
+    		   strokeWeight:'6',//折线的宽度，以像素为单位
+    		   strokeOpacity: 0.8,//折线的透明度，取值范围0 - 1
+    		   strokeColor:"#18a45b" //折线颜色
+    		});
+
+    	try{
+    	 map.addOverlay(polyline);          //增加折线
+    	}catch(err){
+    		console.log(err);
+    	}
+    
+    var pointArray = new Array();	
+    	
+	if(ticket!=null){
+		for(var i=0;i<ticket.length;i++){
+				var point=new BMap.Point(ticket[i].lng, ticket[i].lat);
+				var myIcon = new BMap.Icon("../img/checkPoint.png", new BMap.Size(20,19));
+				var marker = new BMap.Marker(point,{icon:myIcon}); // 创建点
+				map.addOverlay(marker);    //增加点
+			
+				pointArray[i] = new BMap.Point(ticket[i].lng, ticket[i].lat);
+				marker.addEventListener("click",addEvent);
+			}
+		}
+	
+	map.setViewport(pointArray);
+		
+	}
+	
+  
+  
+  function addEvent(e) {
+		 var p = e.target;
+		//alert("marker的位置是" + p.getPosition().lng + "," + p.getPosition().lat);   
+     		var xhm=new ActiveXObject("Microsoft.XMLHttp");
+	  				 xhm.open("GET","../baiduMap/getCheckByPosition.do?lng="+p.getPosition().lng+"&lat="+p.getPosition().lat+"&openId="+openId,false);
+	  				 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	  				 xhm.send();
+	   				var obj=JSON.parse(xhm.responseText);
+	   				var content="巡查资产 : "+obj.address+"<br/>"+
+		            			" 管理分区 : "+obj.manageRegion+" "+
+		            			" 检查结果 : "+obj.check_name+" "+
+		            			" 检查时间 : "+actionTime(obj.date);
+	   				
+				var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
+	            map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat)); //开启信息窗口
+	       	
+    }
+	 
+	//获取覆盖物位置
+	function attribute(e){
+		var p = e.target;
+		var value=new Object();
+        value.lng=p.getPosition().lng;
+        value.lat=p.getPosition().lat;
+        var json = JSON.stringify(value); 
+        alert(json);  
+	}	
+
+    
+	function getByteLen(val) {    //传入一个字符串
+        var len = 0;
+        for (var i = 0; i < val.length; i++) {
+            if (val[i].match(/[^\x00-\xff]/ig) != null) //全角 
+                len += 2; //如果是全角，占用两个字节  如果mysql中某字段是text, 如果设置编码为utf-8,那么一个中文是占3个字节, gbk是两个字节
+            else
+                len += 1; //半角占用一个字节
+        }
+        return len;
+     }       
+   
+	function actionTime(value){
+  	    var date = new Date(value); 
+  	    Y = date.getFullYear() + '年';
+  	    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '月';
+  	    D = date.getDate() + '日 ';
+  	    h = date.getHours() + ':';
+  	    m = date.getMinutes() + ':';
+  	    s = date.getSeconds(); 
+  		return Y+M+D+h+m+s;
+  	}
+	
+</script>

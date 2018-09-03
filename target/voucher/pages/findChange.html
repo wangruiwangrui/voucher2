@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>用户管理</title>
+
+<link rel="stylesheet"
+	href="assets/bootstrap-table/bootstrap-table.css">
+<link rel="stylesheet"
+	href="assets/bootstrap-table/bootstrap-editable.css">
+<script src="assets/bootstrap-table/jquery.min.js"></script>
+<script src="assets/bootstrap-table/bootstrap.min.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table-export.js"></script>
+<script src="assets/bootstrap-table/tableExport.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="assets/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/bootstrap-table-zh-CN.min.js"></script>
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js"></script>
+<![endif]-->
+<style>
+.ml10 {
+	margin-left: 10px;
+}
+
+#operate-success {
+
+	font-size: 16px;
+	background-color: #8AC007;
+	color: #FBFBFB;
+	visibility: hidden
+}
+</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="page-header">
+			<h1>用户管理&nbsp;&nbsp;</h1>
+		</div>
+		<div style="text-align: center;">
+			<span id="operate-success">设置成功</span>
+		</div>
+		<div>
+			<table id="table" data-toggle="table" data-show-export="false"
+				data-url="roominfo/findChange.do" data-search="true"
+				data-show-refresh="true" data-show-toggle="true"
+				data-side-pagination="server" data-pagination="true"
+				data-show-columns="true">
+				<thead>
+					<tr>
+						<!-- <th data-field="state" data-checkbox="true"></th> -->
+						<th data-field="roomAddress">RoomAddress</th>
+						<th data-field="charter" data-sortable="true">Charter</th>
+						<th data-field="ohire" data-sortable="true">OHire</th>
+						<th data-field="area" data-sortable="true">Area</th>
+						<th data-field="concludeDate">ConcludeDate</th>
+						<th data-field="chartBeginDate">ChartBeginDate</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+
+</body>
+</html>

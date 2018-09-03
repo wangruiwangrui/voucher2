@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>新建安全隐患</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta charset="utf-8" />
+ <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="../css/weui.css"/>
+    <link rel="stylesheet" href="../css/example.css"/>
+<style type="text/css">
+    body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
+</style>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="../../../js/jquery-weui.js"></script>
+</head>
+
+<body>
+  <form action="" novalidate>
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">隐患名称</label></div>
+                 <div class="weui-cell__bd">
+                    <input id="name" class="weui-input" />
+                </div>
+            </div>
+    </div>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">隐患等级</label></div>
+                <div id="level" class="weui-cell__bd">
+                </div>              
+        </div>
+    </div>
+    
+    
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">发生时间</label></div>
+                <div  class="weui-cell__bd">
+                  <input id="happenTime" class="weui-input" type="date" />
+                </div>
+        </div>
+    </div>
+    
+   
+     <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">备注</label></div>
+                <div  class="weui-cell__bd">
+                  <input id="remark" class="weui-input"  />
+                </div>
+            </div>
+    </div>
+    
+    <div class="weui-cells__title">隐患详情</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                  <textarea id="detail" class="weui-textarea" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+  
+  </form>
+      
+  <div class="weui-cells__title">隐患位置</div>
+    <div id="allmap"></div>   
+    
+    <div class="weui-cells__title"></div> 
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                </div>
+            </div>
+        </div>
+   
+    <a href="javascript:;" id="save" class="weui-btn weui-btn_plain-primary">保存</a>
+    
+</body>
+</html>
+<script type="text/javascript">
+
+  function getQueryString(key){
+	    var reg = new RegExp("(^|&)"+key+"=([^&]*)(&|$)");
+	    var result = window.location.search.substr(1).match(reg);
+	    return result?decodeURIComponent(result[2]):null;
+	}
+
+    // 百度地图API功能
+    var map = new BMap.Map("allmap");    // 创建Map实例
+
+    var longitude=getQueryString("longitude");
+	var latitude=getQueryString("latitude");
+    var point = new BMap.Point(longitude, latitude);
+    
+    map.centerAndZoom(point, 12);
+    var marker = new BMap.Marker(point); // 创建点
+	map.addOverlay(marker);
+	var str = "我的位置";
+	var opts = {
+			   position : point,    // 指定文本标注所在的地理位置
+			   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
+			}	
+	var label = new BMap.Label(str, opts);  // 创建文本标注对象
+	label.setStyle({
+					 fontSize : "12px",
+					 height : "20px",
+					 lineHeight : "20px",
+					 fontFamily:"微软雅黑"
+				  });
+    map.addOverlay(label);   
+    map.enableScrollWheelZoom(true);
+  	
+    var geoc = new BMap.Geocoder();
+
+	function keyDown(e) {   		  
+	　   var keycode = e.which;   //取得对应的键值（数字）  	  
+	　   var realkey = String.fromCharCode(e.which); //取得代表改键的真正字符  
+	   var val = document.getElementById("input").value;
+	　   if(keycode==13){
+		   local.search(val);
+	　   }
+	 }     
+    
+	//happenTime设置为当前时间
+	var timestamp=actionTime(Date.parse(new Date()));
+    console.log(timestamp);
+    $("#happenTime").val(timestamp);
+    
+	var hiddenlevel=null;
+	
+	var manageRegion=null;
+	
+	 $.get("/voucher/mobile/hidden/selectHiddenLevel.do", { 
+	  }, function(data) {
+		var hiddenLevels=JSON.parse(data);
+		console.log(hiddenLevels);
+ 		var select = document.createElement("select");
+ 		select.setAttribute("id","select");
+ 		select.setAttribute("onchange","gradeChange()");
+ 		var option = document.createElement("option");
+ 		for(var i=hiddenLevels.length-1;i>=0;i--){
+	  			var option = document.createElement("option");
+	  			option.innerHTML=hiddenLevels[i].level_text;
+	  			option.setAttribute("value",hiddenLevels[i].level_text);
+	  			select.appendChild(option);	 		   
+	  			hiddenlevel=hiddenLevels[hiddenLevels.length-1].level_text;
+			 }
+ 
+ 		
+ 		 select.setAttribute("class","weui-input");
+ 		 $("#level").append(select);
+ 		 
+	 });
+	
+	function gradeChange(){ 
+        var objS = document.getElementById("select"); 
+        var grade = objS.options[objS.selectedIndex].value; 
+        console.log(objS.options[objS.selectedIndex]);
+        hiddenlevel=grade;
+       } 
+	
+		
+	function gradeChangeManageRegions(){ 
+      var objS = document.getElementById("selectManageRegions"); 
+      var grade = objS.options[objS.selectedIndex].value; 
+      console.log(objS.options[objS.selectedIndex]);
+      manageRegion=grade;
+     } 
+	
+	function actionTime(value){
+  	    var date = new Date(value); 
+  	    Y = date.getFullYear() + '-';
+  	    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+  	  	D = date.getDate()<10?'0'+date.getDate():date.getDate();
+  	    h = date.getHours() + ':';
+  	    m = date.getMinutes() + ':';
+  	    s = date.getSeconds(); 
+  		return Y+M+D;
+  	}
+	
+         //线路
+	    function navigation(p1, p2) {
+	            var points = [p1,p2];
+	        	var curve = new BMapLib.CurveLine(points, {strokeColor:"blue", strokeWeight:3, strokeOpacity:0.5});
+	        	map.addOverlay(curve);
+	    }
+    
+    function getByteLen(val) {    //传入一个字符串
+        var len = 0;
+        for (var i = 0; i < val.length; i++) {
+            if (val[i].match(/[^\x00-\xff]/ig) != null) //全角 
+                len += 2; //如果是全角，占用两个字节  如果mysql中某字段是text, 如果设置编码为utf-8,那么一个中文是占3个字节, gbk是两个字节
+            else
+                len += 1; //半角占用一个字节
+        }
+        return len;
+     }  
+    
+    function getDistance(lng,lat){
+    	var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
+    	var pointB = new BMap.Point(lng,lat);  // 创建点坐标B--江北区
+    	var d=map.getDistance(pointA,pointB)/1000;
+    	return d.toFixed(2)+' KM';  //获取两点距离,保留小数点后两位
+    }
+
+	
+    $("#save").on("click",function(){
+
+    	geoc.getLocation(point, function(rs){
+    	    	var addComp;
+    	  	  	addComp = rs.addressComponents;
+    	  	  	
+    	  	 //  alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+
+    	    	var name=$("#name").val();
+    	    	var level=hiddenlevel;
+    	    	var happenTime=$("#happenTime").val();
+    	    	var remark=$("#remark").val();
+    	    	var detail=$("#detail").val();
+				var addComp1=JSON.stringify(addComp);
+				
+    	    	 $.post("/voucher/mobile/hidden/insertHidden.do",
+    	    		  {
+    			    	name:name,
+    			    	level:level,
+    			    	manageRegion:"",
+    			    	happenTime:happenTime,
+    			    	remark:remark,
+    			    	detail:detail,
+    			    	addComp:addComp1,
+    			    	lng:longitude,
+    			    	lat:latitude
+    			    }, function(data){
+    		        	var obj = $.parseJSON(data);
+    			    	if (obj.status == 0) {
+    			        	alert("新建隐患"+name+"失败!");
+    			        	console.log(obj.status);
+    			        } else if (obj.status == 1) {
+    			            //存储到服务器成功后的处理
+    			            //
+    			            var guid=obj.guid;
+    			            
+    			            /*
+    			        	$.alert("新建隐患"+name+"成功!","",function(){
+    			        		
+    			        		 $.confirm("是否上传隐患"+name+"的照片", function() {
+    	    	     	    			//点击确认后的回调函数
+    	    			            	
+    	    	     	    			location.href="reworkHiddenDetail.html?guid="+guid+"&latitude="+latitude+"&longitude="+longitude;
+    	    	     	    			
+    	    			            	}, function() {
+    	    	     	    			//点击取消后的回调函数
+    	    	     	    			
+    	    	     	    			history.back();
+    	    	     	    			
+    	    	     	    		});
+    			        		 
+    			        	});
+    			        	*/
+    			        	
+    			        	location.href="addreworkHiddenDetail.html?guid="+guid+"&latitude="+latitude+"&longitude="+longitude;
+    			        	
+    			        }else{
+    			        	
+    			        	$.alert("新建隐患失败!");
+    			        	
+    			        }
+    			    	
+    			    });
+    	  	
+    	});        
+
+    });
+    
+    url=document.location.toString();
+
+	 $.ajax({
+	     url : "../../../wechat/sign.do",
+	     data : {
+	    	 campusId:1,
+	    	 url:url
+	     },
+	     async: false,
+	     type : "GET",
+	     success : function(data) {
+	    	 var ticket=JSON.parse(data);
+       	     /*
+     	      * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
+     	      */  
+       	          
+	    	 
+	    	 wx.config({
+	    		debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	      		appId: ticket.appId,
+	      		timestamp: ticket.timestamp,
+	      		nonceStr: ticket.nonceStr,
+	      		signature: ticket.signature,
+	      		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+	                            'onMenuShareAppMessage', 'onMenuShareQQ',
+	                            'onMenuShareWeibo', 'hideMenuItems',
+	                            'showMenuItems', 'hideAllNonBaseMenuItem',
+	                            'showAllNonBaseMenuItem', 'translateVoice',
+	                            'startRecord', 'stopRecord', 'onRecordEnd',
+	                            'playVoice', 'pauseVoice', 'stopVoice',
+	                            'uploadVoice', 'downloadVoice', 'chooseImage',
+	                            'previewImage', 'uploadImage', 'downloadImage',
+	                            'getNetworkType', 'openLocation', 'getLocation',
+	                            'hideOptionMenu', 'showOptionMenu', 'closeWindow',
+	                            'scanQRCode', 'chooseWXPay',
+	                            'openProductSpecificView', 'addCard', 'chooseCard',
+	                            'openCard' ]
+	      	});
+       	    
+	    	 
+	    	
+       	     
+	      }
+	 });
+
+	 function wxImgCallback(guid,imagename,serverId) {
+		    //将serverId传给wx_upload.php的upload方法
+		    var url = "../../file/upload.do";
+		    $.get(url,{
+		    	campusId:1,
+		    	imagename:imagename,
+		    	serverId:serverId,
+		    	id:guid,
+		    	classType:"hidden"
+		    }, function(data){
+		    	console.log(data);
+		        if (data == 0) {
+		        	alert("上传图片失败!");
+		        	console.log(data.msg);
+		        } else if (data == 1) {
+		            //存储到服务器成功后的处理
+		            //
+		            alert("上传图片"+name+"成功!");
+		            location.href="addreworkHiddenDetail.html?guid="+guid+"&latitude="+latitude+"&longitude="+longitude;
+		        }
+		    });
+		}	
+</script>
+
+ <style type="text/css">
+
+        #allmap{
+            width:98%;
+            border-width: 2px;
+            border-style: solid;
+            border-color: #9b9b9b;
+            margin:0 auto;
+        }
+    </style>

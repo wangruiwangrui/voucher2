@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>图片管理</title>
+
+<link rel="stylesheet"
+	href="assets/bootstrap-table/bootstrap-table.css">
+<link rel="stylesheet"
+	href="assets/bootstrap-table/bootstrap-editable.css">
+<script src="assets/bootstrap-table/jquery.min.js"></script>
+<script src="assets/bootstrap-table/bootstrap.min.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table-export.js"></script>
+<script src="assets/bootstrap-table/tableExport.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="assets/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/bootstrap-table-zh-CN.min.js"></script>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js"></script>
+<![endif]-->
+<style>
+.ml10 {
+	margin-left: 10px;
+}
+
+#operate-success {
+
+	font-size: 16px;
+	background-color: #8AC007;
+	color: #FBFBFB;
+	visibility: hidden
+}
+</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="page-header">
+			<h1>图片管理&nbsp;&nbsp;</h1>
+		</div>
+		<div style="text-align: center;">
+			<span id="operate-success">设置成功</span>
+		</div>
+		<div>
+			<table id="table" data-toggle="table" data-show-export="false"
+				data-url="photo/getAll.do" data-search="true"
+				data-show-refresh="true" data-show-toggle="true"
+				data-side-pagination="server" data-pagination="true"
+				data-show-columns="true">
+				<thead>
+					<tr>
+						<!-- <th data-field="state" data-checkbox="true"></th> -->
+						<th data-field="nickname">昵称</th>
+						<th data-field="openId" data-visible="false">openId</th>
+						<th data-field="headImgUrl">头像</th>
+						<th data-field="photo">图片</th>
+						<th data-field="createTime">拍摄时间</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+	<script>
+		//全局变量
+
+	</script>
+</body>
+</html>

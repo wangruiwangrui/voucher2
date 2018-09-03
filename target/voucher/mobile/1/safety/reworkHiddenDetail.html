@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>更新安全隐患详情</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta charset="utf-8" />
+ <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="../css/weui.css"/>
+    <link rel="stylesheet" href="../css/example.css"/>
+<style type="text/css">
+    body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
+</style>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+  <form action="" novalidate>
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">隐患名称</label></div>
+                 <div class="weui-cell__bd">
+                    <input id="name" class="weui-input" />
+                </div>
+            </div>
+    </div>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">隐患等级</label></div>
+                <div id="level" class="weui-cell__bd">
+                </div>              
+        </div>
+    </div>
+    
+    
+     <div class="weui-cells weui-cells_form">
+      <div class="weui-cell">
+             <div class="weui-cell__hd"><label class="weui-label">整改状态</label></div>
+                <div id="progress" class="weui-cell__bd">
+                </div>
+            <div id="progress_img" class="weui-cell weui-cell_warn">                  
+            </div>
+         </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">发生时间</label></div>
+                <div  class="weui-cell__bd">
+                  <input id="happenTime" class="weui-input" type="date" />
+                </div>
+        </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">录入时间</label></div>
+                <div id="insertTime" class="weui-cell__bd">
+                </div>
+        </div>
+    </div>
+   
+   <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">录入人员</label></div>
+                <div id="username" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+   
+     <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">备注</label></div>
+                <div  class="weui-cell__bd">
+                  <input id="remark" class="weui-input"  />
+                </div>
+            </div>
+    </div>
+    
+    <!--  
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">关联资产</label></div>
+                  <div id="asset" class="weui-cell__bd">
+                  </div>
+            </div>
+    </div>
+    -->
+    
+    <div class="weui-cells weui-cells_form">
+            <div id="asset" class="weui-cell weui-cell_access">
+            </div>
+    </div>
+    
+    <div class="weui-cells__title">隐患详情</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                  <textarea id="detail" class="weui-textarea" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+    
+    
+  </form>
+  
+  <div class="weui-cells__title">隐患位置</div>
+    <div id="allmap"></div>   
+    
+    <div class="weui-cells">
+     <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <div class="weui-panel__hd">隐患图片</div>
+            <div class="weui-uploader__bd">
+                <ul class="pb1 weui-uploader__files" id="uploaderFiles">
+       				<div id="img" >
+       				</div>
+       				<div class="weui-uploader__input-box" id="showPicker">
+       				</div>
+       			</ul>
+       		</div>
+       	</div>
+      </div>    
+    </div>  
+     
+    <a href="javascript:;" id="save" class="weui-btn weui-btn_plain-primary">保存</a>
+      
+</body>
+</html>
+<script type="text/javascript">
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+   }
+
+  var guid=getQueryString("guid");
+
+    // 百度地图API功能
+    var map = new BMap.Map("allmap");    // 创建Map实例
+
+    var longitude=getQueryString("longitude");
+	var latitude=getQueryString("latitude");
+    var point = new BMap.Point(longitude, latitude);
+
+    var pointStart=point;
+    
+	var str = "我的位置";
+	var opts = {
+			   position : point,    // 指定文本标注所在的地理位置
+			   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
+			}	
+	var label = new BMap.Label(str, opts);  // 创建文本标注对象
+	label.setStyle({
+					 fontSize : "12px",
+					 height : "20px",
+					 lineHeight : "20px",
+					 fontFamily:"微软雅黑"
+				  });
+    map.addOverlay(label);   
+    
+  	
+	function keyDown(e) {   		  
+	　   var keycode = e.which;   //取得对应的键值（数字）  	  
+	　   var realkey = String.fromCharCode(e.which); //取得代表改键的真正字符  
+	   var val = document.getElementById("input").value;
+	　   if(keycode==13){
+		   local.search(val);
+	　   }
+	 }     
+    
+	$.ajax({
+        type: "POST",
+        url: "/voucher/mobile/hidden/selectHiddenByGuid.do",
+        data: { "guid":guid},
+        dataType: "json",
+        error: function (request){
+     	   console.log(request);
+        },
+        success: function (text) {              	   
+     	   var obj=text.hidden;
+     	   var imgs=text.fileBytes;
+  
+             	   var guid=obj.guid;
+  
+             	   var distance=null;
+             	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+             	   if(obj.lng!=""&&obj.lat!=""){
+             	   	  distance=getDistance(obj.lng,obj.lat);
+             	   	var point = new BMap.Point(obj.lng,obj.lat);
+             	   	var pointEnd=point;
+             	    map.centerAndZoom(point, 12);
+             	    var marker = new BMap.Marker(point); // 创建点
+             		map.addOverlay(marker);    //增加点
+             	   }
+
+             	  navigation(pointStart, pointEnd);
+             	   
+             	  var name=obj.name;
+                  $("#name").val(obj.name);
+                  console.log("obj="+obj);
+                  $.get("/voucher/mobile/hidden/selectHiddenLevel.do", { 
+                	  }, function(data) {
+                		var hiddenLevels=JSON.parse(data);
+                		console.log(hiddenLevels);
+                  		var select = document.createElement("select");
+        		  		select.setAttribute("id","select");
+        		  		select.setAttribute("onchange","gradeChange()");
+        		  		var option = document.createElement("option");
+        		  		for(var i=0;i<hiddenLevels.length;i++){
+        			  			var option = document.createElement("option");
+        			  			option.innerHTML=hiddenLevels[i].level_text;
+        			  			option.setAttribute("value",hiddenLevels[i].level_text);
+        			  			if(hiddenLevels[i].level_text==obj.hidden_level){
+        			  				option.setAttribute("selected","selected");
+        			  			}
+        			  			select.appendChild(option);
+        		 			 }
+                  
+        		  		 select.setAttribute("class","weui-input");
+                  		 $("#level").append(select);
+                  		 
+                	 });
+                                    
+                  
+                  var type;
+                  var progress_img=document.createElement("i");
+                  
+                  var state=obj.state;
+
+                  type=state;
+                  
+                  if(type=="未整改"||type==null){
+                	  type="未整改";
+                	  progress_img.setAttribute("class","weui-icon-warn");
+                  }else if(type=="整改中"){
+                	  progress_img.setAttribute("class","weui-icon-info-circle"); 
+                  }else if(type=="整改完成"){
+                	  progress_img.setAttribute("class","weui-icon-success");
+                  }
+                  $("#progress_img").append(progress_img);
+                  var progress=document.createElement("span");
+                  progress.innerHTML=type;
+                  $("#progress").append(progress);
+
+                  
+                  var time=actionTime(obj.happen_time);
+                  console.log(time);
+                  $("#happenTime").val(time);
+                  
+                  var time=actionTime(obj.date);
+                  var insertTime=document.createElement("span");
+                  insertTime.innerHTML=time;
+                  $("#insertTime").append(insertTime);
+                  
+                  var remark=obj.remark;
+                  $("#remark").val(remark);
+                  
+                  var detail=obj.detail;
+                  $("#detail").val(detail);
+                  
+                  var terminal=obj.terminal;
+            	  if(terminal!=null&&terminal!=""){
+            		  if(terminal=="PC"){
+            			 var username=document.createElement("span");
+            			 username.innerHTML=obj.user_name;
+                        $("#username").append(username);
+            		  }else if(terminal=="Wechat"){
+            			  $.get("/voucher/mobile/hidden/selectNameBycampusAdmin.do",{
+            				 	campusAdmin:obj.campusAdmin
+            			  		},function(text){
+            			  			var name = $.parseJSON(text);
+            			  			var username=document.createElement("span");
+                       			 	username.innerHTML=name.name;
+                                   $("#username").append(username);
+            			  		});	
+            		  }
+            	  }
+                  
+            	  var asset=document.createElement("span");
+            	  $.get("/voucher/mobile/hidden/getAllAssetByHidden_GUID.do",{
+  				 		guid:guid
+  			  		},function(text){
+  			  		if(text>0){
+  			  			var asset1=document.createElement("div");
+			  				asset1.setAttribute("class","weui-cell__bd");
+			  				var span1=document.createElement("span");
+			  				span1.setAttribute("style","vertical-align: middle");
+			  				span1.innerHTML="关联资产";
+			  				var span2=document.createElement("span");
+		  					span2.setAttribute("class","weui-badge");
+		  					span2.setAttribute("style","margin-left: 25px;");
+		  					span2.innerHTML=text;
+		  					asset1.appendChild(span1);
+		  					asset1.appendChild(span2);
+                			$("#asset").append(asset1); 
+                			var asset2=document.createElement("div");
+                			asset2.setAttribute("class","weui-cell__ft");
+                			$("#asset").append(asset2);                  		
+  			  			}else{
+  			  				var asset=document.createElement("div");
+		  					asset.setAttribute("class","weui-cell__bd");
+		  					var span1=document.createElement("span");
+		  					span1.setAttribute("style","vertical-align: middle");
+		  					span1.innerHTML="关联资产";
+		  					var span2=document.createElement("span");
+		  					span2.setAttribute("style","margin-left: 15px;");
+		  					span2.innerHTML="无";
+		  					asset.appendChild(span1);
+		  					asset.appendChild(span2);
+            				$("#asset").append(asset);
+            				var asset2=document.createElement("div");
+                			asset2.setAttribute("class","weui-cell__ft");
+                			$("#asset").append(asset2);  
+  			  			}
+  			  			
+  			  		$("#asset").click(function(){
+            			location.href="hiddenAsset.html?hiddenGuid="+guid+"&latitude="+latitude+"&longitude="+longitude;
+            			});
+  			  		
+  			  		});
+            	  
+                  console.log(imgs);
+            	   if(imgs!=null){
+                    	   var i = 0;
+                           for(; i < imgs.length; i++){
+                        	   
+                        	  var data=imgs[i];
+                        	  var name=data.name;
+                        	  var uri=data.compressUri;
+                        	  var date=data.date;
+                        	  var panel=document.createElement("div");
+                        	  panel.setAttribute("class","weui-panel__bd");
+                          	   var a=document.createElement("a");
+                         	   a.setAttribute("class","weui_grid");
+                         	   var a=document.createElement("a");
+                         	  a.setAttribute("href","javascript:void(0);");
+                         	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+                         	   var div=document.createElement("div");
+                         	  	div.setAttribute("class","weui-media-box__hd");
+                         	  
+                    	   	 	 src="/voucher/"+uri;
+                    	  	  	var img=document.createElement("img");
+                    	  	  	img.setAttribute("class","weui-media-box__thumb");
+                              	img.setAttribute("src",src);
+                            
+                           	  	div.appendChild(img);
+                           	   		
+                           	  	div2=document.createElement("div");
+                           	  		div2.setAttribute("class","weui-media-box__bd");
+                           	 		h4=document.createElement("h4");
+                           	 		h4.setAttribute("class","weui-media-box__title");
+                           	 	 	h4.innerHTML=name;
+                           	  	 	p=document.createElement("p");
+                           	  	 	p.setAttribute("class","weui-media-box__desc");
+                           	  	 	p.innerHTML=date;
+                           	     div2.appendChild(h4);
+                           	     div2.appendChild(p);
+                           	   a.appendChild(div);
+                           	   a.appendChild(div2);
+                           	   panel.appendChild(a);
+                    	      $("#img").append(panel);
+                           }
+            		   
+            	   }
+        }
+    });
+    
+	var hiddenlevel=null;
+	
+	var manageRegion=null;
+	
+	function gradeChange(){ 
+        var objS = document.getElementById("select"); 
+        var grade = objS.options[objS.selectedIndex].value; 
+        console.log(objS.options[objS.selectedIndex]);
+        hiddenlevel=grade;
+       } 
+	
+	function gradeChangeManageRegions(){ 
+	      var objS = document.getElementById("selectManageRegions"); 
+	      var grade = objS.options[objS.selectedIndex].value; 
+	      console.log(objS.options[objS.selectedIndex]);
+	      manageRegion=grade;
+	     } 
+	
+	function actionTime(value){
+  	    var date = new Date(value); 
+  	    Y = date.getFullYear() + '-';
+  	    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+  	    D = date.getDate()<10?'0'+date.getDate():date.getDate();
+  	    h = date.getHours() + ':';
+  	    m = date.getMinutes() + ':';
+  	    s = date.getSeconds(); 
+  		return Y+M+D;
+  	}
+	
+         //线路
+	    function navigation(p1, p2) {
+	            var points = [p1,p2];
+	        	var curve = new BMapLib.CurveLine(points, {strokeColor:"blue", strokeWeight:3, strokeOpacity:0.5});
+	        	map.addOverlay(curve);
+	    }
+    
+    function getByteLen(val) {    //传入一个字符串
+        var len = 0;
+        for (var i = 0; i < val.length; i++) {
+            if (val[i].match(/[^\x00-\xff]/ig) != null) //全角 
+                len += 2; //如果是全角，占用两个字节  如果mysql中某字段是text, 如果设置编码为utf-8,那么一个中文是占3个字节, gbk是两个字节
+            else
+                len += 1; //半角占用一个字节
+        }
+        return len;
+     }  
+    
+    function getDistance(lng,lat){
+    	var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
+    	var pointB = new BMap.Point(lng,lat);  // 创建点坐标B--江北区
+    	var d=map.getDistance(pointA,pointB)/1000;
+    	return d.toFixed(2)+' KM';  //获取两点距离,保留小数点后两位
+    }
+
+	
+    $("#save").on("click",function(){
+    	var name=$("#name").val();
+    	var level=hiddenlevel;
+    	var happenTime=$("#happenTime").val();
+    	var remark=$("#remark").val();
+    	var detail=$("#detail").val();
+    	
+    	 $.post("/voucher/mobile/hidden/updateHidden.do",
+    		  {
+		    	guid:guid,
+		    	name:name,
+		    	level:level,
+		    	manageRegion:"",
+		    	happenTime:happenTime,
+		    	remark:remark,
+		    	detail:detail,
+		    	lng:longitude,
+		    	lat:latitude
+		    }, function(data){
+		    	if (data == 0) {
+		        	alert("更新隐患"+name+"失败!");
+		        	console.log(data.msg);
+		        } else if (data == 1) {
+		            //存储到服务器成功后的处理
+		            //
+		            alert("更新隐患"+name+"成功!");
+		        	location.reload();
+		        }
+		    });
+    	
+    });
+    
+    url=document.location.toString();
+
+	 $.ajax({
+	     url : "../../../wechat/sign.do",
+	     data : {
+	    	 campusId:1,
+	    	 url:url
+	     },
+	     async: false,
+	     type : "GET",
+	     success : function(data) {
+	    	 var ticket=JSON.parse(data);
+	    	 
+	    	 wx.config({
+	    		debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	      		appId: ticket.appId,
+	      		timestamp: ticket.timestamp,
+	      		nonceStr: ticket.nonceStr,
+	      		signature: ticket.signature,
+	      		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+	                            'onMenuShareAppMessage', 'onMenuShareQQ',
+	                            'onMenuShareWeibo', 'hideMenuItems',
+	                            'showMenuItems', 'hideAllNonBaseMenuItem',
+	                            'showAllNonBaseMenuItem', 'translateVoice',
+	                            'startRecord', 'stopRecord', 'onRecordEnd',
+	                            'playVoice', 'pauseVoice', 'stopVoice',
+	                            'uploadVoice', 'downloadVoice', 'chooseImage',
+	                            'previewImage', 'uploadImage', 'downloadImage',
+	                            'getNetworkType', 'openLocation', 'getLocation',
+	                            'hideOptionMenu', 'showOptionMenu', 'closeWindow',
+	                            'scanQRCode', 'chooseWXPay',
+	                            'openProductSpecificView', 'addCard', 'chooseCard',
+	                            'openCard' ]
+	      	});
+       	    
+	    	 var images = {
+		        	   		 localId: [],
+		        	    	serverId: []
+		        	  	   };
+       	     
+	    	 document.querySelector('#showPicker').onclick = function () {
+	    		 
+	    		 var imagename=prompt("请输入隐患图片的名称 : ","");
+	    		 
+	    		 if(imagename==null){
+	    			 imagename="无标题";
+	    		 }
+	    		 
+	    		 wx.chooseImage({
+	        	      success: function (res) {
+	        	        images.localId = res.localIds;
+	        	        console.log('已选择 ' + res.localIds.length + ' 张图片');
+	        	        
+	        	        var i = 0, length = images.localId.length;
+		        	    images.serverId = [];
+		        	    function upload() {
+		        	      wx.uploadImage({
+		        	        localId: images.localId[i].toString(),
+		        	        isShowProgressTips: images.localId[i].toString(),
+		        	        success: function (res) {
+		        	          i++;
+		        	          console.log('已上传：' + i + '/' + length);
+		        	        //返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
+                               wxImgCallback(imagename,res.serverId);
+		        	       //   images.serverId.push(res.serverId);
+		        	          if (i < length) {
+		        	            upload();
+		        	          }
+		        	        },
+		        	        fail: function (res) {
+		        	        	console.log(res);
+		        	        }
+		        	      });
+		        	    }
+		        	    upload();
+	        	      }
+	        	    });
+	    		 
+	    		 
+	    	 }
+       	     
+	      }
+	 });
+
+	 function wxImgCallback(imagename,serverId) {
+		    //将serverId传给wx_upload.php的upload方法
+		    var url = "../../file/upload.do";
+		    $.get(url,{
+		    	campusId:1,
+		    	imagename:imagename,
+		    	serverId:serverId,
+		    	id:guid,
+		    	classType:"hidden"
+		    }, function(data){
+		    	console.log(data);
+		        if (data == 0) {
+		        	alert("上传图片失败!");
+		        	console.log(data.msg);
+		        } else if (data == 1) {
+		            //存储到服务器成功后的处理
+		            //
+		        	location.reload();
+		        }
+		    });
+		}	
+</script>
+
+ <style type="text/css">
+
+        #allmap{
+            width:98%;
+            border-width: 2px;
+            border-style: solid;
+            border-color: #9b9b9b;
+            margin:0 auto;
+        }
+  </style>
+  
+  <script src="../../../js/previewImage.min.js"></script>
+
+<script>
+ 
+ var im = {};
+ /**
+  * 得到多个元素
+  * @public
+  */
+ im.all = function(selector, contextElement) {
+     var nodeList,
+         list = [];
+     if (contextElement) {
+         nodeList = contextElement.querySelectorAll(selector);
+     } else {
+         nodeList = document.querySelectorAll(selector);
+     }
+     if (nodeList && nodeList.length > 0) {
+         list = Array.prototype.slice.call(nodeList);
+     }
+     return list;
+ }
+
+ /**
+  * 将事件委托给父元素
+  * @public
+  * @param  array     $el         父元素
+  * @param  string    eventType  事件类型名称
+  * @param  string    selector   目标的选择器
+  * @param  function  fn
+  */
+ im.delegate = function($el, eventType, selector, fn) {
+     if (!$el) { return; }
+     $el.addEventListener(eventType, function(e) {
+         var targets = im.all(selector, $el);
+         if (!targets) {
+             return;
+         }
+         // findTarget:
+         for (var i=0; i<targets.length; i++) {
+             var $node = e.target;
+             while ($node) {
+                 if ($node == targets[i]) {
+                     fn.call($node, e);
+                     break; //findTarget;
+                 }
+                 $node = $node.parentNode;
+                 if ($node == $el) {
+                     break;
+                 }
+             }
+         }
+     }, false);
+ };
+
+
+ im.delegate(document.querySelector('#img'), 'click','img',function(){
+	 
+	 var urls = [];
+	 var imgs = im.all('img',im.all('#img')[0]);
+	 imgs.forEach(function(v,i){
+		 var str=v.src;
+		 var url=str.replace(/\/compressFile/, "");
+	     urls.push(url);
+	 })
+     
+	 var thisStr = this.src;
+	 var current = thisStr.replace(/\/compressFile/, "");
+	 
+     var obj = {
+         urls : urls,
+         current : current
+     };
+     previewImage.start(obj);
+ });
+ 
+</script>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>安全隐患详情</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta charset="utf-8" />
+ <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/weui.css"/>
+    <link rel="stylesheet" href="css/example.css"/>
+<style type="text/css">
+    body, html,#allmap {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+</head>
+
+<body>
+    <form action="" novalidate>
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">隐患地点</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="江阳南路23号附1号"/>
+                </div>
+            </div>
+    </div>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">危房等级</label></div>
+                <div class="weui-cell__bd">
+                        <select class="weui-select" name="select1">
+                          <option value="1">A级</option>
+                          <option value="2">B级</option>
+                          <option value="3">C级</option>
+                          <option value="4">D级</option>
+                        </select>
+                </div>
+                <div class="weui-cell__hd"><label class="weui-label">整治状态</label></div>
+                <div class="weui-cell__bd">
+                        <select class="weui-select" name="select1">
+                          <option value="1">整改中</option>
+                          <option value="2">未整改</option>
+                        </select>
+                </div>
+            <div class="weui-cell weui-cell_warn">
+                    <i class="weui-icon-warn"></i>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">管理单位</label></div>
+                <div class="weui-cell__bd">
+                        <select class="weui-select" name="select1">
+                          <option value="1">泸州公房公司</option>
+                        </select>
+                </div>
+        </div>
+    </div>
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">房屋结构</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="砖木"/>
+                </div>
+                <div class="weui-cell__hd"><label class="weui-label">面积</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="201.2"/>
+                </div>
+            </div>
+    </div>
+     <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">状态</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="空置"/>
+                </div>
+            </div>
+    </div>
+    
+    <div class="weui-cells__title">简要说明</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" placeholder="请输入文本" rows="3"></textarea>
+                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                </div>
+            </div>
+        </div>
+       <a href="javascript:;" class="weui-btn weui-btn_plain-default weui-btn_plain-disabled">编辑</a>
+    <a href="javascript:;" class="weui-btn weui-btn_plain-primary">保存</a>
+</form>
+    <div id="allmap"></div>
+    <img src="./images/pic_article.png" alt="">
+    <img src="./images/pic_article.png" alt="">
+</body>
+</html>
+<script type="text/javascript">
+
+    // 百度地图API功能
+    var map = new BMap.Map("allmap");    // 创建Map实例
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
+    map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+    map.setCurrentCity("四川");          // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+</script>

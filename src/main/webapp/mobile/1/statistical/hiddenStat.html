@@ -1,0 +1,136 @@
+<head>
+  <script src="jquery.min.js"></script>
+  <!-- Plotly.js -->
+  <script src="plotly-latest.min.js"></script>
+  <!-- Numeric JS -->
+  <script src="numeric.min.js"></script>
+  <link rel="stylesheet" href="../css/weui.css"/>
+  <title>隐患数据统计</title>
+</head>
+
+<body>
+  
+  <div id="myDiv"><!-- Plotly chart will be drawn inside this DIV --></div>
+  
+  <div id="myDiv2"><!-- Plotly chart will be drawn inside this DIV --></div>
+  
+  <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">选择日期</label></div>
+                <div id="level" class="weui-cell__bd">
+                </div>              
+        </div>
+    </div>
+  
+  <div id="myDiv3"><!-- Plotly chart will be drawn inside this DIV --></div>
+  
+  <div id="myDiv4"><!-- Plotly chart will be drawn inside this DIV --></div>
+
+  
+
+</body>  
+ 
+  <script>
+    <!-- JAVASCRIPT CODE GOES HERE -->
+    
+    $.post("/voucher/mobile/hidden/hiddenStat.do",{
+    	
+    	},function(text){
+    		
+    		var obj = $.parseJSON(text);
+    		
+    		var data = [{
+    	  		values: [obj.notHidden, obj.successHidden ,  obj.inHidden],
+    	  		labels: ['未整改'+obj.notHidden+"处","已完成"+obj.successHidden+"处"
+    	  		         , '整改中'+obj.inHidden+"处"],
+    	  		hoverinfo: 'label+percent',
+    	  		type: 'pie'
+    			}];
+    
+   			 var layout = {
+   					title: '全部隐患数量'
+    			};
+
+    		Plotly.newPlot('myDiv', data ,layout);
+    	
+    		var data2 = [{
+    	  		values: [obj.allAsset, obj.allAssetsHidden],
+    	  		labels: ['正常资产'+obj.allAsset+"处","隐患资产"+obj.allAssetsHidden+"处"],
+    	  		hoverinfo: 'label+percent',
+    	  		hole: .4,
+      		  	type: 'pie'
+    			}];
+    
+   			 var layout2 = {
+   					title: '隐患资产数量'
+    			};
+
+    		Plotly.newPlot('myDiv2', data2 ,layout2);
+    		
+    	});
+    
+    
+    
+       
+    $.get("/voucher/mobile/hidden/findHiddenByYear.do", { 
+	  }, function(data) {
+		var hiddenYears=JSON.parse(data);
+		console.log(hiddenYears);
+		var select = document.createElement("select");
+		select.setAttribute("id","select");
+		select.setAttribute("onchange","gradeChange()");
+		var option = document.createElement("option");
+		for(var i=0;i<hiddenYears.length;i++){
+			console.log(hiddenYears[i]);
+	  			var option = document.createElement("option");
+	  			option.innerHTML=hiddenYears[i]+"年";
+	  			option.setAttribute("value",hiddenYears[i]);
+	  			select.appendChild(option);
+			 }
+
+		 select.setAttribute("class","weui-input");
+		 $("#level").append(select);
+		 
+		 hiddenAmountByMonth(hiddenYears[0]);
+		 
+	 });
+    
+    function gradeChange(){ 
+        var objS = document.getElementById("select"); 
+        var grade = objS.options[objS.selectedIndex].value; 
+        //alert(objS.options[objS.selectedIndex]);
+        hiddenAmountByMonth(grade);
+    }
+    
+    function hiddenAmountByMonth(year){
+    	console.log(year);
+    	$.post("/voucher/mobile/hidden/findHiddenByMonthOfYear.do",{
+        	year:year
+    	},function(text){
+    		var hiddenMonth=JSON.parse(text);
+    		var x=[];
+    		var y=[];
+    		for(var i=0;i<hiddenMonth.length;i++){   			
+    			x[i]=hiddenMonth[i].year+" 隐患:"+hiddenMonth[i].amount+"处";
+    			y[i]=hiddenMonth[i].amount;
+    		}
+    		var data3 = [
+     		            {
+     		              x: x,
+      		              y: y,
+     		              type: 'bar'
+     		            }
+     		          ];
+    		
+    		console.log(x);
+    		console.log(y);
+    		
+    		var layout3 = {
+   					title: year+'年每月新增隐患数量'
+    			};
+
+     		Plotly.newPlot('myDiv3', data3,layout3);
+    	});
+    }
+    
+  </script>

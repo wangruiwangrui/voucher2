@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+encoding//src/main/java/com/voucher/manage/controller/CampusController.java=UTF-8
+encoding//src/main/java/com/voucher/manage/controller/SellerController.java=UTF-8
+encoding//src/main/java/com/voucher/manage/controller/UserController.java=UTF-8
+encoding//src/main/java/com/voucher/manage/daoImpl/AssetsDAOImpl.java=UTF-8
+encoding//src/main/java/com/voucher/manage/filter/SignFilter.java=UTF-8
+encoding//src/main/java/com/voucher/manage/tools/verifycode/Captcha.java=UTF-8
+encoding//src/main/java/com/voucher/manage/tools/verifycode/GifCaptcha.java=UTF-8
+encoding//src/main/java/com/voucher/manage/tools/verifycode/Randoms.java=UTF-8
+encoding//src/main/java/com/voucher/manage/tools/verifycode/SpecCaptcha.java=UTF-8
+encoding//src/main/webapp/WEB-INF/templates/homePageTemplet.ftl=UTF-8
