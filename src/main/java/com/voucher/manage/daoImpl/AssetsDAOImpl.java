@@ -358,6 +358,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"FROM [Hidden] left join  [Position]"+
 					"on [Hidden].GUID = [Position].GUID "+
 					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
+					"AND [Hidden].exist=1"+
 					"AND "+
 					"[Hidden].id not in( select top "+offset+" [Hidden].id from [Hidden] left join  [Position]"+
 					"on [Hidden].GUID = [Position].GUID "+

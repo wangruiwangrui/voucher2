@@ -17,6 +17,9 @@ public class Hidden implements Serializable{
     @SQLString(name="GUID")
 	private String GUID;
 
+    @SQLString(name="RoomGUID")
+	private String RoomGUID;
+    
     @SQLInteger(name="exist")
 	private Integer exist;
 
@@ -81,6 +84,14 @@ public class Hidden implements Serializable{
 		return GUID;
 	}
 
+	public void setRoomGUID(String RoomGUID){
+		this.RoomGUID = RoomGUID;
+	}
+
+	public String getRoomGUID(){
+		return RoomGUID;
+	}
+	
 	public void setExist(Integer exist){
 		this.exist = exist;
 	}

@@ -230,6 +230,9 @@ public class RoomInfo implements Serializable{
     @SQLDateTime(name="asset_check_date")
 	private Date asset_check_date;
 
+    @SQLInteger(name="IsHidden")
+	private Integer IsHidden;
+    
 	public void setGUID(String GUID){
 		this.GUID = GUID;
 	}
@@ -815,6 +818,13 @@ public class RoomInfo implements Serializable{
 	}
 
 
+	public void setIsHidden(Integer IsHidden){
+		this.IsHidden = IsHidden;
+	}
+
+	public Integer getIsHidden(){
+		return IsHidden;
+	}
 
 
 /*

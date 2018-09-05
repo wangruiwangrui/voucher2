@@ -6,4 +6,4 @@
  
  var DOMAIN="http://lzgfgs.com";
  
- //var DOMAIN="http://59329.dxvdsfdsfdsfdsf.cn";
+ //var DOMAIN="http://nwx.wtsms.net";

@@ -55,7 +55,31 @@ public class Hidden_Neaten implements Serializable{
 
     @SQLString(name="progress")
 	private String progress;
-    
+
+    @SQLString(name="RoomGUID")
+	private String RoomGUID;
+
+    @SQLFloat(name="Area")
+	private Float Area;
+
+    @SQLString(name="Type")
+	private String Type;
+
+    @SQLFloat(name="AmountTotal")
+	private Float AmountTotal;
+
+    @SQLFloat(name="Amount")
+	private Float Amount;
+
+    @SQLFloat(name="AuditingAmount")
+	private Float AuditingAmount;
+
+    @SQLString(name="WorkUnit")
+	private String WorkUnit;
+
+    @SQLString(name="AvailabeLength")
+	private String AvailabeLength;
+
 	public void setId(Integer id){
 		this.id = id;
 	}
@@ -174,6 +198,70 @@ public class Hidden_Neaten implements Serializable{
 
 	public String getProgress(){
 		return progress;
+	}
+
+	public void setRoomGUID(String RoomGUID){
+		this.RoomGUID = RoomGUID;
+	}
+
+	public String getRoomGUID(){
+		return RoomGUID;
+	}
+
+	public void setArea(Float Area){
+		this.Area = Area;
+	}
+
+	public Float getArea(){
+		return Area;
+	}
+
+	public void setType(String Type){
+		this.Type = Type;
+	}
+
+	public String getType(){
+		return Type;
+	}
+
+	public void setAmountTotal(Float AmountTotal){
+		this.AmountTotal = AmountTotal;
+	}
+
+	public Float getAmountTotal(){
+		return AmountTotal;
+	}
+
+	public void setAmount(Float Amount){
+		this.Amount = Amount;
+	}
+
+	public Float getAmount(){
+		return Amount;
+	}
+
+	public void setAuditingAmount(Float AuditingAmount){
+		this.AuditingAmount = AuditingAmount;
+	}
+
+	public Float getAuditingAmount(){
+		return AuditingAmount;
+	}
+
+	public void setWorkUnit(String WorkUnit){
+		this.WorkUnit = WorkUnit;
+	}
+
+	public String getWorkUnit(){
+		return WorkUnit;
+	}
+
+	public void setAvailabeLength(String AvailabeLength){
+		this.AvailabeLength = AvailabeLength;
+	}
+
+	public String getAvailabeLength(){
+		return AvailabeLength;
 	}
 
 

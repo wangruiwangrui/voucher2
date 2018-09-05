@@ -26,6 +26,7 @@ import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Item;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
@@ -358,6 +359,7 @@ public class HiddenController {
 	
 	@RequestMapping("/insertHidden")
 	public @ResponseBody Map insertHidden(
+			String roomGuid,
 			@RequestParam String name,@RequestParam String level,
 			@RequestParam String manageRegion,
 			@RequestParam String happenTime,@RequestParam String remark,
@@ -374,6 +376,8 @@ public class HiddenController {
         Users users=userService.getUserByOnlyOpenId(openId);
         
         String userName=users.getName();
+        
+        hidden.setRoomGUID(roomGuid);
         
         hidden.setUserName(userName);       
         
@@ -407,6 +411,50 @@ public class HiddenController {
 		hidden.setDate(date2);
 		hidden.setTerminal("Wechat");
 		int i=hiddenDAO.insertIntoHidden(hidden);
+		
+		if(i==1){
+			//插入资产隐患表
+			Hidden_Assets hidden_Assets=new Hidden_Assets();
+			
+			hidden_Assets.setAsset_GUID(roomGuid);
+			hidden_Assets.setHidden_GUID(uuid.toString());
+			hidden_Assets.setCampusAdmin(openId);
+			hidden_Assets.setUserName(users.getName());
+			hidden_Assets.setDate(date2);
+			
+			assetsDAO.insertIntoHidden_Assets(hidden_Assets);
+			
+			RoomInfo roomInfo=new RoomInfo();
+			
+			Map search=new HashMap<>();
+			
+			search.put(Singleton.ROOMDATABASE + ".[dbo].[RoomInfo].GUID = ", roomGuid);
+			
+			try{
+				RoomInfo roomInfo2=roomInfoDao.findAllRoomInfo(1, 0, "GUID", "", search).get(0);
+				Integer isHidden=roomInfo2.getIsHidden();
+				
+				MyTestUtil.print(roomInfo2);
+				
+				if(isHidden==null||isHidden<1){
+					roomInfo.setIsHidden(1);
+				}else{
+					roomInfo.setIsHidden(1+isHidden);
+				}
+				
+				MyTestUtil.print(roomInfo);
+				
+				String[] where={Singleton.ROOMDATABASE + ".[dbo].[RoomInfo].GUID = ", roomGuid};
+				
+				roomInfo.setWhere(where);
+				
+				roomInfoDao.updateRoomInfo(roomInfo);
+				
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
 		
 		JSONObject jsonObject=JSONObject.parseObject(addComp);
 		
@@ -445,6 +493,7 @@ public class HiddenController {
 	@RequestMapping("/insertHiddenCheck")
 	public @ResponseBody Map insertHiddenCheck(
 			@RequestParam String guid,@RequestParam String checkItemDate,
+			String name, //资产名称
 			@RequestParam String happenTime,@RequestParam String check_name,
 			@RequestParam String check_circs,
 			@RequestParam String addComp,@RequestParam String remark,
@@ -485,11 +534,16 @@ public class HiddenController {
 			hidden_Check_Item.setWall_up(jsonObject1.getInteger("wall_up"));
 			hidden_Check_Item.setOther(jsonObject1.getString("other"));
 			
+			System.out.println("other="+jsonObject1.getString("other"));
+			
+			System.out.println("other="+jsonObject1.getString("other")==null||jsonObject1.getString("other").equals(""));
+			
 			isNull=jsonObject1.getInteger("fire_extinguisher")==null&&jsonObject1.getInteger("high_power")==null&&jsonObject1.getInteger("blow")==null&&
 					jsonObject1.getInteger("line_aging")==null&&jsonObject1.getInteger("incline")==null&&jsonObject1.getInteger("split")==null&&
 					jsonObject1.getInteger("down")==null&&jsonObject1.getInteger("break_off")==null&&jsonObject1.getInteger("destroy")==null&&
 					jsonObject1.getInteger("invalidation")==null&&jsonObject1.getInteger("flaw")==null&&jsonObject1.getInteger("cesspool")==null&&
-					jsonObject1.getInteger("coast")==null&&jsonObject1.getInteger("wall_up")==null;
+					jsonObject1.getInteger("coast")==null&&jsonObject1.getInteger("wall_up")==null&&
+					(jsonObject1.getString("other")==null||jsonObject1.getString("other").equals(""));
 			
 			item=getInt(jsonObject1.getInteger("fire_extinguisher"))+getInt(jsonObject1.getInteger("high_power"))+getInt(jsonObject1.getInteger("blow"))+
 					getInt(jsonObject1.getInteger("line_aging"))+getInt(jsonObject1.getInteger("incline"))+getInt(jsonObject1.getInteger("split"))+
@@ -499,7 +553,7 @@ public class HiddenController {
 			
 			checkItem=getItem("灭火器", hidden_Check_Item.getFire_extinguisher())+getItem("大功率用电器", hidden_Check_Item.getHigh_power())+
 					getItem("易燃易爆物品", hidden_Check_Item.getBlow())+getItem("线路老化", hidden_Check_Item.getBlow())+
-					getItem("顷斜", hidden_Check_Item.getIncline())+getItem("开裂", hidden_Check_Item.getSplit())+
+					getItem("倾斜", hidden_Check_Item.getIncline())+getItem("开裂", hidden_Check_Item.getSplit())+
 					getItem("地基下沉", hidden_Check_Item.getDown())+getItem("屋面脱落", hidden_Check_Item.getBreak_off())+
 					getItem("结构破坏", hidden_Check_Item.getDestroy())+getItem("承重失效", hidden_Check_Item.getInvalidation())+
 					getItem("漏雨", hidden_Check_Item.getFlaw())+getItem("化粪池问题", hidden_Check_Item.getCesspool())+
@@ -523,9 +577,14 @@ public class HiddenController {
         System.out.println("check_circs="+check_circs);
         
         System.out.println("isNull="+isNull);
-        
+
         Map map=new HashMap<>();
-                
+        
+        if(check_name.equals("异常")&&isNull){
+        	map.put("status", 2);
+        	return map;
+        }
+        
         System.out.println("item="+item);
         
         hidden_Check.setCampusAdmin(openId);
@@ -561,51 +620,61 @@ public class HiddenController {
 		
 		hidden_Check_Item.setCheck_id(uuid.toString());
 		
-		hiddenDAO.insertIntoHidden_Check_Item(hidden_Check_Item);
+		int state=hiddenDAO.insertIntoHidden_Check_Item(hidden_Check_Item);
 		
-		JSONObject jsonObject=JSONObject.parseObject(addComp);
-		
-		String province=jsonObject.getString("province");		
-		String city=jsonObject.getString("city");		
-		String district=jsonObject.getString("district");		
-		String street=jsonObject.getString("street");		
-		String streetNumber=jsonObject.getString("streetNumber");	
-		
-		Position position=new Position();
-		
-		position.setCheck_id(uuid.toString());
-		position.setLat(lat);
-		position.setLng(lng);
-		
-		position.setProvince(province);
-		position.setCity(city);
-		position.setDistrict(district);
-		position.setStreet(streetNumber);
-		position.setStreet_number(streetNumber);
-		position.setDate(date);
-		
-		assetsDAO.updatePosition(position);
+		if(state == 1){
+			
+			if(check_name.equals("异常")){
+				insertHidden(guid,name, "", "", happenTime, remark, check_circs, addComp, lng, lat, request);
+			}
 
-		map.put("status", i);
-		map.put("check_id", uuid.toString());
-		
-		position.setCheck_id(null);
-		position.setGUID(guid);
-		
-		boolean isUpdate=false;   //如果有位置就不更新
-		
-		assetsDAO.updatePositionByRoomInfo(position,isUpdate); //更新资产位置
-		
-		//更新安全巡查时间
-		RoomInfo roomInfo=new RoomInfo();
-		
-		roomInfo.setHidden_check_date(date);
-		
-		String[] where={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = ",guid};
-		
-		roomInfo.setWhere(where);
-		
-		roomInfoDao.updateRoomInfo(roomInfo);
+			JSONObject jsonObject = JSONObject.parseObject(addComp);
+
+			String province = jsonObject.getString("province");
+			String city = jsonObject.getString("city");
+			String district = jsonObject.getString("district");
+			String street = jsonObject.getString("street");
+			String streetNumber = jsonObject.getString("streetNumber");
+
+			Position position = new Position();
+
+			position.setCheck_id(uuid.toString());
+			position.setLat(lat);
+			position.setLng(lng);
+
+			position.setProvince(province);
+			position.setCity(city);
+			position.setDistrict(district);
+			position.setStreet(streetNumber);
+			position.setStreet_number(streetNumber);
+			position.setDate(date);
+
+			assetsDAO.updatePosition(position);
+
+			map.put("status", i);
+			map.put("check_id", uuid.toString());
+
+			position.setCheck_id(null);
+			position.setGUID(guid);
+
+			boolean isUpdate = false; // 如果有位置就不更新
+
+			assetsDAO.updatePositionByRoomInfo(position, isUpdate); // 更新资产位置
+
+			// 更新安全巡查时间
+			RoomInfo roomInfo = new RoomInfo();
+
+			roomInfo.setHidden_check_date(date);
+
+			String[] where = { Singleton.ROOMDATABASE + ".[dbo].[RoomInfo].GUID = ", guid };
+
+			roomInfo.setWhere(where);
+
+			roomInfoDao.updateRoomInfo(roomInfo);
+		}else{
+			map.put("status", 0);
+        	return map;
+		}
 		
 		return map;
 		

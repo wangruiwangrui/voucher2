@@ -158,7 +158,7 @@
 					<div class="weui-flex__item">
 						<label class="weui-cell ">
 							<div class="weui-cell__bd">
-								<p class="incline">顷斜</p>
+								<p class="incline">倾斜</p>
 							</div>
 							<div id="incline" class="weui-cell_warn"></div>
 						</label>
@@ -790,7 +790,7 @@
 	   checkItem.cesspool=getRadioValue("cesspool");
 	   checkItem.coast=getRadioValue("coast");
 	   checkItem.wall_up=getRadioValue("wall_up");
-	   checkItem.other=$("#other").val();
+	   checkItem.other=$("#check_circs").val();
 	   
       
 	   var checkItemDate=JSON.stringify(checkItem);
@@ -811,9 +811,12 @@
     	var check_circs=$("#check_circs").val();
     	var addComp1=JSON.stringify(addComp);
 
+    	var name = document.getElementById("address").innerText;
+    	
     	 $.post("/voucher/mobile/hidden/insertHiddenCheck.do",
     		  {
 				guid:guid,
+				name:name,
 				checkItemDate:checkItemDate,
 		    	happenTime:happenTime,
 		    	check_name:check_name,

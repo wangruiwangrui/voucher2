@@ -23,11 +23,12 @@
   <form action="" novalidate>
     <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">隐患名称</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">隐患资产</label></div>
                 <div id="name" class="weui-cell__bd">
                 </div>
             </div>
     </div>
+    <!--  
     <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">隐患等级</label></div>
@@ -36,7 +37,7 @@
                
         </div>
     </div>
-    
+    -->
     
      <div class="weui-cells weui-cells_form">
       <div class="weui-cell">
@@ -239,9 +240,11 @@
                   name.innerHTML=obj.name;
                   $("#name").append(name);
                   
+                  /*
                   var level=document.createElement("span");
                   level.innerHTML=obj.hidden_level;
                   $("#level").append(level);                  
+                  */
                   
                   var type;
                   var progress_img=document.createElement("i");
