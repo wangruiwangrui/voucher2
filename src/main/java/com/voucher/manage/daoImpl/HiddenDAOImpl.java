@@ -12,18 +12,15 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Item;
-import com.voucher.manage.daoModel.Assets.Hidden_Data;
-import com.voucher.manage.daoModel.Assets.Hidden_Level;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
-import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
 import com.voucher.manage.daoModel.Assets.WeiXin_User;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
@@ -46,10 +43,10 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	@Override
 	public Integer InsertIntoHiddenData(String GUID,String NAME,String TYPE,String uri) {
 		// TODO Auto-generated method stub
-		Hidden_Data hidden_Data=new Hidden_Data();
+		Hidden_Check_Date hidden_Data=new Hidden_Check_Date();
 		Date date=new Date();
 		
-		hidden_Data.setGUID(GUID);
+		hidden_Data.setCheck_id(GUID);
 		hidden_Data.setNAME(NAME);
 		hidden_Data.setTYPE(TYPE);
 		hidden_Data.setURI(uri);
@@ -134,7 +131,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		List<byte[]> fileBytes=new ArrayList<byte[]>();
 		
 		// TODO Auto-generated method stub
-		Hidden_Data hidden_Data=new Hidden_Data();
+		Hidden_Check_Date hidden_Data=new Hidden_Check_Date();
 		hidden_Data.setLimit(1000);
 		hidden_Data.setOffset(0);
 		hidden_Data.setNotIn("GUID");
@@ -142,13 +139,13 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		
 		hidden_Data.setWhere(where);
 		
-		List<Hidden_Data> hidden_Datas=SelectExe.get(this.getJdbcTemplate(), hidden_Data);
+		List<Hidden_Check_Date> hidden_Datas=SelectExe.get(this.getJdbcTemplate(), hidden_Data);
 		
-		Iterator<Hidden_Data> iterator=hidden_Datas.iterator();
+		Iterator<Hidden_Check_Date> iterator=hidden_Datas.iterator();
 		
 		while(iterator.hasNext()){
 			
-			Hidden_Data hidden_Data2=iterator.next();
+			Hidden_Check_Date hidden_Data2=iterator.next();
 			
 			File file=new File(filePath+"\\"+hidden_Data2.getURI());
 			
@@ -268,7 +265,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	@Override
 	public Map<String, Object> selectAllHidden(Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
 		// TODO Auto-generated method stub
-        Hidden hidden=new Hidden();
+        Hidden_Check_Date hidden=new Hidden_Check_Date();
 		
 		hidden.setLimit(limit);
 		hidden.setOffset(offset);
@@ -277,11 +274,11 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden.setNotIn("id");
 		
 		if(!search.isEmpty()){
-			search.put("[Hidden].exist =", "1");
+			search.put("[Hidden_Check].exist =", "1");
 		    String[] where=TransMapToString.get(search);
 		    hidden.setWhere(where);
 		}else{
-			String[] where={"[Hidden].exist =", "1"};
+			String[] where={"[Hidden_Check].exist =", "1"};
 			hidden.setWhere(where);
 		}
 		
@@ -298,105 +295,13 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		return map;
 	}
 
-	@Override
-	public Integer insertIntoHidden(Hidden hidden) {
-		// TODO Auto-generated method stub
-		if(hidden!=null){
-		  return InsertExe.get(this.getJdbcTemplate(), hidden);	     
-		}else{
-			return 0;
-		}
-	}
-
-	@Override
-	public Integer updateHidden(Hidden hidden) {
-		// TODO Auto-generated method stub
-	    
-		return UpdateExe.get(this.getJdbcTemplate(), hidden);
-	}
-
-	@Override
-	public Integer deleteHidden(Hidden hidden) {
-		// TODO Auto-generated method stub
-		
-		//return DeleteExe.get(this.getJdbcTemplate(), hidden);
-		Hidden hidden2=new Hidden();
-		hidden2.setExist(0);
-		hidden2.setWhere(hidden.getWhere());
-		int i=UpdateExe.get(this.getJdbcTemplate(), hidden2);
-		if(i==1){
-			String[] where2={"[Hidden_Data].GUID=",hidden.getGUID()};
-			Hidden_Data hidden_Data=new Hidden_Data();
-			hidden_Data.setWhere(hidden.getWhere());
-			DeleteExe.get(this.getJdbcTemplate(), hidden_Data);
-		}
-		return i;
-	}
-
-	@Override
-	public List<Hidden_Level> setctAllHiddenLevel() {
-		// TODO Auto-generated method stub
-		Hidden_Level hidden_level=new Hidden_Level();
-		hidden_level.setOffset(0);
-		hidden_level.setLimit(1000);
-		hidden_level.setNotIn("id");
-		return SelectExe.get(this.getJdbcTemplate(), hidden_level);
-	}
-
-	@Override
-	public Integer insertHiddenLevel(Hidden_Level hidden_level) {
-		// TODO Auto-generated method stub
-		String[] where={"[Hidden_Level].hidden_level=",String.valueOf(hidden_level.getHidden_level())};
-		Hidden_Level hidden_Level2=new Hidden_Level();
-		hidden_Level2.setWhere(where);
-		
-		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_Level2).get("");
-		if(count==0){
-			return InsertExe.get(this.getJdbcTemplate(), hidden_level);
-		}else {
-			return 2;
-		}
-	}
-
-	@Override
-	public Integer deleteHiddenLevel(Hidden_Level hidden_level) {
-		// TODO Auto-generated method stub
-		Hidden hidden=new Hidden();
-		String[] where={"[Hidden].hidden_level=",String.valueOf(hidden_level.getHidden_level()),
-				"[Hidden].exist=","1"};
-		hidden.setWhere(where);
-		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
-		
-		if(count==0){
-			return DeleteExe.get(this.getJdbcTemplate(), hidden_level);
-		}else{
-			return 3;
-		}
-	}
-
-	@Override
-	public Integer updateHiddenLevel(Hidden_Level hidden_Level) {
-		// TODO Auto-generated method stub
-		Hidden hidden=new Hidden();
-		String[] where={"[Hidden].hidden_level=",String.valueOf(hidden_Level.getHidden_level()),
-				"[Hidden].exist=","1"};
-		hidden.setWhere(where);
-		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
-		
-		if(count==0){
-			return UpdateExe.get(this.getJdbcTemplate(), hidden_Level);
-		}else{
-			return 3;
-		}
-	}
-
 
 	@Override
 	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort, String order,
 			Map<String, String> search) {
 		// TODO Auto-generated method stub
-        Hidden hidden=new Hidden();
-        search.put("[Hidden].exist =", "1");
+        Hidden_Check hidden=new Hidden_Check();
+        search.put("[Hidden_Check].exist =", "1");
         
         System.out.println("order="+order+"      sort="+sort);
         
@@ -442,58 +347,6 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		map.put("total", countMap.get(""));
 		
 		return map;
-	}
-
-
-	@Override
-	public List<Hidden_Type> selectAllHiddenType() {
-		// TODO Auto-generated method stub
-		Hidden_Type hidden_Type=new Hidden_Type();
-		hidden_Type.setOffset(0);
-		hidden_Type.setLimit(1000);
-		hidden_Type.setNotIn("id");
-		return SelectExe.get(this.getJdbcTemplate(), hidden_Type);
-	}
-
-
-	@Override
-	public Integer insertHiddenType(Hidden_Type hidden_Type) {
-		// TODO Auto-generated method stub
-		return InsertExe.get(this.getJdbcTemplate(), hidden_Type);
-	}
-
-
-	@Override
-	public Integer deleteHiddenType(Hidden_Type hidden_Type) {
-		// TODO Auto-generated method stub
-		Hidden hidden=new Hidden();
-		String[] where={"[Hidden].type=",String.valueOf(hidden_Type.getType()),
-				"[Hidden].exist=","1"};
-		hidden.setWhere(where);
-		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
-		
-		if(count==0){
-			return DeleteExe.get(this.getJdbcTemplate(), hidden_Type);
-		}else{
-			return 3;
-		}
-	}
-
-
-	@Override
-	public Integer updateHiddenType(Hidden_Type hidden_Type) {
-		// TODO Auto-generated method stub
-		Hidden hidden=new Hidden();
-		String[] where={"[Hidden].type=",String.valueOf(hidden_Type.getType()),
-				"[Hidden].exist=","1"};
-		hidden.setWhere(where);
-		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
-		
-		if(count==0){
-			return UpdateExe.get(this.getJdbcTemplate(), hidden_Type);
-		}else{
-			return 3;
-		}
 	}
 
 
@@ -564,59 +417,6 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		
 	}
 
-
-	@Override
-	public Integer insertHiddenUser(Hidden_User hidden_User) {
-		// TODO Auto-generated method stub
-		
-		Hidden_User hidden_User2=new Hidden_User();
-		
-		String[] where={"[Hidden_User].campusAdmin=",hidden_User.getCampusAdmin()};
-		
-		hidden_User2.setWhere(where);
-		
-		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_User2).get("");
-
-		Hidden_User hidden_User3=new Hidden_User();
-		
-		String[] where2={"[Hidden_User].id=",String.valueOf(hidden_User.getId())};
-		
-		hidden_User3.setWhere(where2);
-		
-		int count2=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_User3).get("");
-		
-		if(count!=0){
-			return 2;
-		}else if(count2!=0){
-			return 3;
-		}else{
-		   return InsertExe.get(this.getJdbcTemplate(), hidden_User);
-		}
-	}
-
-
-	@Override
-	public Integer deleteHiddenUser(Hidden_User hidden_User) {
-		// TODO Auto-generated method stub
-		Hidden hidden=new Hidden();
-		String[] where={"[Hidden].principal=",String.valueOf(hidden_User.getPrincipal()),
-				"[Hidden].exist=","1"};
-		hidden.setWhere(where);
-		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
-		
-		if(count==0){
-			return DeleteExe.get(this.getJdbcTemplate(), hidden_User);
-		}else{
-			return 3;
-		}
-	}
-
-
-	@Override
-	public Integer updateHiddenUser(Hidden_User hidden_User) {
-		// TODO Auto-generated method stub
-		return UpdateExe.get(this.getJdbcTemplate(), hidden_User);
-	}
 	
 	@Override
 	public Integer updateUserPassword(Hidden_User hidden_User,String OldPw) {
@@ -994,13 +794,6 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Neaten.setOrder(order);
 		hidden_Neaten.setNotIn("id");
 		
-        Hidden hidden=new Hidden();
-		
-		hidden.setLimit(limit);
-		hidden.setOffset(offset);
-		hidden.setSort(sort);
-		hidden.setOrder(order);
-		hidden.setNotIn("id");
 		
 		Position position=new Position();
 		
@@ -1021,18 +814,17 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    hidden_Neaten.setWhere(where);
-		    hidden.setWhere(where);
 		    position.setWhere(where);
 		    weiXin_User.setWhere(where);
 		}
 		
 		Map map=new HashMap<String, Object>();
 		
-		Object[] objects={hidden_Neaten,hidden,position,weiXin_User};
+		Object[] objects={hidden_Neaten,position,weiXin_User};
 		
 		Hidden_Neaten_Join hidden_Neaten_Join=new Hidden_Neaten_Join();
 		
-		String[] join={"GUID","neaten_id","campusAdmin"};
+		String[] join={"neaten_id","campusAdmin"};
 		
 		List<Hidden_Neaten> list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Neaten_Join, join);
 		
@@ -1091,28 +883,28 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	@Override
 	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search) {
 		// TODO Auto-generated method stub
-		 Hidden hidden=new Hidden();
-		 search.put("[Hidden].exist =", "1");
+		 Hidden_Check hidden=new Hidden_Check();
+		 search.put("[Hidden_Check].exist =", "1");
 		 
-			hidden.setLimit(10);
-			hidden.setOffset(0);
-			hidden.setSort(null);
-			hidden.setOrder(null);
-			hidden.setNotIn("GUID");
-			
-			Position position=new Position();
-			position.setLimit(10);
-			position.setOffset(0);
-			position.setSort(null);
-			position.setOrder(null);
-			position.setNotIn("GUID");
-			
-			WeiXin_User weiXin_User=new WeiXin_User();
-			weiXin_User.setLimit(10);
-			weiXin_User.setOffset(0);
-			weiXin_User.setSort(null);
-			weiXin_User.setOrder(null);
-			weiXin_User.setNotIn("GUID");
+		hidden.setLimit(10);
+		hidden.setOffset(0);
+		hidden.setSort(null);
+		hidden.setOrder(null);
+		hidden.setNotIn("check_id");
+
+		Position position = new Position();
+		position.setLimit(10);
+		position.setOffset(0);
+		position.setSort(null);
+		position.setOrder(null);
+		position.setNotIn("check_id");
+
+		WeiXin_User weiXin_User = new WeiXin_User();
+		weiXin_User.setLimit(10);
+		weiXin_User.setOffset(0);
+		weiXin_User.setSort(null);
+		weiXin_User.setOrder(null);
+		weiXin_User.setNotIn("check_id");
 			
 		 String[] where=TransMapToString.get(search);
 		 hidden.setWhere(where);
@@ -1124,7 +916,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 				
 		Object[] objects={hidden,position,weiXin_User};
 				
-		String[] join={"GUID","campusAdmin"};
+		String[] join={"check_id","campusAdmin"};
 			
 		Hidden_Join hidden_Join=new Hidden_Join();
 		
@@ -1175,23 +967,28 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public Map selectAllHidden_Point(Integer limit, Integer offset, String sort, String order,
 			Map<String, String> search) {
 		// TODO Auto-generated method stub
-		Hidden hidden=new Hidden();
+		Hidden_Check hidden=new Hidden_Check();
 		hidden.setLimit(limit);
 		hidden.setOffset(offset);
 		hidden.setSort(sort);
 		hidden.setOrder(order);
-		hidden.setNotIn("id");
+		hidden.setNotIn("check_id");
 		
 		Position position=new Position();
 		position.setLimit(limit);
 		position.setOffset(offset);
 		position.setSort(sort);
 		position.setOrder(order);
-		position.setNotIn("id");
+		position.setNotIn("check_id");
 		
 		if(search!=null&&!search.isEmpty()){
+			search.put("check_name=", "异常");
 		    String[] where=TransMapToString.get(search);
 		    hidden.setWhere(where);
+		    position.setWhere(where);
+		}else{
+			String[] where={"check_name=", "异常"};
+			hidden.setWhere(where);
 		    position.setWhere(where);
 		}
 		
@@ -1199,7 +996,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		
 		Object[] objects={hidden,position};
 		
-		String[] join={"guid"};
+		String[] join={"check_id"};
 		
 		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, position_Hidden_Join, join);
 		
@@ -1212,6 +1009,47 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		map.put("total", total);
 		
 		return map;
+	}
+
+
+	@Override
+	public Integer updateRoomInfo_Hidden_Item(RoomInfo_Hidden_Item roomInfo_Hidden_Item) {
+		// TODO Auto-generated method stub
+		String guid=roomInfo_Hidden_Item.getGuid();
+		
+		String[] where={"[RoomInfo_Hidden_Item].guid=",guid};
+		
+		roomInfo_Hidden_Item.setWhere(where);
+		
+		int i;
+		
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), roomInfo_Hidden_Item).get("");
+		
+		if(count>0){
+			i=UpdateExe.get(this.getJdbcTemplate(), roomInfo_Hidden_Item);
+		}else{
+			i=InsertExe.get(this.getJdbcTemplate(), roomInfo_Hidden_Item);
+		}
+		
+		return i;
+	}
+
+
+	@Override
+	public List<RoomInfo_Hidden_Item> selectRoomInfo_Hidden_Item(Integer limit, Integer offset, String sort,
+			String order, Map<String, String> search) {
+		// TODO Auto-generated method stub
+		RoomInfo_Hidden_Item roomInfo_Hidden_Item=new RoomInfo_Hidden_Item();
+		roomInfo_Hidden_Item.setLimit(limit);
+		roomInfo_Hidden_Item.setOffset(offset);
+		roomInfo_Hidden_Item.setNotIn("guid");
+		
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    roomInfo_Hidden_Item.setWhere(where);
+		}
+		
+		return SelectExe.get(this.getJdbcTemplate(), roomInfo_Hidden_Item);
 	}
 
 

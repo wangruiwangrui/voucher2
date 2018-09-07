@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[Hidden_Check_Item]")
-public class Hidden_Check_Item implements Serializable{
+@DBTable(name="[RoomInfo_Hidden_Item]")
+public class RoomInfo_Hidden_Item implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
-    @SQLString(name="check_id")
-	private String check_id;
+    @SQLString(name="guid")
+	private String guid;
 
     @SQLInteger(name="fire_extinguisher")
 	private Integer fire_extinguisher;
@@ -56,16 +56,16 @@ public class Hidden_Check_Item implements Serializable{
 
     @SQLInteger(name="is_other")
 	private Integer is_other;
-    
+
     @SQLString(name="other")
 	private String other;
 
-	public void setCheck_id(String check_id){
-		this.check_id = check_id;
+	public void setGuid(String guid){
+		this.guid = guid;
 	}
 
-	public String getCheck_id(){
-		return check_id;
+	public String getGuid(){
+		return guid;
 	}
 
 	public void setFire_extinguisher(Integer fire_extinguisher){
@@ -187,7 +187,7 @@ public class Hidden_Check_Item implements Serializable{
 	public Integer getIs_other(){
 		return is_other;
 	}
-	
+
 	public void setOther(String other){
 		this.other = other;
 	}

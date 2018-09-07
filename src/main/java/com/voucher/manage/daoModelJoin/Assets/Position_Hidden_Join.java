@@ -39,35 +39,41 @@ public class Position_Hidden_Join implements Serializable{
 	private Date date;
     
     /*
-     * Hidden
+     * Hidden_Check
      */
     
-    @SQLString(name="name")
-   	private String name;
+    @SQLInteger(name="id")
+	private Integer id;
 
-    @SQLString(name="hidden_level")
-	private String hidden_level;
-
-    @SQLString(name="detail")
-   	private String detail;
+    @SQLInteger(name="exist")
+	private Integer exist;
     
-    @SQLDouble(name="progress")
-    private Double progress;
-       
-    @SQLDateTime(name="happen_time")
-   	private Date happen_time;
+    @SQLString(name="check_id")
+	private String check_id;
+
+    @SQLString(name="check_name")
+	private String check_name;
 
     @SQLString(name="principal")
 	private String principal;
 
-    @SQLInteger(name="type")
-   	private Integer type;
+    @SQLString(name="check_circs")
+	private String check_circs;
 
-    @SQLString(name="state")
-   	private String state;
+    @SQLDateTime(name="happen_time")
+	private Date happen_time;
 
+    @SQLDateTime(name="update_time")
+	private Date update_time;
+    
     @SQLString(name="remark")
-   	private String remark;
+	private String remark;
+
+    @SQLString(name="campusAdmin")
+   	private String campusAdmin;
+
+    @SQLString(name="terminal")
+   	private String terminal;
     
      
     public void setGUID(String GUID){
@@ -144,47 +150,23 @@ public class Position_Hidden_Join implements Serializable{
     
 	
 	/*
-     * Hidden
+     * Hidden_Check
      */
 	
-	public void setName(String name){
-		this.name = name;
+	public void setCheck_id(String check_id){
+		this.check_id = check_id;
 	}
 
-	public String getName(){
-		return name;
+	public String getCheck_id(){
+		return check_id;
 	}
 
-	public void setHidden_level(String hidden_level){
-		this.hidden_level = hidden_level;
+	public void setCheck_name(String check_name){
+		this.check_name = check_name;
 	}
 
-	public String getHidden_level(){
-		return hidden_level;
-	}
-
-	public void setDetail(String detail){
-		this.detail = detail;
-	}
-
-	public String getDetail(){
-		return detail;
-	}
-
-	public void setProgress(Double progress){
-		this.progress = progress;
-	}
-
-	public Double getProgress(){
-		return progress;
-	}
-	
-	public void setHappen_time(Date happen_time){
-		this.happen_time = happen_time;
-	}
-
-	public Date getHappen_time(){
-		return happen_time;
+	public String getCheck_name(){
+		return check_name;
 	}
 
 	public void setPrincipal(String principal){
@@ -195,14 +177,30 @@ public class Position_Hidden_Join implements Serializable{
 		return principal;
 	}
 
-	public void setType(Integer type){
-		this.type = type;
+	public void setCheck_circs(String check_circs){
+		this.check_circs = check_circs;
 	}
 
-	public Integer getType(){
-		return type;
+	public String getCheck_circs(){
+		return check_circs;
 	}
-	
+
+	public void setHappen_time(Date happen_time){
+		this.happen_time = happen_time;
+	}
+
+	public Date getHappen_time(){
+		return happen_time;
+	}
+
+	public void setUpdate_time(Date update_time){
+		this.update_time = update_time;
+	}
+
+	public Date getUpdate_time(){
+		return update_time;
+	}
+
 	public void setRemark(String remark){
 		this.remark = remark;
 	}
@@ -210,5 +208,22 @@ public class Position_Hidden_Join implements Serializable{
 	public String getRemark(){
 		return remark;
 	}
+
+	public void setCampusAdmin(String campusAdmin){
+		this.campusAdmin = campusAdmin;
+	}
+
+	public String getCampusAdmin(){
+		return campusAdmin;
+	}
+
+	public void setTerminal(String terminal){
+		this.terminal = terminal;
+	}
+
+	public String getTerminal(){
+		return terminal;
+	}
+
 	
 }

@@ -272,7 +272,7 @@ var state=getQueryString("state");
 		                   	 var result=obj.result;
 		                   	 var lat=result[0].y;
 		                   	 var lng=result[0].x;
-		                   	 location.href="guidance/hiddenNeatenList.html?latitude="+lat+"&longitude="+lng;
+		                   	 location.href="guidance/addNeatenInfoList.html?latitude="+lat+"&longitude="+lng;
 		                    });
 		                    
 		               },

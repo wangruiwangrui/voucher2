@@ -5,12 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.Assets.Hidden;
-import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
-import com.voucher.manage.daoModel.Assets.Hidden_Level;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
-import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.WeiXin_User;
@@ -50,30 +46,8 @@ public interface Assets {
 	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search);
 	
-	public Integer insertIntoHidden(Hidden hidden);
-	
-	public Integer updateHidden(Hidden hidden);
-	
-	public Integer deleteHidden(Hidden hidden);
-	
 	public Integer updatePosition(Position position);
-	
-    public List<Hidden_Level> setctAllHiddenLevel();
-	
-	public Integer insertHiddenLevel(Hidden_Level hidden_level);
-	
-	public Integer deleteHiddenLevel(Hidden_Level hidden_level);
-	
-	public Integer updateHiddenLevel(Hidden_Level hidden_Level);
-	
-    public List<Hidden_Type> selectAllHiddenType();
-	
-	public Integer insertHiddenType(Hidden_Type hidden_Type);
-	
-	public Integer deleteHiddenType(Hidden_Type hidden_Type);
-	
-	public Integer updateHiddenType(Hidden_Type hidden_Type);
-	
+		
 	public Map<String , Object> selectHiddenUser(String campusAdmin);
 	
 	public Map<String, Object> selectAllHiddenUser(Integer limit, Integer offset, String sort,
@@ -115,11 +89,7 @@ public interface Assets {
 	public Integer deleteHiddenNeaten(Hidden_Neaten hidden_Neaten);
 	
 	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search);
-	
-	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets);
-	
-	public Integer deleteHidden_Assets(Hidden_Assets hidden_Assets);
-	
+		
 	public Map findAssetByHideen(Integer limit, Integer offset, String sort, String order,
 			Map<String, String> search);
 	

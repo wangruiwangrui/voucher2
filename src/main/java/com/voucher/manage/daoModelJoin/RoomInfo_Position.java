@@ -225,6 +225,9 @@ public class RoomInfo_Position implements Serializable{
     @SQLFloat(name="UseYears")
 	private Float UseYears;
 	
+    @SQLInteger(name="IsHidden")
+	private Integer IsHidden;
+    
     /*
      * ChartInfo
      */
@@ -924,5 +927,13 @@ public class RoomInfo_Position implements Serializable{
 
 	public String getPhone(){
 		return Phone;
+	}
+	
+	public void setIsHidden(Integer IsHidden){
+		this.IsHidden = IsHidden;
+	}
+
+	public Integer getIsHidden(){
+		return IsHidden;
 	}
 }

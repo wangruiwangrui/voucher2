@@ -23,14 +23,10 @@ import com.voucher.manage.daoModel.HiddenByMonthAmount;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Users;
 import com.voucher.manage.daoModel.Assets.Assets_Check;
-import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
-import com.voucher.manage.daoModel.Assets.Hidden_Data;
-import com.voucher.manage.daoModel.Assets.Hidden_Level;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
-import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
@@ -61,20 +57,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	@Override
 	public Map findAllHidden(Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
 		// TODO Auto-generated method stub
-		
-		Hidden hidden=new Hidden();
-		
-		hidden.setLimit(limit);
-		hidden.setOffset(offset);
-		hidden.setSort(sort);
-		hidden.setOrder(order);
-		
-		if(!search.isEmpty()){
-		    String[] where=TransMapToString.get(search);
-		    hidden.setWhere(where);
-		}
-		
-		
+				
 		return null;
 	}
 
@@ -224,22 +207,15 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		position.setLimit(limit);
 		position.setNotIn("id");
 		
-		Hidden hidden=new Hidden();
+		Hidden_Check hidden=new Hidden_Check();
 		hidden.setOffset(offset);
 		hidden.setLimit(limit);
 		hidden.setNotIn("id");
 		
-		if(!manageRegion.equals("")){
-			String[] where = {"[Position].GUID !=","''",
-					"Hidden.ManageRegion = ", manageRegion};
-			position.setWhere(where);
-			hidden.setWhere(where);
-		}else{
-			String[] where = {"[Position].GUID !=","''"};
-			position.setWhere(where);
-			hidden.setWhere(where);
-		}
-		
+		String[] where = { "[Position].GUID !=", "''" };
+		position.setWhere(where);
+		hidden.setWhere(where);
+
 		Object[] objects={hidden,position};
 		
 		String[] join={"GUID"};
@@ -344,24 +320,23 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"[Position].lng,"+
 					"[Position].lat,"+
 					"[Position].date,"+
-					"[Hidden].name,"+
-					"[Hidden].hidden_level,"+
-					"[Hidden].detail,"+
-					"[Hidden].progress,"+
-					"[Hidden].happen_time,"+
-					"[Hidden].principal,"+
-					"[Hidden].type,"+
-					"[Hidden].state,"+
-					"[Hidden].remark,"+
-					"[Hidden].update_time,"+
-					"[Hidden].date "+
-					"FROM [Hidden] left join  [Position]"+
-					"on [Hidden].GUID = [Position].GUID "+
+					"[Hidden_Check].check_id,"+
+					"[Hidden_Check].check_name,"+
+					"[Hidden_Check].principal,"+
+					"[Hidden_Check].check_circs,"+
+					"[Hidden_Check].happen_time,"+
+					"[Hidden_Check].principal,"+
+					"[Hidden_Check].state,"+
+					"[Hidden_Check].remark,"+
+					"[Hidden_Check].update_time,"+
+					"[Hidden_Check].date "+
+					"FROM [Hidden_Check] left join  [Position]"+
+					"on [Hidden_Check].GUID = [Position].GUID "+
 					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
-					"AND [Hidden].exist=1"+
+					"AND [Hidden_Check].exist=1"+
 					"AND "+
-					"[Hidden].id not in( select top "+offset+" [Hidden].id from [Hidden] left join  [Position]"+
-					"on [Hidden].GUID = [Position].GUID "+
+					"[Hidden_Check].id not in( select top "+offset+" [Hidden_Check].id from [Hidden_Check] left join  [Position]"+
+					"on [Hidden_Check].GUID = [Position].GUID "+
 					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
 					"ORDER BY   SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))) ";
 					
@@ -373,14 +348,14 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		if(search.equals("")){
 			sql=sql0+sql1;
 		}else{
-			sql=sql0+"AND [Hidden].name like '%"+search+"%' "+sql1;
+			sql=sql0+"AND [Hidden_Check].check_circs like '%"+search+"%' "+sql1;
 		}
 		
 		Position_Hidden_Join position_Hidden_Join=new Position_Hidden_Join();
 		
 		Position position=new Position();		
 		
-		Hidden hidden=new Hidden();
+		Hidden_Check hidden=new Hidden_Check();
 		
 		Object[] objects={hidden,position};
 		
@@ -494,6 +469,112 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 
 		return map;
 	}
+	
+	@Override
+	public Map findAssetHiddenByDistance(int limit,int offset,Double lng, Double lat,String search) {
+		// TODO Auto-generated method stub
+		
+		String sql0="SELECT TOP "+limit+" "+
+					"[Position].GUID,"+
+					"[Position].province,"+
+					"[Position].city,"+
+					"[Position].district,"+
+					"[Position].street,"+
+					"[Position].street_number,"+
+					"[Position].lng,"+
+					"[Position].lat,"+
+					"[Position].date,"+
+					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddress,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Region,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Segment,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Useful,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Floor,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Structure,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildArea,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomType,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsCity,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Manager,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManagerPhone,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsStreet,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FitMent,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BeFrom,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].InDate,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightNo,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightArea,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DesignUseful,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildYear,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightUnit,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit,"+		
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsHidden "+
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+					"WHERE [Position].lng is not null AND [Position].lat is not null "+
+					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+					"AND IsHidden>0 "+
+					"AND "+
+					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
+					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+					"AND IsHidden>0 ";
+		
+		
+		String sql1="ORDER BY   "+
+					"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";
+		
+		String sql;
+		
+		String sql2="SELECT count(*) "+				   
+				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+				"WHERE [Position].lng is not null AND [Position].lat is not null "+
+				"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+				"AND IsHidden>0 ";
+		
+		if(search.equals("")){
+			sql=sql0+sql1+")"+sql1;
+		}else{
+			sql=sql0+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+					+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )"+
+					sql1+")"+
+					" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+					+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )"+sql1;
+			sql2=sql2+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+					+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )";
+		}
+		
+		System.out.println("sql="+sql);
+		
+		RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+		
+		Position position=new Position();		
+		
+		RoomInfo roomInfo=new RoomInfo();
+		
+		Object[] objects={roomInfo,position};
+		
+		Map map=new HashMap<>();
+		
+		try{
+			List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,roomInfo_Position);
+			int total=(int) SelectSqlJoinExe.getCount(this.getJdbcTemplate(), sql2, objects).get("");
+			map.put("rows", list);
+			map.put("total", total);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return map;
+	}
+	
 	
 	@Override
 	public Map findAssetByDistanceDate(int limit,int offset,Double lng, Double lat,String search,String search2,Integer type){
@@ -666,19 +747,19 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"[Position].lng,"+
 					"[Position].lat,"+
 					"[Position].date,"+
-					"[Hidden].name,"+
-					"[Hidden].hidden_level,"+
-					"[Hidden].detail,"+
-					"[Hidden].progress,"+
-					"[Hidden].happen_time,"+
-					"[Hidden].principal,"+
-					"[Hidden].type,"+
-					"[Hidden].state,"+
-					"[Hidden].remark,"+
-					"[Hidden].update_time,"+
-					"[Hidden].date "+
-					"FROM [Hidden] left join  [Position]"+
-					"on [Hidden].GUID = [Position].GUID "+
+					"[Hidden_Check].name,"+
+					"[Hidden_Check].hidden_level,"+
+					"[Hidden_Check].detail,"+
+					"[Hidden_Check].progress,"+
+					"[Hidden_Check].happen_time,"+
+					"[Hidden_Check].principal,"+
+					"[Hidden_Check].type,"+
+					"[Hidden_Check].state,"+
+					"[Hidden_Check].remark,"+
+					"[Hidden_Check].update_time,"+
+					"[Hidden_Check].date "+
+					"FROM [Hidden_Check] left join  [Position]"+
+					"on [Hidden_Check].GUID = [Position].GUID "+
 					"WHERE ";
 					
 		String sql1="geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
@@ -692,14 +773,14 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		if(search.equals("")){
 			sql=sql0+sql1;
 		}else{
-			sql=sql0+"AND [Hidden].name like '%"+search+"%' "+sql1;
+			sql=sql0+"AND [Hidden_Check].check_circs like '%"+search+"%' "+sql1;
 		}
 		
 		Position_Hidden_Join position_Hidden_Join=new Position_Hidden_Join();
 		
 		Position position=new Position();		
 		
-		Hidden hidden=new Hidden();
+		Hidden_Check hidden=new Hidden_Check();
 		
 		Object[] objects={hidden,position};
 		
@@ -1071,7 +1152,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		hidden_Assets.setOffset(offset);
 		hidden_Assets.setNotIn("id");
 		
-		Hidden hidden=new Hidden();
+		Hidden_Check hidden=new Hidden_Check();
 		
 		hidden.setLimit(limit);
 		hidden.setOffset(offset);
@@ -1090,24 +1171,22 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
     "[Hidden_Assets].id,"+
     "[Hidden_Assets].asset_GUID,"+
     "[Hidden_Assets].hidden_GUID,"+
-    "[Hidden].[GUID],"+
-    "[Hidden].[exist],"+
-    "[Hidden].[name],"+
-    "[Hidden].[hidden_level],"+
-    "[Hidden].[detail],"+
-    "[Hidden].[happen_time],"+
-    "[Hidden].[progress],"+
-    "[Hidden].[principal],"+
-    "[Hidden].[type],"+
-    "[Hidden].[state],"+
-    "[Hidden].[remark],"+
-    "[Hidden].[update_time],"+
-    "[Hidden].[date],"+
-    "[Hidden].[campusAdmin],"+
-    "[Hidden].[terminal],"+
-    "[ManageRegion] "+
+    "[Hidden_Check].[GUID],"+
+    "[Hidden_Check].[exist],"+
+    "[Hidden_Check].[check_id],"+
+    "[Hidden_Check].[check_name],"+
+    "[Hidden_Check].[principal],"+
+    "[Hidden_Check].[happen_time],"+
+    "[Hidden_Check].[check_circs],"+
+    "[Hidden_Check].[principal],"+
+    "[Hidden_Check].[state],"+
+    "[Hidden_Check].[remark],"+
+    "[Hidden_Check].[update_time],"+
+    "[Hidden_Check].[date],"+
+    "[Hidden_Check].[campusAdmin],"+
+    "[Hidden_Check].[terminal] "+
     "FROM "+
-    "[Hidden_Assets] left join [Hidden] on [Hidden_Assets].[hidden_GUID]=[Hidden].[GUID]"+
+    "[Hidden_Assets] left join [Hidden_Check] on [Hidden_Assets].[hidden_GUID]=[Hidden_Check].[check_id]"+
     ""; 
   
   //  String sqlWhere="AND [Hidden_Assets].[asset_GUID] not in( select top "+offset+" [Hidden_Assets].[asset_GUID] FROM [Hidden_Assets] left join Singleton.ROOMDATABASE"+".[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=Singleton.ROOMDATABASE"+".[dbo].[RoomInfo].[GUID] ORDER BY [Hidden_Assets].[asset_GUID]) ORDER BY [Hidden_Assets].[asset_GUID]";
@@ -1117,7 +1196,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
   		Class<?>[] classeNames=new Class<?>[2];
   
   		classeNames[0]=Hidden_Assets.class;
-  		classeNames[1]=Hidden.class;
+  		classeNames[1]=Hidden_Check.class;
   		
     	List params=new ArrayList<>();
         List paramsCount=new ArrayList<>();
@@ -1202,7 +1281,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		MyTestUtil.print(list);
 		
 		String countSql="select count(*) FROM "+
-			    "[Hidden_Assets] left join [Hidden] on [Hidden_Assets].[hidden_GUID]=[Hidden].[GUID]";
+			    "[Hidden_Assets] left join [Hidden_Check] on [Hidden_Assets].[hidden_GUID]=[Hidden_Check].[check_id]";
 		
 		if(!search.isEmpty()){
 			countSql=countSql+   //sqlserver鍒嗛〉闇�瑕佸湪top涔熷姞涓妛here鏉′欢
@@ -1227,9 +1306,9 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	@Override
 	public Integer findNotHidden() {
 		// TODO Auto-generated method stub
-		Hidden hidden=new Hidden();
+		Hidden_Check hidden=new Hidden_Check();
 		
-		String[] where={"[Hidden].exist !="," 0 ","[Hidden].progress ="," 0 "};
+		String[] where={"[Hidden_Check].exist !="," 0 ","[Hidden_Check].check_name =","异常"};
 		hidden.setWhere(where);
 		
 		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
@@ -1240,10 +1319,9 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	@Override
 	public Integer findInHidden() {
 		// TODO Auto-generated method stub
-		Hidden hidden=new Hidden();
+		Hidden_Check hidden=new Hidden_Check();
 		
-		String[] where={"[Hidden].exist !="," 0 ","[Hidden].progress >","0"
-				," [Hidden].progress <","1"};
+		String[] where={"[Hidden_Check].exist !="," 0 ","[Hidden_Check].state =","整改中"};
 		hidden.setWhere(where);
 		
 		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
@@ -1306,10 +1384,9 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	@Override
 	public Integer findSuccessHidden() {
 		// TODO Auto-generated method stub
-		Hidden hidden=new Hidden();
+		Hidden_Check hidden=new Hidden_Check();
 		
-		String[] where={"[Hidden].exist !="," 0 ","[Hidden].progress >","0"
-				," [Hidden].progress >= ","1"};
+		String[] where={"[Hidden_Check].exist !="," 0 ","[Hidden_Check].state >","整改完成"};
 		hidden.setWhere(where);
 		
 		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
@@ -1321,23 +1398,23 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	public String findLastHidden() {
 		// TODO Auto-generated method stub
 		
-		Hidden hidden=new Hidden();
+		Hidden_Check hidden=new Hidden_Check();
 		
 		String sql="SELECT MAX([date]) FROM [Hidden_Check] where [Hidden_Check].exist !=0";
 		
 		List list=this.getJdbcTemplate().query(sql,new hiddenRowMapper());
 		
-		hidden=(Hidden) list.get(0);
+		hidden= (Hidden_Check) list.get(0);
 		
 		String s=String.valueOf(hidden.getHappen_time());
 		
 		return s;
 	}
 
-	class hiddenRowMapper implements RowMapper<Hidden> {
+	class hiddenRowMapper implements RowMapper<Hidden_Check> {
         //rs涓鸿繑鍥炵粨鏋滈泦锛屼互姣忚涓哄崟浣嶅皝瑁呯潃
-        public Hidden mapRow(ResultSet rs, int rowNum) throws SQLException {    
-            Hidden hidden=new Hidden();
+        public Hidden_Check mapRow(ResultSet rs, int rowNum) throws SQLException {    
+            Hidden_Check hidden=new Hidden_Check();
         	Date date=rs.getDate("");
         	hidden.setHappen_time(date);
             return hidden;
@@ -1347,13 +1424,13 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	@Override
 	public String findIgnoreHidden() {
 		// TODO Auto-generated method stub
-		Hidden hidden=new Hidden();
+		Hidden_Check hidden=new Hidden_Check();
 		
-		String sql="SELECT MAX([happen_time]) FROM [Hidden] where [Hidden].exist !=0";
+		String sql="SELECT MAX([happen_time]) FROM [Hidden_Check] where [Hidden_Check].exist !=0";
 		
 		List list=this.getJdbcTemplate().query(sql,new hiddenRowMapper());
 		
-		hidden=(Hidden) list.get(0);
+		hidden=(Hidden_Check) list.get(0);
 		
 		String s=String.valueOf(hidden.getHappen_time());
 		
@@ -1385,31 +1462,31 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		/*
 		String sql="SELECT top 5 "+    
-					"[Hidden_Data].GUID, "+
-				    "[Hidden_Data].URI, "+
-					"[Hidden_Data].date, "+
-				    "[Hidden].name, "+
-					"[Hidden].detail, "+
-				    "[Hidden].hidden_level, "+
-					"[Hidden].progress "+
+					"[Hidden_Check_Date].GUID, "+
+				    "[Hidden_Check_Date].URI, "+
+					"[Hidden_Check_Date].date, "+
+				    "[Hidden_Check].name, "+
+					"[Hidden_Check].detail, "+
+				    "[Hidden_Check].hidden_level, "+
+					"[Hidden_Check].progress "+
 					"FROM "+
-					"[Hidden_Data] left join [Hidden] on [Hidden_Data].GUID=[Hidden].GUID "+  
-					"where  [Hidden].hidden_level = "+hiddenLevel+" "+
-					"AND ([Hidden_Data].TYPE ='png ' "+
-					"OR [Hidden_Data].TYPE ='jpg ' "+
-					"OR [Hidden_Data].TYPE ='jpeg ' "+
-					"OR [Hidden_Data].TYPE ='gif ' )"+
-					"group by [Hidden_Data].GUID,[Hidden_Data].URI,[Hidden_Data].date, "+
-					"[Hidden].name,[Hidden].detail,[Hidden].hidden_level,[Hidden].progress "+
-					"order by [Hidden_Data].date desc ";
+					"[Hidden_Check_Date] left join [Hidden_Check] on [Hidden_Check_Date].GUID=[Hidden_Check].GUID "+  
+					"where  [Hidden_Check].hidden_level = "+hiddenLevel+" "+
+					"AND ([Hidden_Check_Date].TYPE ='png ' "+
+					"OR [Hidden_Check_Date].TYPE ='jpg ' "+
+					"OR [Hidden_Check_Date].TYPE ='jpeg ' "+
+					"OR [Hidden_Check_Date].TYPE ='gif ' )"+
+					"group by [Hidden_Check_Date].GUID,[Hidden_Check_Date].URI,[Hidden_Check_Date].date, "+
+					"[Hidden_Check].name,[Hidden_Check].detail,[Hidden_Check].hidden_level,[Hidden_Check].progress "+
+					"order by [Hidden_Check_Date].date desc ";
 		*/
 		
-		String sql1="SELECT top 5 [Hidden_Data].GUID "+
-				 	"FROM [Hidden_Data] left join [Hidden] on [Hidden_Data].GUID=[Hidden].GUID "+
-				 	"where  [Hidden].hidden_level = "+hiddenLevel+" "+
-				 	"AND [Hidden].exist!=0 "+
-				 	"AND ([Hidden_Data].TYPE ='png ' OR [Hidden_Data].TYPE ='jpg ' OR [Hidden_Data].TYPE ='jpeg ' OR [Hidden_Data].TYPE ='gif ' ) "+
-				 	"group by [Hidden_Data].GUID ";
+		String sql1="SELECT top 5 [Hidden_Check_Date].GUID "+
+				 	"FROM [Hidden_Check_Date] left join [Hidden_Check] on [Hidden_Check_Date].GUID=[Hidden_Check].GUID "+
+				 	"where  [Hidden_Check].hidden_level = "+hiddenLevel+" "+
+				 	"AND [Hidden_Check].exist!=0 "+
+				 	"AND ([Hidden_Check_Date].TYPE ='png ' OR [Hidden_Check_Date].TYPE ='jpg ' OR [Hidden_Check_Date].TYPE ='jpeg ' OR [Hidden_Check_Date].TYPE ='gif ' ) "+
+				 	"group by [Hidden_Check_Date].GUID ";
 		
 		List hidden_Data_Joins=this.getJdbcTemplate().query(sql1,new hiddenQueryRowMapper1());
 		
@@ -1433,18 +1510,16 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 			String GUID=hidden_Data_Join1.getGUID();
 			
 			String sql2="SELECT top 1 "+    
-					"[Hidden_Data].GUID, "+
-				    "[Hidden_Data].URI, "+
-					"[Hidden_Data].date, "+
-				    "[Hidden].name, "+
-					"[Hidden].detail, "+
-				    "[Hidden].hidden_level, "+
-					"[Hidden].progress "+
+					"[Hidden_Check_Date].GUID, "+
+				    "[Hidden_Check_Date].URI, "+
+					"[Hidden_Check_Date].date, "+
+				    "[Hidden_Check].check_name, "+
+					"[Hidden_Check].check_circs "+
 					"FROM "+
-					"[Hidden_Data] left join [Hidden] on [Hidden_Data].GUID=[Hidden].GUID "+  
-					"where [Hidden_Data].GUID='"+GUID+"'  "+
-					"AND ([Hidden_Data].TYPE ='png ' OR [Hidden_Data].TYPE ='jpg ' OR [Hidden_Data].TYPE ='jpeg ' OR [Hidden_Data].TYPE ='gif ' ) "+
-					"order by [Hidden_Data].date desc ";
+					"[Hidden_Check_Date] left join [Hidden_Check] on [Hidden_Check_Date].GUID=[Hidden_Check].GUID "+  
+					"where [Hidden_Check_Date].GUID='"+GUID+"'  "+
+					"AND ([Hidden_Check_Date].TYPE ='png ' OR [Hidden_Check_Date].TYPE ='jpg ' OR [Hidden_Check_Date].TYPE ='jpeg ' OR [Hidden_Check_Date].TYPE ='gif ' ) "+
+					"order by [Hidden_Check_Date].date desc ";
 			
 			List hidden_Data_Joins2=this.getJdbcTemplate().query(sql2,new hiddenQueryRowMapper2());
 			
@@ -1658,7 +1733,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	public List findHiddenByYear() {
 		// TODO Auto-generated method stub
 		String sql="SELECT convert(varchar(4),date,120) as year"+
-					" FROM [Hidden] where date is not null "+
+					" FROM [Hidden_Check] where date is not null "+
 					" group by convert(varchar(4),date,120) order by year desc";
 		
 		List years=this.getJdbcTemplate().query(sql, new HiddenByYear());
@@ -1698,7 +1773,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	public List findHiddenByMonthOfYear(String year) {
 		// TODO Auto-generated method stub
 		String sql="SELECT convert(varchar(7),date,120) as year ,COUNT(*) as amount "+
-					"FROM [Hidden] where date is not null "+ 
+					"FROM [Hidden_Check] where date is not null "+ 
 					"and convert(varchar(4),date,120)= "+year+" "+ 
 					"group by convert(varchar(7),date,120)";
 		

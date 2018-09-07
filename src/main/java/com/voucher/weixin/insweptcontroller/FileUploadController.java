@@ -6,13 +6,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -23,19 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;  
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.druid.sql.ast.statement.SQLIfStatement.Else;
 import com.voucher.manage.daoModel.Assets.Assets_Check_Date;
-import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
-import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
 import com.voucher.manage.daoModel.TTT.FileSelfBelong;
 import com.voucher.manage.file.ImageFileFactory;
 import com.voucher.manage.model.Photo;
 import com.voucher.manage.service.PhotoService;
-import com.voucher.manage.service.UserService;
 import com.voucher.manage.service.WeiXinService;
 import com.voucher.manage.tools.FileConvect;
 import com.voucher.manage.tools.FileTypeTest;
@@ -138,9 +131,7 @@ public class FileUploadController {
         byte[] fileByte=FileConvect.fileToByte(file2);
         files.add(fileByte);
         
-        if(classType.equals("hidden")){
-        	objectClass=Hidden_Data.class;
-        }else if(classType.equals("check")){
+        if(classType.equals("check")){
         	objectClass=Hidden_Check_Date.class;
         }else if(classType.equals("neaten")){
         	objectClass=Hidden_Neaten_Date.class;
@@ -251,9 +242,7 @@ public class FileUploadController {
         byte[] fileByte=FileConvect.fileToByte(file2);
         files.add(fileByte);
         
-        if(classType.equals("hidden")){
-        	objectClass=Hidden_Data.class;
-        }else if(classType.equals("check")){
+        if(classType.equals("check")){
         	objectClass=Hidden_Check_Date.class;
         }else if(classType.equals("neaten")){
         	objectClass=Hidden_Neaten_Date.class;

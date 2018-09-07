@@ -24,44 +24,28 @@
 
   <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">隐患名称</label></div>
-                <div id="name" class="weui-cell__bd">
+                <div class="weui-cell__hd"><label class="weui-label">资产地址</label></div>
+                <div id="address" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">资产编号</label></div>
+                <div id="num" class="weui-cell__bd">
                 </div>
             </div>
     </div>
 
     <div class="weui-cells weui-cells_form">
-     <div class="weui-cell">
-        <div class="weui-cell__hd"><label class="weui-label">标题</label></div>
-        <div  class="weui-cell__bd">
-          <input id="neaten_name" class="weui-input" />
-        </div>
-     </div>
+      <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">关联隐患</label></div>
+          <div id="hiddenCircs" class="weui-cell__bd">
+     	</div>
+      </div>
     </div>
-    
- 
-    <!--  
-    <div class="weui-cells weui-cells_form">
-    	<div class="weui-cell">
-    		<div class="weui-cell__hd"><label class="weui-label">整改进度</label></div>
-    			<div class="weui-cell__bd">
-       		 		<div class='demos-content-padded'>
-            			<div class="weui-slider-box" id='slider2'>
-               				 <div class="weui-slider">
-                    			<div id="sliderInner" class="weui-slider__inner">
-                        			<div id="sliderTrack" style="width: 0%;" class="weui-slider__track"></div>
-                        			<div id="sliderHandler" style="left: 0%;" class="weui-slider__handler"></div>
-                   				 </div>
-                			</div>
-            	 	   </div>            		   
-        			</div>
-  	  			</div>
-  	  			<div id="progress_img" class="weui-cell "></div>  
-    	</div>
-    </div>
- -->
-   
-   
+       
    <div class="weui-cells weui-cells_form">
       <div class="weui-cell">
              <div class="weui-cell__hd"><label class="weui-label">整改进度</label></div>
@@ -80,6 +64,14 @@
           <input id="principal" class="weui-input" />
         </div>
      </div>
+    </div>
+  
+    <div class="weui-cells weui-cells_form">
+           <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">录入人员</label></div>
+                <div id="username" class="weui-cell__bd">
+                </div>
+          </div>
     </div>
   
   <div class="weui-cells weui-cells_form">
@@ -111,8 +103,13 @@
         </div>
 
 
- <div class="weui-cells__title">整改位置</div>
- <div id="allmap"></div>   
+   <div class="weui-cell weui-cell_access">
+           <div class="weui-cell__bd">资产位置</div>
+            <div class="weui-cell__ft" style="font-size: 0">               
+                 <span id="navigation" class="weui-btn weui-btn_mini weui-btn_primary" >导航路线</span>
+            </div>
+     </div>
+    <div id="allmap"></div>    
     
   <!--    <div class="weui-panel weui-panel_access">
      <div class="weui-panel__hd">安全整改图片</div>  
@@ -172,62 +169,36 @@
 	　   }
 	 }     
         
-    
-    
-    /*
-    var progress=0;
-	$('#slider2').slider(function (progre) {
-        console.log(progre);
-        progress=progre/100;
-        if(progre==0){
-      	  type="未整改";
-      	  progress_img.setAttribute("class","weui-icon-cancel");
-        }else if(progre>0&&progre<100){
-      	  type="整改中";
-      	  progress_img.setAttribute("class","weui-icon-info-circle");  
-        }else if(progre==100){
-      	  type="已整改";
-      	  progress_img.setAttribute("class","weui-icon-success");
-        }
-    });
-	*/
 	
 	var select = document.createElement("select");
 	select.setAttribute("id","select");
 	select.setAttribute("onchange","gradeChange()");
 
 	var option = document.createElement("option");
-	option.innerHTML="未整改";
-	option.setAttribute("value",0);
-	select.appendChild(option);	 
-
-	var option = document.createElement("option");
 	option.innerHTML="整改中";
-	option.setAttribute("value",1);
+	option.setAttribute("value",0);
 	select.appendChild(option);		
-
+	progress_img.setAttribute("class","weui-icon-info-circle");  
+	
 	var option = document.createElement("option");
 	option.innerHTML="整改完成";
-	option.setAttribute("value",2);
+	option.setAttribute("value",1);
 	select.appendChild(option);	
 
 	select.setAttribute("class","weui-input");
 	$("#progress").append(select);	
 
-	var progress="未整改";
+	var progress="整改中";
 
 	function gradeChange(){ 
     var objS = document.getElementById("select"); 
     var grade = objS.options[objS.selectedIndex].value; 
     console.log(objS.options[objS.selectedIndex]);
     progre=grade;
-    if(progre==0){
-    	  progress="未整改";
-    	  progress_img.setAttribute("class","weui-icon-cancel");
-      }else if(progre==1){
+	 if(progre==0){
     	  progress="整改中";
     	  progress_img.setAttribute("class","weui-icon-info-circle");  
-      }else if(progre==2){
+      }else if(progre==1){
     	  progress="整改完成";
     	  progress_img.setAttribute("class","weui-icon-success");
       }
@@ -239,60 +210,89 @@
     	   var obj = $.parseJSON(data);
     	   if(obj.name!=null)
     	   $("#principal").val(obj.name);
+    	   var username=document.createElement("span");
+		   username.innerHTML=obj.user_name;
+           $("#username").append(obj.name);
        });
 	
 	$.ajax({
         type: "POST",
-        url: "/voucher/mobile/hidden/selectHiddenByGuid.do",
+        url: "/voucher/mobile/asset/getRoomInfoByGUID.do",
         data: { "guid":guid},
         dataType: "json",
         error: function (request){
      	   console.log(request);
         },
         success: function (text) {              	   
-     	   var obj=text.hidden;
-     	   var imgs=text.fileBytes;
-  
-             	   var guid=obj.guid;
-  
-             	   var distance=null;
+        	console.log(text);
+      	   var obj=text.roomInfo;
+      	   var imgs=text.fileBytes;
+   
+              	   var guid=obj.guid;
+   
+              	  var distance=null;
              	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
              	   if(obj.lng!=""&&obj.lat!=""){
              	   	  distance=getDistance(obj.lng,obj.lat);
              	   	var point = new BMap.Point(obj.lng,obj.lat);
              	    var pointEnd=point;
              	    map.centerAndZoom(point, 12);
+             	    var myIcon = new BMap.Icon("../../img/blackPoint.jpg", new BMap.Size(30,38));
              	    var marker = new BMap.Marker(point); // 创建点
              		map.addOverlay(marker);    //增加点
              	   }
              	  
              	  navigation(pointStart, pointEnd);
-             	               	            	  
-             	  var name=document.createElement("span");
-                  name.innerHTML=obj.name;
-                  $("#name").append(name);
-                  console.log(obj.progress);
-                  var progress=obj.progress;
-
-                  if(progress=="未整改"){
-                	  progress_img.setAttribute("class","weui-icon-cancel");
-                	  document.getElementById("select")[0].selected=true;
-                  }else if(progress=="整改中"){
-                	  progress_img.setAttribute("class","weui-icon-info-circle"); 
-                	  document.getElementById("select")[1].selected=true;
-                  }else if(progress=="整改完成"){
-                	  progress_img.setAttribute("class","weui-icon-success");
-                	  document.getElementById("select")[2].selected=true;
-                	  
-                	  $.alert("隐患已整改完成!", "提 示", function() {
-      	    			  //点击确认后的回调函数
-      	    				history.back();
-      	    			});
-                	  
-                  }
+              	  
+             	  if(obj.lng!=""&&obj.lat!=""){
+             	  	$("#navigation").on("click",function(){
+             		  location.href="/voucher/mobile/1/navigation.html?latitude="+latitude+"&longitude="+longitude+"&latitude2="+obj.lat+"&longitude2="+obj.lng;
+             	  	});
+             	  }else{
+             		  $("#navigation").hide();
+             	  }
+             	  
+              	 var address=document.createElement("span");
+                	  address.innerHTML=obj.address;
+                   $("#address").append(address);
+                  
+                  <!--
+                  var manageRegion=document.createElement("span");
+                   manageRegion.innerHTML=obj.manageRegion;
+                   $("#manageRegion").append(manageRegion);
+                  -->
+                  
+                  var num=document.createElement("span");
+                  num.innerHTML=obj.num;
+                  $("#num").append(num);
+                  
+                   var region=document.createElement("span");
+                   region.innerHTML=obj.region;
+                   $("#region").append(region);
+                   
+                   
+                   var fareItem=document.createElement("span");
+                   fareItem.innerHTML=obj.fareItem;
+                   $("#fareItem").append(fareItem);
 
         	}
     });
+	
+	$.ajax({
+        type: "POST",
+        url: "/voucher/mobile/hidden/getRoomInfoHiddenItemDataByGUID.do",
+        data: { "guid":guid},
+        dataType: "json",
+        error: function (request){
+     	   console.log(request);
+        },
+        success: function (text) {
+        	console.log(text);
+        	var hiddenCircs=document.createElement("span");
+        	hiddenCircs.innerHTML="<font color='#FF0000'>"+text+"</font>";
+            $("#hiddenCircs").append(hiddenCircs);
+        }
+     });
 	
 	function actionTime(value){
   	    var date = new Date(value); 

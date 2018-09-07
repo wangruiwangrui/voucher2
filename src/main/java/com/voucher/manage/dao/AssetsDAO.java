@@ -6,9 +6,7 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
-import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
@@ -47,6 +45,8 @@ public interface AssetsDAO {
 	public Map findHiddenByDistance(int limit,int offset,Double lng, Double lat,String search);
 	
 	public Map findAssetByDistance(int limit,int offset,Double lng, Double lat,String search);
+	
+	public Map findAssetHiddenByDistance(int limit,int offset,Double lng, Double lat,String search);
 	
 	public Map findAssetByDistanceDate(int limit,int offset,Double lng, Double lat,String search,String search2, Integer type);
 	

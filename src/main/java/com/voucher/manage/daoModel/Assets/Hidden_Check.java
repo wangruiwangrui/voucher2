@@ -50,6 +50,9 @@ public class Hidden_Check implements Serializable{
     @SQLString(name="terminal")
    	private String terminal;
     
+    @SQLString(name="state")
+	private String state;
+    
 	public void setId(Integer id){
 		this.id = id;
 	}
@@ -154,6 +157,13 @@ public class Hidden_Check implements Serializable{
 		return terminal;
 	}
 
+	public void setState(String state){
+		this.state = state;
+	}
+
+	public String getState(){
+		return state;
+	}
 
 /*
 *数据库查询参数

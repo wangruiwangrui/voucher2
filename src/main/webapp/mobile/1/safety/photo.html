@@ -189,14 +189,15 @@
                    html += "网络连接故障";
                    $("#ul").append(html);
                },
-               success: function (text) {              	   
+               success: function (text) {  
+            	   console.log(text);
             	   var data=text.hidden;
             	   var imgs=text.fileBytes;
                    if (data.length > 0) {
                 	   var i = 0;
                        for(; i < data.length; i++){
                     	   var obj = data[i];
-                    	   var guid=obj.guid;
+                    	   var guid=obj.check_id;
                     	   
                     	   var img=null;
                     	   if(imgs[guid]!=null){
@@ -205,11 +206,11 @@
         
                     	   var time="时间:"+actionTime(obj.date);
                     	   var distance=null;
-                    	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+                    	   console.log(obj.check_name+"   "+obj.check_circs+"  "+obj.lng+"   "+obj.lat);
                     	   if(obj.lng!=""&&obj.lat!=""){
                     	   	  distance=getDistance(obj.lng,obj.lat);
                     	   }
-                    	   var li_1=addDiv(img,obj.name,obj.detail,time,"距离:"+distance);
+                    	   var li_1=addDiv(img,obj.check_name,obj.check_circs,time,"距离:"+distance);
                            li_1.setAttribute("guid",guid);
                     	   li_1.setAttribute("onclick","clickEvent(this);");
                     	   $("#ul").append(li_1);

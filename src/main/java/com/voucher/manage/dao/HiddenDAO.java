@@ -3,13 +3,11 @@ package com.voucher.manage.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Item;
-import com.voucher.manage.daoModel.Assets.Hidden_Level;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
-import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
+import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 
 public interface HiddenDAO {
@@ -28,29 +26,7 @@ public interface HiddenDAO {
 	
 	public Map<String, Object> selectAllHidden(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search);
-	
-	public Integer insertIntoHidden(Hidden hidden);
-	
-	public Integer updateHidden(Hidden hidden);
-	
-	public Integer deleteHidden(Hidden hidden);
-	
-	public List<Hidden_Level> setctAllHiddenLevel();
-	
-	public Integer insertHiddenLevel(Hidden_Level hidden_level);
-	
-	public Integer deleteHiddenLevel(Hidden_Level hidden_level);
-	
-	public Integer updateHiddenLevel(Hidden_Level hidden_Level);
-	
-	public List<Hidden_Type> selectAllHiddenType();
-	
-	public Integer insertHiddenType(Hidden_Type hidden_Type);
-	
-	public Integer deleteHiddenType(Hidden_Type hidden_Type);
-	
-	public Integer updateHiddenType(Hidden_Type hidden_Type);
-	
+			
 	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search);
 	
@@ -58,12 +34,6 @@ public interface HiddenDAO {
 	
 	public Map<String, Object> selectAllHiddenUser(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search);
-	
-	public Integer insertHiddenUser(Hidden_User hidden_User);
-	
-	public Integer deleteHiddenUser(Hidden_User hidden_User);
-	
-	public Integer updateHiddenUser(Hidden_User hidden_User);
 	
 	public Integer updateUserPassword(Hidden_User hidden_User,String OldPw);
 	
@@ -93,9 +63,15 @@ public interface HiddenDAO {
 	public Integer getAllAssetByHidden_GUID(String guid);
 	
 	public Integer insertIntoHidden_Check_Item(Hidden_Check_Item hidden_Check_Item);
-	
+
 	public Hidden_Check_Item selectHidden_Check_ItemById(Hidden_Check_Item hidden_Check_Item);
 	
 	public Map selectAllHidden_Point(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search);
+	
+	public List<RoomInfo_Hidden_Item> selectRoomInfo_Hidden_Item(Integer limit, Integer offset, String sort,
+			String order,Map<String, String> search);
+	
+	public Integer updateRoomInfo_Hidden_Item(RoomInfo_Hidden_Item roomInfo_Hidden_Item);
+	
 }

@@ -16,9 +16,7 @@ import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoImpl.MobileDAOImpl;
 import com.voucher.manage.daoModel.Assets.Assets_Check_Date;
-import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
-import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
 import com.voucher.manage.daoModel.TTT.FileSelfBelong;
 import com.voucher.manage.singleton.Singleton;
@@ -106,11 +104,7 @@ public abstract class AbstractFileUpload {
             System.out.println(name);
             System.out.println(mimeType);
             System.out.println(uri);
-            if(object==Hidden_Data.class){
-              hiddenDAO.InsertIntoHiddenData(ID,name,mimeType, uri);
-              //cpoy到资产管理FTP目录
-              CopyFile.set(Singleton.ROOMINFOIMGPATH2, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);
-            }else if(object==Hidden_Check_Date.class){          	
+            if(object==Hidden_Check_Date.class){          	
              //cpoy到资产管理FTP目录
               hiddenDAO.InsertIntoHiddenCheckData(ID, name, mimeType, uri);
               CopyFile.set(Singleton.ROOMINFOIMGPATH2, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);

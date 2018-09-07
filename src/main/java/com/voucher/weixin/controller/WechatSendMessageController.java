@@ -28,7 +28,7 @@ import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.mapper.MessageListMapper;
 import com.voucher.manage.mapper.UsersMapper;
@@ -158,7 +158,7 @@ public class WechatSendMessageController {
 	}
 	
 	
-	public void send(@RequestParam String guid,@RequestParam String hidden_GUID){
+	public void send(@RequestParam String guid,@RequestParam String check_id){
 
 		Integer campusId=1;
 		
@@ -209,11 +209,11 @@ public class WechatSendMessageController {
 			
 			Map search3=new HashMap<>();
 			
-			search3.put("[Hidden].GUID=", hidden_GUID);
+			search3.put("[Hidden_Check].check_id=", check_id);
 			
-			List<Hidden> list3=(List<Hidden>) hiddenDAO.selectAllHidden(2, 0, null, null, search3).get("rows");
+			List<Hidden_Check> list3=(List<Hidden_Check>) hiddenDAO.selectAllHidden(2, 0, null, null, search3).get("rows");
 			
-			Hidden hidden=list3.get(0);
+			Hidden_Check hidden=list3.get(0);
 			
 			WeiXinMapper weiXinMapper=sqlSession.getMapper(WeiXinMapper.class);
 			
@@ -229,12 +229,10 @@ public class WechatSendMessageController {
 	    	first.setColor("#000000");
 	    	first.setValue("尊敬的承租人"+charter+" , 您好 : ");
 	    	m.put("first", first);
-	        
-	    	String user=hidden.getUserName();
-	    	
+	        	    	
 	    	TemplateData keyword1 = new TemplateData();
 	    	keyword1.setColor("#328392");
-	    	keyword1.setValue(user);
+	    	keyword1.setValue("");
 	    	m.put("keyword1", keyword1);
 	    	SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 	    	Date date=new Date();
@@ -247,8 +245,8 @@ public class WechatSendMessageController {
 			m.put("keyword3", keyword3);
 	    	TemplateData keyword4 = new TemplateData();
 	    	keyword4.setColor("#328392");
-	    	keyword4.setValue("您承租的资产存在"+hidden.getName()+","+
-	    			hidden.getDetail()+"的隐患,请注意安全防范!");
+	    	keyword4.setValue("您承租的资产存在"+
+	    			hidden.getCheck_circs()+"的隐患,请注意安全防范!");
 	    	m.put("keyword4", keyword4);
 	    	templateData.setData(m);
 	    	
@@ -260,8 +258,8 @@ public class WechatSendMessageController {
 	    	
 	    	messageList.setCampusId(campusId);
 	    	messageList.setOpenId(openId);
-	    	messageList.setContext("您承租的资产存在"+hidden.getName()+","+
-	    			hidden.getDetail()+"的隐患,请注意安全防范!");
+	    	messageList.setContext("您承租的资产存在"+
+	    			hidden.getCheck_circs()+"的隐患,请注意安全防范!");
 	    	messageList.setType("安全通知");
 	    	messageList.setSendTime(date);
 	    	if(s.equals("消息发送成功")){

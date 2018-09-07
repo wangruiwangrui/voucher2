@@ -25,12 +25,12 @@ import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Item;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
@@ -90,7 +90,7 @@ public class HiddenController {
 	public @ResponseBody Map selectHiddenByGuid(@RequestParam String guid,HttpServletRequest request){
         Map searchMap=new HashMap<>();
 		System.out.println("guid="+guid);
-	    searchMap.put("Hidden.GUID = ", guid);
+	    searchMap.put("[Hidden_Check].check_id = ", guid);
 		
 		Map map=hiddenDAO.selectAllHidden_Jion(10, 0, null, null, searchMap);
 		
@@ -112,7 +112,8 @@ public class HiddenController {
 	@RequestMapping("/selectAllCheck")
 	public @ResponseBody Map selectAllCheck(@RequestParam Integer limit, @RequestParam Integer offset, 
 			String sort, String order,
-			@RequestParam String search,String search2,String search3,HttpServletRequest request) {
+			@RequestParam String search,String search2,String search3,String search4,
+			HttpServletRequest request) {
 		Map searchMap=new HashMap<>();
 		
 		Map map;
@@ -195,6 +196,10 @@ public class HiddenController {
 		
 		if(search3!=null&&!search3.equals("")){
 			searchMap.put("[Hidden_Check].guid = ", search3);
+		}
+		
+		if(search4!=null&&!search4.equals("")){
+			searchMap.put("[Hidden_Check].check_name = ", search4);
 		}
 		
 		map=hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order,search, searchMap);
@@ -295,201 +300,7 @@ public class HiddenController {
 		return result;
 	}
 	
-	
-	@RequestMapping("/selectHiddenLevel")
-	public @ResponseBody List selectHiddenLevel(){
-		return hiddenDAO.setctAllHiddenLevel();
-	}
-	
-	@RequestMapping("/updateHidden")
-	public @ResponseBody Integer updateHidden(@RequestParam String guid,
-			@RequestParam String name,@RequestParam String level,
-			@RequestParam String manageRegion,
-			@RequestParam String happenTime,@RequestParam String remark,
-			@RequestParam String detail,@RequestParam Double lng,
-			@RequestParam Double lat){
-		
-		Hidden hidden=new Hidden();
-
-		String[] where={"[Hidden].GUID=",guid};
-		hidden.setWhere(where);
-		
-		hidden.setName(name);
-		if(level!=null&&!level.equals(""))
-		 hidden.setHidden_level(level);
-		
-		if(manageRegion!=null&&!manageRegion.equals("")){
-			hidden.setManageRegion(manageRegion);
-		}
-		if(happenTime!=null&&!happenTime.equals("")){
-			try {
-				DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
-				Date date;		
-				date = fmt.parse(happenTime);	
-				hidden.setHappen_time(date);
-				System.out.println("thisdate="+date);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		hidden.setRemark(remark);
-		hidden.setDetail(detail);
-		
-		Date date2=new Date();
-		hidden.setUpdate_time(date2);
-				
-		int i=hiddenDAO.updateHidden(hidden);
-		
-		Position position=new Position();
-		
-	    position.setGUID(guid);
-		position.setLat(lat);
-		position.setLng(lng);
-		
-		int count=assetsDAO.countPositionByGUID(position);
-		
-		if(count==0){
-			assetsDAO.updatePosition(position);
-		}
-		
-		return i;
-	}
-	
-	
-	@RequestMapping("/insertHidden")
-	public @ResponseBody Map insertHidden(
-			String roomGuid,
-			@RequestParam String name,@RequestParam String level,
-			@RequestParam String manageRegion,
-			@RequestParam String happenTime,@RequestParam String remark,
-			@RequestParam String detail,@RequestParam String addComp,
-			@RequestParam Double lng,@RequestParam Double lat,
-			HttpServletRequest request){
-		
-		Hidden hidden=new Hidden();
-
-        UUID uuid=UUID.randomUUID();
-        
-        String openId=( String ) request.getSession().getAttribute("openId");
-        
-        Users users=userService.getUserByOnlyOpenId(openId);
-        
-        String userName=users.getName();
-        
-        hidden.setRoomGUID(roomGuid);
-        
-        hidden.setUserName(userName);       
-        
-        hidden.setCampusAdmin(openId);
-        
-        hidden.setGUID(uuid.toString());
-		
-		hidden.setName(name);
-		if(level!=null)
-		 hidden.setHidden_level(level);
-		if(manageRegion!=null&&!manageRegion.equals("")){
-			hidden.setManageRegion(manageRegion);
-		}
-		if(happenTime!=null&&!happenTime.equals("")){
-			try {
-				DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
-				Date date;		
-				date = fmt.parse(happenTime);	
-				hidden.setHappen_time(date);
-				System.out.println("thisdate="+date);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		hidden.setRemark(remark);
-		hidden.setDetail(detail);
-		
-		Date date2=new Date();
-		hidden.setUpdate_time(date2);
-		hidden.setDate(date2);
-		hidden.setTerminal("Wechat");
-		int i=hiddenDAO.insertIntoHidden(hidden);
-		
-		if(i==1){
-			//插入资产隐患表
-			Hidden_Assets hidden_Assets=new Hidden_Assets();
 			
-			hidden_Assets.setAsset_GUID(roomGuid);
-			hidden_Assets.setHidden_GUID(uuid.toString());
-			hidden_Assets.setCampusAdmin(openId);
-			hidden_Assets.setUserName(users.getName());
-			hidden_Assets.setDate(date2);
-			
-			assetsDAO.insertIntoHidden_Assets(hidden_Assets);
-			
-			RoomInfo roomInfo=new RoomInfo();
-			
-			Map search=new HashMap<>();
-			
-			search.put(Singleton.ROOMDATABASE + ".[dbo].[RoomInfo].GUID = ", roomGuid);
-			
-			try{
-				RoomInfo roomInfo2=roomInfoDao.findAllRoomInfo(1, 0, "GUID", "", search).get(0);
-				Integer isHidden=roomInfo2.getIsHidden();
-				
-				MyTestUtil.print(roomInfo2);
-				
-				if(isHidden==null||isHidden<1){
-					roomInfo.setIsHidden(1);
-				}else{
-					roomInfo.setIsHidden(1+isHidden);
-				}
-				
-				MyTestUtil.print(roomInfo);
-				
-				String[] where={Singleton.ROOMDATABASE + ".[dbo].[RoomInfo].GUID = ", roomGuid};
-				
-				roomInfo.setWhere(where);
-				
-				roomInfoDao.updateRoomInfo(roomInfo);
-				
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}
-		}
-		
-		JSONObject jsonObject=JSONObject.parseObject(addComp);
-		
-		String province=jsonObject.getString("province");		
-		String city=jsonObject.getString("city");		
-		String district=jsonObject.getString("district");		
-		String street=jsonObject.getString("street");		
-		String streetNumber=jsonObject.getString("streetNumber");		
-		
-		Position position=new Position();
-		
-		position.setGUID(uuid.toString());
-		position.setLat(lat);
-		position.setLng(lng);
-		
-		position.setProvince(province);
-		position.setCity(city);
-		position.setDistrict(district);
-		position.setStreet(streetNumber);
-		position.setStreet_number(streetNumber);
-		
-		position.setDate(date2);
-		
-		assetsDAO.updatePosition(position);
-		
-		Map map=new HashMap<>();
-		
-		map.put("status", i);
-		map.put("guid", uuid.toString());
-		
-		return map;
-		
-	}
-	
-	
 	@RequestMapping("/insertHiddenCheck")
 	public @ResponseBody Map insertHiddenCheck(
 			@RequestParam String guid,@RequestParam String checkItemDate,
@@ -509,6 +320,8 @@ public class HiddenController {
         JSONObject jsonObject1;
         
         Hidden_Check_Item hidden_Check_Item=new Hidden_Check_Item();
+        
+        RoomInfo_Hidden_Item roomInfo_Hidden_Item=new RoomInfo_Hidden_Item();
         
         String checkItem = null;
         
@@ -534,9 +347,29 @@ public class HiddenController {
 			hidden_Check_Item.setWall_up(jsonObject1.getInteger("wall_up"));
 			hidden_Check_Item.setOther(jsonObject1.getString("other"));
 			
+			roomInfo_Hidden_Item.setGuid(guid);
+			roomInfo_Hidden_Item.setFire_extinguisher(jsonObject1.getInteger("fire_extinguisher"));
+			roomInfo_Hidden_Item.setHigh_power(jsonObject1.getInteger("high_power"));
+			roomInfo_Hidden_Item.setBlow(jsonObject1.getInteger("blow"));
+			roomInfo_Hidden_Item.setLine_aging(jsonObject1.getInteger("line_aging"));
+			roomInfo_Hidden_Item.setIncline(jsonObject1.getInteger("incline"));
+			roomInfo_Hidden_Item.setSplit(jsonObject1.getInteger("split"));
+			roomInfo_Hidden_Item.setDown(jsonObject1.getInteger("down"));
+			roomInfo_Hidden_Item.setBreak_off(jsonObject1.getInteger("break_off"));
+			roomInfo_Hidden_Item.setDestroy(jsonObject1.getInteger("destroy"));
+			roomInfo_Hidden_Item.setInvalidation(jsonObject1.getInteger("invalidation"));
+			roomInfo_Hidden_Item.setFlaw(jsonObject1.getInteger("flaw"));
+			roomInfo_Hidden_Item.setCesspool(jsonObject1.getInteger("cesspool"));
+			roomInfo_Hidden_Item.setCoast(jsonObject1.getInteger("coast"));
+			roomInfo_Hidden_Item.setWall_up(jsonObject1.getInteger("wall_up"));
+			roomInfo_Hidden_Item.setOther(jsonObject1.getString("other"));
+			
 			System.out.println("other="+jsonObject1.getString("other"));
 			
-			System.out.println("other="+jsonObject1.getString("other")==null||jsonObject1.getString("other").equals(""));
+			if(jsonObject1.getString("other")!=null&&!jsonObject1.getString("other").equals("")){
+				hidden_Check_Item.setIs_other(1);
+				roomInfo_Hidden_Item.setIs_other(1);
+			}
 			
 			isNull=jsonObject1.getInteger("fire_extinguisher")==null&&jsonObject1.getInteger("high_power")==null&&jsonObject1.getInteger("blow")==null&&
 					jsonObject1.getInteger("line_aging")==null&&jsonObject1.getInteger("incline")==null&&jsonObject1.getInteger("split")==null&&
@@ -552,7 +385,7 @@ public class HiddenController {
 					getInt(jsonObject1.getInteger("coast"))+getInt(jsonObject1.getInteger("wall_up"));
 			
 			checkItem=getItem("灭火器", hidden_Check_Item.getFire_extinguisher())+getItem("大功率用电器", hidden_Check_Item.getHigh_power())+
-					getItem("易燃易爆物品", hidden_Check_Item.getBlow())+getItem("线路老化", hidden_Check_Item.getBlow())+
+					getItem("易燃易爆物品", hidden_Check_Item.getBlow())+getItem("线路老化", hidden_Check_Item.getLine_aging())+
 					getItem("倾斜", hidden_Check_Item.getIncline())+getItem("开裂", hidden_Check_Item.getSplit())+
 					getItem("地基下沉", hidden_Check_Item.getDown())+getItem("屋面脱落", hidden_Check_Item.getBreak_off())+
 					getItem("结构破坏", hidden_Check_Item.getDestroy())+getItem("承重失效", hidden_Check_Item.getInvalidation())+
@@ -622,12 +455,59 @@ public class HiddenController {
 		
 		int state=hiddenDAO.insertIntoHidden_Check_Item(hidden_Check_Item);
 		
-		if(state == 1){
-			
-			if(check_name.equals("异常")){
-				insertHidden(guid,name, "", "", happenTime, remark, check_circs, addComp, lng, lat, request);
-			}
+		state=hiddenDAO.updateRoomInfo_Hidden_Item(roomInfo_Hidden_Item);
+		
+		if(i == 1){
 
+			RoomInfo roomInfo = new RoomInfo();
+			
+			if (check_name != null && check_name.equals("异常")) {
+				
+				//插入资产隐患表
+				Hidden_Assets hidden_Assets=new Hidden_Assets();
+				
+				hidden_Assets.setAsset_GUID(guid);
+				hidden_Assets.setHidden_GUID(uuid.toString());
+				hidden_Assets.setCampusAdmin(openId);
+				hidden_Assets.setDate(date);
+				
+				assetsDAO.insertIntoHidden_Assets(hidden_Assets);
+				
+				// 更新资产隐患字段
+				Map search = new HashMap<>();
+
+				search.put("[RoomInfo_Hidden_Item].guid = ", guid);
+				
+				try{
+					
+					RoomInfo_Hidden_Item roomInfo_Hidden_Item2=(RoomInfo_Hidden_Item) hiddenDAO.selectRoomInfo_Hidden_Item(1, 0, "", "", search).get(0);
+					int isHidden=getInt(roomInfo_Hidden_Item2.getFire_extinguisher())+
+								getInt(roomInfo_Hidden_Item2.getHigh_power())+
+								getInt(roomInfo_Hidden_Item2.getBlow())+
+								getInt(roomInfo_Hidden_Item2.getLine_aging())+
+								getInt(roomInfo_Hidden_Item2.getIncline())+
+								getInt(roomInfo_Hidden_Item2.getSplit())+
+								getInt(roomInfo_Hidden_Item2.getDown())+
+								getInt(roomInfo_Hidden_Item2.getBreak_off())+
+								getInt(roomInfo_Hidden_Item2.getDestroy())+
+								getInt(roomInfo_Hidden_Item2.getInvalidation())+
+								getInt(roomInfo_Hidden_Item2.getFlaw())+
+								getInt(roomInfo_Hidden_Item2.getCesspool())+
+								getInt(roomInfo_Hidden_Item2.getCoast())+
+								getInt(roomInfo_Hidden_Item2.getWall_up())+
+								getInt(roomInfo_Hidden_Item2.getIs_other());
+					
+					System.out.println("isHidden="+isHidden);
+					
+					roomInfo.setIsHidden(isHidden);
+					
+				}catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+				
+			}
+			
 			JSONObject jsonObject = JSONObject.parseObject(addComp);
 
 			String province = jsonObject.getString("province");
@@ -662,8 +542,7 @@ public class HiddenController {
 			assetsDAO.updatePositionByRoomInfo(position, isUpdate); // 更新资产位置
 
 			// 更新安全巡查时间
-			RoomInfo roomInfo = new RoomInfo();
-
+			
 			roomInfo.setHidden_check_date(date);
 
 			String[] where = { Singleton.ROOMDATABASE + ".[dbo].[RoomInfo].GUID = ", guid };
@@ -671,6 +550,7 @@ public class HiddenController {
 			roomInfo.setWhere(where);
 
 			roomInfoDao.updateRoomInfo(roomInfo);
+			
 		}else{
 			map.put("status", 0);
         	return map;
@@ -684,9 +564,9 @@ public class HiddenController {
 	String getItem(String name,Integer value){
 		if(value!=null){
 			if(value==0){
-				return name+":正常"+" , ";
+				return name+"正常"+" , ";
 			}else if(value==1){
-				return name+":异常"+" , ";
+				return name+"异常"+" , ";
 			}else{
 				return "";
 			}
@@ -847,19 +727,17 @@ public class HiddenController {
 		
 		int i=hiddenDAO.insertHiddenNeaten(hidden_Neaten);
 		
-		Hidden hidden=new Hidden();
+		Hidden_Check hidden_check=new Hidden_Check();
+
+		hidden_check.setState(state);
 		
-		hidden.setProgress(progress);
+		hidden_check.setUpdate_time(date);
 		
-		hidden.setState(state);
+		String[] where={"[Hidden_Check].GUID=",guid};
 		
-		hidden.setUpdate_time(date);
+		hidden_check.setWhere(where);
 		
-		String[] where={"[Hidden].GUID=",guid};
-		
-		hidden.setWhere(where);
-		
-		i=hiddenDAO.updateHidden(hidden);
+		i=hiddenDAO.updateHiddenCheck(hidden_check);
 		
 		JSONObject jsonObject=JSONObject.parseObject(addComp);
 		
@@ -942,15 +820,15 @@ public class HiddenController {
 		
 		int i=hiddenDAO.updateHiddenNeaten(hidden_Neaten);
 		
-		Hidden hidden=new Hidden();
+		Hidden_Check hidden_check=new Hidden_Check();
 		
-		hidden.setProgress(progress);
+		hidden_check.setState(progress);
 		
-		String[] where2={"[Hidden].GUID=",guid};
+		String[] where2={"[Hidden_Check].GUID=",guid};
 		
-		hidden.setWhere(where2);
+		hidden_check.setWhere(where2);
 		
-		i=hiddenDAO.updateHidden(hidden);
+		i=hiddenDAO.updateHiddenCheck(hidden_check);
 		
 		JSONObject jsonObject=JSONObject.parseObject(addComp);
 		
@@ -1055,6 +933,76 @@ public class HiddenController {
 		
 		return count;
 		
+	}
+	
+	@RequestMapping("/getRoomInfoHiddenItemByGUID")
+	public @ResponseBody RoomInfo_Hidden_Item getRoomInfoHiddenItemByGUID(@RequestParam String guid){
+		
+		Map search = new HashMap<>();
+
+		search.put("[RoomInfo_Hidden_Item].guid = ", guid);
+		
+		RoomInfo_Hidden_Item roomInfo_Hidden_Item = null;
+		
+		try{			
+			roomInfo_Hidden_Item=(RoomInfo_Hidden_Item) hiddenDAO.selectRoomInfo_Hidden_Item(1, 0, "", "", search).get(0);
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return roomInfo_Hidden_Item;
+	}
+	
+	@RequestMapping("/getRoomInfoHiddenItemDataByGUID")
+	public @ResponseBody String getRoomInfoHiddenItemDataByGUID(@RequestParam String guid){
+		
+		Map search = new HashMap<>();
+
+		search.put("[RoomInfo_Hidden_Item].guid = ", guid);
+   
+		String hiddenCircs = "";
+		
+		try{			
+			RoomInfo_Hidden_Item hidden_Check_Item=(RoomInfo_Hidden_Item) hiddenDAO.selectRoomInfo_Hidden_Item(1, 0, "", "", search).get(0);
+			
+			hiddenCircs=getItem2("灭火器", hidden_Check_Item.getFire_extinguisher())+getItem2("大功率用电器", hidden_Check_Item.getHigh_power())+
+					getItem2("易燃易爆物品", hidden_Check_Item.getBlow())+getItem2("线路老化", hidden_Check_Item.getLine_aging())+
+					getItem2("倾斜", hidden_Check_Item.getIncline())+getItem2("开裂", hidden_Check_Item.getSplit())+
+					getItem2("地基下沉", hidden_Check_Item.getDown())+getItem2("屋面脱落", hidden_Check_Item.getBreak_off())+
+					getItem2("结构破坏", hidden_Check_Item.getDestroy())+getItem2("承重失效", hidden_Check_Item.getInvalidation())+
+					getItem2("漏雨", hidden_Check_Item.getFlaw())+getItem2("化粪池问题", hidden_Check_Item.getCesspool())+
+					getItem2("山体滑坡", hidden_Check_Item.getCoast())+getItem2("管道堵塞", hidden_Check_Item.getWall_up());
+			
+			String other=hidden_Check_Item.getOther();
+			
+			if(other!=null&&!other.equals("")){
+				hiddenCircs=other+","+hiddenCircs;
+			}
+			
+			if(hiddenCircs.length()>2)
+				hiddenCircs=hiddenCircs.substring(0, hiddenCircs.length()-2);
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return hiddenCircs;
+	}
+	
+	String getItem2(String name,Integer value){
+		if(value!=null){
+			if(value==0){
+				return "";
+			}else if(value==1){
+				return name+"异常"+" , ";
+			}else{
+				return "";
+			}
+		}else{
+			return "";
+		}
 	}
 	
 }

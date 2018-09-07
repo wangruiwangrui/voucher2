@@ -12,12 +12,8 @@ import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.Assets.Hidden;
-import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
-import com.voucher.manage.daoModel.Assets.Hidden_Level;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
-import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.WeiXin_User;
@@ -120,47 +116,6 @@ public class AssetsImpl implements Assets{
 	}
 
 	@Override
-	public Integer insertIntoHidden(Hidden hidden) {
-		// TODO Auto-generated method stub		
-		return hiddenDAO.insertIntoHidden(hidden);
-	}
-
-	@Override
-	public Integer updateHidden(Hidden hidden) {
-		// TODO Auto-generated method stub
-		
-		return hiddenDAO.updateHidden(hidden);
-	}
-
-	@Override
-	public Integer deleteHidden(Hidden hidden) {
-		// TODO Auto-generated method stub
-		Hidden_Assets hidden_Assets=new Hidden_Assets();
-		String[] where0={"[Hidden_Assets].hidden_GUID =",hidden.getGUID()};
-		hidden_Assets.setWhere(where0);
-		assetsDAO.deleteHidden_Assets(hidden_Assets);
-		
-		Hidden_Check hidden_Check=new Hidden_Check();
-		String[] where1={"[Hidden_Check].GUID =",hidden.getGUID()};
-		hidden_Check.setWhere(where1);
-		hiddenDAO.deleteHiddenCheck(hidden_Check);
-		
-		Hidden_Neaten hidden_Neaten=new Hidden_Neaten();
-		String[] where2={"[Hidden_Neaten].GUID =",hidden.getGUID()};
-		hidden_Neaten.setWhere(where2);
-		hiddenDAO.deleteHiddenNeaten(hidden_Neaten);
-		
-		System.out.println("hidden guid="+hidden.getGUID());
-		
-		Position position=new Position();
-		String[] where3={"[Position].GUID =",hidden.getGUID()};
-		position.setWhere(where3);
-		assetsDAO.deletePosition(position);
-		
-		return hiddenDAO.deleteHidden(hidden);
-	}
-
-	@Override
 	public Integer updateRoomInfo(RoomInfo roomInfo) {
 		// TODO Auto-generated method stub
 		RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
@@ -197,29 +152,6 @@ public class AssetsImpl implements Assets{
 
 
 	@Override
-	public List<Hidden_Level> setctAllHiddenLevel() {		
-		// TODO Auto-generated method stub		
-		return hiddenDAO.setctAllHiddenLevel();
-	}
-
-
-	@Override
-	public Integer insertHiddenLevel(Hidden_Level hidden_level) {
-		// TODO Auto-generated method stub
-		
-		return hiddenDAO.insertHiddenLevel(hidden_level);
-	}
-
-
-	@Override
-	public Integer deleteHiddenLevel(Hidden_Level hidden_level) {
-		// TODO Auto-generated method stub
-		
-		return hiddenDAO.deleteHiddenLevel(hidden_level);
-	}
-
-
-	@Override
 	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort, String order,
 			Map<String, String> search) {
 		// TODO Auto-generated method stub
@@ -249,27 +181,6 @@ public class AssetsImpl implements Assets{
 		return hiddenDAO.selectAllHiddenNeatenDate(neaten_id);
 	}
 	
-	@Override
-	public List<Hidden_Type> selectAllHiddenType() {
-		// TODO Auto-generated method stub
-		
-		return hiddenDAO.selectAllHiddenType();
-	}
-
-
-	@Override
-	public Integer insertHiddenType(Hidden_Type hidden_Type) {
-		// TODO Auto-generated method stub
-		
-		return hiddenDAO.insertHiddenType(hidden_Type);
-	}
-
-
-	@Override
-	public Integer deleteHiddenType(Hidden_Type hidden_Type) {
-		// TODO Auto-generated method stub
-		return hiddenDAO.deleteHiddenType(hidden_Type);
-	}
 
 
 	@Override
@@ -278,19 +189,6 @@ public class AssetsImpl implements Assets{
 		 return hiddenDAO.selectAllHiddenUser(limit, offset, sort, order, search);
 	}
 
-
-	@Override
-	public Integer insertHiddenUser(Hidden_User hidden_User) {
-		// TODO Auto-generated method stub
-		return hiddenDAO.insertHiddenUser(hidden_User);
-	}
-
-
-	@Override
-	public Integer deleteHiddenUser(Hidden_User hidden_User) {
-		// TODO Auto-generated method stub
-		return hiddenDAO.deleteHiddenUser(hidden_User);
-	}
 	
 	
 	@Override
@@ -384,24 +282,12 @@ public class AssetsImpl implements Assets{
 	}
 
 
-	@Override
-	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets) {
-		// TODO Auto-generated method stub
-		return  assetsDAO.insertIntoHidden_Assets(hidden_Assets);
-	}
 
 
 	@Override
 	public Map findAssetByHideen(Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
 		// TODO Auto-generated method stub
 		return assetsDAO.findAssetByHideen(limit, offset, sort, order, search);
-	}
-
-
-	@Override
-	public Integer deleteHidden_Assets(Hidden_Assets hidden_Assets) {
-		// TODO Auto-generated method stub
-		return assetsDAO.deleteHidden_Assets(hidden_Assets);
 	}
 
 
@@ -455,27 +341,6 @@ public class AssetsImpl implements Assets{
 	public Map<String, Object> hiddenQuery(Integer hiddenLevel) {
 		// TODO Auto-generated method stub
 		return assetsDAO.hiddenQuery(hiddenLevel);
-	}
-
-
-	@Override
-	public Integer updateHiddenLevel(Hidden_Level hidden_Level) {
-		// TODO Auto-generated method stub
-		return hiddenDAO.updateHiddenLevel(hidden_Level);
-	}
-
-
-	@Override
-	public Integer updateHiddenType(Hidden_Type hidden_Type) {
-		// TODO Auto-generated method stub
-		return hiddenDAO.updateHiddenType(hidden_Type);
-	}
-
-
-	@Override
-	public Integer updateHiddenUser(Hidden_User hidden_User) {
-		// TODO Auto-generated method stub
-		return hiddenDAO.updateHiddenUser(hidden_User);
 	}
 
 
@@ -557,6 +422,24 @@ public class AssetsImpl implements Assets{
 	public Integer getAllRoomInfoPosition() {
 		// TODO Auto-generated method stub
 		return (Integer) roomInfoDao.getAllRoomInfoPosition().get("total");
+	}
+
+	@Override
+	public Integer insertHiddenUser(Hidden_User hidden_User) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer deleteHiddenUser(Hidden_User hidden_User) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer updateHiddenUser(Hidden_User hidden_User) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
