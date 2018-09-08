@@ -7,8 +7,9 @@ import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Item;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
+import com.voucher.manage.daoModel.Assets.Neaten_Check;
 import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 
 public interface HiddenDAO {
 
@@ -26,10 +27,7 @@ public interface HiddenDAO {
 	
 	public Map<String, Object> selectAllHidden(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search);
-			
-	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort,
-			String order,Map<String, String> search);
-	
+
 	public Map<String , Object> selectHiddenUser(String campusAdmin);
 	
 	public Map<String, Object> selectAllHiddenUser(Integer limit, Integer offset, String sort,
@@ -58,7 +56,7 @@ public interface HiddenDAO {
 	
 	public Integer deleteHiddenNeaten(Hidden_Neaten hidden_Neaten);
 	
-	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search);
+	public List<Hidden_Check_Join> selectHiddenOfMap(Map<String, String> search);
 	
 	public Integer getAllAssetByHidden_GUID(String guid);
 	
@@ -74,4 +72,5 @@ public interface HiddenDAO {
 	
 	public Integer updateRoomInfo_Hidden_Item(RoomInfo_Hidden_Item roomInfo_Hidden_Item);
 	
+	public Integer insertIntoNeaten_Check(Neaten_Check neaten_Check);
 }

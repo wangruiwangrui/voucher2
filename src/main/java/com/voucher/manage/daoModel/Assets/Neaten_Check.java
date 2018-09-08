@@ -6,51 +6,81 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[Hidden_Assets]")
-public class Hidden_Assets implements Serializable{
+@DBTable(name="[Neaten_Check]")
+public class Neaten_Check implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
-    @SQLInteger(name="id")
-	private Integer id;
+    @SQLString(name="guid")
+	private String guid;
 
-    @SQLString(name="asset_GUID")
-	private String asset_GUID;
+    @SQLString(name="neaten_id")
+	private String neaten_id;
 
-    @SQLString(name="hidden_GUID")
-	private String hidden_GUID;
+    @SQLString(name="check_id")
+	private String check_id;
+
+    @SQLString(name="principal")
+	private String principal;
+
+    @SQLString(name="progress")
+	private String progress;
+
+    @SQLString(name="userName")
+	private String userName;
 
     @SQLString(name="campusAdmin")
 	private String campusAdmin;
 
-    @SQLString(name="UserName")
-	private String UserName;
-    
     @SQLDateTime(name="date")
 	private Date date;
 
-	public void setId(Integer id){
-		this.id = id;
+	public void setGuid(String guid){
+		this.guid = guid;
 	}
 
-	public Integer getId(){
-		return id;
+	public String getGuid(){
+		return guid;
 	}
 
-	public void setAsset_GUID(String asset_GUID){
-		this.asset_GUID = asset_GUID;
+	public void setNeaten_id(String neaten_id){
+		this.neaten_id = neaten_id;
 	}
 
-	public String getAsset_GUID(){
-		return asset_GUID;
+	public String getNeaten_id(){
+		return neaten_id;
 	}
 
-	public void setHidden_GUID(String hidden_GUID){
-		this.hidden_GUID = hidden_GUID;
+	public void setCheck_id(String check_id){
+		this.check_id = check_id;
 	}
 
-	public String getHidden_GUID(){
-		return hidden_GUID;
+	public String getCheck_id(){
+		return check_id;
+	}
+
+	public void setPrincipal(String principal){
+		this.principal = principal;
+	}
+
+	public String getPrincipal(){
+		return principal;
+	}
+
+	public void setProgress(String progress){
+		this.progress = progress;
+	}
+
+	public String getProgress(){
+		return progress;
+	}
+
+	public void setUserName(String userName){
+		this.userName = userName;
+	}
+
+	public String getUserName(){
+		return userName;
 	}
 
 	public void setCampusAdmin(String campusAdmin){
@@ -61,14 +91,6 @@ public class Hidden_Assets implements Serializable{
 		return campusAdmin;
 	}
 
-	public void setUserName(String UserName){
-		this.UserName = UserName;
-	}
-
-	public String getUserName(){
-		return UserName;
-	}
-	
 	public void setDate(Date date){
 		this.date = date;
 	}

@@ -81,6 +81,8 @@
     });
 </script>
 
+<script src="../../EventUtil.js"></script>
+
 <script>
   function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
@@ -99,6 +101,16 @@
     var search = "";
     var sort = "date";
     var order = "desc";
+    
+    (function(){
+  	  
+	  	EventUtil.addHandler(window,"pageshow",function(){
+	  	  offset=0;
+	  	  $("#ul").children('li').remove();
+		  loadlist();
+	  });
+	  
+	})();
     
     $(".weui-loadmore").hide();
     $(".weui-cells__title").hide();

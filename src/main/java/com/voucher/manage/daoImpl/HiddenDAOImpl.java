@@ -1,6 +1,8 @@
 package com.voucher.manage.daoImpl;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,23 +11,23 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Item;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
+import com.voucher.manage.daoModel.Assets.Neaten_Check;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
 import com.voucher.manage.daoModel.Assets.WeiXin_User;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
-import com.voucher.manage.daoModelJoin.Assets.Position_Hidden_Join;
+import com.voucher.manage.daoModelJoin.Assets.Position_Check_Join;
 import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
@@ -289,60 +291,6 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		map.put("rows", list);
 		
 		Map countMap=SelectExe.getCount(this.getJdbcTemplate(), hidden);
-		
-		map.put("total", countMap.get(""));
-		
-		return map;
-	}
-
-
-	@Override
-	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort, String order,
-			Map<String, String> search) {
-		// TODO Auto-generated method stub
-        Hidden_Check hidden=new Hidden_Check();
-        search.put("[Hidden_Check].exist =", "1");
-        
-        System.out.println("order="+order+"      sort="+sort);
-        
-		hidden.setLimit(limit);
-		hidden.setOffset(offset);
-		hidden.setSort(sort);
-		hidden.setOrder(order);
-		hidden.setNotIn("id");
-						
-		Position position=new Position();
-		
-		position.setLimit(limit);
-		position.setOffset(offset);
-		position.setNotIn("id");
-		
-		WeiXin_User weiXin_User=new WeiXin_User();
-		
-		weiXin_User.setLimit(limit);
-		weiXin_User.setOffset(offset);
-		weiXin_User.setNotIn("id");
-		
-		if(!search.isEmpty()){
-		    String[] where=TransMapToString.get(search);
-		    hidden.setWhere(where);
-		    position.setWhere(where);
-		    weiXin_User.setWhere(where);
-		}
-		
-		Object[] objects={hidden,position,weiXin_User};
-		
-		Map map=new HashMap<String, Object>();
-		
-		Hidden_Join hidden_Jion=new Hidden_Join();
-		
-		String[] join={"GUID","campusAdmin"};
-		
-		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects,hidden_Jion,join);
-		MyTestUtil.print(list);
-		map.put("rows", list);
-		
-		Map countMap=SelectJoinExe.getCount(this.getJdbcTemplate(),objects,join);
 		
 		map.put("total", countMap.get(""));
 		
@@ -841,7 +789,113 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	@Override
 	public Integer insertHiddenNeaten(Hidden_Neaten hidden_Neaten) {
 		// TODO Auto-generated method stub
-		return InsertExe.get(this.getJdbcTemplate(), hidden_Neaten);
+		// 写入整改记录
+		int i = InsertExe.get(this.getJdbcTemplate(), hidden_Neaten);
+
+		if (i > 0) {
+			Hidden_Check hidden_check = new Hidden_Check();
+
+			hidden_check.setState(hidden_Neaten.getProgress());
+
+			hidden_check.setUpdate_time(hidden_Neaten.getDate());
+
+			String[] where = { "[Hidden_Check].GUID=", hidden_Neaten.getGUID(), "[Hidden_Check].state !=", "整改完成",
+								"[Hidden_Check].check_name = ","异常"};
+
+			hidden_check.setWhere(where);
+
+			SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+			
+			String time=sdf.format(hidden_Neaten.getDate());
+			
+			String sql="UPDATE [Hidden_Check] SET update_time= '"+time+"' , "+
+						"state= '"+hidden_Neaten.getProgress()+"' "+
+						"WHERE [Hidden_Check].GUID = '"+hidden_Neaten.getGUID()+"' "+
+						"AND [Hidden_Check].check_name = '异常' "+
+						"AND ([Hidden_Check].state != '整改完成' "+
+						"OR [Hidden_Check].state is null) ";
+			
+			// 更新安全巡查记录
+			i = this.getJdbcTemplate().update(sql);
+
+			if (i > 0) {
+				RoomInfo_Hidden_Item roomInfo_Hidden_Item = new RoomInfo_Hidden_Item();
+
+				String[] where2 = { "[RoomInfo_Hidden_Item].guid=", hidden_Neaten.getGUID() };
+
+				roomInfo_Hidden_Item.setWhere(where2);
+
+				if (i > 0) {
+					
+					hidden_check.setLimit(1000);
+					hidden_check.setOffset(0);
+					hidden_check.setNotIn("id");
+					
+					List<Hidden_Check> list=SelectExe.get(this.getJdbcTemplate(), hidden_check);
+					
+					Iterator<Hidden_Check> iterator=list.iterator();
+					
+					while (iterator.hasNext()) {
+						
+						Hidden_Check hidden_Check2=iterator.next();
+						
+						Neaten_Check neaten_Check=new Neaten_Check();
+						
+						neaten_Check.setGuid(hidden_Neaten.getGUID());
+						neaten_Check.setNeaten_id(hidden_Neaten.getNeaten_id());
+						neaten_Check.setCheck_id(hidden_Check2.getCheck_id());
+						neaten_Check.setPrincipal(hidden_Neaten.getPrincipal());
+						neaten_Check.setProgress(hidden_Neaten.getProgress());
+						neaten_Check.setUserName(hidden_Neaten.getUserName());
+						neaten_Check.setCampusAdmin(hidden_Neaten.getCampusAdmin());
+						neaten_Check.setDate(hidden_Neaten.getDate());
+						
+						i=InsertExe.get(this.getJdbcTemplate(), neaten_Check);
+						
+						if(i<1){
+							TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+						}
+					}
+					
+					if (i > 0) {
+
+						if (hidden_Neaten.getProgress().equals("整改完成")) {
+
+							RoomInfo roomInfo = new RoomInfo();
+
+							roomInfo.setIsHidden(0);
+
+							String[] where3 = {"[RoomInfo].guid=", hidden_Neaten.getGUID() };
+
+							roomInfo.setWhere(where3);
+
+							// 更新资产隐患字段
+							i = UpdateExe.get(this.getJdbcTemplate(), roomInfo);
+
+							if (i > 0) {
+
+								// 删除资产对应隐患表记录
+								DeleteExe.get(this.getJdbcTemplate(), roomInfo_Hidden_Item);
+
+							} else {
+								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							}
+						}
+
+					} else {
+						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					}
+
+				} else {
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				}
+			}else{
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			}
+		} else {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+		return i;
 	}
 
 
@@ -881,7 +935,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 
 
 	@Override
-	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search) {
+	public List<Hidden_Check_Join> selectHiddenOfMap(Map<String, String> search) {
 		// TODO Auto-generated method stub
 		 Hidden_Check hidden=new Hidden_Check();
 		 search.put("[Hidden_Check].exist =", "1");
@@ -905,7 +959,9 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		weiXin_User.setSort(null);
 		weiXin_User.setOrder(null);
 		weiXin_User.setNotIn("check_id");
-			
+		
+		 search.put("[Hidden_Check].check_name =", "异常");
+		 search.put("[Hidden_Check].state !=", "整改完成");
 		 String[] where=TransMapToString.get(search);
 		 hidden.setWhere(where);
 		 position.setWhere(where);
@@ -918,7 +974,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 				
 		String[] join={"check_id","campusAdmin"};
 			
-		Hidden_Join hidden_Join=new Hidden_Join();
+		Hidden_Check_Join hidden_Join=new Hidden_Check_Join();
 		
 		List hidden_joins=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Join, join);		
 			 
@@ -930,14 +986,14 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public Integer getAllAssetByHidden_GUID(String guid) {
 		// TODO Auto-generated method stub
 		
-		Hidden_Assets hidden_Assets=new Hidden_Assets();
+		RoomInfo roomInfo=new RoomInfo();
 		
-		String[] where={"hidden_GUID=",guid};
+		String[] where={"[RoomInfo].IsHidden>","0"};
+
+		roomInfo.setWhere(where);
 		
-		hidden_Assets.setWhere(where);
-		
-		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_Assets).get("");
-		
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), roomInfo).get("");
+
 		return count;
 	}
 
@@ -992,7 +1048,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		    position.setWhere(where);
 		}
 		
-		Position_Hidden_Join position_Hidden_Join=new Position_Hidden_Join();
+		Position_Check_Join position_Hidden_Join=new Position_Check_Join();
 		
 		Object[] objects={hidden,position};
 		
@@ -1050,6 +1106,13 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		}
 		
 		return SelectExe.get(this.getJdbcTemplate(), roomInfo_Hidden_Item);
+	}
+
+
+	@Override
+	public Integer insertIntoNeaten_Check(Neaten_Check neaten_Check) {
+		// TODO Auto-generated method stub
+		return InsertExe.get(this.getJdbcTemplate(), neaten_Check);
 	}
 
 

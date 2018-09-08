@@ -167,7 +167,7 @@ var state=getQueryString("state");
 	                	 var result=obj.result;
 	                	 var lat=result[0].y;
 	                	 var lng=result[0].x;
-	                	 location.href="hidden/hiddenSearch.html?latitude="+lat+"&longitude="+lng;
+	                	 location.href="guidance/hiddenNeatenList.html?latitude="+lat+"&longitude="+lng;
 	                 });
 	              
 	            },
@@ -372,7 +372,7 @@ var state=getQueryString("state");
 		}
 		
 		try{
-			 document.querySelector('#photo').onclick = function () {
+			 document.querySelector('#hiddenAssets').onclick = function () {
 	 		  wx.getLocation({
 		               success : function(res) {
 		                    // alert(JSON.stringify(res));
@@ -393,7 +393,7 @@ var state=getQueryString("state");
 			                   	 var result=obj.result;
 			                   	 var lat=result[0].y;
 			                   	 var lng=result[0].x;
-			                   	 location.href="safety/photo.html?latitude="+lat+"&longitude="+lng;
+			                   	 location.href="safety/hiddenAssets.html?latitude="+lat+"&longitude="+lng;
 			                 });
 		                    
 		                 },

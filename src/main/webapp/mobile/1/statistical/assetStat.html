@@ -45,8 +45,8 @@
     },function(text){
     	var obj = $.parseJSON(text);
     	var data = [{
-  			values: [obj.allAsset, obj.allAssetsHidden],
-  			labels: ['正常资产'+obj.allAsset+"处","隐患资产"+obj.allAssetsHidden+"处"],
+  			values: [obj.allAsset-obj.allAssetsHidden, obj.allAssetsHidden],
+  			labels: ['正常资产'+(obj.allAsset-obj.allAssetsHidden)+"处","隐患资产"+obj.allAssetsHidden+"处"],
   			hoverinfo: 'label+percent',
 		  	type: 'pie'
 			}];

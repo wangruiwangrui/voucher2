@@ -32,6 +32,9 @@ public class Hidden_Neaten implements Serializable{
     @SQLDateTime(name="happen_time")
 	private Date happen_time;
 
+    @SQLString(name="check_circs")
+	private String check_circs;
+    
     @SQLString(name="neaten_instance")
 	private String neaten_instance;
 
@@ -59,6 +62,9 @@ public class Hidden_Neaten implements Serializable{
     @SQLString(name="RoomGUID")
 	private String RoomGUID;
 
+    @SQLString(name="RepairItem")
+	private String RepairItem;
+    
     @SQLFloat(name="Area")
 	private Float Area;
 
@@ -136,6 +142,14 @@ public class Hidden_Neaten implements Serializable{
 		return happen_time;
 	}
 
+	public void setCheck_circs(String check_circs){
+		this.check_circs = check_circs;
+	}
+
+	public String getCheck_circs(){
+		return check_circs;
+	}
+	
 	public void setNeaten_instance(String neaten_instance){
 		this.neaten_instance = neaten_instance;
 	}
@@ -208,6 +222,14 @@ public class Hidden_Neaten implements Serializable{
 		return RoomGUID;
 	}
 
+	public void setRepairItem(String RepairItem){
+		this.RepairItem = RepairItem;
+	}
+
+	public String getRepairItem(){
+		return RepairItem;
+	}
+	
 	public void setArea(Float Area){
 		this.Area = Area;
 	}

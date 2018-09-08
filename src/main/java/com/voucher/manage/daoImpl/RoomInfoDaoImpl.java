@@ -15,13 +15,11 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.RoomInfoDao;
-import com.voucher.manage.daoImpl.AssetsDAOImpl.hidden_AssetsRowMapper;
 import com.voucher.manage.daoModel.Floor;
 import com.voucher.manage.daoModel.RoomChangeHireLog;
 import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.RoomInfoRowMapper;
-import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.FileSelfBelong;

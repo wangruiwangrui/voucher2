@@ -17,8 +17,6 @@ import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.WeiXin_User;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.file.DocFileFactory;
 import com.voucher.manage.file.ImageFileFactory;
 import com.voucher.manage.file.PdfFileFactory;
@@ -152,15 +150,6 @@ public class AssetsImpl implements Assets{
 
 
 	@Override
-	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort, String order,
-			Map<String, String> search) {
-		// TODO Auto-generated method stub
-		
-		return hiddenDAO.selectAllHidden_Jion(limit, offset, sort, order, search);
-	}
-
-
-	@Override
 	public Map<String, Object> selectAllHiddenDate(String GUID) {
 		// TODO Auto-generated method stub
 		
@@ -276,15 +265,6 @@ public class AssetsImpl implements Assets{
 
 
 	@Override
-	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search) {
-		// TODO Auto-generated method stub
-		return hiddenDAO.selectHiddenOfMap(search);
-	}
-
-
-
-
-	@Override
 	public Map findAssetByHideen(Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
 		// TODO Auto-generated method stub
 		return assetsDAO.findAssetByHideen(limit, offset, sort, order, search);
@@ -334,13 +314,6 @@ public class AssetsImpl implements Assets{
 	public String findIgnoreHidden() {
 		// TODO Auto-generated method stub
 		return assetsDAO.findIgnoreHidden();
-	}
-
-
-	@Override
-	public Map<String, Object> hiddenQuery(Integer hiddenLevel) {
-		// TODO Auto-generated method stub
-		return assetsDAO.hiddenQuery(hiddenLevel);
 	}
 
 

@@ -1,6 +1,5 @@
 package com.rmi.server;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -10,8 +9,6 @@ import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.WeiXin_User;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.model.Users;
 
 public interface Assets {	
@@ -42,10 +39,7 @@ public interface Assets {
 	
 	public Map<String, Object> selectAllHidden(Integer limit,Integer offset,String sort,String order,
 			Map search);
-	
-	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort,
-			String order,Map<String, String> search);
-	
+		
 	public Integer updatePosition(Position position);
 		
 	public Map<String , Object> selectHiddenUser(String campusAdmin);
@@ -87,8 +81,6 @@ public interface Assets {
 	public Integer updateHiddenNeaten(Hidden_Neaten hidden_Neaten);
 	
 	public Integer deleteHiddenNeaten(Hidden_Neaten hidden_Neaten);
-	
-	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search);
 		
 	public Map findAssetByHideen(Integer limit, Integer offset, String sort, String order,
 			Map<String, String> search);
@@ -106,8 +98,6 @@ public interface Assets {
 	public String findLastHidden();
 	
 	public String  findIgnoreHidden();
-	
-	public Map<String, Object> hiddenQuery(Integer hiddenLevel);
 	
 	public List selectManageRegion();
 	

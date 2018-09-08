@@ -14,6 +14,7 @@
     <script src="../../../js/swiper.js"></script>
     <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
  	<script src="../../../js/jquery-weui.js"></script>
+ 	<link rel="stylesheet" href="../css/jquery-weui.css">
 <style type="text/css">
     body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
 </style>
@@ -56,6 +57,81 @@
          </div>
     </div>
 
+   	<div id="repair"><!-- 维修记录 -->
+	
+		<div class="weui-cells__title">维修项目</div>
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__bd">
+					<textarea id="repairItem" class="weui-textarea" rows="3"></textarea>
+				</div>
+			</div>
+		</div>
+
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><label class="weui-label">维修类型</label></div>
+				<div id="type" class="weui-cell__bd"></div>
+			</div>
+		</div>
+
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">维修面积</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="area" type="number" class="weui-input" />
+				</div>
+			</div>
+		</div>
+
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">送审金额</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="amount" type="number" class="weui-input" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">审减金额</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="amountTotal" type="number" class="weui-input" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">保修期</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="availabeLength" class="weui-input" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">施工单位</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="workUnit"  class="weui-input" />
+				</div>
+			</div>
+		</div>
+		
+
+	</div>
    
   <div class="weui-cells weui-cells_form">
      <div class="weui-cell">
@@ -111,14 +187,6 @@
      </div>
     <div id="allmap"></div>    
     
-  <!--    <div class="weui-panel weui-panel_access">
-     <div class="weui-panel__hd">安全整改图片</div>  
-       <div id="img" class="weui-panel__bd">
-       </div>  
-       <div class="weui-uploader__input-box" id="showPicker">
-       </div>   
-    </div>  
-	-->
 	
  <a href="javascript:;" id="save" class="weui-btn weui-btn_plain-primary">保存</a>
 	
@@ -169,6 +237,7 @@
 	　   }
 	 }     
         
+	$("#repair").hide();
 	
 	var select = document.createElement("select");
 	select.setAttribute("id","select");
@@ -198,11 +267,60 @@
 	 if(progre==0){
     	  progress="整改中";
     	  progress_img.setAttribute("class","weui-icon-info-circle");  
+    	  $("#repair").hide();
       }else if(progre==1){
     	  progress="整改完成";
     	  progress_img.setAttribute("class","weui-icon-success");
+    	  $("#repair").show();
       }
    } 
+	
+	var select2 = document.createElement("select");
+	select2.setAttribute("id","select2");
+	select2.setAttribute("onchange","gradeChange2()");
+
+	var option2 = document.createElement("option");
+	option2.innerHTML="排危工程";
+	option2.setAttribute("value",0);
+	select2.appendChild(option2);		
+	
+	var option2 = document.createElement("option");
+	option2.innerHTML="小修";
+	option2.setAttribute("value",1);
+	select2.appendChild(option2);	
+
+	var option2 = document.createElement("option");
+	option2.innerHTML="大中修";
+	option2.setAttribute("value",2);
+	select2.appendChild(option2);
+	
+	var option2 = document.createElement("option");
+	option2.innerHTML="其他";
+	option2.setAttribute("value",3);
+	select2.appendChild(option2);
+	
+	select2.setAttribute("class","weui-input");
+	$("#type").append(select2);	
+
+	var type="排危工程";
+	
+	function gradeChange2(){ 
+	    var objS = document.getElementById("select2"); 
+	    var grade = objS.options[objS.selectedIndex].value; 
+	    console.log(objS.options[objS.selectedIndex]);
+	    progre=grade;
+		 if(progre==0){
+	    	  type="排危工程";
+	      }else if(progre==1){
+	    	  type="小修";
+	      }else if(progre==2){
+	    	  type="大中修";
+	      }else if(progre==3){
+	    	  type="其他";
+	      }
+	   }
+	
+	var addressValue;
 	
 	$.post('/voucher/mobile/register/userinfoByopenId.do', {
 		campusId:1
@@ -255,6 +373,7 @@
               	 var address=document.createElement("span");
                 	  address.innerHTML=obj.address;
                    $("#address").append(address);
+                  addressValue=obj.address;
                   
                   <!--
                   var manageRegion=document.createElement("span");
@@ -339,23 +458,51 @@
   
     $("#save").on("click",function(){
 
-    	console.log("guid="+guid);
-    	
+	
     	geoc.getLocation(point, function(rs){
     	    var addComp;
     	  	addComp = rs.addressComponents;
-        	
-        	var neaten_name=$("#neaten_name").val();        	
+        	      	
         	var principal=$("#principal").val();
         	var happenTime=$("#happenTime").val();
         	var remark=$("#remark").val();
         	var neaten_instance=$("#neaten_instance").val();
         	var addComp1=JSON.stringify(addComp);
 
+        	var repairItem=$("#repairItem").val();
+        	var area=$("#area").val();
+        	var amount=$("#amount").val();
+        	var amountTotal=$("#amountTotal").val();
+        	var availabeLength=$("#availabeLength").val();
+        	var workUnit=$("#workUnit").val();
+        	
+        	if(progress=="整改完成"){
+        		var error="";
+        		if(repairItem==null||repairItem==""){
+        			error="维修项目不能为空!";
+        		}else if(area==null||area==""){
+        			error="面积不能为空!";
+        		}else if(amount==null||amount==""){
+        			error="送审金额不能为空!";
+        		}else if(amountTotal==null||amountTotal==""){
+        			error="审减金额不能为空!";
+        		}else if(availabeLength==null||availabeLength==""){
+        			error="保修期不能为空!";
+        		}
+        		
+        		if(error!=""){
+        			
+        			$.alert(error);
+        			
+        			return false;
+        		}
+        		        		
+        	}
+        	
         	 $.post("/voucher/mobile/hidden/insertHiddenNeaten.do",
-        		  {
+        		{
  					guid:guid,
-        		 	neaten_name:neaten_name,
+ 					address:addressValue,
     		    	happenTime:happenTime,
     		    	principal:principal,
     		    	progress:progress,
@@ -364,19 +511,26 @@
     		    	neaten_instance:neaten_instance,
     		    	addComp:addComp1,
     		    	lng:longitude,
-    		    	lat:latitude
+    		    	lat:latitude,
+    		    	repairItem:repairItem,
+    		    	type:type,
+    		    	area:area,
+    		    	amount:amount,
+    		    	amountTotal:amountTotal,
+    		    	availabeLength:availabeLength,
+    		    	workUnit:workUnit
     		    }, function(data){
     	        	var obj = $.parseJSON(data);
-    		    	if (obj.status == 0) {
-    		        	alert("新建"+name+"隐患整改记录失败!");
+    		    	if (obj.status == "failure") {
+    		    		$.alert("新建"+name+"隐患整改记录失败!",function() {
+			        		  //点击确认后的回调函数
+			        		history.back();
+			        	});
     		        	console.log(obj.status);
-    		        } else if (obj.status == 1) {
+    		        } else if (obj.status == "succeed") {
     		            //存储到服务器成功后的处理
     		            //
     		            var neaten_id=obj.neaten_id;
-    		        	//alert("新建"+name+"隐患整改记录成功!");
-    		        	
-    		        	//location.href="NeatenInfoDetail.html?neaten_id="+neaten_id+"&latitude="+latitude+"&longitude="+longitude;
 
     		            $.alert("新建"+name+"隐患整改记录成功!","",function(){
     		        		
@@ -396,7 +550,10 @@
     		        	
     		       	 }else{
     			        	
-    			        	$.alert("新建隐患整改记录失败!");
+    			        	$.alert("新建隐患整改记录失败!",function() {
+    			        		  //点击确认后的回调函数
+    			        		history.back();
+    			        	});
     			        	
     			     }
     		    });

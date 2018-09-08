@@ -12,9 +12,7 @@ import java.util.Map;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
-import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -26,12 +24,10 @@ import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Assets_Join;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.model.Access;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.PhotoService;
@@ -42,7 +38,6 @@ import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 import com.voucher.weixin.insweptcontroller.FileUploadController;
 
-import common.HttpClient;
 
 @Controller
 @RequestMapping("/mobile/asset")
@@ -654,15 +649,15 @@ public class AssetController {
 		
 		map.put("rows", hidden_Assets_Joins);
 		
-		Iterator<Hidden_Assets_Join> iterator=hidden_Assets_Joins.iterator();
+		Iterator<Hidden_Check_Join> iterator=hidden_Assets_Joins.iterator();
 		
 		List roominfos=new ArrayList<>();
 		
 		while (iterator.hasNext()) {
-			Hidden_Assets_Join hidden_Assets_Join=iterator.next();
+			Hidden_Check_Join hidden_Assets_Join=iterator.next();
 			RoomInfo roomInfo=new RoomInfo();
 			
-			roomInfo.setGUID(hidden_Assets_Join.getAsset_GUID());
+			roomInfo.setGUID(hidden_Assets_Join.getGUID());
 			
 			roominfos.add(roomInfo);
 		}
@@ -673,44 +668,7 @@ public class AssetController {
 		return map;
 		
 	}
-	
-	@RequestMapping("/insertHiddenAssets")
-	public @ResponseBody Integer insertHiddenAssets(@RequestParam String guid,
-			@RequestParam String hiddenGuid,HttpServletRequest request){
-		
-		Hidden_Assets hidden_Assets=new Hidden_Assets();
-		
-		HttpSession session=request.getSession();
-		
-		String openId=session.getAttribute("openId").toString();
-		
-		Users users=userService.getUserByOnlyOpenId(openId);
-		
-		Date date=new Date();
-		
-		hidden_Assets.setAsset_GUID(guid);
-		hidden_Assets.setHidden_GUID(hiddenGuid);
-		hidden_Assets.setCampusAdmin(openId);
-		hidden_Assets.setUserName(users.getName());
-		hidden_Assets.setDate(date);
-				
-		return assetsDAO.insertIntoHidden_Assets(hidden_Assets);
-		
-	}
-	
-	@RequestMapping("/delHiddenAssets")
-	public @ResponseBody Integer delHiddenAssets(@RequestParam String guid,
-			@RequestParam String hiddenGuid,HttpServletRequest request){
-		
-		Hidden_Assets hidden_Assets=new Hidden_Assets();
-		
-		String[] where={"asset_GUID=",guid,"hidden_GUID=",hiddenGuid};
-		
-		hidden_Assets.setWhere(where);
-		
-		return assetsDAO.deleteHidden_Assets(hidden_Assets);
-		
-	}
+
 	
 	@RequestMapping("/getAllAssetByHidden_GUID")
 	public @ResponseBody Integer getAllAssetByHidden_GUID(@RequestParam String guid){
@@ -721,31 +679,7 @@ public class AssetController {
 		
 	}
 	
-	
-	@RequestMapping("/getHiddenByAsset")
-	public @ResponseBody Map getHiddenByAsset(@RequestParam Integer limit,@RequestParam Integer offset,String sort,String order,
-			@RequestParam String assetGuid,HttpServletRequest request){
 		
-		Map searchMap=new HashMap<>();
-		
-		searchMap.put("[Hidden_Assets].asset_GUID=", assetGuid);
-		
-		Map map=new HashMap<>();
-		
-		Map hidden_Assets_JoinMap=assetsDAO.findHideenByAsset(limit, offset, sort, order, searchMap);
-		
-		List hidden_Joins=(List) hidden_Assets_JoinMap.get("rows");
-		
-		map.put("rows", hidden_Joins);
-		
-
-		Map fileBytes=mobileDao.hiddenImageQuery(request, hidden_Joins);
-		map.put("fileBytes", fileBytes);
-		
-		return map;
-		
-	}
-	
 	@RequestMapping("/getChartInfoByChartGUID")
 	public @ResponseBody Map<String, Object> getChartInfoByChartGUID(@RequestParam String chartGUID
 			,HttpServletRequest request){

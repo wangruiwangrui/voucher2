@@ -43,7 +43,6 @@ import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.mapper.WeiXinMapper;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
@@ -171,28 +170,6 @@ public class BaiduMapController {
 		return list;
 	}
 	
-	@RequestMapping("/getByDistanceImg")
-	public @ResponseBody Map getByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
-			Double distance,String search,HttpServletRequest request){
-		System.out.println("search="+search);
-		if(search==null)
-			search="";
-		
-		Map map=assetsDAO.findHiddenByDistance(limit, offset, lng, lat, search);
-		
-		MyTestUtil.print(map);
-		
-		List list=(List) map.get("row");
-		
-		Map fileBytes=mobileDao.positionHiddenImageQuery(request, list);
-		
-		Map result=new HashMap<>();
-		
-		result.put("hidden", list);
-		result.put("fileBytes", fileBytes);
-		
-		return result;
-	}
 	
 	@RequestMapping("/getAssetsByDistance")
 	public @ResponseBody Map getAssetsByDistance(Integer limit,Integer offset,Double lng,Double lat,
@@ -275,6 +252,34 @@ public class BaiduMapController {
 		return result;
 	}
 	
+	@RequestMapping("/getHiddenAssetsByDistanceImg")
+	public @ResponseBody Map getHiddenAssetsByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
+			Double distance,String search,HttpServletRequest request){
+		System.out.println("search="+search);
+
+		Map map;
+		
+		if(search==null)
+			search="";		
+	
+		map = assetsDAO.findHiddenAssetByDistance(limit, offset, lng, lat, search);
+		
+		MyTestUtil.print(map);
+		
+		List list=(List) map.get("rows");
+		int total=(int) map.get("total");
+		
+		Map fileBytes=mobileDao.roomInfo_PositionImageQuery(request, list);
+		
+		Map result=new HashMap<>();
+		
+		result.put("rows", list);
+		result.put("total", total);
+		result.put("fileBytes", fileBytes);
+		
+		return result;
+	}
+	
 	@RequestMapping("/getAssetsHiddenByDistanceImg")
 	public @ResponseBody Map getAssetsHiddenByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
 			Double distance,String search,HttpServletRequest request){
@@ -336,7 +341,7 @@ public class BaiduMapController {
         
         List list=hiddenDAO.selectHiddenOfMap(searchMap);
         
-        Hidden_Join hidden_Join=(Hidden_Join) list.get(0);
+        Hidden_Check_Join hidden_Join=(Hidden_Check_Join) list.get(0);
 		
         String GUID=hidden_Join.getGUID();
         

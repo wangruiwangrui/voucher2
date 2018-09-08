@@ -89,34 +89,12 @@ for(var i=0;i<json_data.length;i++){
 	var point=new BMap.Point(json_data[i][0], json_data[i][1]);
 	var myIcon = new BMap.Icon("../../img/hiddenPoint2.png", new BMap.Size(10,30));
 	var marker= new BMap.Marker(point, {icon : myIcon}); // 创建点
-	if(json_data[i][3]=="重大隐患"){
-		var myIcon = new BMap.Icon("../../img/hiddenPoint0.png", new BMap.Size(10,30));
-		marker = new BMap.Marker(point, {icon : myIcon}); // 创建点
-	}else if(json_data[i][3]=="一级隐患"){
-		var myIcon = new BMap.Icon("../../img/hiddenPoint1.png", new BMap.Size(10,30));
-		marker = new BMap.Marker(point, {icon : myIcon}); // 创建点
-	}else if(json_data[i][3]=="二级隐患"){
-		var myIcon = new BMap.Icon("../../img/hiddenPoint2.png", new BMap.Size(10,30));
-		marker = new BMap.Marker(point, {icon : myIcon}); // 创建点
-	}
+
+	var myIcon = new BMap.Icon("../../img/hiddenPoint0.png", new BMap.Size(10,30));
+	marker = new BMap.Marker(point, {icon : myIcon}); // 创建点
+
 	map.addOverlay(marker);    //增加点
-	/*
-	var str = json_data[i][2];
-	var opts = {
-			   position : point,    // 指定文本标注所在的地理位置
-			   offset   : new BMap.Size(-getByteLen(str)*4, 5)    //设置文本偏移量
-			}	
-	console.log(getByteLen(str));
-	var label = new BMap.Label(str, opts);  // 创建文本标注对象
-	label.setStyle({
-					 color : "red",
-					 fontSize : "12px",
-					 height : "20px",
-					 lineHeight : "20px",
-					 fontFamily:"微软雅黑"
-				  });
-    map.addOverlay(label);
-    */
+
 	marker.addEventListener("click",attribute);
 }
 //让所有点在视野范围内
@@ -135,7 +113,8 @@ function attribute(e){
     	lat:hidden_lat
     }, function(data){
     	var obj=$.parseJSON(data);
-    	location.href="hidden/hiddenDetail.html?guid="+obj.guid+"&latitude="+lat+"&longitude="+lng;
+    	var guid=encodeURI(obj.guid);
+    	location.href="hidden/hiddenDetail.html?guid="+guid+"&latitude="+lat+"&longitude="+lng;
     });
     
 }	

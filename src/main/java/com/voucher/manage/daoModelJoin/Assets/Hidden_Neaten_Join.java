@@ -31,6 +31,9 @@ public class Hidden_Neaten_Join implements Serializable{
 	    @SQLDateTime(name="happen_time")
 		private Date happen_time;
 
+	    @SQLString(name="check_circs")
+		private String check_circs;
+	    
 	    @SQLString(name="neaten_instance")
 		private String neaten_instance;
 
@@ -49,25 +52,8 @@ public class Hidden_Neaten_Join implements Serializable{
 	    @SQLString(name="terminal")
 		private String terminal;
 	    
-	    /*
-	     * Hidden
-	     */
-	    
-	    @SQLString(name="name")
-		private String name;
-	    
-	    @SQLInteger(name="hidden_level")
-		private Integer hidden_level;	    
-	    
-	    @SQLString(name="detail")
-		private String detail;
-	    
 	    @SQLString(name="progress")
 		private String progress;
-	    
-	    @SQLInteger(name="type")
-		private Integer type;
-	    
 	    /*
 	     * Position
 	     */
@@ -186,22 +172,15 @@ public class Hidden_Neaten_Join implements Serializable{
 			return terminal;
 		}
 		
-		public String getName() {
-			return name;
+
+		public void setProgress(String progress){
+			this.progress = progress;
 		}
 
-		public void setName(String name) {
-			this.name = name;
+		public String getProgress(){
+			return progress;
 		}
-
-		public Integer getHidden_level() {
-			return hidden_level;
-		}
-
-		public void setHidden_level(Integer hidden_level) {
-			this.hidden_level = hidden_level;
-		}
-
+		
 		public Date getHappen_time() {
 			return happen_time;
 		}
@@ -209,29 +188,13 @@ public class Hidden_Neaten_Join implements Serializable{
 		public void setHappen_time(Date happen_time) {
 			this.happen_time = happen_time;
 		}
-
-		public String getDetail() {
-			return detail;
+		
+		public void setCheck_circs(String check_circs){
+			this.check_circs = check_circs;
 		}
 
-		public void setDetail(String detail) {
-			this.detail = detail;
-		}
-
-		public String getProgress() {
-			return progress;
-		}
-
-		public void setProgress(String progress) {
-			this.progress = progress;
-		}
-
-		public Integer getType() {
-			return type;
-		}
-
-		public void setType(Integer type) {
-			this.type = type;
+		public String getCheck_circs(){
+			return check_circs;
 		}
 		
 		public void setLng(Double lng){

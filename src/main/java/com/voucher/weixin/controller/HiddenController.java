@@ -25,14 +25,12 @@ import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Item;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
@@ -62,53 +60,7 @@ public class HiddenController {
 		this.userService = userService;
 	}
 	
-	@RequestMapping("/selectAllHidden")
-	public @ResponseBody Map selectAllHidden(@RequestParam Integer limit, @RequestParam Integer offset, 
-			String sort, String order,
-			@RequestParam String search,HttpServletRequest request) {
-		Map searchMap=new HashMap<>();
 		
-		if(!search.equals("")){
-			searchMap.put("Hidden.name like", "%"+search+"%");
-		}
-		
-		Map map=hiddenDAO.selectAllHidden_Jion(limit, offset, sort, order, searchMap);
-		
-		List list=(List) map.get("rows");
-		
-		Map fileBytes=mobileDao.hiddenImageQuery(request,list);
-		
-		Map result=new HashMap<>();
-		
-		result.put("hidden", list);
-		result.put("fileBytes", fileBytes);
-		
-		return result;
-	}
-	
-	@RequestMapping("/selectHiddenByGuid")
-	public @ResponseBody Map selectHiddenByGuid(@RequestParam String guid,HttpServletRequest request){
-        Map searchMap=new HashMap<>();
-		System.out.println("guid="+guid);
-	    searchMap.put("[Hidden_Check].check_id = ", guid);
-		
-		Map map=hiddenDAO.selectAllHidden_Jion(10, 0, null, null, searchMap);
-		
-		List list=(List) map.get("rows");
-		
-		Map result=new HashMap<>();
-		
-		Hidden_Join hidden_Join=(Hidden_Join) list.get(0);
-		
-		List fileBytes=mobileDao.allHiddenImageByGUID(request, hidden_Join);
-		
-		result.put("hidden", hidden_Join);
-		result.put("fileBytes", fileBytes);
-		MyTestUtil.print(fileBytes);
-		
-		return result;
-	}
-	
 	@RequestMapping("/selectAllCheck")
 	public @ResponseBody Map selectAllCheck(@RequestParam Integer limit, @RequestParam Integer offset, 
 			String sort, String order,
@@ -267,11 +219,14 @@ public class HiddenController {
 		
 		List list=(List) map.get("rows");
 		
+		int total=(int) map.get("total");
+		
 		Map fileBytes=mobileDao.neatenImageQuery(request,list);
 		
 		Map result=new HashMap<>();
 		
 		result.put("hidden_Neaten", list);
+		result.put("total", total);
 		result.put("fileBytes", fileBytes);
 		
 		return result;
@@ -283,7 +238,7 @@ public class HiddenController {
 		
 	    searchMap.put("[Hidden_Neaten].neaten_id = ", neaten_id);
 		
-		Map map=hiddenDAO.selectAllHiddenNeaten(10, 0, null, null, searchMap);
+		Map map=hiddenDAO.selectAllHiddenNeaten(1, 0, null, null, searchMap);
 		
 		List list=(List) map.get("rows");
 		
@@ -462,17 +417,7 @@ public class HiddenController {
 			RoomInfo roomInfo = new RoomInfo();
 			
 			if (check_name != null && check_name.equals("异常")) {
-				
-				//插入资产隐患表
-				Hidden_Assets hidden_Assets=new Hidden_Assets();
-				
-				hidden_Assets.setAsset_GUID(guid);
-				hidden_Assets.setHidden_GUID(uuid.toString());
-				hidden_Assets.setCampusAdmin(openId);
-				hidden_Assets.setDate(date);
-				
-				assetsDAO.insertIntoHidden_Assets(hidden_Assets);
-				
+								
 				// 更新资产隐患字段
 				Map search = new HashMap<>();
 
@@ -671,13 +616,15 @@ public class HiddenController {
 	
 	@RequestMapping("/insertHiddenNeaten")
 	public @ResponseBody Map insertHiddenNeaten(
-			@RequestParam String guid,
-			@RequestParam String neaten_name,@RequestParam String progress,
-			@RequestParam String state,
+			@RequestParam String guid,@RequestParam String progress,
+			@RequestParam String state,@RequestParam String address,
 			@RequestParam String happenTime,@RequestParam String principal,
 			@RequestParam String remark,
 			@RequestParam String neaten_instance,@RequestParam String addComp,
 			@RequestParam Double lng,@RequestParam Double lat,
+			String repairItem,String type,
+			Float area,Float amount,Float amountTotal,
+			String availabeLength,String workUnit,
 			HttpServletRequest request){
 		
 		Hidden_Neaten hidden_Neaten=new Hidden_Neaten();
@@ -688,10 +635,12 @@ public class HiddenController {
         
         hidden_Neaten.setGUID(guid);
         
+        hidden_Neaten.setNeaten_name(address);
+        
+        System.out.println("address="+address);
+        
         hidden_Neaten.setNeaten_id(uuid.toString());
-        
-        hidden_Neaten.setNeaten_name(neaten_name);
-        
+                
         hidden_Neaten.setPrincipal(principal);
         
         hidden_Neaten.setRemark(remark);
@@ -707,6 +656,33 @@ public class HiddenController {
         hidden_Neaten.setUserName(userName);
         
         hidden_Neaten.setProgress(progress);
+        
+        String check_circs=getRoomInfoHiddenItemDataByGUID(guid);
+        
+        hidden_Neaten.setCheck_circs(check_circs);
+        
+        Map map=new HashMap<>();
+        
+        if(progress!=null&&progress.equals("整改完成")){
+        	
+        	if(repairItem==null||repairItem.equals("")||type==null||type.equals("")||amount==null||amountTotal==null||
+        			area==null||availabeLength==null||availabeLength.equals("")||workUnit==null||workUnit.equals("")){
+        		
+        		map.put("status", "succeed");
+        		map.put("neaten_id", uuid.toString());
+				
+        		return map;
+        	}
+
+        	hidden_Neaten.setRoomGUID(guid);
+        	hidden_Neaten.setRepairItem(repairItem);
+        	hidden_Neaten.setType(type);
+        	hidden_Neaten.setAmount(amount);
+        	hidden_Neaten.setAmountTotal(amountTotal);
+        	hidden_Neaten.setArea(area);
+        	hidden_Neaten.setAvailabeLength(availabeLength);
+        	hidden_Neaten.setWorkUnit(workUnit);
+        }
         
 		if(happenTime!=null&&!happenTime.equals("")){
 			try {
@@ -726,44 +702,38 @@ public class HiddenController {
 		hidden_Neaten.setTerminal("Wechat");
 		
 		int i=hiddenDAO.insertHiddenNeaten(hidden_Neaten);
-		
-		Hidden_Check hidden_check=new Hidden_Check();
 
-		hidden_check.setState(state);
+		if (i > 0 ) {
+			JSONObject jsonObject = JSONObject.parseObject(addComp);
+
+			String province = jsonObject.getString("province");
+			String city = jsonObject.getString("city");
+			String district = jsonObject.getString("district");
+			String street = jsonObject.getString("street");
+			String streetNumber = jsonObject.getString("streetNumber");
+
+			Position position = new Position();
+
+			position.setNeaten_id(uuid.toString());
+			position.setLat(lat);
+			position.setLng(lng);
+
+			position.setProvince(province);
+			position.setCity(city);
+			position.setDistrict(district);
+			position.setStreet(streetNumber);
+			position.setStreet_number(streetNumber);
+
+			assetsDAO.updatePositionByNeaten(position);
+		}
 		
-		hidden_check.setUpdate_time(date);
-		
-		String[] where={"[Hidden_Check].GUID=",guid};
-		
-		hidden_check.setWhere(where);
-		
-		i=hiddenDAO.updateHiddenCheck(hidden_check);
-		
-		JSONObject jsonObject=JSONObject.parseObject(addComp);
-		
-		String province=jsonObject.getString("province");		
-		String city=jsonObject.getString("city");		
-		String district=jsonObject.getString("district");		
-		String street=jsonObject.getString("street");		
-		String streetNumber=jsonObject.getString("streetNumber");	
-		
-		Position position=new Position();
-		
-		position.setNeaten_id(uuid.toString());
-		position.setLat(lat);
-		position.setLng(lng);
-		
-		position.setProvince(province);
-		position.setCity(city);
-		position.setDistrict(district);
-		position.setStreet(streetNumber);
-		position.setStreet_number(streetNumber);
-		
-		assetsDAO.updatePositionByNeaten(position);
-		
-		Map map=new HashMap<>();
-		
-		map.put("status", i);
+
+		if(i>0){
+			map.put("status", "succeed");
+		}else{
+			map.put("status", "failure");
+		}
+				
 		map.put("neaten_id", uuid.toString());
 				
 		return map;
@@ -774,7 +744,7 @@ public class HiddenController {
 	@RequestMapping("/updateHiddenNeaten")
 	public @ResponseBody Map updateHiddenNeaten(
 			@RequestParam String guid,@RequestParam String neaten_id,
-			@RequestParam String neaten_name,@RequestParam String progress,
+			@RequestParam String progress,
 			@RequestParam String happenTime,@RequestParam String principal,
 			@RequestParam String remark,
 			@RequestParam String neaten_instance,@RequestParam String addComp,
@@ -786,8 +756,6 @@ public class HiddenController {
         String openId=( String ) request.getSession().getAttribute("openId");
         
         hidden_Neaten.setNeaten_id(neaten_id);
-        
-        hidden_Neaten.setNeaten_name(neaten_name);
         
         hidden_Neaten.setPrincipal(principal);
         
@@ -819,17 +787,7 @@ public class HiddenController {
 		hidden_Neaten.setWhere(where);
 		
 		int i=hiddenDAO.updateHiddenNeaten(hidden_Neaten);
-		
-		Hidden_Check hidden_check=new Hidden_Check();
-		
-		hidden_check.setState(progress);
-		
-		String[] where2={"[Hidden_Check].GUID=",guid};
-		
-		hidden_check.setWhere(where2);
-		
-		i=hiddenDAO.updateHiddenCheck(hidden_check);
-		
+				
 		JSONObject jsonObject=JSONObject.parseObject(addComp);
 		
 		String province=jsonObject.getString("province");		

@@ -9,8 +9,8 @@
 <meta name="format-detection" content="telephone=no" />
 <meta charset="utf-8" />
  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="css/weui.css"/>
-    <link rel="stylesheet" href="css/example.css"/>
+    <link rel="stylesheet" href="../css/weui.css"/>
+    <link rel="stylesheet" href="../css/example.css"/>
 <style type="text/css">
     body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
 </style>
@@ -74,13 +74,6 @@
         </div>
     </div>
    
-    <div class="weui-cells weui-cells_form">
-        <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">租金</label></div>
-                <div id="hire" class="weui-cell__bd">
-                </div>
-        </div>
-    </div>
    
      <div class="weui-cells weui-cells_form">
             <div class="weui-cell weui-cell_access">
@@ -108,8 +101,11 @@
     </div>  
     
     <div class="weui-cells weui-cells_form">
-            <div id="hidden" class="weui-cell weui-cell_access">
-            </div>
+      <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">关联隐患</label></div>
+          <div id="hiddenCircs" class="weui-cell__bd">
+     	</div>
+      </div>
     </div>
   
   	<div class="weui-cells weui-cells_form">
@@ -139,6 +135,8 @@
       <div class="weui-uploader__input-box" id="showPicker">
        </div>
    </div>  
+      
+   <a href="javascript:;" id="check" class="weui-btn weui-btn_plain-primary">新建安全巡查记录</a>
       
 </body>
 </html>
@@ -256,11 +254,7 @@
                   var buildArea=document.createElement("span");
                   buildArea.innerHTML=obj.buildArea+" m<sup>2</sup>";
                   $("#buildArea").append(buildArea);
-  
-                  var hire=document.createElement("span");
-                  hire.innerHTML=obj.hire;
-                  $("#hire").append(hire);
-                  
+                    
 
                   var State=document.createElement("span");
                   State.innerHTML=obj.state;
@@ -287,47 +281,24 @@
                   var chartGUID=encodeURI(obj.chartGUID);
                   
                   $("#State").click(function(){
-          			  location.href="assetState.html?chartGUID="+chartGUID+"&latitude="+latitude+"&longitude="+longitude;
+          			  location.href="../../assetAdmin/assetState.html?chartGUID="+chartGUID+"&latitude="+latitude+"&longitude="+longitude;
                   });
                   
-                  var hidden=document.createElement("span");
-            	  $.get("/voucher/mobile/asset/getAllAssetByHidden_GUID.do",{
-  				 		guid:guid
-  			  		},function(text){
-  			  			if(text>0){
-  			  				//hidden.innerHTML=text+"处";
-  			  				var hidden1=document.createElement("div");
-  			  				hidden1.setAttribute("class","weui-cell__bd");
-  			  				var span1=document.createElement("span");
-  			  				span1.setAttribute("style","vertical-align: middle");
-  			  				span1.innerHTML="关联隐患";
-  			  				var span2=document.createElement("span");
-			  				span2.setAttribute("class","weui-badge");
-			  				span2.setAttribute("style","margin-left: 25px;");
-			  				span2.innerHTML=text;
-			  				hidden1.appendChild(span1);
-			  				hidden1.appendChild(span2);
-                    		$("#hidden").append(hidden1); 
-                    		var hidden2=document.createElement("div");
-                    		$("#hidden").append(hidden2); 
-                    		
-                    		
-  			  			}else{
-  			  				var hidden=document.createElement("div");
-			  				hidden.setAttribute("class","weui-cell__bd");
-			  				var span1=document.createElement("span");
-			  				span1.setAttribute("style","vertical-align: middle");
-			  				span1.innerHTML="关联隐患";
-			  				var span2=document.createElement("span");
-			  				span2.setAttribute("style","margin-left: 15px;");
-			  				span2.innerHTML="无";
-			  				hidden.appendChild(span1);
-			  				hidden.appendChild(span2);
-                			$("#hidden").append(hidden);
-  			  			}
-  			  			 			  		
-  			  		
-  			  		});
+              	$.ajax({
+                    type: "POST",
+                    url: "/voucher/mobile/hidden/getRoomInfoHiddenItemDataByGUID.do",
+                    data: { "guid":guid},
+                    dataType: "json",
+                    error: function (request){
+                 	   console.log(request);
+                    },
+                    success: function (text) {
+                    	console.log(text);
+                    	var hiddenCircs=document.createElement("span");
+                    	hiddenCircs.innerHTML="<font color='#FF0000'>"+text+"</font>";
+                        $("#hiddenCircs").append(hiddenCircs);
+                    }
+                 });
                   
             	  $.get("/voucher/mobile/asset/getCountCheckByGUID.do",{
 				 		guid:guid
@@ -353,7 +324,7 @@
                   		
                   		$("#hiddenCheck").click(function(){
         			  			var assetGuid=encodeURI(guid);
-        			  			location.href="../1/guidance/hiddenCheckListByGuid.html?search="+assetGuid+"&latitude="+latitude+"&longitude="+longitude+"&type=gear";
+        			  			location.href="../../1/guidance/hiddenCheckListByGuid.html?search="+assetGuid+"&latitude="+latitude+"&longitude="+longitude+"&type=gear";
                   		});
                   		
 			  			}else{
@@ -390,7 +361,7 @@
                   		
                   		$("#assetCheck").click(function(){
         			  			var assetGuid=encodeURI(guid);
-                  			location.href="assetCheck/assetCheckListByGuid.html?search="+assetGuid+"&latitude="+latitude+"&longitude="+longitude;
+                  			location.href="../../assetAdmin/assetCheck/assetCheckListByGuid.html?search="+assetGuid+"&latitude="+latitude+"&longitude="+longitude;
                   		});
                   		
 			  			}else{
@@ -453,6 +424,10 @@
         }
     });
     
+	$("#check").click(function(){
+		var guid=encodeURI(getQueryString("guid"));
+		location.href="../../1/guidance/addCheckInfoDetail.html?guid="+guid+"&latitude="+latitude+"&longitude="+longitude;
+	});
     
 	  //线路
     function navigation(p1, p2) {
@@ -494,7 +469,7 @@
     url=document.location.toString();
 
 	 $.ajax({
-	     url : "../../wechat/sign.do",
+	     url : "../../../wechat/sign.do",
 	     data : {
 	    	 campusId:1,
 	    	 url:url
@@ -607,7 +582,7 @@
 </script>
 
 
-<script src="../../js/previewImage.min.js"></script>
+<script src="../../../js/previewImage.min.js"></script>
 
 <script>
  

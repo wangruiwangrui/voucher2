@@ -4,12 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
 
 public interface AssetsDAO {
 
@@ -46,6 +42,8 @@ public interface AssetsDAO {
 	
 	public Map findAssetByDistance(int limit,int offset,Double lng, Double lat,String search);
 	
+	public Map findHiddenAssetByDistance(int limit,int offset,Double lng, Double lat,String search);
+	
 	public Map findAssetHiddenByDistance(int limit,int offset,Double lng, Double lat,String search);
 	
 	public Map findAssetByDistanceDate(int limit,int offset,Double lng, Double lat,String search,String search2, Integer type);
@@ -53,10 +51,6 @@ public interface AssetsDAO {
 	public Map findHiddenByPoint(Double lng, Double lat,Double distance,String search);
 	
 	public Map findAssetByPoint(int limit,int offset,Double lng, Double lat,Double distance,String search);
-		
-	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets);
-	
-	public Integer deleteHidden_Assets(Hidden_Assets hidden_Assets);
 	
 	public Map findAssetByHideen(Integer limit, Integer offset, String sort, String order,
 			Map<String, String> search);
@@ -77,9 +71,7 @@ public interface AssetsDAO {
 	public String findLastHidden();
 	
 	public String  findIgnoreHidden();
-	
-	public Map<String, Object> hiddenQuery(Integer hiddenLevel);
-	
+		
 	public List selectManageRegion();
 	
 	public List selectRoomProperty();
