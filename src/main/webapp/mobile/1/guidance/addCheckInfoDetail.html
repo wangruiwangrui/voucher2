@@ -423,14 +423,6 @@
         </div>
     </div>
    
-    <div class="weui-cells weui-cells_form" id="hire_div">
-        <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">租金</label></div>
-                <div id="hire" class="weui-cell__bd">
-                </div>
-        </div>
-    </div>
-   
    
     <div class="weui-cells weui-cells_form" id="charter_div">
             <div class="weui-cell weui-cell_access">
@@ -583,10 +575,6 @@
               	var charter=document.createElement("span");
           	 	charter.innerHTML=obj.charter;
                	$("#charter").append(charter);
-               	
-               	var hire=document.createElement("span");
-                hire.innerHTML=obj.hire;
-                $("#hire").append(hire);
                	
               }else{
             	  $("#charter_div").hide();

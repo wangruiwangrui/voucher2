@@ -20,12 +20,15 @@ import com.voucher.manage.daoModel.RoomChangeHireLog;
 import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.RoomInfoRowMapper;
+import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.FileSelfBelong;
 import com.voucher.manage.daoModel.TTT.HireList;
+import com.voucher.manage.daoModel.TTT.PreMessage;
 import com.voucher.manage.daoModel.TTT.RoomRepairLog;
 import com.voucher.manage.daoModelJoin.RoomChangeHireLog_RoomChartLog;
+import com.voucher.manage.daoModelJoin.RoomInfo_Neaten_Join;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoRowMapper.RowMappersJoin;
@@ -893,22 +896,43 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	public Map<String, Object> findAllRoomRepairLog(Integer limit, Integer offset, String sort, String order,
 			Map search) {
 		// TODO Auto-generated method stub
-		RoomRepairLog repairLog=new RoomRepairLog();
+
+		Hidden_Neaten hidden_Neaten=new Hidden_Neaten();
 		
-		repairLog.setLimit(limit);
-		repairLog.setOffset(offset);
-		repairLog.setSort(sort);
-		repairLog.setOrder(order);
-		repairLog.setNotIn("GUID");
+		hidden_Neaten.setLimit(limit);
+		hidden_Neaten.setOffset(offset);
+		hidden_Neaten.setNotIn("GUID");
+		hidden_Neaten.setSort(sort);
+		hidden_Neaten.setOrder(order);
+		
+		RoomInfo roomInfo=new RoomInfo();
+		
+		roomInfo.setLimit(limit);
+		roomInfo.setOffset(offset);
+		roomInfo.setNotIn("GUID");
+		roomInfo.setSort(sort);
+		roomInfo.setOrder(order);
 		
 		if(!search.isEmpty()){
+			search.put("progress=", "整改完成");
 		    String[] where=TransMapToString.get(search);
-		    repairLog.setWhere(where);
+		    roomInfo.setWhere(where);
+		    hidden_Neaten.setWhere(where);
+		}else{
+			String[] where={"progress=", "整改完成"};
+			roomInfo.setWhere(where);
+		    hidden_Neaten.setWhere(where);
 		}
-				
-		List list=SelectExe.get(this.getJdbcTemplate(), repairLog);
 		
-		int total=(int) SelectExe.getCount(this.getJdbcTemplate(), repairLog).get("");
+		String[] join={"[GUID]"};
+		
+		Object[] objects={hidden_Neaten,roomInfo};
+		
+		RoomInfo_Neaten_Join roomInfo_Neaten_Join=new RoomInfo_Neaten_Join();
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, roomInfo_Neaten_Join, join);
+		
+		int total=(int) SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join).get("");
 		
 		Map map=new HashMap<>();
 		
@@ -917,6 +941,58 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		map.put("total", total);
 		
 		return map;
+	}
+
+	@Override
+	public Map<String, Object> findAllPreMessage(Integer limit, Integer offset, String sort, String order, Map search) {
+		// TODO Auto-generated method stub
+		
+		PreMessage preMessage=new PreMessage();
+		
+		preMessage.setLimit(limit);
+		preMessage.setOffset(offset);
+		preMessage.setSort(sort);
+		preMessage.setOrder(order);
+		preMessage.setNotIn("GUID");
+		
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    preMessage.setWhere(where);
+		}
+		
+		List list=SelectExe.get(this.getJdbcTemplate(), preMessage);
+		
+		int total=(int) SelectExe.getCount(this.getJdbcTemplate(), preMessage).get("");
+		
+		Map map=new HashMap<>();
+		
+		map.put("rows", list);
+		
+		map.put("total", total);
+		
+		return map;
+	}
+
+	@Override
+	public Integer insertPreMessage(PreMessage preMessage) {
+		// TODO Auto-generated method stub
+		return InsertExe.get(this.getJdbcTemplate(), preMessage);
+	}
+
+	@Override
+	public List getAllChartInfo() {
+		// TODO Auto-generated method stub
+		ChartInfo chartInfo=new ChartInfo();
+		
+		chartInfo.setLimit(1000);
+		chartInfo.setOffset(0);
+		chartInfo.setNotIn("GUID");
+		
+		String[] where={"IsHistory=","1"};
+		
+		chartInfo.setWhere(where);
+		
+		return SelectExe.get(this.getJdbcTemplate(), chartInfo);
 	}
 	
 }

@@ -24,9 +24,6 @@
         <div class="refresh">正在刷新</div>
        </div>
        
-       <div class="weui-cells weui-cells_form">
-               <a href="javascript:;" id="new" class="weui-btn weui-btn_primary">新建整改记录</a>
-        </div>
 
         <div class="weui-cells weui-cells_form">
               <div class="weui-cell">
@@ -39,6 +36,9 @@
         </div>
         
 		<div class="weui-cells">
+			<div class="weui-panel weui-panel_access">
+  				<div id="count" class="weui-panel__hd"></div>
+  		  </div>
          <div id="ul" >
             
          </div>
@@ -90,9 +90,6 @@
   	  loadlist();
     });
     
-    $("#new").on("click",function(){
-    	location.href="addNeatenInfoList.html?latitude="+latitude+"&longitude="+longitude;
-    })
     
     loadlist();
     
@@ -186,7 +183,15 @@
                },
                success: function (text) {              	   
             	   var data=text.hidden_Neaten;
+            	   var count=text.total;
             	   var imgs=text.fileBytes;
+            	   
+            	   var span=document.createElement("span");
+                   span.innerHTML=" "+count+"条记录";
+                   var count = document.getElementById('count'); 
+                   $("#count").children().remove();
+                   count.appendChild(span);
+            	   
                    if (data.length > 0) {
                 	   var i = 0;
                        for(; i < data.length; i++){
@@ -204,7 +209,12 @@
                     	   if(obj.lng!=""&&obj.lat!=""){
                     	   	  distance=getDistance(obj.lng,obj.lat);
                     	   }
-                    	   var li_1=addDiv(img,obj.neaten_name,obj.neaten_instance,time,"距离:"+distance);
+                    	   if(obj.progress=="整改中"){
+                   	   			var progress="<font color='6699FF'>"+obj.progress+"</font>";
+                   	   		}else{
+                   		   		var progress="<font color='green'>"+obj.progress+"</font>";
+                   	   		}
+                    	   var li_1=addDiv(img,obj.neaten_name,progress,time,"距离:"+distance);
                            li_1.setAttribute("neaten_id",neaten_id);
                     	   li_1.setAttribute("onclick","clickEvent(this);");
                     	   $("#ul").append(li_1);

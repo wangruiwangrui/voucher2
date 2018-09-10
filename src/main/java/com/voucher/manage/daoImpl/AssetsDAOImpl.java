@@ -1081,7 +1081,10 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
     Singleton.ROOMDATABASE+".[dbo].[RoomInfo].SecurityRegion,"+
     Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomCount,"+
     Singleton.ROOMDATABASE+".[dbo].[RoomInfo].LandArea,"+
-    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].UseYears "+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].UseYears, "+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].hidden_check_date, "+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].asset_check_date, "+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsHidden "+
     "FROM "+
      Singleton.ROOMDATABASE+".[dbo].[RoomInfo] ";
   
@@ -1162,7 +1165,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
     		   sql=sql+   //sqlserver鍒嗛〉闇�瑕佸湪top涔熷姞涓妛here鏉′欢
     	         		 "\n  where "+whereCommand+
     	                  " GUID not in("+
-    	                  " select top "+offset+" GUID  FROM [RoomInfo] where "+
+    	                  " select top "+offset+" GUID  FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] where "+
     	                   whereCommand.substring(0,whereCommand.length()-7)+")";
     	}
     	

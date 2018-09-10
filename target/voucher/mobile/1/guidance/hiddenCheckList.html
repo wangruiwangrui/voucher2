@@ -33,6 +33,9 @@
                 <div id="tab2" class="weui-navbar__item">
                    	 	本月巡查记录
                 </div>
+                <div id="tab3" class="weui-navbar__item">
+                   	 	未巡查资产
+                </div>
             </div>
         </div>
     </div>
@@ -107,7 +110,11 @@
         offset = 0;
         $("#ul").children('li').remove();
         loading = false;
-  	  loadlist();
+        if(url=="/voucher/mobile/hidden/selectAllCheck.do?search5=1"){
+			  loadlist2();
+		 }else{
+		  	  loadlist();
+		 }
     });
     
     url="/voucher/mobile/hidden/selectAllCheck.do";
@@ -135,7 +142,19 @@
       loading = false;
 	  loadlist();
   });
-    
+   
+  $("#tab3").on("click",function(){
+	  $("#input").attr("placeholder","输入数字查其它月份记录");
+	  $("#input").val("");
+	  search = "";
+	  url="/voucher/mobile/hidden/selectAllCheck.do?search5=1";
+	  limit = 10;
+      offset = 0;
+      $("#ul").children('li').remove();
+      loading = false;
+	  loadlist2();
+  });
+  
     loadlist();
     
     $(document.body).pullToRefresh().on("pull-to-refresh", function() {
@@ -154,7 +173,11 @@
     	  $(".weui-loadmore").show();
     	  loading = true;
     	  setTimeout(function () {
-    		  loadlist();
+    		  if(url=="/voucher/mobile/hidden/selectAllCheck.do?search5=1"){
+    			  loadlist2();
+    		  }else{
+    		  	  loadlist();
+    		  }
     		  loading = false;
           }, 1500);   //模拟延迟
     	  
@@ -346,7 +369,141 @@
         	    }); 
 
 
+        	    
+        	 // =======加载数据loadlist();
+        	      function loadlist2() {
+        	           var html = "";
+        	           $.ajax({
+        	               type: "get",
+        	               url: url,
+        	               data: { "limit" : limit, 
+        	                       "offset" : offset,
+        	                       "search" : search,
+        	                       "lng" : longitude,
+        	                       "lat" : latitude
+        	                       },
+        	               dataType: "json",
+        	               error: function (request){
+        	            	   console.log(request);
+        	                   $(".weui-loadmore").hide();         
+        	                   html += "网络连接故障";
+        	                   $("#ul").append(html);
+        	               },
+        	               success: function (text) {   
+        	            	   console.log(text);
+        	            	   var data=text.hidden_Check;
+        	            	   var count=text.total;
+        	            	   var imgs=text.fileBytes;
+        	            	   console.log(data);
+        	            	   console.log(imgs);
+        	            	   
+        	            	   var span=document.createElement("span");
+        	                   span.innerHTML=" "+count+"条记录";
+        	                   var count = document.getElementById('count'); 
+        	                   $("#count").children().remove();
+        	                   count.appendChild(span);
+        	            	   
+        	                   if (data.length > 0) {
+        	                	   var i = 0;
+        	                       for(; i < data.length; i++){
+        	                    	   var obj = data[i];
+        	                    	   var guid=obj.guid;
+        	                    	   
+        	                    	   var img=null;
+        	                    	   if(imgs[guid]!=null){
+        	                    		   img="/voucher/"+imgs[guid];
+        	                    	   }
+        	        
+        	                    	   var time="时间:"+actionTime(obj.date);
+        	                    	   var distance=null;
+        	                    	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+        	                    	   if(obj.lng!=""&&obj.lat!=""){
+        	                    		   distance=getDistance(longitude,latitude,obj.lng,obj.lat);
+        	                    	   }
+        	                    	   var li_1=addDiv2(img,obj.address,"距离:"+distance,obj.roomProperty+"("+obj.buildArea+"M<sup>2</sup>)"
+        	                    			   ,obj.region,"资产编号:"+obj.num);
+        	                           li_1.setAttribute("guid",guid);
+        	                    	   li_1.setAttribute("onclick","clickEvent2(this);");
+        	                    	   $("#ul").append(li_1);
+        	                       }
+        	                       offset=offset+i;
+        	                       if(i<limit){
+        	                    	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+        	                           $("#ul").append(html);
+        	                    	   loading = true;
+        	                       }
+        	                   }else {
+        	                	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+        	                       $("#ul").append(html);
+        	                	   loading = true;
+        	                   }
+        	                   $(".weui-loadmore").hide();
+        	               }
+        	           });
+        	       }
           
+        	      function addDiv2(src,title,content,time,interval,manageRegion){
+                	  var li=document.createElement("li");
+                      var div_1=document.createElement("div");
+                       div_1.setAttribute("class","single-mode");
+                      var div_1_1=document.createElement("div");
+                       div_1_1.setAttribute("class","img-left");
+                      var img=document.createElement("img");
+                      if(src!=null){
+                       img.setAttribute("src",src);
+                       img.setAttribute("class","img");
+                       div_1_1.appendChild(img);
+                      }else{
+                    	  img.setAttribute("src","/voucher/img/notImg.jpg");
+                          img.setAttribute("class","img");
+                          div_1_1.appendChild(img); 
+                      }
+                       div_1.appendChild(div_1_1);               
+                      var div_2=document.createElement("div");
+                       div_2.setAttribute("class","text-right");
+                      var div_2_1=document.createElement("div");
+                       div_2_1.setAttribute("class","single-inner");
+                      var div_2_1_1=document.createElement("div");
+                       div_2_1_1.setAttribute("class","title");
+                       addSpan(div_2_1_1,title);
+                      var div_2_1_2=document.createElement("div");
+                      div_2_1_2.setAttribute("class","right_text");
+                       addSpan(div_2_1_2,manageRegion);
+                      var div_2_1_3=document.createElement("div");
+                       addSpan(div_2_1_3,time);
+                       div_2_1_3.setAttribute("class","weui-cells__title");
+                       div_2_1_3.setAttribute("style","margin:2px 0px 2px 0px");
+                      var div_2_1_4=document.createElement("div");
+                       addSpan(div_2_1_4,content);
+                       div_2_1_4.setAttribute("class","weui-cells__title");
+                       div_2_1_4.setAttribute("style","margin:2px 0px 2px 0px");
+                      var div_2_1_5=document.createElement("div");
+                       addSpan(div_2_1_5,interval);
+                       div_2_1_5.setAttribute("class","weui-cells__title");
+                       div_2_1_5.setAttribute("style","margin:2px 0px 2px 0px"); 
+                       
+                       div_2_1.appendChild(div_2_1_1);
+                       div_2_1.appendChild(div_2_1_2);
+                       div_2_1.appendChild(div_2_1_3);
+                       div_2_1.appendChild(div_2_1_4);
+                       div_2_1.appendChild(div_2_1_5);
+                       div_2.appendChild(div_2_1);
+                       
+          
+        			 li.appendChild(div_1);
+        			 li.appendChild(div_2);
+        			 
+        			li.setAttribute("class","weui-cell");
+        			 
+        			 return li;
+                  }
+                  
+                  function clickEvent2(that){
+                	  var guid=encodeURI($(that).attr("guid"));
+              	       location.href="../../assetAdmin/assetDetail.html?guid="+guid+"&latitude="+latitude+"&longitude="+longitude;      	  
+                  }
+
+        	      
     </script>
 <style>
 ul{

@@ -116,8 +116,8 @@ public class ChartInfo implements Serializable{
     @SQLString(name="Memo")
 	private String Memo;
 
-    @SQLBoolean(name="IsHistory")
-	private Boolean IsHistory;
+    @SQLInteger(name="IsHistory")
+	private Integer IsHistory;
 
     @SQLString(name="Region")
 	private String Region;
@@ -444,11 +444,11 @@ public class ChartInfo implements Serializable{
 		return Memo;
 	}
 
-	public void setIsHistory(Boolean IsHistory){
+	public void setIsHistory(Integer IsHistory){
 		this.IsHistory = IsHistory;
 	}
 
-	public Boolean getIsHistory(){
+	public Integer getIsHistory(){
 		return IsHistory;
 	}
 

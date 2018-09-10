@@ -66,7 +66,12 @@
 
   var longitude=getQueryString("longitude");
   var latitude=getQueryString("latitude");
+  var type=getQueryString("type");
   var search3 = getQueryString("search");
+  var search4 = null;
+  if(type == "abnormity"){
+	  search4 = "异常";
+  }
   
   var map = new BMap.Map("allmap");
   
@@ -121,6 +126,7 @@
                        "offset" : offset,
                        "search" : "",
                        "search3" : search3,
+                       "search4" : search4,
                        "sort" : sort,
                        "order" : order
                        },

@@ -74,7 +74,7 @@
         </div>
     </div>
    
-    <div class="weui-cells weui-cells_form">
+    <div class="weui-cells weui-cells_form" id="hireDiv">
         <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">租金</label></div>
                 <div id="hire" class="weui-cell__bd">
@@ -158,6 +158,15 @@
   var latitude=getQueryString("latitude");
   var point = new BMap.Point(longitude, latitude);
 
+  var place=0;
+  
+	var xhm = new XMLHttpRequest();
+	xhm.open("GET", "/voucher/mobile/asset/selectPlace.do", false);
+	xhm.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhm.send();
+
+	place = xhm.responseText;
+  
   var pointStart=point;
   
 	var str = "我的位置";
@@ -257,10 +266,14 @@
                   buildArea.innerHTML=obj.buildArea+" m<sup>2</sup>";
                   $("#buildArea").append(buildArea);
   
-                  var hire=document.createElement("span");
-                  hire.innerHTML=obj.hire;
-                  $("#hire").append(hire);
                   
+                  if(place>2){
+                  	var hire=document.createElement("span");
+                  	hire.innerHTML=obj.hire;
+                  	$("#hire").append(hire);
+                  }else{
+                	  $("#hireDiv").hide(); 
+                  }
 
                   var State=document.createElement("span");
                   State.innerHTML=obj.state;

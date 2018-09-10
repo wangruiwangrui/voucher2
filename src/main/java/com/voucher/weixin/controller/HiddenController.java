@@ -1,8 +1,12 @@
 package com.voucher.weixin.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +16,8 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.http.message.BasicNameValuePair;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -30,6 +36,7 @@ import com.voucher.manage.daoModel.Assets.Hidden_Check_Item;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
+import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
 import com.voucher.manage.model.Users;
@@ -64,17 +71,53 @@ public class HiddenController {
 	@RequestMapping("/selectAllCheck")
 	public @ResponseBody Map selectAllCheck(@RequestParam Integer limit, @RequestParam Integer offset, 
 			String sort, String order,
-			@RequestParam String search,String search2,String search3,String search4,
+			@RequestParam String search,String search2,String search3,String search4,String search5,
+			
 			HttpServletRequest request) {
 		Map searchMap=new HashMap<>();
 		
 		Map map;
 		
-		/*
-		if(!search.equals("")){
-			searchMap.put("check_name like", "%"+search+"%");
+		System.out.println("search5="+search5);
+		
+		if(search==null||search.equals("")&&search5!=null&&!search5.equals("")){
+			
+			Calendar cal = Calendar.getInstance();  
+	        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
+	        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+	        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+			
+			String startTime = null;
+			
+			String endTime=null;
+			
+			startTime=sdf.format(cal.getTime());
+			
+			System.out.println("startTime="+startTime);
+			
+			cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY)+1, cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0); 
+	        
+	        endTime=sdf.format(cal.getTime());
+	        
+	        System.out.println("endTime="+endTime);
+	        
+	        map=hiddenDAO.selectNotHiddenCheckAssetByDate(limit, offset,"", startTime, endTime);
+	        
+	        List list=(List) map.get("rows");
+			
+			int total=(int) map.get("total");
+	        
+			Map fileBytes=mobileDao.roomInfo_PositionImageQuery(request, list);
+	        
+			Map result=new HashMap<>();
+			
+			result.put("hidden_Check", list);
+			result.put("total", total);
+			result.put("fileBytes", fileBytes);
+			
+			return result;
+			
 		}
-		*/
 		
 		if(search!=null&&!search.equals("")){
 			
@@ -107,13 +150,22 @@ public class HiddenController {
 				
 				System.out.println("searchMap="+searchMap);
 				
-				map=hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order,null, searchMap);
-
+				if(search5!=null&&!search5.equals("")){
+					map=hiddenDAO.selectNotHiddenCheckAssetByDate(limit, offset,"", startTime, endTime);
+				}else{
+					map=hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order,null, searchMap);
+				}
 				List list=(List) map.get("rows");
 				
 				int total=(int) map.get("total");
 				
-				Map fileBytes=mobileDao.checkImageQuery(request,list);
+				Map fileBytes;
+				
+				if(search5!=null&&!search5.equals("")){
+					fileBytes=mobileDao.roomInfo_PositionImageQuery(request, list);
+				}else{
+					fileBytes=mobileDao.checkImageQuery(request,list);
+				}
 				
 				Map result=new HashMap<>();
 				
@@ -445,6 +497,44 @@ public class HiddenController {
 					System.out.println("isHidden="+isHidden);
 					
 					roomInfo.setIsHidden(isHidden);
+					
+					final String checkCircs=check_circs;
+					
+					//发送隐患通知
+					try{						
+						Runnable r = new Runnable() {
+							@Override
+							public void run() {
+								String thisguid = null;
+								try {
+									thisguid = URLEncoder.encode(guid, "utf-8");
+									System.out.println("thisguid="+thisguid);
+								} catch (UnsupportedEncodingException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								Users users=userService.getUserByOnlyOpenId(openId);
+								
+								String url="http://lzgfgs.com/voucher/mobile/assetAdmin/assetDetail.html?guid="+thisguid;
+								
+								SimpleDateFormat sdf  =   new  SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " ); 
+								String time = sdf.format(new Date());
+								
+								String currentOpenId=( String ) request.getSession().getAttribute("openId");
+								
+								new WechatSendMessageController().sendMessage(2, "nBV50MfKYjpDlWqXJQAgjPZrW-925l45CYoxNaiMSI0",
+										"整改通知", url, "隐患资产:"+name, users.getName(), time, "安全巡查", checkCircs,
+										"限期整改","", currentOpenId);
+								
+							}
+						};
+						
+						Thread t=new Thread(r);
+						t.start();
+					}catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
 					
 				}catch (Exception e) {
 					// TODO: handle exception

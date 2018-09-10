@@ -29,10 +29,10 @@
             </div>
     </div>
     
-    <div class="weui-cells weui-cells_form">
+     <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">管理分区</label></div>
-                <div id="manageRegion" class="weui-cell__bd">
+                <div class="weui-cell__hd"><label class="weui-label">资产编号</label></div>
+                <div id="num" class="weui-cell__bd">
                 </div>
             </div>
     </div>
@@ -225,9 +225,9 @@
                 	  clickEvent(obj.guid);
                   });
                   
-                  var manageRegion=document.createElement("span");
-                  manageRegion.innerHTML=obj.manageRegion;
-                  $("#manageRegion").append(manageRegion);
+                  var num=document.createElement("span");
+                  num.innerHTML=obj.num;
+                  $("#num").append(num);
              	   
              	  //var check_name=document.createElement("span");
              	 //check_name.innerHTML=obj.check_name;

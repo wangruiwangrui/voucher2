@@ -102,30 +102,12 @@ body, html, #allmap {
 		var pointArray = new Array();
 		for (var i = 0; i < json_data.length; i++) {
 			var point = new BMap.Point(json_data[i][0], json_data[i][1]);
-			var myIcon = new BMap.Icon("../img/hiddenPoint2.png",
+			var myIcon = new BMap.Icon("../img/hiddenPoint0.png",
 					new BMap.Size(10, 30));
 			var marker = new BMap.Marker(point, {
 				icon : myIcon
 			}); // 创建点
-			if (json_data[i][3] == "重大隐患") {
-				var myIcon = new BMap.Icon("../img/hiddenPoint0.png",
-						new BMap.Size(10, 30));
-				marker = new BMap.Marker(point, {
-					icon : myIcon
-				}); // 创建点
-			} else if (json_data[i][3] == "一级隐患") {
-				var myIcon = new BMap.Icon("../img/hiddenPoint1.png",
-						new BMap.Size(10, 30));
-				marker = new BMap.Marker(point, {
-					icon : myIcon
-				}); // 创建点
-			} else if (json_data[i][3] == "二级隐患") {
-				var myIcon = new BMap.Icon("../img/hiddenPoint2.png",
-						new BMap.Size(10, 30));
-				marker = new BMap.Marker(point, {
-					icon : myIcon
-				}); // 创建点
-			}
+
 			map.addOverlay(marker); //增加点
 			marker.addEventListener("click", attribute);
 		}
@@ -145,59 +127,61 @@ body, html, #allmap {
 				"application/x-www-form-urlencoded");
 		xhm.send();
 		// alert(xhm.responseText);
-		var data=JSON.parse(xhm.responseText);
+		var data = JSON.parse(xhm.responseText);
 
-		xhm.open("GET", "/voucher/mobile/asset/getAssetByHidden.do?limit=100&offset=0"+
-				"&hiddenGuid="+data.guid, false);
+		var guid=encodeURI(data.guid);
+		
+		xhm.open("GET",
+				"/voucher/mobile/asset/getAssetByHidden.do?limit=100&offset=0"
+						+ "&hiddenGuid=" + guid, false);
 		xhm.setRequestHeader("Content-type",
 				"application/x-www-form-urlencoded");
 		xhm.send();
+
+		var hidden = data.hidden;
+
+		var data2 = JSON.parse(xhm.responseText);
+
+		var rows = data2.rows[0];
+
+		var state;
 		
-		var hidden=data.hidden;
-		
-		var data2=JSON.parse(xhm.responseText); 
-		
-		var rows=data2.rows;
-		
-		var assets="";
-		
-		for(var i=0;i<rows.length;i++){
-		    assets=assets+rows[i].address+",";
+		if(hidden.state=="整改中"){
+			state=hidden.state;
+		}else{
+			state="未整改";
 		}
 		
-		assets=assets.substring(0,assets.length-1);
-		
-		var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 隐患名称 : "+hidden.name+"</h4>"+
-		"<p>"+
-    	" 隐患等级 : "+hidden.hidden_level+" </br>"+
-    	" 隐患状态 : "+hidden.state+" </br>"+
-    	" 隐患详情 : "+hidden.detail+" </br>"+
-    	" 关联资产 : "+assets+" </br>"+
-    	" 录入人员 : "+hidden.user_name+" </br>"+
-    	" 录入时间 :"+actionTime(hidden.date)+" </br>"+
-    	"</p>"+"</div>";
-    	
-		var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
-        map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat));
+		var content = "<h4 style='margin:0 0 5px 0;padding:0.2em 0'> "
+				+ "隐患资产 : " + rows.address + "</h4>" 
+				+ "<p>" + " 隐患详情 : "+ data2.detail 
+				+ "</br>" + " 整改进度 : "+ state
+				+" </br>" + " 录入人员 : " + hidden.user_name
+				+ " </br>" + " 录入时间 :" + actionTime(hidden.date) + " </br>"
+				+ "</p>" + "</div>";
+
+		var infoWindow = new BMap.InfoWindow(content); // 创建信息窗口对象
+		map
+				.openInfoWindow(infoWindow, new BMap.Point(e.point.lng,
+						e.point.lat));
 
 	}
 
-	
 	var opts = {
-			width : 250, // 信息窗口宽度
-			height : 120, // 信息窗口高度
-			title : "资产详情", // 信息窗口标题
-			enableMessage : true
-		//设置允许信息窗发送短息
-		};
+		width : 250, // 信息窗口宽度
+		height : 120, // 信息窗口高度
+		title : "资产详情", // 信息窗口标题
+		enableMessage : true
+	//设置允许信息窗发送短息
+	};
 
 	function openInfo(content, e) {
-			var p = e.target;
-			var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
-			var infoWindow = new BMap.InfoWindow(content, opts); // 创建信息窗口对象 
-			map.openInfoWindow(infoWindow, point); //开启信息窗口
-		}
-	
+		var p = e.target;
+		var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+		var infoWindow = new BMap.InfoWindow(content, opts); // 创建信息窗口对象 
+		map.openInfoWindow(infoWindow, point); //开启信息窗口
+	}
+
 	function getByteLen(val) { //传入一个字符串
 		var len = 0;
 		for (var i = 0; i < val.length; i++) {
@@ -208,16 +192,17 @@ body, html, #allmap {
 		}
 		return len;
 	}
-	
-	function actionTime(value){
-  	    var date = new Date(value); 
-  	    Y = date.getFullYear() + '年';
-  	    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '月';
-  	    D = date.getDate() + '日 ';
-  	    h = date.getHours() + ':';
-  	    m = date.getMinutes() + ':';
-  	    s = date.getSeconds(); 
-  		return Y+M+D+h+m+s;
-  	}
-	
+
+	function actionTime(value) {
+		var date = new Date(value);
+		Y = date.getFullYear() + '年';
+		M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date
+				.getMonth() + 1)
+				+ '月';
+		D = date.getDate() + '日 ';
+		h = date.getHours() + ':';
+		m = date.getMinutes() + ':';
+		s = date.getSeconds();
+		return Y + M + D + h + m + s;
+	}
 </script>

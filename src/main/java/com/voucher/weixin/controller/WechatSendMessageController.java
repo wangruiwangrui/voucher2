@@ -283,7 +283,9 @@ public class WechatSendMessageController {
 			@RequestParam String Send_Type,@RequestParam String url,
 			@RequestParam String first_data,@RequestParam String keyword1_data,
 			@RequestParam String keyword2_data,@RequestParam String keyword3_data,
-			@RequestParam String keyword4_data,@RequestParam String remark_data){
+			@RequestParam String keyword4_data,@RequestParam String keyword5_data,
+			@RequestParam String remark_data, 
+			@RequestParam String currentOpenId){
 
 		Integer campusId=1;
 		
@@ -300,7 +302,7 @@ public class WechatSendMessageController {
 			
 		MessageListMapper messageListMapper=sqlSession.getMapper(MessageListMapper.class);
 			
-		List<Users> list=usersMapper.getUserByPlace(place);
+		List<Users> list=usersMapper.getUserByGuidance();
 			
 	  if(list!=null){
 		
@@ -314,7 +316,11 @@ public class WechatSendMessageController {
 				return ;
 			
 			String openId=users.getOpenId();
-						
+			
+			if(currentOpenId!=null&&!currentOpenId.equals("")&&openId.equals(currentOpenId)){
+				continue;
+			}
+			
 			WeiXinMapper weiXinMapper=sqlSession.getMapper(WeiXinMapper.class);
 			
 			weixin=weiXinMapper.getCampus(campusId);   	
@@ -346,9 +352,16 @@ public class WechatSendMessageController {
 			
 			if(keyword4_data!=null&&!keyword4_data.equals("")){
 				TemplateData keyword4 = new TemplateData();
-				keyword4.setColor("#328392");
+				keyword4.setColor("#D2691E");
 				keyword4.setValue(keyword4_data);
 				m.put("keyword4", keyword4);
+			}
+			
+			if(keyword5_data!=null&&!keyword5_data.equals("")){
+				TemplateData keyword5 = new TemplateData();
+				keyword5.setColor("#328392");
+				keyword5.setValue(keyword5_data);
+				m.put("keyword5", keyword5);
 			}
 			
 			if(remark_data!=null&&remark_data.equals("")){

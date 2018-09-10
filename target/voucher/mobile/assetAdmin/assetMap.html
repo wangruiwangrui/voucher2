@@ -101,7 +101,7 @@ function getQueryString(name) {
          	" 资产性质 : "+obj.roomProperty+" "+
          	" 资产编号 : "+obj.num+" </br>"+
          	" 面积 : "+obj.buildArea+" m<sup>2</sup> "+
-         	" 租金 :"+obj.hire+" "+
+         	" 距离 :"+getDistance(obj.lng,obj.lat)+" "+
          	"</p>"+"</div>";
  			var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
              map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat)); //开启信息窗口
@@ -112,12 +112,13 @@ function getQueryString(name) {
  				var tab="<table border=1 width=700>";
  			        for(var i=0;i<rows.length;i++){
  			        	var obj=rows[i];
+ 			        	var distance=
  			        	tab+="<tr>";
  			        	tab+="<td> 资产名称 : "+obj.address+" </td>";
  			        	tab+="<td> 资产性质 : "+obj.roomProperty+" </td>";
  			        	tab+="<td> 资产编号 : "+obj.num+" </td>";
  			        	tab+="<td> 面积 : "+obj.buildArea+" m<sup>2</sup> </td>";
- 			        	tab+="<td> 租金 :"+obj.hire+" </td>";	               
+ 			        	tab+="<td> 距离 :"+getDistance(obj.lng,obj.lat)+" </td>";             
  			            tab+="<td>"+"<img style='float:right;margin:4px' id='imgDemo' src="+url+" width='50' height='30'/>"+"</td>";
  			            tab+="</tr>";
  			        }    
@@ -176,7 +177,7 @@ function getQueryString(name) {
         	" 资产性质 : "+obj.roomProperty+" "+
         	" 资产编号 : "+obj.num+" </br>"+
         	" 面积 : "+obj.buildArea+" m<sup>2</sup> "+
-        	" 租金 :"+obj.hire+" "+
+        	" 距离 :"+getDistance(obj.lng,obj.lat)+" "+
         	"</p>"+"</div>";
 			var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
             map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat)); //开启信息窗口
@@ -193,7 +194,7 @@ function getQueryString(name) {
 			        	tab+="<td> 资产性质 : "+obj.roomProperty+" </td>";
 			        	tab+="<td> 资产编号 : "+obj.num+" </td>";
 			        	tab+="<td> 面积 : "+obj.buildArea+" m<sup>2</sup> </td>";
-			        	tab+="<td> 租金 :"+obj.hire+" </td>";	               
+			        	tab+="<td> 距离 :"+getDistance(obj.lng,obj.lat)+" </td>";               
 			            tab+="<td>"+"<img style='float:right;margin:4px' id='imgDemo' src="+url+" width='50' height='30'/>"+"</td>";
 			            tab+="</tr>";
 			        }    

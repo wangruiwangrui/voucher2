@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,6 +26,7 @@ import com.voucher.manage.daoModel.Assets.Neaten_Check;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
 import com.voucher.manage.daoModel.Assets.WeiXin_User;
+import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
 import com.voucher.manage.daoModelJoin.Assets.Position_Check_Join;
@@ -434,39 +436,6 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		weiXin_User.setSort(sort);
 		weiXin_User.setOrder(order);
 		weiXin_User.setNotIn("id");
-		/*
-		if(address!=null&&!address.equals("")){
-			
-			RoomInfo roomInfo2=new RoomInfo();
-			
-			String[] where2={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].[Address] like ","%"+address+"%"};
-			
-			roomInfo2.setWhere(where2);
-			roomInfo2.setLimit(2);
-			roomInfo2.setOffset(0);			
-			roomInfo2.setNotIn("GUID");
-			
-			List<RoomInfo> list3=SelectExe.get(this.getJdbcTemplate(), roomInfo2);
-			
-			try{
-				
-				RoomInfo roomInfo3=list3.get(0);
-							
-				//MyTestUtil.print(roomInfo3);
-				
-				if(roomInfo3!=null){
-
-					search.put("[Hidden_Check].[GUID] = ", roomInfo3.getGUID());
-				}
-				
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-				return null;
-			}
-			
-		}
-		*/
 		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
@@ -484,151 +453,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		
 		list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Check_Join, join);
 		countMap=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
-		/*
-		if(offset>0){
-			
-			Object[] objects={hidden_Check,weiXin_User};
-			
-			String[] join={"campusAdmin"};
-		
-			Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
-		
-			list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Check_Join, join);
-		
-			Iterator<Hidden_Check_Join> iterator=list.iterator();
-			
-			int i=0;
-			
-			while (iterator.hasNext()) {
-				
-				Hidden_Check_Join hidden_Check_Join2=iterator.next();
-				
-				String guid=hidden_Check_Join2.getGUID();
-				
-				RoomInfo roomInfo4=new RoomInfo();
-				
-				String[] where4={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = ",guid};
-				
-				roomInfo4.setWhere(where4);
-				roomInfo4.setLimit(1);
-				roomInfo4.setOffset(0);			
-				roomInfo4.setNotIn("GUID");
-				
-				System.out.println("guid="+guid);
-				
-				List<RoomInfo> list2=SelectExe.get(this.getJdbcTemplate(), roomInfo4);
-				
-				try{
-					
-					RoomInfo roomInfo5=list2.get(0);
-								
-					//MyTestUtil.print(roomInfo5);
-					
-					hidden_Check_Join2.setAddress(roomInfo5.getAddress());
-					hidden_Check_Join2.setManageRegion(roomInfo5.getManageRegion());
-					hidden_Check_Join2.setState(roomInfo5.getState());
-					
-					
-				}catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
-				
-				Position position2=new Position();
-				
-				String[] where5={"[Position].[check_id]=",hidden_Check_Join2.getCheck_id()};
-				
-				position2.setWhere(where5);
-				position2.setLimit(2);
-				position2.setOffset(0);
-				position2.setNotIn("id");
-				
-				List<Position> list3=SelectExe.get(this.getJdbcTemplate(), position2);
-				
-				try{
-					if(!list3.isEmpty()){
-					
-						Position position3=list3.get(0);
-					
-						hidden_Check_Join2.setLat(position3.getLat());
-						hidden_Check_Join2.setLng(position3.getLng());
-						hidden_Check_Join2.setCity(position3.getCity());
-						hidden_Check_Join2.setDistrict(position3.getDistrict());
-						hidden_Check_Join2.setStreet(position3.getStreet());
-					
-					}
-				}catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
-				
-				list.set(i, hidden_Check_Join2);
-				
-				i++;
-			}
-			
-			countMap=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
-			
-		}else{
 
-			
-			Object[] objects={hidden_Check,position,weiXin_User};
-			
-			String[] join={"check_id","campusAdmin"};
-		
-			Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
-		
-			list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Check_Join, join);
-		
-			Iterator<Hidden_Check_Join> iterator=list.iterator();
-			
-			int i=0;
-			
-			while (iterator.hasNext()) {
-				
-				Hidden_Check_Join hidden_Check_Join2=iterator.next();
-				
-				String guid=hidden_Check_Join2.getGUID();
-				
-				RoomInfo roomInfo4=new RoomInfo();
-				
-				String[] where4={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = ",guid};
-				
-				roomInfo4.setWhere(where4);
-				roomInfo4.setLimit(2);
-				roomInfo4.setOffset(0);			
-				roomInfo4.setNotIn("GUID");
-				
-				System.out.println("guid="+guid);
-				
-				List<RoomInfo> list2=SelectExe.get(this.getJdbcTemplate(), roomInfo4);
-				
-				try{
-					
-					RoomInfo roomInfo5=list2.get(0);
-								
-					//MyTestUtil.print(roomInfo5);
-					
-					hidden_Check_Join2.setAddress(roomInfo5.getAddress());
-					hidden_Check_Join2.setManageRegion(roomInfo5.getManageRegion());
-					hidden_Check_Join2.setState(roomInfo5.getState());
-					hidden_Check_Join2.setNum(roomInfo5.getNum());
-					
-				}catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
-							
-				
-				list.set(i, hidden_Check_Join2);
-				
-				i++;
-			}
-			
-			countMap=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
-		}
-		*/
-		
 		
 		map.put("rows", list);
 		System.out.println("checkjoinlist=");
@@ -640,6 +465,116 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		return map;
 	}
 
+	//按时间查询没有巡查的资产
+	@Override
+	public Map selectNotHiddenCheckAssetByDate(int limit, int offset,String search,
+			String startTime,String endTime) {
+		
+		// TODO Auto-generated method stub
+			String sql0="SELECT TOP "+limit+"* from "+
+							"(select ROW_NUMBER() OVER (ORDER BY "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].num) AS rows,"+
+							"[Position].province,"+
+							"[Position].city,"+
+							"[Position].district,"+
+							"[Position].street,"+
+							"[Position].street_number,"+
+							"[Position].lng,"+
+							"[Position].lat,"+
+							"[Position].date,"+
+							Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddress,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Region,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Segment,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Useful,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Floor,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Structure,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildArea,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomType,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsCity,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Manager,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManagerPhone,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsStreet,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FitMent,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BeFrom,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].InDate,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightNo,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightArea,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DesignUseful,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildYear,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightUnit,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit "+				   
+							"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] "+
+						    "left join (SELECT "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,COUNT(*) as c "+
+						    "FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join Hidden_Check on RoomInfo.GUID=Hidden_Check.guid "+ 
+						    "where convert(varchar(11),"+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].hidden_check_date ,120 )>'"+startTime+"' "+
+							"and convert(varchar(11),"+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].hidden_check_date ,120 )<'"+endTime+"' "+
+						    "group by "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID ) t1 "+
+						    "on t1.GUID=[YTRoomManage].[dbo].[RoomInfo].GUID " +
+							"left join  [Position] "+
+							"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+							"WHERE c is null "+
+							"AND ([Position].lng is not null AND [Position].lat is not null "+
+							"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
+							
+				
+				String sql;
+				
+				String sql2="SELECT count(*) "+				   
+						"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] "+						
+						"left join (SELECT TOP 1000 "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,COUNT(*) as c "+
+						"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join Hidden_Check on RoomInfo.GUID=Hidden_Check.guid "+ 
+						"where convert(varchar(11),"+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].hidden_check_date ,120 )>'"+startTime+"' "+
+					    "and convert(varchar(11),"+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].hidden_check_date ,120 )<'"+endTime+"' "+
+						"group by "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID ) t1 "+
+						"on t1.GUID=[YTRoomManage].[dbo].[RoomInfo].GUID " +
+						"left join  [Position] "+
+						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+						"WHERE c is null "+
+						"AND ([Position].lng is not null AND [Position].lat is not null "+
+						"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
+				
+				if(search.equals("")){
+					sql=sql0+")) as w1 where rows>"+offset;
+					sql2=sql2+")";
+				}else{
+					sql=sql0+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+							+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )"+") "+
+							"as w1 where rows>"+offset;
+					sql2=sql2+") AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+							+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )";
+				}
+				
+				System.out.println("sql="+sql);
+				
+				RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+				
+				Position position=new Position();		
+				
+				RoomInfo roomInfo=new RoomInfo();
+				
+				Object[] objects={roomInfo,position};
+				
+				Map map=new HashMap<>();
+				
+				try{
+					List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,roomInfo_Position);
+					int total=(int) SelectSqlJoinExe.getCount(this.getJdbcTemplate(), sql2, objects).get("");
+					map.put("rows", list);
+					map.put("total", total);
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+
+				return map;
+	}
+	
 	//安全巡查位置
 	@Override
 	public Map<String, Object> selectAllHiddenCheckPosition(Integer limit, Integer offset, String sort,
@@ -937,21 +872,28 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	@Override
 	public List<Hidden_Check_Join> selectHiddenOfMap(Map<String, String> search) {
 		// TODO Auto-generated method stub
-		 Hidden_Check hidden=new Hidden_Check();
-		 search.put("[Hidden_Check].exist =", "1");
-		 
-		hidden.setLimit(10);
+		
+		Hidden_Check hidden=new Hidden_Check();
+		search.put("[Hidden_Check].exist =", "1");		 
+		hidden.setLimit(2);
 		hidden.setOffset(0);
-		hidden.setSort(null);
-		hidden.setOrder(null);
-		hidden.setNotIn("check_id");
+		hidden.setSort("date");
+		hidden.setOrder("desc");
+		hidden.setNotIn("GUID");
 
+		RoomInfo roomInfo=new RoomInfo();		
+		roomInfo.setLimit(2);
+		roomInfo.setOffset(0);
+		roomInfo.setSort("date");
+		roomInfo.setOrder("desc");
+		roomInfo.setNotIn("GUID");
+		
 		Position position = new Position();
-		position.setLimit(10);
+		position.setLimit(2);
 		position.setOffset(0);
-		position.setSort(null);
-		position.setOrder(null);
-		position.setNotIn("check_id");
+		position.setSort("date");
+		position.setOrder("desc");
+		position.setNotIn("GUID");
 
 		WeiXin_User weiXin_User = new WeiXin_User();
 		weiXin_User.setLimit(10);
@@ -961,7 +903,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		weiXin_User.setNotIn("check_id");
 		
 		 search.put("[Hidden_Check].check_name =", "异常");
-		 search.put("[Hidden_Check].state !=", "整改完成");
+		 search.put("[Position].GUID !=", "");
 		 String[] where=TransMapToString.get(search);
 		 hidden.setWhere(where);
 		 position.setWhere(where);
@@ -970,14 +912,16 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 			 
 		Map map=new HashMap<String, Object>();
 				
-		Object[] objects={hidden,position,weiXin_User};
+		Object[] objects={hidden,roomInfo,position,weiXin_User};
 				
-		String[] join={"check_id","campusAdmin"};
+		String[] join={"GUID","GUID","campusAdmin"};
 			
 		Hidden_Check_Join hidden_Join=new Hidden_Check_Join();
 		
 		List hidden_joins=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Join, join);		
-			 
+		
+		MyTestUtil.print(hidden_joins);
+		
 		return hidden_joins;
 	}
 
@@ -1023,38 +967,38 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public Map selectAllHidden_Point(Integer limit, Integer offset, String sort, String order,
 			Map<String, String> search) {
 		// TODO Auto-generated method stub
-		Hidden_Check hidden=new Hidden_Check();
-		hidden.setLimit(limit);
-		hidden.setOffset(offset);
-		hidden.setSort(sort);
-		hidden.setOrder(order);
-		hidden.setNotIn("check_id");
+		RoomInfo roomInfo=new RoomInfo();
+		roomInfo.setLimit(limit);
+		roomInfo.setOffset(offset);
+		roomInfo.setSort(sort);
+		roomInfo.setOrder(order);
+		roomInfo.setNotIn("GUID");
 		
 		Position position=new Position();
 		position.setLimit(limit);
 		position.setOffset(offset);
 		position.setSort(sort);
 		position.setOrder(order);
-		position.setNotIn("check_id");
+		position.setNotIn("GUID");
 		
 		if(search!=null&&!search.isEmpty()){
-			search.put("check_name=", "异常");
+			search.put("[RoomInfo].IsHidden > ", "0");
 		    String[] where=TransMapToString.get(search);
-		    hidden.setWhere(where);
+		    roomInfo.setWhere(where);
 		    position.setWhere(where);
 		}else{
-			String[] where={"check_name=", "异常"};
-			hidden.setWhere(where);
+			String[] where={"[RoomInfo].IsHidden > ", "0"};
+			roomInfo.setWhere(where);
 		    position.setWhere(where);
 		}
 		
-		Position_Check_Join position_Hidden_Join=new Position_Check_Join();
+		RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
 		
-		Object[] objects={hidden,position};
+		Object[] objects={roomInfo,position};
 		
-		String[] join={"check_id"};
+		String[] join={"GUID"};
 		
-		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, position_Hidden_Join, join);
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, roomInfo_Position, join);
 		
 		int total=(int) SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join).get("");
 		

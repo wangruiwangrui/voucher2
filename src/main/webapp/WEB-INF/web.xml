@@ -128,7 +128,6 @@
 	
 	<filter-mapping>
 		<filter-name>MobileSessionFilter</filter-name>
-		<url-pattern>/mobile/1/safety/*</url-pattern>
 		<url-pattern>/mobile/1/guidance/*</url-pattern>
 	</filter-mapping>
 

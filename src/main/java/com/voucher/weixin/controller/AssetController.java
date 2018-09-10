@@ -9,10 +9,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -26,8 +30,8 @@ import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.daoModel.TTT.PreMessage;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.model.Access;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.PhotoService;
@@ -37,6 +41,8 @@ import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 import com.voucher.weixin.insweptcontroller.FileUploadController;
+
+import common.HttpClient;
 
 
 @Controller
@@ -639,7 +645,7 @@ public class AssetController {
 		
 		Map searchMap=new HashMap<>();
 		
-		searchMap.put("[Hidden_Assets].hidden_GUID=", hiddenGuid);
+		searchMap.put("[RoomInfo].GUID=", hiddenGuid);
 		
 		Map map=new HashMap<>();
 		
@@ -649,17 +655,17 @@ public class AssetController {
 		
 		map.put("rows", hidden_Assets_Joins);
 		
-		Iterator<Hidden_Check_Join> iterator=hidden_Assets_Joins.iterator();
+		String detail=new HiddenController().getRoomInfoHiddenItemDataByGUID(hiddenGuid);
+		
+		map.put("detail", detail);
+		
+		Iterator<RoomInfo_Position> iterator=hidden_Assets_Joins.iterator();
 		
 		List roominfos=new ArrayList<>();
 		
 		while (iterator.hasNext()) {
-			Hidden_Check_Join hidden_Assets_Join=iterator.next();
-			RoomInfo roomInfo=new RoomInfo();
 			
-			roomInfo.setGUID(hidden_Assets_Join.getGUID());
-			
-			roominfos.add(roomInfo);
+			roominfos.add(iterator.next());
 		}
 		
 		Map fileBytes=mobileDao.roomInfoImageQuery(request, roominfos);
@@ -806,7 +812,7 @@ public class AssetController {
 		
 		if(sort!=null&&!sort.equals("")){
 		}else{
-			sort="RoomAddress";
+			sort="date";
 		}
 		
 		if(order!=null&&order.equals("asc")){
@@ -820,10 +826,193 @@ public class AssetController {
 		Map where=new HashMap<>();
 		
 		if(search!=null&&!search.equals("")){
-			where.put("RoomAddress like ","%"+search+"%");
+			where.put("Address like ","%"+search+"%");
 		}
 		
 		return roomInfoDao.findAllRoomRepairLog(limit, offset, sort, order, where);
+	}
+	
+	@RequestMapping("/getMessageNumber")
+	public @ResponseBody String getMessageNumber(){
+		
+		  HttpClient httpClient = new HttpClient();
+		
+		  String requestUrl="http://www.smschinese.cn/web_api/SMS";
+		  List<BasicNameValuePair> reqParam = new ArrayList<BasicNameValuePair>();
+		  reqParam.add(new BasicNameValuePair("Action", "SMS_Num"));
+		  reqParam.add(new BasicNameValuePair("Uid", "泸州市国有公房经营管理有限公司"));
+		  reqParam.add(new BasicNameValuePair("Key", "44d75966a2a94d79bb38"));
+		  String r=httpClient.doGet(requestUrl, reqParam);
+		  
+		  System.out.println("r="+r);
+		  
+		  return r;
+		  
+	}
+	
+	@RequestMapping("/getPreMessage")
+	public @ResponseBody Map getPreMessage(@RequestParam Integer limit,@RequestParam Integer offset,
+			String sort,String order,
+			String search){
+		
+		if(sort!=null&&!sort.equals("")){
+		}else{
+			sort="OptDate";
+		}
+		
+		if(order!=null&&order.equals("asc")){
+			order="asc";
+		}else if(order!=null&&order.equals("desc")){
+			order="desc";
+		}else{
+			order="desc";
+		}
+		
+		Map where=new HashMap<>();
+		
+		if(search!=null&&!search.equals("")){
+			where.put("PhoneWho like ","%"+search+"%");
+		}
+		
+		return roomInfoDao.findAllPreMessage(limit, offset, sort, order, where);
+	}
+	
+	@RequestMapping("/sendMessage")
+	public @ResponseBody String sendMessage(@RequestParam String Message,@RequestParam String numbers,
+			HttpServletRequest request){
+		
+		String openId=( String ) request.getSession().getAttribute("openId");
+		
+		Users users=userService.getUserByOnlyOpenId(openId);
+		
+		PreMessage preMessage=new PreMessage();
+
+		preMessage.setOptAdd(users.getName());
+		preMessage.setMessage(Message);
+		
+		HttpClient httpClient = new HttpClient();
+
+		String requestUrl="http://utf8.api.smschinese.cn";
+		
+		String arr[] = numbers.split("\\s+");//使用正则表达式将字符串分割 “\\s+”表示多个空格
+		int sum = 0;
+		String result = "";
+		for(String phone:arr)//遍历所有的字符串并转换成整数求和
+		{
+			 List<BasicNameValuePair> reqParam = new ArrayList<BasicNameValuePair>();
+			  reqParam.add(new BasicNameValuePair("Uid", "泸州市国有公房经营管理有限公司"));
+			  reqParam.add(new BasicNameValuePair("Key", "44d75966a2a94d79bb38"));
+			  reqParam.add(new BasicNameValuePair("smsMob",phone));
+			  reqParam.add(new BasicNameValuePair("smsText",Message));
+			  String r=httpClient.doGet(requestUrl, reqParam);
+			  
+			  String GUID=UUID.randomUUID().toString();
+				
+			  preMessage.setGUID(GUID);
+			  preMessage.setPhone(phone);
+			  preMessage.setOptDate(new Date());
+			  
+			  int i=Integer.parseInt(r);
+			  if(i>0){
+				  result=result+" "+phone+"发送成功";
+				  preMessage.setState("发送成功");
+			  }else{
+				  result=result+" "+phone+"发送失败";
+				  preMessage.setState("发送失败");
+			  }
+			  
+			  roomInfoDao.insertPreMessage(preMessage);
+		}
+		
+		return result;
+
+	}
+	
+	@RequestMapping("/sendAllMessage")
+	public @ResponseBody String sendAllMessage(@RequestParam String Message,HttpServletRequest request){
+		
+		String openId=( String ) request.getSession().getAttribute("openId");
+		
+		Users users=userService.getUserByOnlyOpenId(openId);
+			
+		PreMessage preMessage=new PreMessage();
+		
+
+		preMessage.setOptAdd(users.getName());
+		preMessage.setMessage(Message);
+		
+		HttpClient httpClient = new HttpClient();
+
+		String requestUrl="http://utf8.api.smschinese.cn";
+		
+		List list=roomInfoDao.getAllChartInfo();
+
+		Iterator<ChartInfo> iterator=list.iterator();
+		
+		try{
+			
+			Runnable r = new Runnable() {
+
+				@Override
+				public void run() {
+					
+					while (iterator.hasNext()) {
+						ChartInfo chartInfo = iterator.next();
+						if (chartInfo.getPhone() != null || !chartInfo.getPhone().equals("")) {
+							// TODO Auto-generated method stub
+							List<BasicNameValuePair> reqParam = new ArrayList<BasicNameValuePair>();
+							reqParam.add(new BasicNameValuePair("Uid", "泸州市国有公房经营管理有限公司"));
+							reqParam.add(new BasicNameValuePair("Key", "44d75966a2a94d79bb38"));
+							reqParam.add(new BasicNameValuePair("smsMob", chartInfo.getPhone()));
+							reqParam.add(new BasicNameValuePair("smsText", Message));
+							String r = httpClient.doGet(requestUrl, reqParam);
+							
+							
+							String GUID=UUID.randomUUID().toString();
+							
+							preMessage.setGUID(GUID);
+							preMessage.setPhoneWho(chartInfo.getCharter());
+							preMessage.setPhone(chartInfo.getPhone());
+							preMessage.setOptDate(new Date());
+
+							int i = Integer.parseInt(r);
+							if (i > 0) {
+								preMessage.setState("发送成功");
+							} else {
+								preMessage.setState("发送失败");
+							}
+
+							roomInfoDao.insertPreMessage(preMessage);
+						}
+					}
+					
+				}
+			};
+
+			Thread t=new Thread(r);
+			t.start();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return "发送失败";
+		}
+		
+		return "已启动发送程序,请稍后在短信列表查看";
+
+	}
+	
+	
+	@RequestMapping(value="selectPlace")
+	public @ResponseBody Integer selectPlace(HttpServletRequest request,
+			HttpServletResponse response){
+		
+		String openId=( String ) request.getSession().getAttribute("openId");
+		
+		Users users=userService.getUserByOnlyOpenId(openId);
+		
+		int place=users.getPlace();
+	    
+		return place;
 	}
 	
 }

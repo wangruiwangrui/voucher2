@@ -1,5 +1,6 @@
 package com.voucher.manage.controller;
 
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -336,6 +337,8 @@ public class BaiduMapController {
 		  
 		Map searchMap=new HashMap<>();
         
+		System.out.println("lng="+lng+"   lat="+lat);
+		
         searchMap.put("[Position].lng=", String.valueOf(lng));
         searchMap.put("[Position].lat=", String.valueOf(lat));
         
