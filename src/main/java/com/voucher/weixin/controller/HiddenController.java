@@ -83,8 +83,9 @@ public class HiddenController {
 		if(search==null||search.equals("")&&search5!=null&&!search5.equals("")){
 			
 			Calendar cal = Calendar.getInstance();  
-	        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
+	        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY)-1, cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
 	        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+	        cal.roll(Calendar.DATE, -1);
 	        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 			
 			String startTime = null;
@@ -95,8 +96,10 @@ public class HiddenController {
 			
 			System.out.println("startTime="+startTime);
 			
-			cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY)+1, cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0); 
-	        
+			cal = Calendar.getInstance();
+			cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0); 
+			cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+			cal.roll(Calendar.DATE, -1);
 	        endTime=sdf.format(cal.getTime());
 	        
 	        System.out.println("endTime="+endTime);
