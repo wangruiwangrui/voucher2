@@ -1,6 +1,8 @@
 package com.voucher.manage.daoImpl;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
@@ -27,13 +30,17 @@ import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
 import com.voucher.manage.daoModel.Assets.WeiXin_User;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Item_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
 import com.voucher.manage.daoModelJoin.Assets.Position_Check_Join;
+import com.voucher.manage.daoRowMapper.RowMappers;
+import com.voucher.manage.daoRowMapper.RowMappersJoin;
 import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe;
+import com.voucher.manage.daoSQL.SelectSQL;
 import com.voucher.manage.daoSQL.SelectSqlJoinExe;
 import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.file.AbstractFileUpload;
@@ -724,11 +731,14 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 
 
 	@Override
-	public Integer insertHiddenNeaten(Hidden_Neaten hidden_Neaten) {
+	public Integer insertHiddenNeaten(Hidden_Neaten hidden_Neaten,RoomInfo_Hidden_Item roomInfo_Hidden_Item,
+			Hidden_Check_Item hidden_Check_Item,Integer item){
 		// TODO Auto-generated method stub
 		// 写入整改记录
 		int i = InsertExe.get(this.getJdbcTemplate(), hidden_Neaten);
 
+		System.out.println("i="+i);
+		
 		if (i > 0) {
 			Hidden_Check hidden_check = new Hidden_Check();
 
@@ -745,23 +755,102 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 			
 			String time=sdf.format(hidden_Neaten.getDate());
 			
-			String sql="UPDATE [Hidden_Check] SET update_time= '"+time+"' , "+
-						"state= '"+hidden_Neaten.getProgress()+"' "+
-						"WHERE [Hidden_Check].GUID = '"+hidden_Neaten.getGUID()+"' "+
-						"AND [Hidden_Check].check_name = '异常' "+
-						"AND ([Hidden_Check].state != '整改完成' "+
-						"OR [Hidden_Check].state is null) ";
+
+			String[] where2 = { "[RoomInfo_Hidden_Item].guid=", hidden_Neaten.getGUID() };
+
+			roomInfo_Hidden_Item.setWhere(where2);
+
+			String sql = "select *from [Hidden_Check] left join [Hidden_Check_Item] "
+					+ "ON [Hidden_Check].check_id=[Hidden_Check_Item].check_id" + " WHERE [Hidden_Check].GUID = '"
+					+ hidden_Neaten.getGUID() + "' " + "AND [Hidden_Check].check_name = '异常' "
+					+ "AND ([Hidden_Check].state != '整改完成' " + "OR [Hidden_Check].state is null) "
+					+"AND exist=1";
+
+			Class[] object = { Hidden_Check.class, Hidden_Check_Item.class };
+
+			List<Hidden_Check_Item_Join> list2 = this.getJdbcTemplate().query(sql,
+					new RowMappersJoin(object, Hidden_Check_Item_Join.class));
+
+			Iterator<Hidden_Check_Item_Join> iterator2 = list2.iterator();
+
+			System.out.println("sql="+sql);
 			
-			// 更新安全巡查记录
-			i = this.getJdbcTemplate().update(sql);
+			MyTestUtil.print(list2);
+			
+			while (iterator2.hasNext()) {
 
-			if (i > 0) {
-				RoomInfo_Hidden_Item roomInfo_Hidden_Item = new RoomInfo_Hidden_Item();
+				Hidden_Check_Item_Join hidden_Check_Item_Join = iterator2.next();
 
-				String[] where2 = { "[RoomInfo_Hidden_Item].guid=", hidden_Neaten.getGUID() };
+				String[] where4 = { "check_id=", hidden_Check_Item_Join.getCheck_id() };
+				
+				hidden_Check_Item.setWhere(where4);
+				
+				hidden_Check_Item.setLimit(1);
+				hidden_Check_Item.setOffset(0);
+				hidden_Check_Item.setNotIn("check_id");
+				
+				MyTestUtil.print(hidden_Check_Item);
+				
+				Hidden_Check_Item hidden_Check_Item2=(Hidden_Check_Item) SelectExe.get(this.getJdbcTemplate(), hidden_Check_Item).get(0);
+				
+				Hidden_Check_Item hidden_Check_Item3 = new Hidden_Check_Item();
+								
+				try {
+					hidden_Check_Item3=compare(hidden_Check_Item, hidden_Check_Item2);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				hidden_Check_Item3.setWhere(where4);
+				
+System.out.println("hidden_check_item3=");
+				
+				MyTestUtil.print(hidden_Check_Item3);
+				
+				try{
+					i=UpdateExe.get(this.getJdbcTemplate(), hidden_Check_Item3);
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+						
+				Hidden_Check hidden_Check2 = new Hidden_Check();
 
-				roomInfo_Hidden_Item.setWhere(where2);
+				Hidden_Check_Item hidden_Check_Item5=(Hidden_Check_Item) SelectExe.get(this.getJdbcTemplate(), hidden_Check_Item).get(0);
+				
+				System.out.println("hidden_check_item5=");
+				
+				MyTestUtil.print(hidden_Check_Item);
+				
+				int isNeate = getInt(hidden_Check_Item5.getFire_extinguisher())
+						+ getInt(hidden_Check_Item5.getHigh_power()) + getInt(hidden_Check_Item5.getBlow())
+						+ getInt(hidden_Check_Item5.getLine_aging()) + getInt(hidden_Check_Item5.getIncline())
+						+ getInt(hidden_Check_Item5.getSplit()) + getInt(hidden_Check_Item5.getDown())
+						+ getInt(hidden_Check_Item5.getBreak_off()) + getInt(hidden_Check_Item5.getDestroy())
+						+ getInt(hidden_Check_Item5.getInvalidation()) + getInt(hidden_Check_Item5.getFlaw())
+						+ getInt(hidden_Check_Item5.getCesspool()) + getInt(hidden_Check_Item5.getCoast())
+						+ getInt(hidden_Check_Item5.getWall_up());
+				
+				System.out.println("isNeate ="+isNeate);
+				
+				if ((isNeate ==0 )&& (hidden_Check_Item.getOther() == null || hidden_Check_Item.getOther().equals(""))) {
+					hidden_Check2.setState("整改完成");
+				} else {
+					hidden_Check2.setState("整改中");
+				}
+				
+				hidden_Check2.setWhere(where4);
 
+				i = UpdateExe.get(this.getJdbcTemplate(), hidden_Check2);
+
+				if (i >0) {
+	
+				}else{
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				}
+
+			}
+			
 				if (i > 0) {
 					
 					hidden_check.setLimit(1000);
@@ -800,20 +889,49 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 
 							RoomInfo roomInfo = new RoomInfo();
 
-							roomInfo.setIsHidden(0);
-
-							String[] where3 = {"[RoomInfo].guid=", hidden_Neaten.getGUID() };
+							roomInfo.setLimit(1);
+							roomInfo.setOffset(0);
+							roomInfo.setNotIn("GUID");
+							
+							String[] where3 = {"[RoomInfo].guid=", hidden_Neaten.getGUID()};
 
 							roomInfo.setWhere(where3);
-
+							
+							roomInfo=(RoomInfo) SelectExe.get(this.getJdbcTemplate(), roomInfo).get(0);
+							
+							RoomInfo roomInfo2=new RoomInfo();
+							roomInfo2.setWhere(where3);
+							
+							MyTestUtil.print(roomInfo);
+							
+							System.out.println("item="+item);
+							
+							int isHidden=roomInfo.getIsHidden()-item;
+							
+							roomInfo2.setIsHidden(isHidden);
+							
 							// 更新资产隐患字段
-							i = UpdateExe.get(this.getJdbcTemplate(), roomInfo);
+							i = UpdateExe.get(this.getJdbcTemplate(), roomInfo2);
 
 							if (i > 0) {
 
-								// 删除资产对应隐患表记录
-								DeleteExe.get(this.getJdbcTemplate(), roomInfo_Hidden_Item);
+								if(isHidden==0){
+									// 删除资产对应隐患表记录
+									DeleteExe.get(this.getJdbcTemplate(), roomInfo_Hidden_Item);
+									
+								   }else{
+									
+									// 更新资产对应隐患表记录
+									i=UpdateExe.get(this.getJdbcTemplate(), roomInfo_Hidden_Item);
+									
+									if(i>0){
 
+										}else {
+											TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+										}
+									
+								   }
+								
 							} else {
 								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 							}
@@ -829,13 +947,59 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 			}else{
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			}
-		} else {
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-		}
+
 		return i;
 	}
 
+	int getInt(Integer value){
+		if(value!=null){
+			return value;
+		}else{
+			return 0;
+		}
+	}
+	
+	 Hidden_Check_Item compare(Hidden_Check_Item obj1, Hidden_Check_Item Obj2)
+            throws Exception {
 
+        Hidden_Check_Item hidden_Check_Item=new Hidden_Check_Item();
+
+        Field[] fs = obj1.getClass().getDeclaredFields();//获取所有属性
+        for (Field f : fs) {
+            f.setAccessible(true);//设置访问性，反射类的方法，设置为true就可以访问private修饰的东西，否则无法访问
+            Object v1 = f.get(obj1);
+            Object v2 = f.get(Obj2);
+            if(equals(v1, v2)){
+                 System.out.println(f.getName());
+				if (!f.getName().equals("serialVersionUID") && !f.getName().equals("check_id")
+						&& !f.getName().equals("other") && !f.getName().equals("notIn") && !f.getName().equals("sort")
+						&& !f.getName().equals("order") && !f.getName().equals("where")
+						&& !f.getName().equals("whereTerm")) {
+					String getMethodName = "set" + f.getName().substring(0, 1).toUpperCase() + f.getName().substring(1);
+					Method getMethod = hidden_Check_Item.getClass().getDeclaredMethod(getMethodName, Integer.class);
+					getMethod.invoke(hidden_Check_Item, 0);
+                 }else if(f.getName().equals("order")){
+                	 Method getMethod = hidden_Check_Item.getClass().getDeclaredMethod("setOther", String.class);
+ 					 getMethod.invoke(hidden_Check_Item, "");
+ 					 getMethod = hidden_Check_Item.getClass().getDeclaredMethod("setIsOther", Integer.class);
+ 					 getMethod.invoke(hidden_Check_Item, 0);
+                 }
+            }
+        }
+        return hidden_Check_Item;
+    }
+	
+	  boolean equals(Object obj1, Object obj2) {
+
+		   System.out.println("obj1="+obj1);
+		   System.out.println("obj2="+obj2);
+
+	        if (obj1 == null || obj2 == null) {
+	            return false;
+	        }
+	        return obj1.equals(obj2);
+	    }
+	
 	@Override
 	public Integer deleteHiddenNeaten(Hidden_Neaten hidden_Neaten) {
 		// TODO Auto-generated method stub

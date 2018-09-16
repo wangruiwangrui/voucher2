@@ -239,7 +239,7 @@ public class AssetsImpl implements Assets{
 	@Override
 	public Integer insertHiddenNeaten(Hidden_Neaten hidden_Neaten) {
 		// TODO Auto-generated method stub
-		return hiddenDAO.insertHiddenNeaten(hidden_Neaten);
+		return 1;
 	}
 
 

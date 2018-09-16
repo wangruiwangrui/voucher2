@@ -1087,9 +1087,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
     Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsHidden "+
     "FROM "+
      Singleton.ROOMDATABASE+".[dbo].[RoomInfo] ";
-  
-  //  String sqlWhere="AND [Hidden_Assets].[asset_GUID] not in( select top "+offset+" [Hidden_Assets].[asset_GUID] FROM [Hidden_Assets] left join Singleton.ROOMDATABASE"+".[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=Singleton.ROOMDATABASE"+".[dbo].[RoomInfo].[GUID] ORDER BY [Hidden_Assets].[asset_GUID]) ORDER BY [Hidden_Assets].[asset_GUID]";
-	
+
   		StringBuilder whereCommand = new StringBuilder(); 
          		
     	List params=new ArrayList<>();
@@ -1175,7 +1173,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		MyTestUtil.print(list);
 		
 		String countSql="select count(*) FROM "+
-			    "[Hidden_Assets] left join "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]="+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].[GUID]";
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo]";
 		
 		if(!search.isEmpty()){
 			countSql=countSql+   //sqlserver鍒嗛〉闇�瑕佸湪top涔熷姞涓妛here鏉′欢
@@ -1224,8 +1222,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
     "FROM "+
     "[Hidden_Check] "; 
   
-  //  String sqlWhere="AND [Hidden_Assets].[asset_GUID] not in( select top "+offset+" [Hidden_Assets].[asset_GUID] FROM [Hidden_Assets] left join Singleton.ROOMDATABASE"+".[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=Singleton.ROOMDATABASE"+".[dbo].[RoomInfo].[GUID] ORDER BY [Hidden_Assets].[asset_GUID]) ORDER BY [Hidden_Assets].[asset_GUID]";
-	
+
   		StringBuilder whereCommand = new StringBuilder(); 
         		
     	List params=new ArrayList<>();
@@ -1311,7 +1308,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		MyTestUtil.print(list);
 		
 		String countSql="select count(*) FROM "+
-			    "[Hidden_Assets] left join [Hidden_Check] on [Hidden_Assets].[hidden_GUID]=[Hidden_Check].[check_id]";
+			    "[Hidden_Check] ";
 		
 		if(!search.isEmpty()){
 			countSql=countSql+   //sqlserver鍒嗛〉闇�瑕佸湪top涔熷姞涓妛here鏉′欢
@@ -1690,9 +1687,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		List list=this.getJdbcTemplate().query(sql,new HiddenAssetByMonth());
 		
 		String sql2="SELECT convert(varchar(7),InDate,120) as year ,COUNT(*) as amount "+
-					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join [Hidden_Assets] on "+
-					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID=[Hidden_Assets].asset_GUID "+
-					"where InDate is not null and [Hidden_Assets].asset_GUID is not null "+
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] "+
+					"where IsHidden>0 and InDate is not null "+
 					"and convert(varchar(4),InDate,120) = "+year+" group by convert(varchar(7),InDate,120)";
 		
 		List list2=this.getJdbcTemplate().query(sql2,new HiddenAssetByMonth());

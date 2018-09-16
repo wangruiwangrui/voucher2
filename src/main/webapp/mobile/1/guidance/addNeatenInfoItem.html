@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>选择整改项目</title>
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta charset="utf-8" />
+    <link rel="stylesheet" href="../css/weui.css"/>
+    <link rel="stylesheet" href="../css/example.css"/>
+    <link rel="stylesheet" href="../css/jquery-weui.css">
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+</head>
+<body>
+
+	<div class="container" id="container">
+		
+		<div class="cell">
+			<div class="weui-cells__title">当前的隐患</div>
+			<div class="weui-cells weui-cells_checkbox" id="main"></div>
+		</div>
+			
+	</div>
+	
+	<a href="javascript:;" id="save" class="weui-btn weui-btn_plain-primary">保存</a>
+
+</body>
+
+<style type="text/css">
+	#save {
+		width:100%;
+		position:fixed;
+		bottom: 1px;
+	}
+</style>
+
+<script>
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+   }
+
+  var guid=getQueryString("guid");
+  
+  var longitude=getQueryString("longitude");
+  var latitude=getQueryString("latitude");
+
+
+  function addDiv(item,text){
+	  var label=document.createElement("label");
+	  label.setAttribute("class","weui-cell weui-check__label");
+	  label.setAttribute("for",item);
+	  var div_1=document.createElement("div");
+	  div_1.setAttribute("class","weui-cell__hd");
+	  var input=document.createElement("input");
+	  input.setAttribute("type","checkbox");
+	  input.setAttribute("class","weui-check");
+	  input.setAttribute("name","checkbox1");
+	  input.setAttribute("id",item);
+	  var i=document.createElement("i");
+	  i.setAttribute("class","weui-icon-checked");
+	  div_1.appendChild(input);
+	  div_1.appendChild(i);
+	  var div_2=document.createElement("div");
+	  div_2.setAttribute("class","weui_cell_bd weui_cell_primary");
+	  var p=document.createElement("p");
+	  p.setAttribute("class","weui-cell__bd");
+	  p.innerHTML=text;
+	  div_2.appendChild(p);
+	  label.appendChild(div_1);
+	  label.appendChild(div_2);
+	  
+	  $("#main").append(label);
+  }
+
+  $.ajax({
+      type: "POST",
+      url: "/voucher/mobile/hidden/getRoomInfoHiddenItemByGUID.do",
+      data: { "guid":guid},
+      dataType: "json",
+      error: function (request){
+   	   console.log(request);
+      },
+      success: function (text) {
+    	    console.log(text);
+    	  	var fire_extinguisher=text.fire_extinguisher;
+    	  	if(fire_extinguisher>0){
+    	  		addDiv("fire_extinguisher","灭火器");
+    	  	}
+   	  	 	var high_power=text.high_power;
+	  		if(high_power>0){
+	  			addDiv("high_power","大功率用电器");
+	  		}
+   	   		var blow=text.blow;
+	  		if(blow>0){
+	  			addDiv("blow","易燃易爆物品");
+	  		}
+   	   		var line_aging=text.line_aging;
+	  		if(line_aging>0){
+	  			addDiv("line_aging","线路老化");
+	  		}
+   	   		var incline=text.incline;
+	  		if(incline>0){
+	  			addDiv("incline","倾斜");
+	  		}
+   	   		var split=text.split;
+	  		if(split>0){
+	  			addDiv("split","开裂");
+	  		}
+   	   		var down=text.down;
+	  		if(down>0){
+	  			addDiv("down","地基下沉");
+	  		}
+   	   		var break_off=text.break_off;
+	  		if(break_off>0){
+	  			addDiv("break_off","屋面脱落");
+	  		}
+   	   		var destroy=text.destroy;
+	  		if(destroy>0){
+	  			addDiv("destroy","结构破坏");
+	  		}
+   	   		var invalidation=text.invalidation;
+	  		if(invalidation>0){
+	  			addDiv("invalidation","承重失效");
+	  		}
+   	   		var flaw=text.flaw;
+	  		if(flaw>0){
+	  			addDiv("flaw","漏雨");
+	  		}
+   	   		var cesspool=text.cesspool;
+	  		if(cesspool>0){
+	  			addDiv("cesspool","化粪池问题");
+	  		}
+   	   		var coast=text.coast;
+	  		if(coast>0){
+	  			addDiv("coast","山体滑坡");
+	  		}
+   	   		var wall_up=text.wall_up;
+	  		if(wall_up>0){
+	  			addDiv("wall_up","管道堵塞");
+	  		}
+   	   		
+    	    var other=text.other;
+    	    if(other!=null&&other!=""){
+				addDiv("other",other);
+    	    }
+      }
+   });
+
+	$("#save").on("click", function() {
+		obj = document.getElementsByName("checkbox1");
+		check_val = [];
+		for (k in obj) {
+			if (obj[k].checked)
+				check_val.push(obj[k].id);
+		}
+		var item=JSON.stringify(check_val);
+		guid=encodeURI(guid);
+		item=encodeURI(item);
+		location.href="addNeatenInfoDetail.html?guid="+guid+"&latitude="+latitude+"&longitude="+longitude+"&item="+item;
+	});
+	
+</script>
+
+</html>

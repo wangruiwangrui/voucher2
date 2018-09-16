@@ -61,9 +61,6 @@ public class Hidden_Neaten implements Serializable{
 
     @SQLString(name="RoomGUID")
 	private String RoomGUID;
-
-    @SQLString(name="RepairItem")
-	private String RepairItem;
     
     @SQLFloat(name="Area")
 	private Float Area;
@@ -220,14 +217,6 @@ public class Hidden_Neaten implements Serializable{
 
 	public String getRoomGUID(){
 		return RoomGUID;
-	}
-
-	public void setRepairItem(String RepairItem){
-		this.RepairItem = RepairItem;
-	}
-
-	public String getRepairItem(){
-		return RepairItem;
 	}
 	
 	public void setArea(Float Area){

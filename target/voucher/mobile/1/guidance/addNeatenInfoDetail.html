@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>安全隐患整改详情</title>
+    <title>新建隐患整改</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -46,8 +46,15 @@
      	</div>
       </div>
     </div>
-       
-   <div class="weui-cells weui-cells_form">
+
+	<div class="weui-cells weui-cells_form">
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">整改项目</label></div>
+			<div id="item" class="weui-cell__bd"></div>
+		</div>
+	</div>
+
+	<div class="weui-cells weui-cells_form">
       <div class="weui-cell">
              <div class="weui-cell__hd"><label class="weui-label">整改进度</label></div>
                 <div id="progress" class="weui-cell__bd">
@@ -59,15 +66,6 @@
 
    	<div id="repair"><!-- 维修记录 -->
 	
-		<div class="weui-cells__title">维修项目</div>
-		<div class="weui-cells weui-cells_form">
-			<div class="weui-cell">
-				<div class="weui-cell__bd">
-					<textarea id="repairItem" class="weui-textarea" rows="3"></textarea>
-				</div>
-			</div>
-		</div>
-
 		<div class="weui-cells weui-cells_form">
 			<div class="weui-cell">
 				<div class="weui-cell__hd"><label class="weui-label">维修类型</label></div>
@@ -111,7 +109,18 @@
 		<div class="weui-cells weui-cells_form">
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
-					<label class="weui-label">保修期</label>
+					<label class="weui-label">审定金额</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="auditingAmount" type="number" class="weui-input" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">质保期(年)</label>
 				</div>
 				<div class="weui-cell__bd">
 					<input id="availabeLength" class="weui-input" />
@@ -169,7 +178,7 @@
      </div>
     </div>
   
-    <div class="weui-cells__title">整改内容</div>
+    <div class="weui-cells__title">整改详情</div>
     <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__bd">
@@ -200,9 +209,12 @@
    }
 
   var guid=getQueryString("guid");
-
+  var item=getQueryString("item");
+  
   var longitude=getQueryString("longitude");
   var latitude=getQueryString("latitude");
+  
+  console.log(item);
   
     // 百度地图API功能
     var map = new BMap.Map("allmap");    // 创建Map实例
@@ -385,15 +397,7 @@
                   num.innerHTML=obj.num;
                   $("#num").append(num);
                   
-                   var region=document.createElement("span");
-                   region.innerHTML=obj.region;
-                   $("#region").append(region);
-                   
-                   
-                   var fareItem=document.createElement("span");
-                   fareItem.innerHTML=obj.fareItem;
-                   $("#fareItem").append(fareItem);
-
+                                     
         	}
     });
 	
@@ -406,12 +410,75 @@
      	   console.log(request);
         },
         success: function (text) {
-        	console.log(text);
+        	//console.log(text);
         	var hiddenCircs=document.createElement("span");
         	hiddenCircs.innerHTML="<font color='#FF0000'>"+text+"</font>";
             $("#hiddenCircs").append(hiddenCircs);
         }
      });
+	
+	var checkItem=new Object();
+	
+	console.log(item);
+	var item=item.replace("[","");
+	var item=item.replace("]","");
+	var reg = new RegExp('"',"g");  
+	var item = item.replace(reg, "");  
+	var item=item.split(",");
+	console.log(item);
+	var text="";
+	
+	for(var i=0;i<item.length;i++){		
+		console.log(item[i]);
+		if(item[i]=="fire_extinguisher"){
+	  		text=text+"灭火器,";
+	  		checkItem.fire_extinguisher=1;
+	  	}else if(item[i]=="high_power"){
+  			text=text+"大功率用电器,";
+  			checkItem.high_power=1;
+  		}else if(item[i]=="blow"){
+  			text=text+"易燃易爆物品,";
+  			checkItem.blow=1;
+  		}else if(item[i]=="line_aging"){
+  			text=text+"线路老化,";
+  			checkItem.line_aging=1;
+  		}else if(item[i]=="incline"){
+  			text=text+"倾斜,";
+  			checkItem.incline=1;
+  		}else if(item[i]=="split"){
+  			text=text+"开裂,";
+  			 checkItem.split=1;
+  		}else if(item[i]=="down"){
+  			text=text+"地基下沉,";
+  			checkItem.down=1;
+  		}else if(item[i]=="break_off"){
+  			text=text+"屋面脱落,";
+  			checkItem.break_off=1;
+  		}else if(item[i]=="destroy"){
+  			text=text+"结构破坏,";
+  			checkItem.destroy=1;
+  		}else if(item[i]=="invalidation"){
+  			text=text+"承重失效,";
+  			checkItem.invalidation=1;
+  		}else if(item[i]=="flaw"){
+  			text=text+"漏雨,";
+  			checkItem.flaw=1;
+  		}else if(item[i]=="cesspool"){
+  			text=text+"化粪池问题,";
+  			checkItem.cesspool=1;
+  		}else if(item[i]=="coast"){
+  			text=text+"山体滑坡,";
+  			checkItem.coast=1;
+  		}else if(item[i]=="wall_up"){
+  			text=text+"管道堵塞,";
+  			checkItem.wall_up=1;
+  		}else if(item[i]!=""){
+	    	text=text+"其它隐患";
+	    	checkItem.other=item[i];
+	    }
+	}
+	text="<font color='#FF0000'>"+text.substr(0, text.length - 1);  +"</font>";
+	$("#item").append(text);
 	
 	function actionTime(value){
   	    var date = new Date(value); 
@@ -469,25 +536,25 @@
         	var neaten_instance=$("#neaten_instance").val();
         	var addComp1=JSON.stringify(addComp);
 
-        	var repairItem=$("#repairItem").val();
         	var area=$("#area").val();
         	var amount=$("#amount").val();
         	var amountTotal=$("#amountTotal").val();
+        	var auditingAmount=$("#auditingAmount").val();
         	var availabeLength=$("#availabeLength").val();
         	var workUnit=$("#workUnit").val();
         	
         	if(progress=="整改完成"){
         		var error="";
-        		if(repairItem==null||repairItem==""){
-        			error="维修项目不能为空!";
-        		}else if(area==null||area==""){
+				if(area==null||area==""){
         			error="面积不能为空!";
         		}else if(amount==null||amount==""){
         			error="送审金额不能为空!";
         		}else if(amountTotal==null||amountTotal==""){
         			error="审减金额不能为空!";
+        		}else if(auditingAmount==null||auditingAmount==""){
+        			error="审定金额不能为空!";
         		}else if(availabeLength==null||availabeLength==""){
-        			error="保修期不能为空!";
+        			error="质保期不能为空!";
         		}
         		
         		if(error!=""){
@@ -498,7 +565,7 @@
         		}
         		        		
         	}
-        	
+        	console.log(item);
         	 $.post("/voucher/mobile/hidden/insertHiddenNeaten.do",
         		{
  					guid:guid,
@@ -512,13 +579,14 @@
     		    	addComp:addComp1,
     		    	lng:longitude,
     		    	lat:latitude,
-    		    	repairItem:repairItem,
     		    	type:type,
     		    	area:area,
     		    	amount:amount,
     		    	amountTotal:amountTotal,
+    		    	auditingAmount:auditingAmount,
     		    	availabeLength:availabeLength,
-    		    	workUnit:workUnit
+    		    	workUnit:workUnit,
+    		    	checkItemDate:JSON.stringify(checkItem)
     		    }, function(data){
     	        	var obj = $.parseJSON(data);
     		    	if (obj.status == "failure") {
@@ -542,7 +610,7 @@
       			            	}, function() {
       	     	    			//点击取消后的回调函数
       	     	    			
-      	     	    			history.back();
+      	     	    			history.go(-2);
       	     	    			
       	     	    		});
    		        		 
@@ -552,7 +620,7 @@
     			        	
     			        	$.alert("新建隐患整改记录失败!",function() {
     			        		  //点击确认后的回调函数
-    			        		history.back();
+    			        		   history.go(-2);
     			        	});
     			        	
     			     }

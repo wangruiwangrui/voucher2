@@ -1,15 +1,18 @@
 package com.voucher.weixin.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -714,9 +717,10 @@ public class HiddenController {
 			@RequestParam String happenTime,@RequestParam String principal,
 			@RequestParam String remark,
 			@RequestParam String neaten_instance,@RequestParam String addComp,
+			@RequestParam String checkItemDate,
 			@RequestParam Double lng,@RequestParam Double lat,
-			String repairItem,String type,
-			Float area,Float amount,Float amountTotal,
+			String type,
+			Float area,Float amount,Float amountTotal,Float auditingAmount,
 			String availabeLength,String workUnit,
 			HttpServletRequest request){
 		
@@ -725,6 +729,20 @@ public class HiddenController {
         UUID uuid=UUID.randomUUID();
         
         String openId=( String ) request.getSession().getAttribute("openId");
+        
+        JSONObject jsonObject1 = null;
+        
+        Hidden_Check_Item hidden_Check_Item=new Hidden_Check_Item();
+        
+        RoomInfo_Hidden_Item roomInfo_Hidden_Item=new RoomInfo_Hidden_Item();
+        
+        String checkItem = null;
+        
+        boolean isNull = false;
+        
+        Integer item = 0;
+        
+        Map map=new HashMap<>();
         
         hidden_Neaten.setGUID(guid);
         
@@ -753,25 +771,127 @@ public class HiddenController {
         String check_circs=getRoomInfoHiddenItemDataByGUID(guid);
         
         hidden_Neaten.setCheck_circs(check_circs);
-        
-        Map map=new HashMap<>();
-        
+       
+       try {
+			jsonObject1= JSONObject.parseObject(checkItemDate);
+			hidden_Check_Item.setFire_extinguisher(jsonObject1.getInteger("fire_extinguisher"));
+			hidden_Check_Item.setHigh_power(jsonObject1.getInteger("high_power"));
+			hidden_Check_Item.setBlow(jsonObject1.getInteger("blow"));
+			hidden_Check_Item.setLine_aging(jsonObject1.getInteger("line_aging"));
+			hidden_Check_Item.setIncline(jsonObject1.getInteger("incline"));
+			hidden_Check_Item.setSplit(jsonObject1.getInteger("split"));
+			hidden_Check_Item.setDown(jsonObject1.getInteger("down"));
+			hidden_Check_Item.setBreak_off(jsonObject1.getInteger("break_off"));
+			hidden_Check_Item.setDestroy(jsonObject1.getInteger("destroy"));
+			hidden_Check_Item.setInvalidation(jsonObject1.getInteger("invalidation"));
+			hidden_Check_Item.setFlaw(jsonObject1.getInteger("flaw"));
+			hidden_Check_Item.setCesspool(jsonObject1.getInteger("cesspool"));
+			hidden_Check_Item.setCoast(jsonObject1.getInteger("coast"));
+			hidden_Check_Item.setWall_up(jsonObject1.getInteger("wall_up"));
+			hidden_Check_Item.setOther(jsonObject1.getString("other"));
+			
+			roomInfo_Hidden_Item.setGuid(guid);
+			if (getInt(jsonObject1.getInteger("fire_extinguisher")) > 0)
+				roomInfo_Hidden_Item.setFire_extinguisher(0);
+			if (getInt(jsonObject1.getInteger("high_power")) > 0)
+				roomInfo_Hidden_Item.setHigh_power(0);
+			if (getInt(jsonObject1.getInteger("blow")) > 0)
+				roomInfo_Hidden_Item.setBlow(0);
+			if (getInt(jsonObject1.getInteger("line_aging")) > 0)
+				roomInfo_Hidden_Item.setLine_aging(0);
+			if (getInt(jsonObject1.getInteger("incline")) > 0)
+				roomInfo_Hidden_Item.setIncline(0);
+			if (getInt(jsonObject1.getInteger("split")) > 0)
+				roomInfo_Hidden_Item.setSplit(0);
+			if (getInt(jsonObject1.getInteger("down")) > 0)
+				roomInfo_Hidden_Item.setDown(0);
+			if (getInt(jsonObject1.getInteger("break_off")) > 0)
+				roomInfo_Hidden_Item.setBreak_off(0);
+			if (getInt(jsonObject1.getInteger("destroy")) > 0)
+				roomInfo_Hidden_Item.setDestroy(0);
+			if (getInt(jsonObject1.getInteger("invalidation")) > 0)
+				roomInfo_Hidden_Item.setInvalidation(0);
+			if (getInt(jsonObject1.getInteger("flaw")) > 0)
+				roomInfo_Hidden_Item.setFlaw(0);
+			if (getInt(jsonObject1.getInteger("cesspool")) > 0)
+				roomInfo_Hidden_Item.setCesspool(0);
+			if (getInt(jsonObject1.getInteger("coast")) > 0)
+				roomInfo_Hidden_Item.setCoast(0);
+			if (getInt(jsonObject1.getInteger("wall_up")) > 0)
+				roomInfo_Hidden_Item.setWall_up(0);
+			if (jsonObject1.getString("other") != null && !jsonObject1.getString("other").equals("")) {
+				roomInfo_Hidden_Item.setOther("");
+				roomInfo_Hidden_Item.setIs_other(0);
+				hidden_Check_Item.setIs_other(1);
+				roomInfo_Hidden_Item.setIs_other(0); //roomInfo_Hidden_Item要更新的整改项目应为0				
+			}
+
+			
+			isNull=jsonObject1.getInteger("fire_extinguisher")==null&&jsonObject1.getInteger("high_power")==null&&jsonObject1.getInteger("blow")==null&&
+					jsonObject1.getInteger("line_aging")==null&&jsonObject1.getInteger("incline")==null&&jsonObject1.getInteger("split")==null&&
+					jsonObject1.getInteger("down")==null&&jsonObject1.getInteger("break_off")==null&&jsonObject1.getInteger("destroy")==null&&
+					jsonObject1.getInteger("invalidation")==null&&jsonObject1.getInteger("flaw")==null&&jsonObject1.getInteger("cesspool")==null&&
+					jsonObject1.getInteger("coast")==null&&jsonObject1.getInteger("wall_up")==null&&
+					(jsonObject1.getString("other")==null||jsonObject1.getString("other").equals(""));
+			
+			item=getInt(jsonObject1.getInteger("fire_extinguisher"))+getInt(jsonObject1.getInteger("high_power"))+getInt(jsonObject1.getInteger("blow"))+
+					getInt(jsonObject1.getInteger("line_aging"))+getInt(jsonObject1.getInteger("incline"))+getInt(jsonObject1.getInteger("split"))+
+					getInt(jsonObject1.getInteger("down"))+getInt(jsonObject1.getInteger("break_off"))+getInt(jsonObject1.getInteger("destroy"))+
+					getInt(jsonObject1.getInteger("invalidation"))+getInt(jsonObject1.getInteger("flaw"))+getInt(jsonObject1.getInteger("cesspool"))+
+					getInt(jsonObject1.getInteger("coast"))+getInt(jsonObject1.getInteger("wall_up"));
+			
+			if (jsonObject1.getString("other") != null && !jsonObject1.getString("other").equals("")) 
+				item=item+1;    //other项加1
+			
+			checkItem=getItem("灭火器", hidden_Check_Item.getFire_extinguisher())+getItem("大功率用电器", hidden_Check_Item.getHigh_power())+
+					getItem("易燃易爆物品", hidden_Check_Item.getBlow())+getItem("线路老化", hidden_Check_Item.getLine_aging())+
+					getItem("倾斜", hidden_Check_Item.getIncline())+getItem("开裂", hidden_Check_Item.getSplit())+
+					getItem("地基下沉", hidden_Check_Item.getDown())+getItem("屋面脱落", hidden_Check_Item.getBreak_off())+
+					getItem("结构破坏", hidden_Check_Item.getDestroy())+getItem("承重失效", hidden_Check_Item.getInvalidation())+
+					getItem("漏雨", hidden_Check_Item.getFlaw())+getItem("化粪池问题", hidden_Check_Item.getCesspool())+
+					getItem("山体滑坡", hidden_Check_Item.getCoast())+getItem("管道堵塞", hidden_Check_Item.getWall_up());
+			
+			if(checkItem.length()>2)
+				checkItem=checkItem.substring(0, checkItem.length()-2);
+			
+       }catch (Exception e) {
+		// TODO: handle exception
+    	   e.printStackTrace();
+       }
+       
+       System.out.println("other="+jsonObject1.getString("other"));
+       
+       System.out.println("isNull="+isNull);
+       
+       System.out.println("item="+item);
+       
+       System.out.println("checkitme="+checkItem);
+       
+     
         if(progress!=null&&progress.equals("整改完成")){
         	
-        	if(repairItem==null||repairItem.equals("")||type==null||type.equals("")||amount==null||amountTotal==null||
+        	if(auditingAmount==null||type==null||type.equals("")||amount==null||amountTotal==null||
         			area==null||availabeLength==null||availabeLength.equals("")||workUnit==null||workUnit.equals("")){
         		
-        		map.put("status", "succeed");
+        		System.out.println("auditingAmount="+auditingAmount);
+        		System.out.println("type="+type);
+        		System.out.println("amount="+amount);
+        		System.out.println("amountTotal="+amountTotal);
+        		System.out.println("area="+area);
+        		System.out.println("availabeLength="+availabeLength);
+        		System.out.println("workUnit="+workUnit);
+
+        		map.put("status", "failure");
         		map.put("neaten_id", uuid.toString());
 				
         		return map;
         	}
 
         	hidden_Neaten.setRoomGUID(guid);
-        	hidden_Neaten.setRepairItem(repairItem);
         	hidden_Neaten.setType(type);
         	hidden_Neaten.setAmount(amount);
         	hidden_Neaten.setAmountTotal(amountTotal);
+        	hidden_Neaten.setAuditingAmount(auditingAmount);
         	hidden_Neaten.setArea(area);
         	hidden_Neaten.setAvailabeLength(availabeLength);
         	hidden_Neaten.setWorkUnit(workUnit);
@@ -794,8 +914,10 @@ public class HiddenController {
 		hidden_Neaten.setDate(date);
 		hidden_Neaten.setTerminal("Wechat");
 		
-		int i=hiddenDAO.insertHiddenNeaten(hidden_Neaten);
+		int i=hiddenDAO.insertHiddenNeaten(hidden_Neaten, roomInfo_Hidden_Item, hidden_Check_Item, item);
 
+		System.out.println("iii="+i);
+		
 		if (i > 0 ) {
 			JSONObject jsonObject = JSONObject.parseObject(addComp);
 
@@ -830,7 +952,7 @@ public class HiddenController {
 		map.put("neaten_id", uuid.toString());
 				
 		return map;
-		
+
 	}
 	
 	

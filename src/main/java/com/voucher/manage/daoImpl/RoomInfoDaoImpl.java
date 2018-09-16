@@ -759,18 +759,18 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		// TODO Auto-generated method stub
 		
 		String sql="SELECT [Position].lng,[Position].lat from [Position]"
-				+ "left join [Hidden_Assets] on [Position].GUID=[Hidden_Assets].asset_GUID "
-				+" where  [Position].is_roomInfo=1 and [Hidden_Assets].asset_GUID is not null";
+				+ "left join "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] on [Position].GUID=[RoomInfo].GUID "
+				+" where  [Position].is_roomInfo=1";
 		
 		String sql2="SELECT count(*) from [Position]"
-				+ "left join [Hidden_Assets] on [Position].GUID=[Hidden_Assets].asset_GUID "
-				+" where  [Position].is_roomInfo=1 and [Hidden_Assets].asset_GUID is not null";
+				+ "left join "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] on [Position].GUID=[RoomInfo].GUID "
+				+" where  [Position].is_roomInfo=1";
 		
 		Map map=new HashMap<>();
 
 		try{
 			List list=this.getJdbcTemplate().query(sql,new position());
-			int total=this.getJdbcTemplate().queryForInt(sql2);
+			int total=(int) this.getJdbcTemplate().queryForMap(sql2).get("");
 			map.put("rows", list);
 			map.put("total", total);
 			//MyTestUtil.print(list);
