@@ -49,6 +49,19 @@ public class UserServiceImpl implements UserService {
 	public Integer getUserCount(String campusAdmin ,Integer campusId,String search) {
 		return usersMapper.getUserCount(campusAdmin,campusId,search);
 	}
+	
+	public List<Users> getAllChartUser(Integer campusId,Integer limit, Integer offset, String sort,
+			String order,String search) {
+		return usersMapper.getAllChartUser(campusId,limit,offset,sort,order,search);
+	}
+	
+	@Override
+	public Integer getAllChartCount(Integer campusId, String search) {
+		// TODO Auto-generated method stub
+		return usersMapper.getAllChartCount(campusId, search);
+	}
+	
+
 
 	public Integer getUserFullCount(Integer campusId,String search) {
 		return usersMapper.getUserFullCount(campusId,search);
@@ -209,5 +222,6 @@ public class UserServiceImpl implements UserService {
 		return usersMapper.getUserByAssetCharter(charter, idNo);
 		
 	}
+
 
 }

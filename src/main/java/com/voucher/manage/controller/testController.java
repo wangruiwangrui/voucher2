@@ -4,6 +4,7 @@ package com.voucher.manage.controller;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.rmi.server.AssetsImpl;
 import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoImpl.HiddenDAOImpl;
 import com.voucher.manage.redis.Orders;
 import com.voucher.manage.redis.RedisDao;
@@ -35,6 +37,8 @@ public class testController {
      private AffairService testService;
 	
      private HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+     
+     RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
      
 	/*
      private RedisDao orderDao;
@@ -162,6 +166,13 @@ public class testController {
 			Integer offset){
 		
 		return hiddenDAO.selectAllHiddenCheck(limit, offset, null, null, null, new HashMap<>());
+		
+	}
+	
+	@RequestMapping("getAllChartInfo")
+	public @ResponseBody List getAllChartInfo(){
+		
+		return roomInfoDao.getAllChartInfo();
 		
 	}
 	

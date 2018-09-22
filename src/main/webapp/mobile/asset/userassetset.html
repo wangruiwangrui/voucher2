@@ -56,15 +56,6 @@
                 <i class="weui_icon_warn"></i>
             </div>
         </div>
-        <div class="weui_cell" id="w3">
-            <div class="weui_cell_hd"><label class="weui_label">证件号</label></div>
-            <div class="weui_cell_bd weui_cell_primary IDNo">
-                <input class="weui_input" id="IDNo" type="text"  placeholder="请输入身份证号码">
-            </div>
-            <div class="weui_cell_ft">
-                <i class="weui_icon_warn"></i>
-            </div>
-        </div>
         <div class="weui_cell " id="w2">
             <div class="weui_cell_hd"><label class="weui_label">手机号</label></div>
              <div class="weui_cell_bd weui_cell_primary phone">
@@ -74,13 +65,13 @@
                 <i class="weui_icon_warn"></i>
             </div>
         </div>
-        <div class="weui_cell weui_vcode">
+        <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" id="regtlx" type="text" placeholder="请输入验证码">
+                <input class="weui_input" id="regtlx" type="number" pattern="[0-9]*" placeholder="请输入验证码">
             </div>
             <div class="weui_cell_ft">
-                <img id="re_img1" width="130px" src="/voucher/mobile/assetRegister/getYzm.do">
+                <a href="javascript:" class="weui_btn weui_btn_mini weui_btn_default" id="bt01">发送验证码</a> 
             </div>
         </div>
     </div>
@@ -102,30 +93,81 @@
 </div>
 
 <script type="text/javascript">
- function refreshValidatecode(){
-	 var img=document.getElementById('re_img1');
-	 img.src="/voucher/mobile/assetRegister/getYzm.do?t="+Math.random();
-    } 
- $(".primary").on("click",function(){
-     $("#dialog2").attr("style","display:none"); 
- });
 
-</script>
+	$(function() {
+		FastClick.attach(document.body);
+	});
 
-<script>
-  $(function() {
-    FastClick.attach(document.body);
-  });
+	$(".primary").on("click", function() {
+		$("#dialog2").attr("style", "display:none");
+	});
+	
 </script>
 
 <script type='text/javascript' src='../../js/jquery-weui.js' charset='utf-8'></script>
 
-<script>
-      $(".swiper-container").swiper({
-        loop: true,
-        autoplay: 3000
-      });
-    
+<script type="text/javascript">
+
+
+	$(".swiper-container").swiper({
+		loop : true,
+		autoplay : 3000
+	});
+
+	var bt01 = document.getElementById("bt01");
+
+
+	bt01.onclick = function() {
+		var name=document.getElementById("name").value;
+		var phone=document.getElementById("phone").value;
+		
+		if(name==null||name==""){
+			$("#dialog2").attr("style","display:block"); 
+			$(".weui_dialog_title").html("请输入姓名");
+			return false;
+		}
+		
+		if(phone==null||phone==""){
+			$("#dialog2").attr("style","display:block"); 
+			$(".weui_dialog_title").html("请输入手机号");
+			return false;
+		}
+				
+		var xhm = new XMLHttpRequest();
+		xhm.open("GET", "/voucher/mobile/assetRegister/getValidate.do?phone="+phone+"&name="+name, false);
+		xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xhm.send();
+		var json = xhm.responseText;
+
+		if (json == 1) {
+
+			bt01.disabled = true; //当点击后倒计时时候不能点击此按钮 
+			var time = 60; //倒计时60秒 
+			var timer = setInterval(fun1, 1000); //设置定时器 
+			
+			function fun1() {
+				time--;
+				if (time >= 0) {
+					bt01.innerHTML = time + "s后重新发送";
+				} else {
+					bt01.innerHTML = "重新发送验证码";
+					bt01.disabled = false; //倒计时结束能够重新点击发送的按钮 
+					clearTimeout(timer); //清除定时器 
+					time = 60; //设置循环重新开始条件 
+				}
+			}
+			
+		}else if(json==2){
+			$("#dialog2").attr("style","display:block"); 
+			$(".weui_dialog_title").html("承租人姓名不存在");
+		}else{
+			$("#dialog2").attr("style","display:block"); 
+			$(".weui_dialog_title").html("验证码发送失败");
+		}
+
+	}
+
+
 </script>
 
 <style type="text/css">
@@ -145,6 +187,7 @@
 }
 
 .footer{position:absolute;bottom:0;width:100%;height:100px;}
+
 
 </style>
 

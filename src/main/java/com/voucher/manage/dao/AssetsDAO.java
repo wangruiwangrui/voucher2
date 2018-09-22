@@ -109,4 +109,7 @@ public interface AssetsDAO {
 	public Map<String, Object> findAllHire(String term,Map search);
 	
 	public Map<String, Object> getCountCheckByGUID(@RequestParam String guid);
+	
+	public Map<String, Object> getAllChartInfo(Integer limit, Integer offset, String sort,
+			String order,Map search);
 }

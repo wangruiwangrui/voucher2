@@ -2187,5 +2187,39 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		return map;
 	}
+
+	@Override
+	public Map<String, Object> getAllChartInfo(Integer limit, Integer offset, String sort, String order, Map search) {
+		// TODO Auto-generated method stub
+		
+		ChartInfo chartInfo=new ChartInfo();
+		
+		chartInfo.setLimit(limit);
+		chartInfo.setOffset(offset);
+		if(sort!=null&&!sort.equals("")){
+			chartInfo.setSort(sort);
+		}
+		if(offset!=null&&!offset.equals("")){
+			chartInfo.setOffset(offset);
+		}
+		
+		chartInfo.setNotIn("GUID");
+		
+		if(!search.isEmpty()){
+			String[] where=TransMapToString.get(search);
+			chartInfo.setWhere(where);
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+
+		List list = SelectExe.get(this.getJdbcTemplate(), chartInfo);
+		map.put("rows", list);
+
+		Map countMap = SelectExe.getCount(this.getJdbcTemplate(), chartInfo);
+
+		map.put("total", countMap.get(""));
+		
+		return map;
+	}
 	
 }

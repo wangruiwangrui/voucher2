@@ -4,96 +4,6 @@
 <head>
 <title>Weixin后台管理</title>
 
-<!-- 警告对话框 -->	
-<script src="sweetalert/sweetalert.min.js"></script>
-<link rel="stylesheet" type="text/css" href="sweetalert/sweetalert.css">  
-<!--  
- <script type="text/javascript">
-	if(typeof(EventSource) !== "undefined") {
-		 var evtSource = new EventSource("/voucher/sse");
-         var alertdialog=document.getElementById("alertdialog");
-         var alertchar=document.getElementById("alertchar");
-		 evtSource.addEventListener("ping", function(e){
-			var obj = JSON.parse(e.data);
-			
-		     swal({
-					title: "昵称 : "+obj.nickName, 
-					imageUrl:obj.imgUrl,
-					text:
-	              //    "<br /> campusId :"+ obj.campusId
-	                   "<h3>商品名称 :"+ obj.campusName+
-	                   "<br />订单号 : "+obj.id+
-						"<br />商品号 : "+obj.foodId+
-	                   "<br />  数量 :"+obj.amount+
-	                   "<br />  管理员 :"+obj.campusAdmin+
-	              //    "<br /> nickName :"+ obj.nickName
-	              //    "<br /> keyCode :"+obj.keyCode
-	                   "</h3>", 
-	                html: true,
-					type: "warning",
-					showCancelButton: true,
-					closeOnConfirm: false,
-					confirmButtonText: "确认",
-					confirmButtonColor: "#44b549"
-					}, function() {
-						$.ajax({
-							url: "/voucher/consumemanage/commit.do",
-							type: "post",
-							data:{campusAdmin:obj.campusAdmin,campusId:obj.campusId,
-                                  openId:obj.openId,id:obj.id},
-							dataType:'json'
-						}).done(function(data) {
-							if(data==1)
-							 swal("操作成功!", "已成功消费商品！", "success");
-							else{
-								swal("操作失败", "确认消费失败!", "error");
-							}
-						}).error(function(data) {
-							swal("OMG", "未知错误,操作失败!", "error");
-						});
-					});
-		     
-		     if(obj.j>50){
-		    	 swal({   
-		 			title: "已过期",      
-		 			imageUrl: "sweetalert/images/thumbs-up.jpg",
-		 			html: true,
-		 			timer: 1000,   
-		 			showConfirmButton: false
-		 		});
-		     }
-		     
-		     $(".cancel").on("click",function(){
-		    	 $.post("/voucher/consumemanage/cancel.do", {
-		             campusAdmin:obj.campusAdmin,
-		             keyCode:obj.keyCode
-		    	}, function(text) {
-		    		
-		    	});
-		     });
-		     
-		    console.log(obj.campusAdmin+"  "+e.data);
-		  }, false);
-
-		  evtSource.addEventListener("open", function(e) {
-		    // Connection was opened.
-			 console.log("sse open");
-		  }, false);
-
-		  evtSource.addEventListener("error", function(e) {
-		  }, false);
-		  
-		  evtSource.addEventListener("close", function(e) {
-		      
-			  }, false);
-		  
-		} else {
-			 alert("您的浏览器不支持的EventSource,请更换浏览器");
-	}
-	
-</script>
--->  
-
 <link rel='stylesheet' type='text/css' href='css/bootstrap2.min.css'>
 <link rel="stylesheet"
 	href="assets/bootstrap-table/bootstrap.min.css"><!-- 必须注意引入顺序  -->
@@ -163,13 +73,13 @@ a:hover {
 							</a>
 					</figure><hr /></li>
 					
-					<!--  
-					<li><figure id="photo">
+				 
+					<li><figure id="charters">
 							<a href="javascript:void(0);" target="content"> <i
-								class='icon-user'></i> 图片管理&nbsp;&nbsp;
+								class='icon-user'></i> 承租人&nbsp;&nbsp;
 							</a>
 					</figure><hr /></li>
-					-->
+			
 					
 					<li><figure id="access">
 							<a href="javascript:void(0);" target="content"> <i

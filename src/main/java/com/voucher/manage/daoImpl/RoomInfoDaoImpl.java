@@ -984,15 +984,17 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		// TODO Auto-generated method stub
 		ChartInfo chartInfo=new ChartInfo();
 		
-		chartInfo.setLimit(1000);
-		chartInfo.setOffset(0);
-		chartInfo.setNotIn("GUID");
+		RoomInfo roomInfo=new RoomInfo();
+
+		String sql="SELECT * FROM "+Singleton.ROOMDATABASE+".[dbo].[ChartInfo] left join "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] on [ChartInfo].guid="+
+					"[RoomInfo].ChartGUID where ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置') "+
+					"AND IsHistory=0";
 		
-		String[] where={"IsHistory=","1"};
+		Object[] objects={chartInfo,roomInfo};
 		
-		chartInfo.setWhere(where);
+		List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,chartInfo);
 		
-		return SelectExe.get(this.getJdbcTemplate(), chartInfo);
+		return list;
 	}
 	
 }

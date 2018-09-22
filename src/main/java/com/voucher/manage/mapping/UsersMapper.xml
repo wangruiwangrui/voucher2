@@ -125,6 +125,66 @@
 		</if>		
 	</select>
 
+		<select id="getAllChartUser" resultMap="BaseResultMap" useCache="false">
+		select
+		users.id,users.open_id,
+		campus_id,subscribe,nickname, headimg_url,
+		language,province,groupid,country,
+		city,sex,remark,
+		usersinfo.name,users.place,
+		usersinfo.headship,usersinfo.email,	
+		total_amount,
+		subscribe_time,
+		address,phone,
+		charter,IDNo,hire_phone 
+		from users
+		left join usersinfo
+		on
+		users.open_id = usersinfo.open_id
+		left join user_asset
+		on
+		users.open_id = user_asset.open_id	
+		<where>
+			users.campus_id=#{campusId,jdbcType=INTEGER}
+			and user_asset.charter !="" 
+		<if test="search != null and search !='' ">
+				and (nickname like #{search,jdbcType=VARCHAR} or
+				usersinfo.phone like
+				#{search,jdbcType=VARCHAR} or usersinfo.address like #{search,jdbcType=VARCHAR})
+			</if>
+			<if test="sort != null">
+				order by ${sort}
+			</if>
+			<if test="sort != null and order != null">
+				${order}
+			</if>
+		</where>
+		<if test="offset != null and limit != null">
+			limit #{offset,jdbcType=INTEGER} ,
+			#{limit,jdbcType=INTEGER}
+		</if>		
+	</select>
+
+		 <select id="getAllChartCount" resultType="Integer" useCache="false">
+		select
+		count("*")
+		from
+		users left join usersinfo
+		on
+		users.open_id = usersinfo.open_id
+		left join user_asset
+		on
+		users.open_id = user_asset.open_id	
+		and user_asset.charter !="" 
+		<where>
+		   users.campus_id=#{campusId,jdbcType=INTEGER} 
+			<if test="search != null and search !='' ">
+				and (nickname like #{search,jdbcType=VARCHAR} or usersinfo.phone like
+				#{search,jdbcType=VARCHAR} or usersinfo.address like #{search,jdbcType=VARCHAR})
+			</if>
+		</where>
+	</select>
+
 	<select id="getWetchatAllUsers" resultMap="BaseResultMap" useCache="false">
 		select
 		id,users.open_id,

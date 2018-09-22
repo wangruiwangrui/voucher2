@@ -181,7 +181,8 @@ $.get("/voucher/oauth/test.do", {
 	 			valid2=false;
 	   	   }
 	     });
-	 });	 
+	 });
+	 /*
 	 $('.IDNo input').focus(function(){
 		 $('#w3').attr("class","weui_cell");
 	 });
@@ -202,7 +203,7 @@ $.get("/voucher/oauth/test.do", {
 	   	   }
 	     });
 	 });
-	 
+	 */
 	
 	 
 	 $.post('/voucher/mobile/assetRegister/userAssetByopenId.do', {
@@ -214,8 +215,10 @@ $.get("/voucher/oauth/test.do", {
 	    	   $("#name").attr("placeholder",obj.charter);
 	    	   if(obj.hirePhone!=null)
 	    	   $("#phone").attr("placeholder",obj.hirePhone);
+	    	   /*
 	    	   if(obj.idno!=null)
 	    	   $("#IDNo").attr("placeholder",obj.idno);
+	    	   */
 	       });
 	 
 	document.querySelector('#showTooltips').onclick =function(){
@@ -226,13 +229,12 @@ $.get("/voucher/oauth/test.do", {
 		}
 		var name=document.getElementById("name").value;
 		var phone=document.getElementById("phone").value;
-		var IDNo=document.getElementById("IDNo").value;
+		//var IDNo=document.getElementById("IDNo").value;
 		var regtlx=document.getElementById("regtlx").value;
 		if(campusId!=null&&typeof(campusId)!="undefined"){
 			$.post('/voucher/mobile/assetRegister/insert.do', {
 				name:name,
 				phone:phone,
-				IDNo:IDNo,
 				regtlx:regtlx
 			},function(data){		
               if(data==1){
@@ -245,8 +247,7 @@ $.get("/voucher/oauth/test.do", {
               }else if(data==3){
            	   $("#dialog2").attr("style","display:block"); 
    	 			  $(".weui_dialog_title").html("操作失败");
-              }
-			   refreshValidatecode();
+              }	
 			},"json");
 		}
 	 }

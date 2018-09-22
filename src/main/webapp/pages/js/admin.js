@@ -3,6 +3,11 @@ $('#auser').click(function(){
    $('#content').attr('src','pages/user.html');
  });
 
+$('#charters').click(function(){
+	   $('#content').load('pages/charters.html');
+	   $('#content').attr('src','pages/charters.html');
+	 });
+
 $('#wechatMenu').click(function(){
 	   $('#content').load('pages/managerPage.html');
 	   $('#content').attr('src','pages/managerPage.html');
@@ -18,6 +23,8 @@ $('#messageList').click(function(){
 	   $('#content').load('pages/messageList.html');
 	   $('#content').attr('src','pages/messageList.html');
 	 });
+
+
 
 /*
 $('#roomChange').click(function(){

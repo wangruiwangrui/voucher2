@@ -1,8 +1,12 @@
 package com.voucher.weixin.insweptcontroller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.activemq.filter.function.makeListFunction;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -19,25 +25,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.dao.RoomInfoDao;
+import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.daoModel.TTT.PreMessage;
 import com.voucher.manage.model.Sellers;
 import com.voucher.manage.model.User_Asset;
 import com.voucher.manage.model.Users;
 
 import com.voucher.manage.service.SellerService;
 import com.voucher.manage.service.UserService;
+import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.Constants;
 import com.voucher.manage.tools.IdcardUtil;
 import com.voucher.manage.tools.Md5;
+import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.verifycode.Captcha;
 import com.voucher.manage.tools.verifycode.SpecCaptcha;
 import com.voucher.sqlserver.context.Connect;
+
+import common.HttpClient;
 
 @Controller
 @RequestMapping("/mobile/assetRegister")
 public class AssetUserRegisterController {
 
-	private String verifyCode;
-	
 	private UserService userService;
 	
 	@Autowired
@@ -49,11 +60,14 @@ public class AssetUserRegisterController {
 	
 	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
 	
+	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
+	
 	/*
 	 * 生成验证码类
 	 */
 	@RequestMapping(value="getYzm",method=RequestMethod.GET)
 	public void getYzm(HttpServletResponse response,HttpServletRequest request){
+		String verifyCode;
 		try {
 			response.setHeader("Pragma", "No-cache");  
 	        response.setHeader("Cache-Control", "no-cache");  
@@ -66,6 +80,8 @@ public class AssetUserRegisterController {
 	        //生成图片  
 	        captcha.out(response.getOutputStream());
             verifyCode=captcha.text().toLowerCase();
+            HttpSession session = request.getSession();
+            session.setAttribute("verifyCode", verifyCode);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -157,10 +173,86 @@ public class AssetUserRegisterController {
 	}
 	
 	
+
+	//生成短信验证码
+	@RequestMapping(value="getValidate",method=RequestMethod.GET)
+	public @ResponseBody Integer getValidate(@RequestParam String phone,
+			@RequestParam String name,
+			HttpServletResponse response,HttpServletRequest request){
+			
+		PreMessage preMessage=new PreMessage();
+		
+		HttpClient httpClient = new HttpClient();
+
+		String requestUrl="http://utf8.api.smschinese.cn";
+		
+		Map searchMap=new HashMap<>();
+		
+		searchMap.put("Charter like ", "%"+name.trim()+"%");
+		
+		Map useMap=assetsDAO.getAllChartInfo(1, 0, "", "", searchMap);
+		
+		try{
+			List<ChartInfo> chartInfoList = (List<ChartInfo>) useMap.get("rows");
+			ChartInfo chartInfo = chartInfoList.get(0);
+			if(chartInfo==null){
+				return 2;
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return 2;
+		}
+		
+		String vcode = "";
+        for (int i = 0; i < 6; i++) {
+            vcode = vcode + (int)(Math.random() * 9);
+        }
+		
+		String Message="您正在进行手机验证,验证码是 : "+vcode+" , 5分钟内有效";
+		
+		System.out.println("phone="+phone);
+		System.out.println("Message="+Message);
+		
+		List<BasicNameValuePair> reqParam = new ArrayList<BasicNameValuePair>();
+		reqParam.add(new BasicNameValuePair("Uid", "泸州市国有公房经营管理有限公司"));
+		reqParam.add(new BasicNameValuePair("Key", "44d75966a2a94d79bb38"));
+		reqParam.add(new BasicNameValuePair("smsMob",phone));
+		reqParam.add(new BasicNameValuePair("smsText",Message));
+		String r=httpClient.doGet(requestUrl, reqParam);
+		
+		String GUID=UUID.randomUUID().toString();
+		
+		preMessage.setGUID(GUID);
+		preMessage.setPhoneWho(name);
+		preMessage.setPhone(phone);
+		preMessage.setMessage(Message);
+		preMessage.setOptDate(new Date());
+
+		int i = Integer.parseInt(r);
+		
+		System.out.println("i="+i);
+		
+		if (i > 0) {
+			LinkedHashMap<String, Map<String, Object>> linkMap=Singleton.getInstance().getRegisterMap();
+			Map<String, Object> map=new HashMap<>();
+			map.put("vcode", vcode);
+			map.put("startTime", new Date());
+			linkMap.put(phone, map);
+			preMessage.setState("发送成功");
+		} else {
+			preMessage.setState("发送失败");
+		}
+		
+		roomInfoDao.insertPreMessage(preMessage);
+		
+		return i;
+	}
+	
    @RequestMapping("insert")
    public @ResponseBody Integer
    insert(HttpServletRequest request,@RequestParam String name,
-		   @RequestParam String IDNo,@RequestParam String phone,
+		   @RequestParam String phone,
 		   @RequestParam String regtlx){
 	   
 	   HttpSession session = request.getSession();
@@ -177,46 +269,49 @@ public class AssetUserRegisterController {
 		   return 2;
 	   }
 	   
-	   regtlx=regtlx.toLowerCase();
 	   
-	   System.out.println("regtlx="+regtlx+"      verifyCode="+verifyCode);
-	   
-	   if(!regtlx.equals(verifyCode)){
-		   verifyCode=null;
-		   return 2;
-	   }
-	
-	   Date upTime=new Date();
-	   
-	   try {		
-               User_Asset user_asset=new User_Asset();
-               
-               user_asset.setOpenId(openId);
-               if(!name.equals(""))
-               user_asset.setCharter(name);
-               if(!IDNo.equals(""))
-               user_asset.setIdno(IDNo);
-               if(!phone.equals(""))
-			   user_asset.setHirePhone(phone);
-               
-				int testRepeat=userService.getCountUser_AssetByOpenId(openId);
-				
-				int type;
-				
-				if(testRepeat==1){
-					type=userService.updateUser_AssetByOpenId(user_asset);
-				}else{
-					type=userService.insertIntoUser_AssetByOpenId(user_asset);
-				}
-				
-				return type;
-			
-			}
-		    catch (Exception e) {
-		    	e.printStackTrace();
+		try {
 
-	            return 3;
-		    }
+			regtlx = regtlx.toLowerCase();
+			LinkedHashMap<String, Map<String, Object>> linkMap = Singleton.getInstance().getRegisterMap();
+			Map<String, Object> map = linkMap.get(phone);
+			MyTestUtil.print(map);
+			String verifyCode = (String) map.get("vcode");
+
+			System.out.println("regtlx=" + regtlx + "      verifyCode=" + verifyCode);
+
+			if (!regtlx.equals(verifyCode)) {
+				verifyCode = null;
+				return 2;
+			}
+
+			Date upTime = new Date();
+
+			User_Asset user_asset = new User_Asset();
+
+			user_asset.setOpenId(openId);
+			if (!name.equals(""))
+				user_asset.setCharter(name);
+			if (!phone.equals(""))
+				user_asset.setHirePhone(phone);
+
+			int testRepeat = userService.getCountUser_AssetByOpenId(openId);
+
+			int type;
+
+			if (testRepeat == 1) {
+				type = userService.updateUser_AssetByOpenId(user_asset);
+			} else {
+				type = userService.insertIntoUser_AssetByOpenId(user_asset);
+			}
+
+			return type;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return 3;
+		}
    }
    
    @RequestMapping("/userAssetByopenId")
