@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.druid.sql.ast.statement.SQLIfStatement.Else;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
@@ -395,6 +396,10 @@ public class AssetController {
 		
 		map.put("fileBytes", fileBytes);
 		
+		List hiddenCheckFileBytes=mobileDao.allRoomHiddenCheckImageByGUID(request, guid);
+		
+		map.put("hiddenCheckFileBytes", hiddenCheckFileBytes);
+		
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -432,11 +437,12 @@ public class AssetController {
 		Users users=userService.getUserByOnlyOpenId(openId);
 		
 		String Charter=users.getCharter();
-    	String IDNo=users.getIDNo();
-		
+		String phone=users.getHirePhone();
+    	
     	Map searchMap=new HashMap<>();
     	
-    	searchMap.put("[ChartInfo].IDNo=", IDNo);
+    	searchMap.put("ChartInfo.Phone = ", phone.trim());
+		searchMap.put("ChartInfo.Charter like ","%"+Charter.trim()+"%");
     	   	    	
     	Map map=roomInfoDao.getChartInfoByGUID(limit, offset, sort, order, searchMap);
     	
@@ -458,7 +464,7 @@ public class AssetController {
 		
 		Map searchMap=new HashMap<>();
     	
-    	searchMap.put("[HireList].ChartGUID=", hireGUID);
+    	searchMap.put("[HireList].HireGUID=", hireGUID);
     	   	    	
     	Map map=roomInfoDao.getHireListByGUID(limit, offset, sort, order, searchMap);
     	
@@ -833,26 +839,17 @@ public class AssetController {
 	}
 	
 	@RequestMapping("/getMessageNumber")
-	public @ResponseBody String getMessageNumber(){
-		
-		  HttpClient httpClient = new HttpClient();
-		
-		  String requestUrl="http://www.smschinese.cn/web_api/SMS";
-		  List<BasicNameValuePair> reqParam = new ArrayList<BasicNameValuePair>();
-		  reqParam.add(new BasicNameValuePair("Action", "SMS_Num"));
-		  reqParam.add(new BasicNameValuePair("Uid", "泸州市国有公房经营管理有限公司"));
-		  reqParam.add(new BasicNameValuePair("Key", "44d75966a2a94d79bb38"));
-		  String r=httpClient.doGet(requestUrl, reqParam);
-		  
-		  System.out.println("r="+r);
-		  
-		  return r;
+	public @ResponseBody Integer getMessageNumber(){
+
+		  WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
+		  		
+		  return wechatSendMessageController.getPhoneMessageNumber();
 		  
 	}
 	
 	@RequestMapping("/getPreMessage")
 	public @ResponseBody Map getPreMessage(@RequestParam Integer limit,@RequestParam Integer offset,
-			String sort,String order,
+			@RequestParam Integer time,String sort,String order,
 			String search){
 		
 		if(sort!=null&&!sort.equals("")){
@@ -868,10 +865,42 @@ public class AssetController {
 			order="desc";
 		}
 		
+		Calendar cal = Calendar.getInstance();  
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+		
+        if(time==2){
+        	cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        }
+        
+        String startTime = null;
+		
+		startTime=sdf.format(cal.getTime());
+        
+		cal = Calendar.getInstance();  
+
+        String endTime = null;
+		
+		endTime=sdf.format(cal.getTime());
+		
+		System.out.println("startTime="+startTime+"   endTime="+endTime);
+		
 		Map where=new HashMap<>();
 		
+		if(time==1){
+			where.put("convert(varchar(11),"+Singleton.ROOMDATABASE+
+					".[dbo].[PreMessage].OptDate ,120 ) = ", endTime);
+		}else if(time>1){
+			where.put("convert(varchar(11),"+Singleton.ROOMDATABASE+
+					".[dbo].[PreMessage].OptDate ,120 ) >= ", startTime);
+			where.put("convert(varchar(11),"+Singleton.ROOMDATABASE+
+					".[dbo].[PreMessage].OptDate ,120 ) <= ", endTime);
+		}
+		
 		if(search!=null&&!search.equals("")){
-			where.put("PhoneWho like ","%"+search+"%");
+			where.put(Singleton.ROOMDATABASE+
+					".[dbo].[PreMessage].PhoneWho like ","%"+search+"%");
 		}
 		
 		return roomInfoDao.findAllPreMessage(limit, offset, sort, order, where);
@@ -883,45 +912,19 @@ public class AssetController {
 		
 		String openId=( String ) request.getSession().getAttribute("openId");
 		
-		Users users=userService.getUserByOnlyOpenId(openId);
-		
-		PreMessage preMessage=new PreMessage();
-
-		preMessage.setOptAdd(users.getName());
-		preMessage.setMessage(Message);
-		
-		HttpClient httpClient = new HttpClient();
-
-		String requestUrl="http://utf8.api.smschinese.cn";
+		WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
 		
 		String arr[] = numbers.split("\\s+");//使用正则表达式将字符串分割 “\\s+”表示多个空格
 		int sum = 0;
 		String result = "";
 		for(String phone:arr)//遍历所有的字符串并转换成整数求和
-		{
-			 List<BasicNameValuePair> reqParam = new ArrayList<BasicNameValuePair>();
-			  reqParam.add(new BasicNameValuePair("Uid", "泸州市国有公房经营管理有限公司"));
-			  reqParam.add(new BasicNameValuePair("Key", "44d75966a2a94d79bb38"));
-			  reqParam.add(new BasicNameValuePair("smsMob",phone));
-			  reqParam.add(new BasicNameValuePair("smsText",Message));
-			  String r=httpClient.doGet(requestUrl, reqParam);
-			  
-			  String GUID=UUID.randomUUID().toString();
-				
-			  preMessage.setGUID(GUID);
-			  preMessage.setPhone(phone);
-			  preMessage.setOptDate(new Date());
-			  
-			  int i=Integer.parseInt(r);
+		{  
+			  int i=wechatSendMessageController.sendPhoneMessage(phone, Message,null,openId);
 			  if(i>0){
 				  result=result+" "+phone+"发送成功";
-				  preMessage.setState("发送成功");
 			  }else{
 				  result=result+" "+phone+"发送失败";
-				  preMessage.setState("发送失败");
-			  }
-			  
-			  roomInfoDao.insertPreMessage(preMessage);
+			  }			  			 
 		}
 		
 		return result;
@@ -934,17 +937,7 @@ public class AssetController {
 		String openId=( String ) request.getSession().getAttribute("openId");
 		
 		Users users=userService.getUserByOnlyOpenId(openId);
-			
-		PreMessage preMessage=new PreMessage();
-		
-
-		preMessage.setOptAdd(users.getName());
-		preMessage.setMessage(Message);
-		
-		HttpClient httpClient = new HttpClient();
-
-		String requestUrl="http://utf8.api.smschinese.cn";
-		
+				
 		List list=roomInfoDao.getAllChartInfo();
 
 		Iterator<ChartInfo> iterator=list.iterator();
@@ -956,33 +949,15 @@ public class AssetController {
 				@Override
 				public void run() {
 					
+					WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
+
 					while (iterator.hasNext()) {
 						ChartInfo chartInfo = iterator.next();
 						if (chartInfo.getPhone() != null || !chartInfo.getPhone().equals("")) {
 							// TODO Auto-generated method stub
-							List<BasicNameValuePair> reqParam = new ArrayList<BasicNameValuePair>();
-							reqParam.add(new BasicNameValuePair("Uid", "泸州市国有公房经营管理有限公司"));
-							reqParam.add(new BasicNameValuePair("Key", "44d75966a2a94d79bb38"));
-							reqParam.add(new BasicNameValuePair("smsMob", chartInfo.getPhone()));
-							reqParam.add(new BasicNameValuePair("smsText", Message));
-							String r = httpClient.doGet(requestUrl, reqParam);
-							
-							
-							String GUID=UUID.randomUUID().toString();
-							
-							preMessage.setGUID(GUID);
-							preMessage.setPhoneWho(chartInfo.getCharter());
-							preMessage.setPhone(chartInfo.getPhone());
-							preMessage.setOptDate(new Date());
 
-							int i = Integer.parseInt(r);
-							if (i > 0) {
-								preMessage.setState("发送成功");
-							} else {
-								preMessage.setState("发送失败");
-							}
-
-							roomInfoDao.insertPreMessage(preMessage);
+							int i = wechatSendMessageController.sendPhoneMessage(chartInfo.getPhone(), Message, chartInfo.getCharter(), openId);
+							
 						}
 					}
 					

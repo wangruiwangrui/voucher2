@@ -116,20 +116,25 @@
 
 	var bt01 = document.getElementById("bt01");
 
+	var isClick=true;
 
 	bt01.onclick = function() {
-		var name=document.getElementById("name").value;
-		var phone=document.getElementById("phone").value;
-		
+	var name=document.getElementById("name").value;
+	var phone=document.getElementById("phone").value;
+			
+	if(isClick){
+		isClick = false; //不能点击此按钮 
 		if(name==null||name==""){
 			$("#dialog2").attr("style","display:block"); 
 			$(".weui_dialog_title").html("请输入姓名");
+			isClick = true;   //返回后能够重新点击发送的按钮 
 			return false;
 		}
 		
 		if(phone==null||phone==""){
 			$("#dialog2").attr("style","display:block"); 
 			$(".weui_dialog_title").html("请输入手机号");
+			isClick = true;   //返回后能够重新点击发送的按钮 
 			return false;
 		}
 				
@@ -141,7 +146,7 @@
 
 		if (json == 1) {
 
-			bt01.disabled = true; //当点击后倒计时时候不能点击此按钮 
+			isClick = false; //当点击后倒计时时候不能点击此按钮 
 			var time = 60; //倒计时60秒 
 			var timer = setInterval(fun1, 1000); //设置定时器 
 			
@@ -151,7 +156,7 @@
 					bt01.innerHTML = time + "s后重新发送";
 				} else {
 					bt01.innerHTML = "重新发送验证码";
-					bt01.disabled = false; //倒计时结束能够重新点击发送的按钮 
+					isClick = true;   //倒计时结束能够重新点击发送的按钮 
 					clearTimeout(timer); //清除定时器 
 					time = 60; //设置循环重新开始条件 
 				}
@@ -165,7 +170,9 @@
 			$(".weui_dialog_title").html("验证码发送失败");
 		}
 
+
 	}
+  }
 
 
 </script>

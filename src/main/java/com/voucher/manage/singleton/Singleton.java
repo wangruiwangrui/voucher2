@@ -21,6 +21,12 @@ public class Singleton {
 	//资产管理系统图片目录2
 	public static final String ROOMINFOIMGPATH2	="E:\\GTJTSJ\\pasoft";
 	
+	//短信帐号
+	public static final String UID="泸州市国有公房经营管理有限公司";
+	
+	//短信密钥
+	public static final String KEY="44d75966a2a94d79bb38";
+	
 	private LinkedHashMap<String,Map<String, Object>> registerMap;
 	
     private Singleton (){    	

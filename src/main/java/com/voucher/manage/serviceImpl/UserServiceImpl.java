@@ -216,10 +216,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Users getUserByAssetCharter(String charter, String idNo) {
+	public Users getUserByAssetCharter(String charter, String phone) {
 		// TODO Auto-generated method stub
 		
-		return usersMapper.getUserByAssetCharter(charter, idNo);
+		return usersMapper.getUserByAssetCharter(charter, phone);
 		
 	}
 

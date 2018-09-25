@@ -27,7 +27,7 @@
 
 <body>
         <div class="header">
-            <h1 class="page-header">合同详情</h1>
+            <h1 class="page-header">租金详情</h1>
         </div>
 
 
@@ -45,7 +45,7 @@
                                     <thead>
                                     <tr>
                                         <th data-align="left" data-field="hire">金额</th>
-                                        <th data-align="left" data-field="state" data-sortable="true">状态</th>
+                                        <th data-align="left" data-field="state" data-sortable="true" data-formatter="statusFormatter">状态</th>
                                         <th data-align="left" data-field="hireDate" data-sortable="true">日期</th>                               
 
                                     </tr>
@@ -110,6 +110,26 @@
         
     }
     
+    function statusFormatter(value, row, index) {
+    	
+        var hiredate =row.hireDate;
+        
+        var date=actionDate(new Date());
+        
+        var compare=compareDate(hiredate,date);
+        
+    	if (value == "未交"){
+    		if(compare){
+    			return "<img src='../../../img/wrong.jpg' width='15px' height='15px'></i><font color='#FF0000'>已逾期</font>";
+    		}else{
+    			return "未交";
+    		}
+    	}else if (value == "已交"){
+    		return "<img src='../../../img/right.jpg' width='15px' height='15px'></i><font color='#3eb94e'>已交</font>";
+    	}
+    	
+    }
+    
     function actionTime(value, row, index){
         var date = new Date(value);
         Y = date.getFullYear() + '-';
@@ -121,6 +141,39 @@
         return Y+M+D+h+m+s;
     }
 
+    function actionDate(value, row, index){
+        var date = new Date(value);
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1);
+        D = date.getDate() + ' ';
+        h = date.getHours() + ':';
+        m = date.getMinutes() + ':';
+        s = date.getSeconds();
+        return Y+M;
+    }
+    
+    function compareDate(checkStartDate, checkEndDate) {      
+        var arys1= new Array();      
+        var arys2= new Array();      
+    if(checkStartDate != null && checkEndDate != null) {      
+        arys1=checkStartDate.split('-');   
+       // console.log(arys1[0],parseInt(arys1[1]-1));
+          var sdate=new Date(arys1[0],parseInt(arys1[1]-1));      
+        arys2=checkEndDate.split('-');      
+        var edate=new Date(arys2[0],parseInt(arys2[1]-1));   
+      //  console.log("checkStartDate="+checkStartDate+" checkEndDate ="+checkEndDate);
+      // console.log("sdate="+sdate+"edate="+edate);
+    if(sdate > edate) {      
+      //  console.log("日期开始时间大于结束时间");         
+        return false;         
+    }  else {   
+      //  console.log("通过");   
+        return true;      
+        }   
+        }      
+    }     
+
+    
 </script>
 </body>
 

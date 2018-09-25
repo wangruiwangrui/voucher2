@@ -142,6 +142,10 @@ public class RoomInfoController {
 			order="desc";
 		}
 		
+		if(search!=null&&!search.equals("")){
+			search="%"+search+"%";
+		}
+		
 		List list=weiXinService.getAllMessageList(campusId, limit, offset, sort, order, search);
 		
 		int count=weiXinService.getAllMessageCount(campusId, search);

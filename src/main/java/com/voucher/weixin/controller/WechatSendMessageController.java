@@ -1,28 +1,27 @@
 package com.voucher.weixin.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
@@ -30,40 +29,27 @@ import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.daoModel.TTT.PreMessage;
 import com.voucher.manage.mapper.MessageListMapper;
 import com.voucher.manage.mapper.UsersMapper;
 import com.voucher.manage.mapper.WeiXinMapper;
 import com.voucher.manage.model.MessageList;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.model.WeiXin;
-import com.voucher.manage.service.UserService;
-import com.voucher.manage.service.WeiXinService;
-import com.voucher.manage.serviceImpl.UserServiceImpl;
 import com.voucher.manage.singleton.Singleton;
+import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 import com.voucher.weixin.MessageTemplate.ChatTemplateProcessor;
 import com.voucher.weixin.MessageTemplate.TemplateData;
 import com.voucher.weixin.MessageTemplate.WxTemplate;
 
+import common.HttpClient;
+
 @Controller
 @RequestMapping("/mobile/WechatSendMessage")
 public class WechatSendMessageController {
 	Integer campusId=1;
-	
-	private WeiXinService weixinService;
 
-	private UserService userService;
-	
-	@Autowired
-	public void setAccessTokenService(WeiXinService weiXinService) {
-		this.weixinService=weiXinService;
-	}
-	
-	@Autowired
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-	
 	ApplicationContext applicationContext=new Connect().get();
 	
 	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
@@ -72,6 +58,18 @@ public class WechatSendMessageController {
 	
 	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
 	
+	ClassPathXmlApplicationContext mysqlApplicationContext = new ClassPathXmlApplicationContext(
+			"spring-mybatis2.xml");
+	DefaultSqlSessionFactory defaultSqlSessionFactory = (DefaultSqlSessionFactory) mysqlApplicationContext
+			.getBean("sqlSessionFactory");
+	SqlSession sqlSession = defaultSqlSessionFactory.openSession();
+	
+	private UsersMapper usersMapper = sqlSession.getMapper(UsersMapper.class);
+	
+	private WeiXinMapper weiXinMapper = sqlSession.getMapper(WeiXinMapper.class);
+		
+	private MessageListMapper messageListMapper = sqlSession.getMapper(MessageListMapper.class);
+	
 	@RequestMapping("/send")
 	public @ResponseBody String template(HttpServletRequest request,HttpServletResponse response,
 			@RequestParam String title,@RequestParam String reportUser,
@@ -79,10 +77,10 @@ public class WechatSendMessageController {
 		String accessToken;
     	WeiXin weixin;
 		
-		weixin=weixinService.getCampusById(campusId);   	
+		weixin=weiXinMapper.getCampus(campusId);   	
 		accessToken=weixin.getAccessToken();
     	
-		List userlist=userService.getUserByGuidance();
+		List userlist=usersMapper.getUserByGuidance();
 		
     	ChatTemplateProcessor wechatTemplate=new ChatTemplateProcessor();
     	
@@ -149,7 +147,7 @@ public class WechatSendMessageController {
     		messageList.setState(0);
     	}
     	
-    	weixinService.insertMessageList(messageList);
+    	messageListMapper.insertMessageList(messageList);
     	
        }
     	
@@ -157,8 +155,9 @@ public class WechatSendMessageController {
     	
 	}
 	
-	
-	public void send(@RequestParam String guid,@RequestParam String check_id){
+	//向承租人发隐患通知
+	public void send(@RequestParam String guid,@RequestParam String check_id,String userName,
+			String openId,HttpServletRequest request){
 
 		Integer campusId=1;
 		
@@ -178,104 +177,97 @@ public class WechatSendMessageController {
 		Map search2=new HashMap<>();
 		
 		search2.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID=", chartGUID);
+		search2.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].IsHistory=", "0");
 		
-		List<ChartInfo> list2=(List<ChartInfo>) roomInfoDao.getChartInfoByGUID(2, 0, null, null, search2).get("rows");
-		
-		try{
-		
-		if(list2!=null){
+		List<ChartInfo> list2=(List<ChartInfo>) roomInfoDao.getChartInfoByGUID(1, 0, null, null, search2).get("rows");
+
+		try {
 			
-			ChartInfo chartInfo=list2.get(0);
+			Map search3 = new HashMap<>();
+
+			search3.put("check_id=", check_id);
+
+			List<Hidden_Check> list3 = (List<Hidden_Check>) hiddenDAO.selectAllHidden(2, 0, null, null, search3)
+					.get("rows");
+
+			Hidden_Check hidden = list3.get(0);
 			
-			String charter=chartInfo.getCharter().trim();
-			String idNo=chartInfo.getIDNo().trim();
+			String Message="您承租的资产存在" + hidden.getCheck_circs() + "的隐患,请注意安全防范!";
 			
-			System.out.println("charter="+charter+"     idno="+idNo);
-			
-			ClassPathXmlApplicationContext applicationContext=new ClassPathXmlApplicationContext("spring-mybatis2.xml");
-			
-			DefaultSqlSessionFactory defaultSqlSessionFactory= (DefaultSqlSessionFactory) applicationContext.getBean("sqlSessionFactory");
+			if (list2 != null) {
 				
-			SqlSession sqlSession=defaultSqlSessionFactory.openSession();
-			
-			UsersMapper usersMapper=sqlSession.getMapper(UsersMapper.class);
-			
-			Users users=usersMapper.getUserByAssetCharter(charter, idNo);
-			
-			if(users==null)
-				return ;
-			
-			String openId=users.getOpenId();
-			
-			Map search3=new HashMap<>();
-			
-			search3.put("[Hidden_Check].check_id=", check_id);
-			
-			List<Hidden_Check> list3=(List<Hidden_Check>) hiddenDAO.selectAllHidden(2, 0, null, null, search3).get("rows");
-			
-			Hidden_Check hidden=list3.get(0);
-			
-			WeiXinMapper weiXinMapper=sqlSession.getMapper(WeiXinMapper.class);
-			
-			weixin=weiXinMapper.getCampus(campusId);   	
-			accessToken=weixin.getAccessToken();
-		
-			WxTemplate templateData=new WxTemplate();
-	    	templateData.setTouser(openId);
-	    	templateData.setTopcolor("#000000");
-	    	templateData.setTemplate_id("nBV50MfKYjpDlWqXJQAgjPZrW-925l45CYoxNaiMSI0");
-	    	Map<String,TemplateData> m = new HashMap<String,TemplateData>();
-	    	TemplateData first = new TemplateData();
-	    	first.setColor("#000000");
-	    	first.setValue("尊敬的承租人"+charter+" , 您好 : ");
-	    	m.put("first", first);
-	        	    	
-	    	TemplateData keyword1 = new TemplateData();
-	    	keyword1.setColor("#328392");
-	    	keyword1.setValue("");
-	    	m.put("keyword1", keyword1);
-	    	SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-	    	Date date=new Date();
-			String time=sdf.format(date);
-			TemplateData keyword2 = new TemplateData();
-			keyword2.setValue(time);
-			m.put("keyword2", keyword2);
-			TemplateData keyword3 = new TemplateData();
-			keyword3.setValue("限期检查");
-			m.put("keyword3", keyword3);
-	    	TemplateData keyword4 = new TemplateData();
-	    	keyword4.setColor("#328392");
-	    	keyword4.setValue("您承租的资产存在"+
-	    			hidden.getCheck_circs()+"的隐患,请注意安全防范!");
-	    	m.put("keyword4", keyword4);
-	    	templateData.setData(m);
-	    	
-	    	ChatTemplateProcessor wechatTemplate=new ChatTemplateProcessor();
-	    	
-	    	String s=wechatTemplate.sendTemplateMessage(accessToken, templateData);
-	    	
-	    	MessageList messageList=new MessageList();
-	    	
-	    	messageList.setCampusId(campusId);
-	    	messageList.setOpenId(openId);
-	    	messageList.setContext("您承租的资产存在"+
-	    			hidden.getCheck_circs()+"的隐患,请注意安全防范!");
-	    	messageList.setType("安全通知");
-	    	messageList.setSendTime(date);
-	    	if(s.equals("消息发送成功")){
-	    		messageList.setState(1);
-	    	}else{
-	    		messageList.setState(0);
-	    	}
-	    	
-	    	MessageListMapper messageListMapper=sqlSession.getMapper(MessageListMapper.class);
-	    	
-	    	messageListMapper.insertMessageList(messageList);
-		 }
-		}catch (Exception e) {
+				ChartInfo chartInfo = list2.get(0);
+				String charter = chartInfo.getCharter().trim();
+				String phone = chartInfo.getPhone().trim();
+				System.out.println("charter=" + charter + "     phone=" + phone);
+
+				sendPhoneMessage(chartInfo.getPhone(), "尊敬的承租人" + charter + " , 您好 : "+Message, charter, openId);
+								
+				Users users = usersMapper.getUserByAssetCharter(charter, phone);
+
+				// 向承租人发微信消息
+				if (users != null) {
+					
+					weixin = weiXinMapper.getCampus(campusId);
+					accessToken = weixin.getAccessToken();
+
+					WxTemplate templateData = new WxTemplate();
+					templateData.setTouser(openId);
+					templateData.setTopcolor("#000000");
+					templateData.setTemplate_id("nBV50MfKYjpDlWqXJQAgjPZrW-925l45CYoxNaiMSI0");
+					Map<String, TemplateData> m = new HashMap<String, TemplateData>();
+					TemplateData first = new TemplateData();
+					first.setColor("#000000");
+					first.setValue("尊敬的承租人" + charter + " , 您好 : ");
+					m.put("first", first);
+
+					TemplateData keyword1 = new TemplateData();
+					keyword1.setColor("#328392");
+					keyword1.setValue(userName);
+					m.put("keyword1", keyword1);
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date date = new Date();
+					String time = sdf.format(date);
+					TemplateData keyword2 = new TemplateData();
+					keyword2.setValue(time);
+					m.put("keyword2", keyword2);
+					TemplateData keyword3 = new TemplateData();
+					keyword3.setValue("安全巡查");
+					m.put("keyword3", keyword3);
+					TemplateData keyword4 = new TemplateData();
+					keyword4.setColor("#328392");
+					keyword4.setValue("您承租的资产存在" + hidden.getCheck_circs() + "的隐患,请注意安全防范!");
+					m.put("keyword4", keyword4);
+					templateData.setData(m);
+
+					ChatTemplateProcessor wechatTemplate = new ChatTemplateProcessor();
+
+					String s = wechatTemplate.sendTemplateMessage(accessToken, templateData);
+
+					MessageList messageList = new MessageList();
+
+					messageList.setCampusId(campusId);
+					messageList.setOpenId(openId);
+					messageList.setContext(Message);
+					messageList.setType("安全通知");
+					messageList.setSendTime(date);
+					if (s.equals("消息发送成功")) {
+						messageList.setState(1);
+					} else {
+						messageList.setState(0);
+					}
+
+					MessageListMapper messageListMapper = sqlSession.getMapper(MessageListMapper.class);
+
+					messageListMapper.insertMessageList(messageList);
+				}
+
+			}
+		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		
 	}
 	
 	
@@ -318,7 +310,7 @@ public class WechatSendMessageController {
 			String openId=users.getOpenId();
 			
 			if(currentOpenId!=null&&!currentOpenId.equals("")&&openId.equals(currentOpenId)){
-				continue;
+			 	continue;
 			}
 			
 			WeiXinMapper weiXinMapper=sqlSession.getMapper(WeiXinMapper.class);
@@ -399,5 +391,65 @@ public class WechatSendMessageController {
 		}
 	}
 	
+	
+	public Integer sendPhoneMessage(String phone,String Message,
+			String charter,String openId){
+		
+		Users users = usersMapper.getUserByOnlyOpenId(openId);
+
+		PreMessage preMessage = new PreMessage();
+
+		preMessage.setOptAdd(users.getName());
+		preMessage.setMessage(Message);
+
+		HttpClient httpClient = new HttpClient();
+
+		String requestUrl="http://utf8.api.smschinese.cn";
+
+		List<BasicNameValuePair> reqParam = new ArrayList<BasicNameValuePair>();
+		reqParam.add(new BasicNameValuePair("Uid", Singleton.UID));
+		reqParam.add(new BasicNameValuePair("Key", Singleton.KEY));
+		reqParam.add(new BasicNameValuePair("smsMob", phone));
+		reqParam.add(new BasicNameValuePair("smsText", Message));
+		String r = httpClient.doGet(requestUrl, reqParam);
+
+		String GUID = UUID.randomUUID().toString();
+
+		preMessage.setGUID(GUID);
+		preMessage.setPhone(phone);
+		preMessage.setOptDate(new Date());
+		
+		if(charter!=null&&!charter.equals(""))
+			preMessage.setPhoneWho(charter);
+		
+		int i=Integer.parseInt(r);
+		
+		if(i>0){
+			  preMessage.setState("发送成功");
+		  }else{
+			  preMessage.setState("发送失败");
+		  }
+		
+		roomInfoDao.insertPreMessage(preMessage);
+
+		return i;
+	}
+	
+	
+	public Integer getPhoneMessageNumber(){
+		
+		  HttpClient httpClient = new HttpClient();
+		
+		  String requestUrl="http://www.smschinese.cn/web_api/SMS";
+		  
+		  List<BasicNameValuePair> reqParam = new ArrayList<BasicNameValuePair>();
+		  reqParam.add(new BasicNameValuePair("Action", "SMS_Num"));
+		  reqParam.add(new BasicNameValuePair("Uid", Singleton.UID));
+		  reqParam.add(new BasicNameValuePair("Key", Singleton.KEY));
+		  String r=httpClient.doGet(requestUrl, reqParam);
+		  
+		  return Integer.parseInt(r);
+		  
+	}
 	
 }

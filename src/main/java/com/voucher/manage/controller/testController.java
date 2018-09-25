@@ -4,6 +4,7 @@ package com.voucher.manage.controller;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +26,7 @@ import com.voucher.manage.daoImpl.HiddenDAOImpl;
 import com.voucher.manage.redis.Orders;
 import com.voucher.manage.redis.RedisDao;
 import com.voucher.manage.service.AffairService;
+import com.voucher.manage.singleton.Singleton;
 import com.voucher.sqlserver.context.Connect;
 
 
@@ -176,4 +178,32 @@ public class testController {
 		
 	}
 	
+	
+	@RequestMapping("getAllVerify")
+	public @ResponseBody String getAllVerify(){
+		
+		LinkedHashMap<String, Map<String, Object>> map = Singleton.getInstance().getRegisterMap();
+
+		System.out.println("1:");
+
+		System.out.println("size:" + map.size());
+
+		String s = "";
+
+		for (Map.Entry<String, Map<String, Object>> m : map.entrySet()) {
+
+			map.containsKey(m.getKey());
+			System.out.println("key:" + m.getKey());
+			for (Map.Entry<String, Object> m2 : m.getValue().entrySet()) {
+				System.out.println("     currentSize : " + map.size() + "     key:  " + m2.getKey() + "     value:  "
+						+ m2.getValue());
+				s = s + "     currentSize : " + map.size() + "     key:  " + m2.getKey() + "     value:  "
+						+ m2.getValue();
+			}
+
+		}
+
+		return s;
+		
+	}
 }

@@ -308,22 +308,32 @@
   				 		guid:guid
   			  		},function(text){
   			  			if(text>0){
-  			  				//hidden.innerHTML=text+"处";
-  			  				var hidden1=document.createElement("div");
-  			  				hidden1.setAttribute("class","weui-cell__bd");
-  			  				var span1=document.createElement("span");
-  			  				span1.setAttribute("style","vertical-align: middle");
-  			  				span1.innerHTML="关联隐患";
-  			  				var span2=document.createElement("span");
-			  				span2.setAttribute("class","weui-badge");
-			  				span2.setAttribute("style","margin-left: 25px;");
-			  				span2.innerHTML=text;
-			  				hidden1.appendChild(span1);
-			  				hidden1.appendChild(span2);
-                    		$("#hidden").append(hidden1); 
-                    		var hidden2=document.createElement("div");
-                    		$("#hidden").append(hidden2); 
                     		
+                    		$.ajax({
+                                type: "POST",
+                                url: "/voucher/mobile/hidden/getRoomInfoHiddenItemDataByGUID.do",
+                                data: { "guid":guid},
+                                dataType: "json",
+                                error: function (request){
+                             	   console.log(request);
+                                },
+                                success: function (text) {
+          			  				//hidden.innerHTML=text+"处";
+          			  				var hidden1=document.createElement("div");
+          			  				hidden1.setAttribute("class","weui-cell__bd");
+          			  				var span1=document.createElement("span");
+          			  				span1.setAttribute("style","vertical-align: middle");
+          			  				span1.innerHTML="关联隐患";
+          			  				var span2=document.createElement("span");
+        			  				span2.setAttribute("style","margin-left: 25px;");
+        			  				span2.innerHTML="<font color='#FF0000'>"+text+"</font>";
+        			  				hidden1.appendChild(span1);
+        			  				hidden1.appendChild(span2);
+                            		$("#hidden").append(hidden1); 
+                            		var hidden2=document.createElement("div");
+                            		$("#hidden").append(hidden2); 
+                                }
+                             });
                     		
   			  			}else{
   			  				var hidden=document.createElement("div");

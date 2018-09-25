@@ -42,6 +42,7 @@ import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.verifycode.Captcha;
 import com.voucher.manage.tools.verifycode.SpecCaptcha;
 import com.voucher.sqlserver.context.Connect;
+import com.voucher.weixin.controller.WechatSendMessageController;
 
 import common.HttpClient;
 
@@ -177,10 +178,13 @@ public class AssetUserRegisterController {
 	//生成短信验证码
 	@RequestMapping(value="getValidate",method=RequestMethod.GET)
 	public @ResponseBody Integer getValidate(@RequestParam String phone,
-			@RequestParam String name,
-			HttpServletResponse response,HttpServletRequest request){
+			@RequestParam String name,HttpServletResponse response,HttpServletRequest request){
 			
 		PreMessage preMessage=new PreMessage();
+		
+		HttpSession session = request.getSession();
+		
+		String openId=session.getAttribute("openId").toString();
 		
 		HttpClient httpClient = new HttpClient();
 
@@ -214,22 +218,9 @@ public class AssetUserRegisterController {
 		System.out.println("phone="+phone);
 		System.out.println("Message="+Message);
 		
-		List<BasicNameValuePair> reqParam = new ArrayList<BasicNameValuePair>();
-		reqParam.add(new BasicNameValuePair("Uid", "泸州市国有公房经营管理有限公司"));
-		reqParam.add(new BasicNameValuePair("Key", "44d75966a2a94d79bb38"));
-		reqParam.add(new BasicNameValuePair("smsMob",phone));
-		reqParam.add(new BasicNameValuePair("smsText",Message));
-		String r=httpClient.doGet(requestUrl, reqParam);
-		
-		String GUID=UUID.randomUUID().toString();
-		
-		preMessage.setGUID(GUID);
-		preMessage.setPhoneWho(name);
-		preMessage.setPhone(phone);
-		preMessage.setMessage(Message);
-		preMessage.setOptDate(new Date());
+		WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
 
-		int i = Integer.parseInt(r);
+		int i = wechatSendMessageController.sendPhoneMessage(phone, Message,name,openId);
 		
 		System.out.println("i="+i);
 		
@@ -243,9 +234,7 @@ public class AssetUserRegisterController {
 		} else {
 			preMessage.setState("发送失败");
 		}
-		
-		roomInfoDao.insertPreMessage(preMessage);
-		
+				
 		return i;
 	}
 	
@@ -275,7 +264,11 @@ public class AssetUserRegisterController {
 			regtlx = regtlx.toLowerCase();
 			LinkedHashMap<String, Map<String, Object>> linkMap = Singleton.getInstance().getRegisterMap();
 			Map<String, Object> map = linkMap.get(phone);
-			MyTestUtil.print(map);
+			
+			if(map==null||map.isEmpty()){
+				return 3;
+			}
+			
 			String verifyCode = (String) map.get("vcode");
 
 			System.out.println("regtlx=" + regtlx + "      verifyCode=" + verifyCode);

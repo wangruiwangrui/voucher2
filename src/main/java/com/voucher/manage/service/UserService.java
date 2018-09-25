@@ -63,5 +63,5 @@ public interface UserService {
     
     Map selectAllAccess(Integer campusId,Integer limit, Integer offset, String sort,String order,String search,String page);
     
-    Users getUserByAssetCharter(String charter, String idNo);
+    Users getUserByAssetCharter(String charter, String phone);
 }

@@ -384,12 +384,13 @@ public class HiddenController {
 				roomInfo_Hidden_Item.setIs_other(1);
 			}
 			
-			isNull=jsonObject1.getInteger("fire_extinguisher")==null&&jsonObject1.getInteger("high_power")==null&&jsonObject1.getInteger("blow")==null&&
+			boolean isItemNull=jsonObject1.getInteger("fire_extinguisher")==null&&jsonObject1.getInteger("high_power")==null&&jsonObject1.getInteger("blow")==null&&
 					jsonObject1.getInteger("line_aging")==null&&jsonObject1.getInteger("incline")==null&&jsonObject1.getInteger("split")==null&&
 					jsonObject1.getInteger("down")==null&&jsonObject1.getInteger("break_off")==null&&jsonObject1.getInteger("destroy")==null&&
 					jsonObject1.getInteger("invalidation")==null&&jsonObject1.getInteger("flaw")==null&&jsonObject1.getInteger("cesspool")==null&&
-					jsonObject1.getInteger("coast")==null&&jsonObject1.getInteger("wall_up")==null&&
-					(jsonObject1.getString("other")==null||jsonObject1.getString("other").equals(""));
+					jsonObject1.getInteger("coast")==null&&jsonObject1.getInteger("wall_up")==null;
+			
+			isNull=	isItemNull&&(jsonObject1.getString("other")==null||jsonObject1.getString("other").equals(""));
 			
 			item=getInt(jsonObject1.getInteger("fire_extinguisher"))+getInt(jsonObject1.getInteger("high_power"))+getInt(jsonObject1.getInteger("blow"))+
 					getInt(jsonObject1.getInteger("line_aging"))+getInt(jsonObject1.getInteger("incline"))+getInt(jsonObject1.getInteger("split"))+
@@ -408,10 +409,10 @@ public class HiddenController {
 			if(checkItem.length()>2)
 				checkItem=checkItem.substring(0, checkItem.length()-2);
 			
-			if(check_circs!=null&&!check_circs.equals("")&&!isNull){
-				check_circs=check_circs+","+checkItem;
+			if(check_circs!=null&&!check_circs.equals("")&&!isItemNull){
+				check_circs=check_circs+" , "+checkItem;
 			}else{
-				check_circs=checkItem;
+				check_circs=checkItem.substring(0, checkItem.length()-2);
 			}
         }catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -521,16 +522,20 @@ public class HiddenController {
 								}
 								Users users=userService.getUserByOnlyOpenId(openId);
 								
-								String url="http://lzgfgs.com/voucher/mobile/assetAdmin/assetDetail.html?guid="+thisguid;
+								String url="http://nwx.wtsms.net/voucher/mobile/1/safety/hiddenAssetDetail.html?guid="+thisguid;
 								
 								SimpleDateFormat sdf  =   new  SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " ); 
 								String time = sdf.format(new Date());
 								
 								String currentOpenId=( String ) request.getSession().getAttribute("openId");
 								
-								new WechatSendMessageController().sendMessage(2, "nBV50MfKYjpDlWqXJQAgjPZrW-925l45CYoxNaiMSI0",
+								WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
+								
+								wechatSendMessageController.sendMessage(2, "nBV50MfKYjpDlWqXJQAgjPZrW-925l45CYoxNaiMSI0",
 										"整改通知", url, "隐患资产:"+name, users.getName(), time, "安全巡查", checkCircs,
 										"限期整改","", currentOpenId);
+								
+								wechatSendMessageController.send(guid, uuid.toString(), users.getName(), openId, request);
 								
 							}
 						};
@@ -1150,7 +1155,7 @@ public class HiddenController {
 			String other=hidden_Check_Item.getOther();
 			
 			if(other!=null&&!other.equals("")){
-				hiddenCircs=other+","+hiddenCircs;
+				hiddenCircs=other+" , "+hiddenCircs;
 			}
 			
 			if(hiddenCircs.length()>2)

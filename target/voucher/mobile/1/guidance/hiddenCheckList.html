@@ -418,7 +418,7 @@
         	                    	   var distance=null;
         	                    	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
         	                    	   if(obj.lng!=""&&obj.lat!=""){
-        	                    		   distance=getDistance(longitude,latitude,obj.lng,obj.lat);
+        	                    		   distance=getDistance(obj.lng,obj.lat);
         	                    	   }
         	                    	   var li_1=addDiv2(img,obj.address,"距离:"+distance,obj.roomProperty+"("+obj.buildArea+"M<sup>2</sup>)"
         	                    			   ,obj.region,"资产编号:"+obj.num);

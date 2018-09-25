@@ -35,6 +35,18 @@
         </div>
 
 
+				<div id="toolbar" class="btn-group">
+                    <button class="btn btn-default dropdown-toggle " type="button" data-toggle="dropdown">
+                                          <span id="day">全部时间</span><span class="caret"></span>
+                      <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" >
+                       <li role="presentation"><a role="menuitem" id="today" tabindex="-1" href="#">今天</a></li>
+                       <li role="presentation"><a role="menuitem" id="week" tabindex="-1" href="#">一周内</a></li>
+                       <li role="presentation"><a role="menuitem" id="month" tabindex="-1" href="#">一月内</a></li>
+                       <li role="presentation"><a role="menuitem" id="all" tabindex="-1" href="#">全部日期</a></li>
+                     </ul>
+                   </button>		 
+			</div>
+
         <div id="page-inner">
             <div class="row">
                 <div class="col-xs-12">
@@ -42,8 +54,8 @@
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table id="table" class="table " data-toggle="table" data-toolbar="#toolbar"
-                                       data-url="/voucher/mobile/asset/getPreMessage.do" data-search="true"
-                                       data-striped="true"
+                                       data-url="/voucher/mobile/asset/getPreMessage.do?order=desc&sort=OptDate&time=0" data-search="true"
+                                       data-striped="true" data-toolbar="#toolbar"
                                        data-show-refresh="false" data-show-toggle="false"
                                        data-side-pagination="server" data-pagination="true"
                                        data-show-columns="false" data-sort-order="desc">
@@ -53,7 +65,7 @@
                                         <th data-align="left" data-field="phone" >电话号码</th>
                                         <th data-align="left" data-field="message">内容</th>
                                         <th data-align="left" data-field="optAdd" >操作人</th>
-                                        <th data-align="left" data-field="state" >状态</th>
+                                        <th data-align="left" data-field="state" data-formatter="statusFormatter" data-sortable="true">状态</th>
                                         <th data-align="left" data-field="optDate"  data-formatter="actionTime" data-sortable="true">发送时间</th>
                                     </tr>
                                     </thead>
@@ -97,6 +109,43 @@
     }
 
 
+    var url="/voucher/mobile/asset/getPreMessage.do?order=desc&sort=OptDate&time=0";
+    
+    $("#today").on("click",function(){
+    	console.log("today");
+    	document.getElementById("day").innerText = "今天";
+    	var url="/voucher/mobile/asset/getPreMessage.do?order=desc&sort=OptDate&time=1";
+    	$(" #table").bootstrapTable('refresh',{
+			url : url
+		});
+    });
+
+    $("#week").on("click",function(){
+    	console.log("week");
+    	document.getElementById("day").innerText = "一周内";
+    	var url="/voucher/mobile/asset/getPreMessage.do?order=desc&sort=OptDate&time=2";
+    	$(" #table").bootstrapTable('refresh',{
+			url : url
+		});    	
+    });
+    
+    $("#month").on("click",function(){
+    	console.log("month");
+    	document.getElementById("day").innerText = "一月内";
+    	var url="/voucher/mobile/asset/getPreMessage.do?order=desc&sort=OptDate&time=3";
+    	$(" #table").bootstrapTable('refresh',{
+			url : url
+		});    	        
+    });
+    
+    $("#all").on("click",function(){
+    	console.log("today");
+    	document.getElementById("day").innerText = "全部时间";
+    	url="/voucher/mobile/asset/getPreMessage.do?order=desc&sort=OptDate&time=0";
+    	$(" #table").bootstrapTable('refresh',{
+			url : url
+		});    	        
+    });
     
     function actionReport(value, row, index) {
     		return [
@@ -122,6 +171,16 @@
             '<a  href="javascript:void(0)"  title="点击查看用户详情">',
             value,
             '</a>'].join('');
+    }
+    
+	function statusFormatter(value, row, index) {    	        
+    	if (value == "发送成功"){
+    		return "<font color='#3eb94e'>"+value+"</font>";
+    	}else if (value == "发送失败"){
+    		return "<font color='#FF0000'>"+value+"</font>";
+    	}else{
+    		return value;
+    	}    	
     }
     
     function actionTime(value, row, index){

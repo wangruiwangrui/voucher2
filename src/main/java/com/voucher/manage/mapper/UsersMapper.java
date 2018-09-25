@@ -96,5 +96,5 @@ public interface UsersMapper {
 
 	List<String> getUserByType(Map<String, Object> paramMap);
 	
-	Users getUserByAssetCharter(@Param(value="charter")String charter, @Param(value="idNo")String idNo);
+	Users getUserByAssetCharter(@Param(value="charter")String charter, @Param(value="phone")String phone);
 }

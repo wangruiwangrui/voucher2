@@ -276,7 +276,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	@Override
 	public Map<String, Object> selectAllHidden(Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
 		// TODO Auto-generated method stub
-        Hidden_Check_Date hidden=new Hidden_Check_Date();
+        Hidden_Check hidden=new Hidden_Check();
 		
 		hidden.setLimit(limit);
 		hidden.setOffset(offset);
@@ -803,9 +803,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 				}
 				
 				hidden_Check_Item3.setWhere(where4);
-				
-System.out.println("hidden_check_item3=");
-				
+								
 				MyTestUtil.print(hidden_Check_Item3);
 				
 				try{
@@ -829,11 +827,11 @@ System.out.println("hidden_check_item3=");
 						+ getInt(hidden_Check_Item5.getBreak_off()) + getInt(hidden_Check_Item5.getDestroy())
 						+ getInt(hidden_Check_Item5.getInvalidation()) + getInt(hidden_Check_Item5.getFlaw())
 						+ getInt(hidden_Check_Item5.getCesspool()) + getInt(hidden_Check_Item5.getCoast())
-						+ getInt(hidden_Check_Item5.getWall_up());
+						+ getInt(hidden_Check_Item5.getWall_up())+getInt(hidden_Check_Item5.getIs_other());
 				
 				System.out.println("isNeate ="+isNeate);
 				
-				if ((isNeate ==0 )&& (hidden_Check_Item.getOther() == null || hidden_Check_Item.getOther().equals(""))) {
+				if (hidden_Neaten.getProgress().equals("整改完成")&&isNeate ==0) {
 					hidden_Check2.setState("整改完成");
 				} else {
 					hidden_Check2.setState("整改中");

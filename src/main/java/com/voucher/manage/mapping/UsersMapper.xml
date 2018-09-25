@@ -109,6 +109,8 @@
 			users.campus_id=#{campusId,jdbcType=INTEGER}
 		<if test="search != null and search !='' ">
 				and (nickname like #{search,jdbcType=VARCHAR} or
+				usersinfo.name like
+				#{search,jdbcType=VARCHAR} or
 				usersinfo.phone like
 				#{search,jdbcType=VARCHAR} or usersinfo.address like #{search,jdbcType=VARCHAR})
 			</if>
@@ -150,7 +152,10 @@
 		<if test="search != null and search !='' ">
 				and (nickname like #{search,jdbcType=VARCHAR} or
 				usersinfo.phone like
-				#{search,jdbcType=VARCHAR} or usersinfo.address like #{search,jdbcType=VARCHAR})
+				#{search,jdbcType=VARCHAR} or
+				user_asset.charter like
+				#{search,jdbcType=VARCHAR} or
+				 usersinfo.address like #{search,jdbcType=VARCHAR})
 			</if>
 			<if test="sort != null">
 				order by ${sort}
@@ -180,7 +185,10 @@
 		   users.campus_id=#{campusId,jdbcType=INTEGER} 
 			<if test="search != null and search !='' ">
 				and (nickname like #{search,jdbcType=VARCHAR} or usersinfo.phone like
-				#{search,jdbcType=VARCHAR} or usersinfo.address like #{search,jdbcType=VARCHAR})
+				#{search,jdbcType=VARCHAR} or
+				user_asset.charter like
+				#{search,jdbcType=VARCHAR}
+				 or usersinfo.address like #{search,jdbcType=VARCHAR})
 			</if>
 		</where>
 	</select>
@@ -316,6 +324,8 @@
 		   users.campus_id=#{campusId,jdbcType=INTEGER} 
 			<if test="search != null and search !='' ">
 				and (nickname like #{search,jdbcType=VARCHAR} or usersinfo.phone like
+				#{search,jdbcType=VARCHAR} or
+				usersinfo.name like
 				#{search,jdbcType=VARCHAR} or usersinfo.address like #{search,jdbcType=VARCHAR})
 			</if>
 		</where>
@@ -517,7 +527,7 @@
 		<where>
 			user_asset.charter=#{charter,jdbcType=VARCHAR}
 			and
-			user_asset.IDNo=#{idNo,jdbcType=VARCHAR}
+			user_asset.hire_phone=#{phone,jdbcType=VARCHAR}
 	    </where>
 	</select>
     

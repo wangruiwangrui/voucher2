@@ -394,50 +394,6 @@
     		        	
     		        	location.href="CheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
     		        	
-    		        	/*
-    		        	var images = {
-    		        	   		 localId: [],
-    		        	    	serverId: []
-    		        	  	   };
-          	        	    		 
-    	    			 var imagename=prompt("请输入安全巡查图片的名称 : ","");
-    	    		 
-    	    			 if(imagename==null){
-    	    				 imagename="无标题";
-    	    			 }
-    	    		 
-    	    			 wx.chooseImage({
-    	        	     	 success: function (res) {
-    	        	       		 images.localId = res.localIds;
-    	        	        	console.log('已选择 ' + res.localIds.length + ' 张图片');
-    	        	        
-    	        	        	var i = 0, length = images.localId.length;
-    		        	    	images.serverId = [];
-    		        	    	
-    		        	   		 function upload() {
-    		        	     		 wx.uploadImage({
-    		        	       			 localId: images.localId[i].toString(),
-    		        	        		isShowProgressTips: images.localId[i].toString(),
-    		        	       			 success: function (res) {
-    		        	        		  i++;
-    		        	         		 console.log('已上传：' + i + '/' + length);
-    		        	        		//返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
-                                		  wxImgCallback(check_id,imagename,res.serverId);
-    		        	       		//   images.serverId.push(res.serverId);
-    		        	        		  if (i < length) {
-    		        	           			 upload();
-    		        	          				}
-    		        	       				 },
-    		        	       			 fail: function (res) {
-    		        	        			console.log(res);
-    		        	        			}	
-    		        	      			});
-    		        	   			 }
-    		        	   		 
-    		        	    		upload();   	        	     	
-    	        	     		 }
-    	        	   	 	});
-    		        	  */
     		       	 }
     		    });
     	  

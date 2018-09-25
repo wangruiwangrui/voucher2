@@ -245,6 +245,9 @@ $.get("/voucher/oauth/test.do", {
            	   $("#dialog2").attr("style","display:block"); 
   	 			  $(".weui_dialog_title").html("验证码错误");
               }else if(data==3){
+      			$("#dialog2").attr("style","display:block"); 
+    			$(".weui_dialog_title").html("验证码已过期");
+              }else{
            	   $("#dialog2").attr("style","display:block"); 
    	 			  $(".weui_dialog_title").html("操作失败");
               }	

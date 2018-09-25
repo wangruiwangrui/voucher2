@@ -210,6 +210,60 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 	
 	}
 	
+	
+	@Override
+	public List allRoomHiddenCheckImageByGUID(HttpServletRequest request, String guid) {
+		// TODO Auto-generated method stub
+		String pathRoot = System.getProperty("user.home");
+		
+		String filePath=pathRoot+Singleton.filePath;
+        
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
+				
+		String sql="SELECT "+    
+				"[Hidden_Check_Date].check_id, "+
+			    "[Hidden_Check_Date].URI, "+
+				"[Hidden_Check_Date].date, "+
+			    "[Hidden_Check_Date].NAME "+
+				"FROM "+
+				"[Hidden_Check_Date] left join [Hidden_Check] on [Hidden_Check_Date].check_id=[Hidden_Check].check_id "+  
+				"where [Hidden_Check].guid='"+guid+"'  "+
+				"AND ([Hidden_Check].state is null or [Hidden_Check].state ! = '整改完成')"+
+				"AND ([Hidden_Check_Date].TYPE ='png ' OR [Hidden_Check_Date].TYPE ='jpg ' OR [Hidden_Check_Date].TYPE ='jpeg ' OR [Hidden_Check_Date].TYPE ='gif ' ) "+
+				"order by [Hidden_Check_Date].date desc ";
+		
+		List hidden_Data_Joins=this.getJdbcTemplate().query(sql,new checkImageQueryRowMapper());
+		
+		List fileBytes=new ArrayList<>();
+		
+		Iterator<Hidden_Check_Date> iterator=hidden_Data_Joins.iterator();
+		
+		while (iterator.hasNext()) {
+			
+			Hidden_Check_Date hidden_Check_Date=iterator.next();
+			
+			try{			
+				String oldFile=filePath+"\\"+hidden_Check_Date.getURI();
+			
+				CopyFile.set(imgPath, oldFile, hidden_Check_Date.getURI());
+			
+				Map<String,String> map=new HashMap<>();
+				
+				map.put("name", hidden_Check_Date.getNAME());
+				map.put("uri", Singleton.filePath+"\\"+hidden_Check_Date.getURI());
+				map.put("compressUri", Singleton.filePath+"\\compressFile\\"+hidden_Check_Date.getURI());
+				map.put("date", hidden_Check_Date.getDate().toString());
+				
+				fileBytes.add(map);
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		
+		return fileBytes;
+	}
+	
 	@Override
 	public List allAssetCheckImageByGUID(HttpServletRequest request,Hidden_Check_Join hidden_Check_Join) {
 		// TODO Auto-generated method stub
@@ -661,5 +715,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 		
 		return count;
 	}
+
+
 	
 }

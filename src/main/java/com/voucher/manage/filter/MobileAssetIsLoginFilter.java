@@ -1,6 +1,11 @@
 package com.voucher.manage.filter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -88,23 +93,38 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        	System.out.println("MobileAssetIsLoginFilter openId ="+openId);
 		        	
 		        	String Charter=users.getCharter();
-		        	String IDNo=users.getIDNo();
+		        	String phone=users.getHirePhone();
 		        	
-		        	if(IDNo==null||IDNo.equals("")||Charter.equals("")) {
+		        	if(phone==null||phone.equals("")||Charter.equals("")) {
 		        		wrapper.sendRedirect(settingPath);
 			            return;
 		        	}else {
 		        		
 		        		try {
-		        			ChartInfo chartInfo=assetsDAO.getChartInfoByIDNo(IDNo);
+		        			Map searchMap=new HashMap<>();
+		        			searchMap.put("ChartInfo.Phone = ", phone.trim());
+		        			searchMap.put("ChartInfo.Charter like ","%"+Charter.trim()+"%");
+		        			
+		        			Map map=assetsDAO.getAllChartInfo(1, 0, null, null, searchMap);
+		        			
+		        			List list=(List) map.get("rows");
+		        			
+		        			ChartInfo chartInfo=(ChartInfo) list.get(0);
 			        		
+		        			final String REGEX = Charter.trim();
+
+		        			Pattern pattern = Pattern.compile(REGEX);
+
+		        			Matcher matcher = pattern.matcher(chartInfo.getCharter().trim());
+		        			
+		        			boolean isCharter=matcher.find();
+		        			
 			        		System.out.println("Charter="+Charter+"   chartInfo.getCharter()="+
-			        				chartInfo.getCharter()+"   "+Charter.trim().equals(chartInfo.getCharter().trim()));
-			        		System.out.println("IDNo="+IDNo+"   chartInfo.getIDNo()="+
-			        				chartInfo.getIDNo()+"   "+IDNo.equals(chartInfo.getIDNo()));
-			        		
-		        			if(Charter.trim().equals(chartInfo.getCharter().trim())&&
-		        					IDNo.trim().equals(chartInfo.getIDNo().trim())){
+			        				chartInfo.getCharter()+"   "+ isCharter);
+			        		System.out.println("phone="+phone+"   chartInfo.getPhone="+
+			        				chartInfo.getPhone()+"   "+phone.equals(chartInfo.getPhone().trim()));
+			        					        		
+		        			if(isCharter&&phone.trim().equals(chartInfo.getPhone().trim())){
 		        				chain.doFilter(request, response);
 		        			}else {
 		        				wrapper.sendRedirect(redirectPath);

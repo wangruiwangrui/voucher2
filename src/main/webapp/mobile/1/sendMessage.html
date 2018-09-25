@@ -189,6 +189,19 @@
 
 		var xhm;
 
+		var truthBeTold = window.confirm("向全部承租人发送短信,单击“确定”继续。单击“取消”停止。"); 
+ 		
+		if (truthBeTold) {
+			sendAll();
+		} else{
+			document.getElementById("sms_On").style.display = "";
+			document.getElementById("sms_On2").style.display = "";
+			document.getElementById("sms_Off").style.display = "none";
+		}
+
+	}
+
+	function sendAll() {
 		try {
 			xhm = new XMLHttpRequest();
 		} catch (e) {

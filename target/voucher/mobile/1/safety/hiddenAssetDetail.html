@@ -129,11 +129,9 @@
     <div id="allmap"></div>   
     
    <div class="weui-panel weui-panel_access">
-     <div class="weui-panel__hd">资产图片</div>  
+     <div class="weui-panel__hd">资产关联隐患图片</div>  
       <div id="img" class="weui-panel__bd">
        </div>    
-      <div class="weui-uploader__input-box" id="showPicker">
-       </div>
    </div>  
       
    <a href="javascript:;" id="check" class="weui-btn weui-btn_plain-primary">新建安全巡查记录</a>
@@ -201,7 +199,7 @@
         success: function (text) {
         	console.log(text);
      	   var obj=text.roomInfo;
-     	   var imgs=text.fileBytes;
+     	   var imgs=text.hiddenCheckFileBytes;
   
              	   var guid=obj.guid;
   
@@ -386,8 +384,9 @@
                       for(; i < imgs.length; i++){
                    	   
                    	  var data=imgs[i];
-                   	  var name=data.fileBelong;
+                   	  var name=data.name;
                    	  var uri=data.compressUri;
+                   	  var date=data.date;
                    	  var panel=document.createElement("div");
                    	  panel.setAttribute("class","weui-panel__bd");
                      	   var a=document.createElement("a");
@@ -408,10 +407,11 @@
                       	  	div2=document.createElement("div");
                       	  		div2.setAttribute("class","weui-media-box__bd");
                       	 		h4=document.createElement("h4");
-                      	 		h4.setAttribute("class","weui-media-box__title");                      	 		
+                      	 		h4.setAttribute("class","weui-media-box__title");   
+                      	 		h4.innerHTML=name;
                       	  	 	p=document.createElement("p");
                       	  	 	p.setAttribute("class","weui-media-box__desc");
-                      	  		p.innerHTML=name;
+                      	  		p.innerHTML=date;
                       	     div2.appendChild(h4);
                       	     div2.appendChild(p);
                       	   a.appendChild(div);
@@ -505,43 +505,7 @@
 		        	   		 localId: [],
 		        	    	serverId: []
 		        	  	   };
-      	     
-	    	 document.querySelector('#showPicker').onclick = function () {
-	    		 
-	    		 var imagename="无标题";
-	    		 
-	    		 wx.chooseImage({
-	        	      success: function (res) {
-	        	        images.localId = res.localIds;
-	        	        console.log('已选择 ' + res.localIds.length + ' 张图片');
-	        	        
-	        	        var i = 0, length = images.localId.length;
-		        	    images.serverId = [];
-		        	    function upload() {
-		        	      wx.uploadImage({
-		        	        localId: images.localId[i].toString(),
-		        	        isShowProgressTips: images.localId[i].toString(),
-		        	        success: function (res) {
-		        	          i++;
-		        	          console.log('已上传：' + i + '/' + length);
-		        	        //返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
-                              wxImgCallback(imagename,res.serverId);
-		        	       //   images.serverId.push(res.serverId);
-		        	          if (i < length) {
-		        	            upload();
-		        	          }
-		        	        },
-		        	        fail: function (res) {
-		        	        	console.log(res);
-		        	        }
-		        	      });
-		        	    }
-		        	    upload();
-	        	      }
-	        	    });
-	    		 
-	    		 
-	    	 }
+ 
       	     
 	      }
 	 });
