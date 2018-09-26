@@ -44,7 +44,8 @@ public interface HiddenDAO {
 	public Map<String, Object> selectAllHiddenCheckPosition(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search);
 	
-	public Integer insertHiddenCheck(Hidden_Check hidden_Check);
+	public Integer insertHiddenCheck(Hidden_Check hidden_Check, Hidden_Check_Item hidden_Check_Item, 
+			RoomInfo_Hidden_Item roomInfo_Hidden_Item, RoomInfoDao roomInfoDao);
 	
 	public Integer updateHiddenCheck(Hidden_Check hidden_Check);
 	

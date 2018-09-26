@@ -390,7 +390,7 @@ public class HiddenController {
 					jsonObject1.getInteger("invalidation")==null&&jsonObject1.getInteger("flaw")==null&&jsonObject1.getInteger("cesspool")==null&&
 					jsonObject1.getInteger("coast")==null&&jsonObject1.getInteger("wall_up")==null;
 			
-			isNull=	isItemNull&&(jsonObject1.getString("other")==null||jsonObject1.getString("other").equals(""));
+			isNull=	isItemNull&&(jsonObject1.getString("other")==null&&jsonObject1.getString("other").equals(""));
 			
 			item=getInt(jsonObject1.getInteger("fire_extinguisher"))+getInt(jsonObject1.getInteger("high_power"))+getInt(jsonObject1.getInteger("blow"))+
 					getInt(jsonObject1.getInteger("line_aging"))+getInt(jsonObject1.getInteger("incline"))+getInt(jsonObject1.getInteger("split"))+
@@ -411,8 +411,10 @@ public class HiddenController {
 			
 			if(check_circs!=null&&!check_circs.equals("")&&!isItemNull){
 				check_circs=check_circs+" , "+checkItem;
+			}else if((check_circs==null||check_circs.equals(""))&&!isItemNull){
+				check_circs=checkItem;
 			}else{
-				check_circs=checkItem.substring(0, checkItem.length()-2);
+				check_circs=check_circs.substring(0, check_circs.length()-2);
 			}
         }catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -445,7 +447,12 @@ public class HiddenController {
         hidden_Check.setRemark(remark);
         
         hidden_Check.setCheck_circs(check_circs);
-
+        
+        if (check_name != null && check_name.equals("异常")){
+        	
+        	hidden_Check.setState("未整改");
+        	
+        }
 		if(happenTime!=null&&!happenTime.equals("")){
 			try {
 				DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
@@ -463,145 +470,91 @@ public class HiddenController {
 		hidden_Check.setDate(date);
 		hidden_Check.setTerminal("Wechat");
 		
-		int i=hiddenDAO.insertHiddenCheck(hidden_Check);
-		
 		hidden_Check_Item.setCheck_id(uuid.toString());
 		
-		int state=hiddenDAO.insertIntoHidden_Check_Item(hidden_Check_Item);
-		
-		state=hiddenDAO.updateRoomInfo_Hidden_Item(roomInfo_Hidden_Item);
-		
-		if(i == 1){
+		int i=hiddenDAO.insertHiddenCheck(hidden_Check, hidden_Check_Item, roomInfo_Hidden_Item,roomInfoDao);
 
-			RoomInfo roomInfo = new RoomInfo();
-			
-			if (check_name != null && check_name.equals("异常")) {
-								
-				// 更新资产隐患字段
-				Map search = new HashMap<>();
+		map.put("status", i);
+		map.put("check_id", uuid.toString());
+		
+		final String checkCircs=hidden_Check.getCheck_circs();
 
-				search.put("[RoomInfo_Hidden_Item].guid = ", guid);
-				
-				try{
-					
-					RoomInfo_Hidden_Item roomInfo_Hidden_Item2=(RoomInfo_Hidden_Item) hiddenDAO.selectRoomInfo_Hidden_Item(1, 0, "", "", search).get(0);
-					int isHidden=getInt(roomInfo_Hidden_Item2.getFire_extinguisher())+
-								getInt(roomInfo_Hidden_Item2.getHigh_power())+
-								getInt(roomInfo_Hidden_Item2.getBlow())+
-								getInt(roomInfo_Hidden_Item2.getLine_aging())+
-								getInt(roomInfo_Hidden_Item2.getIncline())+
-								getInt(roomInfo_Hidden_Item2.getSplit())+
-								getInt(roomInfo_Hidden_Item2.getDown())+
-								getInt(roomInfo_Hidden_Item2.getBreak_off())+
-								getInt(roomInfo_Hidden_Item2.getDestroy())+
-								getInt(roomInfo_Hidden_Item2.getInvalidation())+
-								getInt(roomInfo_Hidden_Item2.getFlaw())+
-								getInt(roomInfo_Hidden_Item2.getCesspool())+
-								getInt(roomInfo_Hidden_Item2.getCoast())+
-								getInt(roomInfo_Hidden_Item2.getWall_up())+
-								getInt(roomInfo_Hidden_Item2.getIs_other());
-					
-					System.out.println("isHidden="+isHidden);
-					
-					roomInfo.setIsHidden(isHidden);
-					
-					final String checkCircs=check_circs;
-					
-					//发送隐患通知
-					try{						
-						Runnable r = new Runnable() {
-							@Override
-							public void run() {
-								String thisguid = null;
-								try {
-									thisguid = URLEncoder.encode(guid, "utf-8");
-									System.out.println("thisguid="+thisguid);
-								} catch (UnsupportedEncodingException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								Users users=userService.getUserByOnlyOpenId(openId);
+		if (check_name != null && check_name.equals("异常")) {
 								
-								String url="http://nwx.wtsms.net/voucher/mobile/1/safety/hiddenAssetDetail.html?guid="+thisguid;
-								
-								SimpleDateFormat sdf  =   new  SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " ); 
-								String time = sdf.format(new Date());
-								
-								String currentOpenId=( String ) request.getSession().getAttribute("openId");
-								
-								WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
-								
-								wechatSendMessageController.sendMessage(2, "nBV50MfKYjpDlWqXJQAgjPZrW-925l45CYoxNaiMSI0",
-										"整改通知", url, "隐患资产:"+name, users.getName(), time, "安全巡查", checkCircs,
-										"限期整改","", currentOpenId);
-								
-								wechatSendMessageController.send(guid, uuid.toString(), users.getName(), openId, request);
-								
+				//发送隐患通知
+				try{						
+					Runnable r = new Runnable() {
+						@Override
+						public void run() {
+							String thisguid = null;
+							try {
+								thisguid = URLEncoder.encode(guid, "utf-8");
+								System.out.println("thisguid="+thisguid);
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
-						};
-						
-						Thread t=new Thread(r);
-						t.start();
-					}catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
-					}
+							Users users=userService.getUserByOnlyOpenId(openId);
+							
+							String url="http://lzgfgs.com/voucher/mobile/1/safety/hiddenAssetDetail.html?guid="+thisguid;
+							
+							SimpleDateFormat sdf  =   new  SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " ); 
+							String time = sdf.format(new Date());
+							
+							String currentOpenId=( String ) request.getSession().getAttribute("openId");
+							
+							WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
+							
+							wechatSendMessageController.sendMessage(2, "nBV50MfKYjpDlWqXJQAgjPZrW-925l45CYoxNaiMSI0",
+									"整改通知", url, "隐患资产:"+name, users.getName(), time, "安全巡查", checkCircs,
+									"限期整改","", currentOpenId);
+							
+							wechatSendMessageController.send(guid, uuid.toString(), users.getName(), openId, request);
+							
+						}
+					};
 					
+					Thread t=new Thread(r);
+					t.start();
 				}catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
 				}
-				
-			}
+
 			
-			JSONObject jsonObject = JSONObject.parseObject(addComp);
-
-			String province = jsonObject.getString("province");
-			String city = jsonObject.getString("city");
-			String district = jsonObject.getString("district");
-			String street = jsonObject.getString("street");
-			String streetNumber = jsonObject.getString("streetNumber");
-
-			Position position = new Position();
-
-			position.setCheck_id(uuid.toString());
-			position.setLat(lat);
-			position.setLng(lng);
-
-			position.setProvince(province);
-			position.setCity(city);
-			position.setDistrict(district);
-			position.setStreet(streetNumber);
-			position.setStreet_number(streetNumber);
-			position.setDate(date);
-
-			assetsDAO.updatePosition(position);
-
-			map.put("status", i);
-			map.put("check_id", uuid.toString());
-
-			position.setCheck_id(null);
-			position.setGUID(guid);
-
-			boolean isUpdate = false; // 如果有位置就不更新
-
-			assetsDAO.updatePositionByRoomInfo(position, isUpdate); // 更新资产位置
-
-			// 更新安全巡查时间
-			
-			roomInfo.setHidden_check_date(date);
-
-			String[] where = { Singleton.ROOMDATABASE + ".[dbo].[RoomInfo].GUID = ", guid };
-
-			roomInfo.setWhere(where);
-
-			roomInfoDao.updateRoomInfo(roomInfo);
-			
-		}else{
-			map.put("status", 0);
-        	return map;
 		}
+
+		JSONObject jsonObject = JSONObject.parseObject(addComp);
+
+		String province = jsonObject.getString("province");
+		String city = jsonObject.getString("city");
+		String district = jsonObject.getString("district");
+		String street = jsonObject.getString("street");
+		String streetNumber = jsonObject.getString("streetNumber");
+
+		Position position = new Position();
+
+		position.setCheck_id(uuid.toString());
+		position.setLat(lat);
+		position.setLng(lng);
+
+		position.setProvince(province);
+		position.setCity(city);
+		position.setDistrict(district);
+		position.setStreet(streetNumber);
+		position.setStreet_number(streetNumber);
+		position.setDate(date);
+
+		assetsDAO.updatePosition(position);
+
+		position.setCheck_id(null);
+		position.setGUID(guid);
+
+		boolean isUpdate = false; // 如果有位置就不更新
+
+		assetsDAO.updatePositionByRoomInfo(position, isUpdate); // 更新资产位置
 		
+
 		return map;
 		
 	}

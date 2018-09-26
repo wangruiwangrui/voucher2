@@ -1,8 +1,10 @@
 package com.voucher.manage.daoImpl;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,11 +15,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
@@ -44,10 +49,13 @@ import com.voucher.manage.daoSQL.SelectSQL;
 import com.voucher.manage.daoSQL.SelectSqlJoinExe;
 import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.file.AbstractFileUpload;
+import com.voucher.manage.model.Users;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.FileConvect;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
+import com.voucher.sqlserver.context.Connect;
+import com.voucher.weixin.controller.WechatSendMessageController;
 
 public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 
@@ -646,9 +654,86 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	
 
 	@Override
-	public Integer insertHiddenCheck(Hidden_Check hidden_Check) {
+	public Integer insertHiddenCheck(Hidden_Check hidden_Check, Hidden_Check_Item hidden_Check_Item,
+			RoomInfo_Hidden_Item roomInfo_Hidden_Item, RoomInfoDao roomInfoDao) {
 		// TODO Auto-generated method stub
-		return InsertExe.get(this.getJdbcTemplate(), hidden_Check);
+		String check_name=hidden_Check.getCheck_name();
+		
+		int i=InsertExe.get(this.getJdbcTemplate(), hidden_Check);
+		
+		if (i > 0) {
+			i = insertIntoHidden_Check_Item(hidden_Check_Item);
+		} else {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+
+		if (i > 0) {
+			i = updateRoomInfo_Hidden_Item(roomInfo_Hidden_Item);
+		} else {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+		
+		if(i > 0){
+
+			RoomInfo roomInfo = new RoomInfo();
+			
+			if (check_name != null && check_name.equals("异常")) {
+								
+				// 更新资产隐患字段
+				Map search = new HashMap<>();
+
+				search.put("[RoomInfo_Hidden_Item].guid = ", hidden_Check.getGUID());
+				
+				try{
+					
+					RoomInfo_Hidden_Item roomInfo_Hidden_Item2=(RoomInfo_Hidden_Item)selectRoomInfo_Hidden_Item(1, 0, "", "", search).get(0);
+					
+					int isHidden=getInt(roomInfo_Hidden_Item2.getFire_extinguisher())+
+								getInt(roomInfo_Hidden_Item2.getHigh_power())+
+								getInt(roomInfo_Hidden_Item2.getBlow())+
+								getInt(roomInfo_Hidden_Item2.getLine_aging())+
+								getInt(roomInfo_Hidden_Item2.getIncline())+
+								getInt(roomInfo_Hidden_Item2.getSplit())+
+								getInt(roomInfo_Hidden_Item2.getDown())+
+								getInt(roomInfo_Hidden_Item2.getBreak_off())+
+								getInt(roomInfo_Hidden_Item2.getDestroy())+
+								getInt(roomInfo_Hidden_Item2.getInvalidation())+
+								getInt(roomInfo_Hidden_Item2.getFlaw())+
+								getInt(roomInfo_Hidden_Item2.getCesspool())+
+								getInt(roomInfo_Hidden_Item2.getCoast())+
+								getInt(roomInfo_Hidden_Item2.getWall_up())+
+								getInt(roomInfo_Hidden_Item2.getIs_other());
+					
+					System.out.println("isHidden="+isHidden);
+					
+					roomInfo.setIsHidden(isHidden);
+					
+
+					
+				}catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+				
+			}
+
+			// 更新安全巡查时间
+			
+			roomInfo.setHidden_check_date(hidden_Check.getDate());
+
+			String[] where = { Singleton.ROOMDATABASE + ".[dbo].[RoomInfo].GUID = ", hidden_Check.getGUID()};
+
+			roomInfo.setWhere(where);
+			
+			i=roomInfoDao.updateRoomInfo(roomInfo);
+			
+			if(i<1){
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			}
+		}
+		
+		return i;
+		
 	}
 
 

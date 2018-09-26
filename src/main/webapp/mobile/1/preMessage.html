@@ -27,6 +27,10 @@
     <script type="text/javascript" src="../../bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 
 	
+	<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	
+	<link rel="stylesheet" href="../../weixinUI/style/weui.css"/>
+	
 </head>
 
 <body>
@@ -35,15 +39,9 @@
         </div>
 
 
-				<div id="toolbar" class="btn-group">
-                    <button class="btn btn-default dropdown-toggle " type="button" data-toggle="dropdown">
+			<div id="toolbar" class="btn-group">
+                    <button  class="btn btn-default dropdown-toggle " type="button" data-toggle="dropdown">
                                           <span id="day">全部时间</span><span class="caret"></span>
-                      <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" >
-                       <li role="presentation"><a role="menuitem" id="today" tabindex="-1" href="#">今天</a></li>
-                       <li role="presentation"><a role="menuitem" id="week" tabindex="-1" href="#">一周内</a></li>
-                       <li role="presentation"><a role="menuitem" id="month" tabindex="-1" href="#">一月内</a></li>
-                       <li role="presentation"><a role="menuitem" id="all" tabindex="-1" href="#">全部日期</a></li>
-                     </ul>
                    </button>		 
 			</div>
 
@@ -54,7 +52,7 @@
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table id="table" class="table " data-toggle="table" data-toolbar="#toolbar"
-                                       data-url="/voucher/mobile/asset/getPreMessage.do?order=desc&time=0" data-search="true"
+                                       data-url="/voucher/mobile/asset/getPreMessage.do?time=0" data-search="true"
                                        data-striped="true" data-toolbar="#toolbar"
                                        data-show-refresh="false" data-show-toggle="false"
                                        data-side-pagination="server" data-pagination="true"
@@ -78,8 +76,22 @@
         </div>
 
 
+	<div id="actionSheet_wrap">
+		<div class="weui_mask_transition" id="mask" style="display: none;"></div>
+		<div class="weui_actionsheet" id="weui_actionsheet">
+			<div class="weui_actionsheet_menu">
+			           <div class="weui_actionsheet_cell" id="today" >今天</div>
+                       <div class="weui_actionsheet_cell" id="week" >一周内</div>
+                       <div class="weui_actionsheet_cell" id="month" >一月内</div>
+                       <div class="weui_actionsheet_cell" id="all" >全部日期</div>
+			</div>
+			<div class="weui_actionsheet_action">
+				<div class="weui_actionsheet_cell" id="actionsheet_cancel">取消</div>
+			</div>
+		</div>
+	</div>
 
-</div>
+	</div>
 <!-- 警告对话框 -->
 <div class="modal fade" id="alertdialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -109,12 +121,39 @@
     }
 
 
-    var url="/voucher/mobile/asset/getPreMessage.do?order=desc&time=0";
+    var url="/voucher/mobile/asset/getPreMessage.do?time=0";
+    
+	 $('#toolbar').on('click', function () {
+		 document.getElementById("actionSheet_wrap").style.display="block";
+         var mask = $('#mask');
+         var weuiActionsheet = $('#weui_actionsheet');
+         weuiActionsheet.addClass('weui_actionsheet_toggle');
+         mask.show()
+             .focus()//加focus是为了触发一次页面的重排(reflow or layout thrashing),使mask的transition动画得以正常触发
+             .addClass('weui_fade_toggle').one('click', function () {
+             hideActionSheet(weuiActionsheet, mask);
+         });
+         $('#actionsheet_cancel').one('click', function () {
+             hideActionSheet(weuiActionsheet, mask);
+         });
+         mask.unbind('transitionend').unbind('webkitTransitionEnd');
+
+         function hideActionSheet(weuiActionsheet, mask) {
+             weuiActionsheet.removeClass('weui_actionsheet_toggle');
+             mask.removeClass('weui_fade_toggle');
+             mask.on('transitionend', function () {
+                 mask.hide();
+             }).on('webkitTransitionEnd', function () {
+                 mask.hide();
+             })
+         }
+     });
     
     $("#today").on("click",function(){
     	console.log("today");
+    	document.getElementById("actionSheet_wrap").style.display="none";
     	document.getElementById("day").innerText = "今天";
-    	var url="/voucher/mobile/asset/getPreMessage.do?order=desc&time=1";
+    	var url="/voucher/mobile/asset/getPreMessage.do?time=1";
     	$(" #table").bootstrapTable('refresh',{
 			url : url
 		});
@@ -122,8 +161,9 @@
 
     $("#week").on("click",function(){
     	console.log("week");
+    	document.getElementById("actionSheet_wrap").style.display="none";
     	document.getElementById("day").innerText = "一周内";
-    	var url="/voucher/mobile/asset/getPreMessage.do?order=desc&time=2";
+    	var url="/voucher/mobile/asset/getPreMessage.do?time=2";
     	$(" #table").bootstrapTable('refresh',{
 			url : url
 		});    	
@@ -131,8 +171,9 @@
     
     $("#month").on("click",function(){
     	console.log("month");
+    	document.getElementById("actionSheet_wrap").style.display="none";
     	document.getElementById("day").innerText = "一月内";
-    	var url="/voucher/mobile/asset/getPreMessage.do?order=desc&time=3";
+    	var url="/voucher/mobile/asset/getPreMessage.do?time=3";
     	$(" #table").bootstrapTable('refresh',{
 			url : url
 		});    	        
@@ -140,8 +181,9 @@
     
     $("#all").on("click",function(){
     	console.log("today");
+    	document.getElementById("actionSheet_wrap").style.display="none";
     	document.getElementById("day").innerText = "全部时间";
-    	url="/voucher/mobile/asset/getPreMessage.do?order=desc&time=0";
+    	url="/voucher/mobile/asset/getPreMessage.do?time=0";
     	$(" #table").bootstrapTable('refresh',{
 			url : url
 		});    	        

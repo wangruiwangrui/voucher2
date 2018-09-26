@@ -857,6 +857,8 @@ public class AssetController {
 			sort="OptDate";
 		}
 		
+		System.out.println("order="+order);
+		
 		if(order!=null&&order.equals("asc")){
 			order="asc";
 		}else if(order!=null&&order.equals("desc")){
