@@ -217,7 +217,7 @@ public class AssetsImpl implements Assets{
 	@Override
 	public Integer insertHiddenCheck(Hidden_Check hidden_Check) {
 		// TODO Auto-generated method stub
-		return hiddenDAO.insertHiddenCheck(hidden_Check);
+		return 0;
 	}
 
 

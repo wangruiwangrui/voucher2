@@ -44,7 +44,6 @@ import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
 
-import voucher.UpdateSql;
 
 import com.voucher.manage.singleton.Singleton;
 

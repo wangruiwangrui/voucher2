@@ -52,7 +52,6 @@ import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TestDistance;
 import com.voucher.sqlserver.context.Connect;
 
-import voucher.Mybatis;
 
 @Controller
 @RequestMapping("/baiduMap")
