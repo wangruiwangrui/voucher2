@@ -35,6 +35,9 @@ public class Hidden_Neaten implements Serializable{
     @SQLString(name="check_circs")
 	private String check_circs;
     
+    @SQLString(name="neaten_item")
+	private String neaten_item;
+    
     @SQLString(name="neaten_instance")
 	private String neaten_instance;
 
@@ -59,6 +62,9 @@ public class Hidden_Neaten implements Serializable{
     @SQLString(name="progress")
 	private String progress;
 
+    @SQLInteger(name="is_repair")
+	private Integer is_repair;
+    
     @SQLString(name="RoomGUID")
 	private String RoomGUID;
     
@@ -107,6 +113,14 @@ public class Hidden_Neaten implements Serializable{
 		return exist;
 	}
 
+	public void setIs_repair(Integer is_repair){
+		this.is_repair = is_repair;
+	}
+
+	public Integer getIs_repair(){
+		return is_repair;
+	}
+	
 	public void setNeaten_id(String neaten_id){
 		this.neaten_id = neaten_id;
 	}
@@ -145,6 +159,14 @@ public class Hidden_Neaten implements Serializable{
 
 	public String getCheck_circs(){
 		return check_circs;
+	}
+	
+	public void setNeaten_item(String neaten_item){
+		this.neaten_item = neaten_item;
+	}
+
+	public String getNeaten_item(){
+		return neaten_item;
 	}
 	
 	public void setNeaten_instance(String neaten_instance){

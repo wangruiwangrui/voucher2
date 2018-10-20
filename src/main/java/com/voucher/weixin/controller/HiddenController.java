@@ -496,7 +496,7 @@ public class HiddenController {
 							}
 							Users users=userService.getUserByOnlyOpenId(openId);
 							
-							String url="http://lzgfgs.com/voucher/mobile/1/safety/hiddenAssetDetail.html?guid="+thisguid;
+							String url="http://lzgfgs.com/voucher/mobile/1/guidance/addNeatenInfoItem.html?guid="+thisguid;
 							
 							SimpleDateFormat sdf  =   new  SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " ); 
 							String time = sdf.format(new Date());
@@ -671,7 +671,8 @@ public class HiddenController {
 	@RequestMapping("/insertHiddenNeaten")
 	public @ResponseBody Map insertHiddenNeaten(
 			@RequestParam String guid,@RequestParam String progress,
-			@RequestParam String state,@RequestParam String address,
+			@RequestParam Integer is_repair,
+			@RequestParam String address,
 			@RequestParam String happenTime,@RequestParam String principal,
 			@RequestParam String remark,
 			@RequestParam String neaten_instance,@RequestParam String addComp,
@@ -725,6 +726,8 @@ public class HiddenController {
         hidden_Neaten.setUserName(userName);
         
         hidden_Neaten.setProgress(progress);
+        
+        hidden_Neaten.setIs_repair(0);
         
         String check_circs=getRoomInfoHiddenItemDataByGUID(guid);
         
@@ -809,9 +812,10 @@ public class HiddenController {
 					getItem("漏雨", hidden_Check_Item.getFlaw())+getItem("化粪池问题", hidden_Check_Item.getCesspool())+
 					getItem("山体滑坡", hidden_Check_Item.getCoast())+getItem("管道堵塞", hidden_Check_Item.getWall_up());
 			
-			if(checkItem.length()>2)
+			if(checkItem.length()>2){
 				checkItem=checkItem.substring(0, checkItem.length()-2);
-			
+				hidden_Neaten.setNeaten_item(checkItem);
+			}
        }catch (Exception e) {
 		// TODO: handle exception
     	   e.printStackTrace();
@@ -826,7 +830,7 @@ public class HiddenController {
        System.out.println("checkitme="+checkItem);
        
      
-        if(progress!=null&&progress.equals("整改完成")){
+        if(progress!=null&&is_repair==1&&progress.equals("整改完成")){
         	
         	if(auditingAmount==null||type==null||type.equals("")||amount==null||amountTotal==null||
         			area==null||availabeLength==null||availabeLength.equals("")||workUnit==null||workUnit.equals("")){
@@ -845,6 +849,7 @@ public class HiddenController {
         		return map;
         	}
 
+        	hidden_Neaten.setIs_repair(is_repair);
         	hidden_Neaten.setRoomGUID(guid);
         	hidden_Neaten.setType(type);
         	hidden_Neaten.setAmount(amount);

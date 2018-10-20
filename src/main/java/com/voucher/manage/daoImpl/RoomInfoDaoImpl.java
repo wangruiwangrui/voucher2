@@ -913,12 +913,12 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		roomInfo.setOrder(order);
 		
 		if(!search.isEmpty()){
-			search.put("progress=", "整改完成");
+			search.put("is_repair=", "1");
 		    String[] where=TransMapToString.get(search);
 		    roomInfo.setWhere(where);
 		    hidden_Neaten.setWhere(where);
 		}else{
-			String[] where={"progress=", "整改完成"};
+			String[] where={"is_repair=", "1"};
 			roomInfo.setWhere(where);
 		    hidden_Neaten.setWhere(where);
 		}

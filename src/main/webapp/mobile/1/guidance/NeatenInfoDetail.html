@@ -58,14 +58,13 @@
     	</div>
     </div>
  -->
-   
-    <div class="weui-cells weui-cells_form">
-      <div class="weui-cell">
-        <div class="weui-cell__hd"><label class="weui-label">隐患详情</label></div>
-          <div id="check_circs" class="weui-cell__bd">
-     	</div>
-      </div>
-    </div>
+      
+   	<div class="weui-cells weui-cells_form">
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">整改项目</label></div>
+			<div id="item" class="weui-cell__bd"></div>
+		</div>
+	</div>
    
    <div class="weui-cells weui-cells_form">
       <div class="weui-cell">
@@ -306,13 +305,17 @@
                   $("#progress").append(progress);
 
 				
-				var check_circs=document.createElement("span");
-				if(type=="整改中"){
-					check_circs.innerHTML="<font color='#FF0000'>"+obj.check_circs+"</font>";
-				}else{
-					check_circs.innerHTML="<font color='3366cc'>"+obj.check_circs+"</font>";
+				var item=document.createElement("span");
+				
+				if(obj.neaten_item!=null&&obj.neaten_item!=""){
+					if(type=="整改中"){
+						item.innerHTML="<font color='#FF0000'>"+obj.neaten_item+"</font>";
+					}else{
+						item.innerHTML="<font color='3366cc'>"+obj.neaten_item+"</font>";
+					}
 				}
-				$("#check_circs").append(check_circs);
+				
+				$("#item").append(item);
 				
 				 var time=actionTime(obj.happen_time);
 				 console.log(time);

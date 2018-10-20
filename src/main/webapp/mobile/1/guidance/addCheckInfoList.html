@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="../css/jquery-weui.css">
     <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
     <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="../../../js/jquery.min.js"></script>
+	<script src="../../../js/jquery-weui.js"></script>
 </head>
 <body>
 
@@ -73,8 +75,7 @@
           
         <!--<input type="file" style="/* visibility: hidden */" capture="camera" accept="image/*,video/*" name="" value="" >-->
 </body>
-<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<script src="../../../js/jquery-weui.js"></script>
+
 
 <script type="text/javascript" class="navbar js_show">
     $(function(){
@@ -320,7 +321,7 @@
                     	   var li_1=addDiv(img,obj.address,"距离:"+distance,obj.roomProperty+"("+obj.buildArea+"M<sup>2</sup>)"
                     			   ,obj.region,"资产编号:"+obj.num);
                            li_1.setAttribute("guid",guid);
-                    	   li_1.setAttribute("onclick","clickEvent(this);");
+                    	   li_1.setAttribute("onclick","clickEvent('"+guid+"');");
                     	   $("#ul").append(li_1);
                        }
                        offset=offset+i;
@@ -395,8 +396,10 @@
 			 return li;
           }
           
-          function clickEvent(that){
-        	  var guid=encodeURI($(that).attr("guid"));
+          function clickEvent(GUID){
+        	  //var guid=encodeURI($(that).attr("guid"));
+        	  console.log(GUID);
+        	  var guid=encodeURI(GUID);
         	  wx.getLocation({
       	         success : function(res) {
       	            // alert(JSON.stringify(res));

@@ -259,6 +259,9 @@ public class RoomInfo_Neaten_Join {
 	    @SQLString(name="check_circs")
 		private String check_circs;
 	    
+	    @SQLString(name="neaten_item")
+		private String neaten_item;
+	    
 	    @SQLString(name="neaten_instance")
 		private String neaten_instance;
 
@@ -963,6 +966,14 @@ public class RoomInfo_Neaten_Join {
 
 		public String getCheck_circs(){
 			return check_circs;
+		}
+		
+		public void setNeaten_item(String neaten_item){
+			this.neaten_item = neaten_item;
+		}
+
+		public String getNeaten_item(){
+			return neaten_item;
 		}
 		
 		public void setNeaten_instance(String neaten_instance){
