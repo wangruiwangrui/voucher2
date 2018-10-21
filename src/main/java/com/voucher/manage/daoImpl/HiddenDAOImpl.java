@@ -528,8 +528,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 							"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] "+
 						    "left join (SELECT "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,COUNT(*) as c "+
 						    "FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join Hidden_Check on RoomInfo.GUID=Hidden_Check.guid "+ 
-						    "where convert(varchar(11),"+Singleton.ROOMDATABASE+".[dbo].[Hidden_Check].date ,120 )>'"+startTime+"' "+
-							"and convert(varchar(11),"+Singleton.ROOMDATABASE+".[dbo].[Hidden_Check].date ,120 )<='"+endTime+"' "+
+						    "where convert(varchar(11),"+"[Hidden_Check].date ,120 )>'"+startTime+"' "+
+							"and convert(varchar(11),"+"[Hidden_Check].date ,120 )<='"+endTime+"' "+
 						    "and [Hidden_Check].exist=1 "+
 						    "group by "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID ) t1 "+
 						    "on t1.GUID=[YTRoomManage].[dbo].[RoomInfo].GUID " +
@@ -546,8 +546,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 						"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] "+						
 						"left join (SELECT TOP 1000 "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,COUNT(*) as c "+
 						"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join Hidden_Check on RoomInfo.GUID=Hidden_Check.guid "+ 
-						"where convert(varchar(11),"+Singleton.ROOMDATABASE+".[dbo].[Hidden_Check].date ,120 )>'"+startTime+"' "+
-					    "and convert(varchar(11),"+Singleton.ROOMDATABASE+".[dbo].[Hidden_Check].date ,120 )<='"+endTime+"' "+
+						"where convert(varchar(11),"+"[dbo].[Hidden_Check].date ,120 )>'"+startTime+"' "+
+					    "and convert(varchar(11),"+"[dbo].[Hidden_Check].date ,120 )<='"+endTime+"' "+
 					    "and [Hidden_Check].exist=1 "+
 						"group by "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID ) t1 "+
 						"on t1.GUID=[YTRoomManage].[dbo].[RoomInfo].GUID " +
@@ -975,6 +975,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 							roomInfo.setLimit(1);
 							roomInfo.setOffset(0);
 							roomInfo.setNotIn("GUID");
+							
+							System.out.print("[RoomInfo].guid="+hidden_Neaten.getGUID());
 							
 							String[] where3 = {"[RoomInfo].guid=", hidden_Neaten.getGUID()};
 

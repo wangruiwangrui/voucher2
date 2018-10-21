@@ -812,6 +812,9 @@ public class HiddenController {
 					getItem("漏雨", hidden_Check_Item.getFlaw())+getItem("化粪池问题", hidden_Check_Item.getCesspool())+
 					getItem("山体滑坡", hidden_Check_Item.getCoast())+getItem("管道堵塞", hidden_Check_Item.getWall_up());
 			
+			if (jsonObject1.getString("other") != null && !jsonObject1.getString("other").equals("")) 
+				checkItem=jsonObject1.getString("other")+" , "+checkItem;   //other项加1
+			
 			if(checkItem.length()>2){
 				checkItem=checkItem.substring(0, checkItem.length()-2);
 				hidden_Neaten.setNeaten_item(checkItem);

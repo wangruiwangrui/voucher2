@@ -914,11 +914,12 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		if(!search.isEmpty()){
 			search.put("is_repair=", "1");
+			search.put("exist=", "1");
 		    String[] where=TransMapToString.get(search);
 		    roomInfo.setWhere(where);
 		    hidden_Neaten.setWhere(where);
 		}else{
-			String[] where={"is_repair=", "1"};
+			String[] where={"is_repair=", "1","exist=", "1"};
 			roomInfo.setWhere(where);
 		    hidden_Neaten.setWhere(where);
 		}

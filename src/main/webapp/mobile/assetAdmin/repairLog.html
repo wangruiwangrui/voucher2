@@ -50,8 +50,8 @@
                                     <thead>
                                     <tr>
                                     	<th data-align="left" data-field="address" data-sortable="true">资产地址</th>
-                                        <th data-align="left" data-field="area" >面积</th>
-                                        <th data-align="left" data-field="type">类型</th>
+                                        <th data-align="left" data-field="area" >维修面积</th>
+                                        <th data-align="left" data-field="type">维修类型</th>
                                         <th data-align="left" data-field="date"  data-formatter="actionTime" data-sortable="true">维修时间</th>                                   
                                         <th data-align="left" data-field="amount" >送审金额</th>                             
                                         <th data-align="left" data-field="amountTotal" >审减金额</th> 
@@ -137,7 +137,7 @@
         h = date.getHours() + ':';
         m = date.getMinutes() + ':';
         s = date.getSeconds();
-        return Y+M+D;
+        return Y+M+D+h+m+s;
     }
 
 </script>

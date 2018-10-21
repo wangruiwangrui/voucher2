@@ -527,7 +527,7 @@
 
            	   var distance=null;
 
-           	/* 
+           	 
            	if(obj.lng!=""&&obj.lat!=""){  
            		var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
   	    		var pointB = new BMap.Point(obj.lng,obj.lat);  // 创建点坐标B--江北区
@@ -540,7 +540,7 @@
   	    			});
   	    		}
            	}
- 			*/
+ 			
            	  var address=document.createElement("span");
            	  address.innerHTML=obj.address;
               $("#address").append(address);
@@ -824,6 +824,9 @@
     });
     
    $("#save").on("click",function(){
+	   
+	   document.getElementById("save").disabled=true; 
+	   
 	   var fire_extinguisher=getRadioValue("fire_extinguisher");
 	   var high_power=getRadioValue("high_power");
 	   var blow=getRadioValue("blow");
@@ -900,6 +903,9 @@
 		    	lat:latitude
 		    }, function(data){
 	        	var obj = $.parseJSON(data);
+	        	
+	        	document.getElementById("save").disabled=false; 
+	        	
 		    	if (obj.status == 0) {
 		        	alert("新建"+name+"安全巡查记录失败!");
 		        	console.log(obj.status);

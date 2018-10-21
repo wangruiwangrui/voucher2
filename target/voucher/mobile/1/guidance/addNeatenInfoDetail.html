@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>新建隐患整改</title>
+    <title>新建隐患整改(需要维修)</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -217,6 +217,8 @@
   
   var longitude=getQueryString("longitude");
   var latitude=getQueryString("latitude");
+  
+  var is_repair=1;
   
   console.log(item);
   
@@ -520,11 +522,17 @@
   			text=text+"管道堵塞,";
   			checkItem.wall_up=1;
   		}else if(item[i]!=""){
-	    	text=text+"其它隐患,";
-	    	checkItem.other=item[i];
+  			var gid=encodeURI(guid);
+  			var xhm=new XMLHttpRequest();
+   	    	xhm.open("GET","/voucher/mobile/hidden/getRoomInfoHiddenItemByGUID.do?guid="+gid,false);
+   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+   	    	xhm.send();
+   	    	var ticket=JSON.parse(xhm.responseText);
+  			text=ticket.other+","+text;
+	    	checkItem.other=ticket.other;
 	    }
 	}
-	text="<font color='#FF0000'>"+text.substr(0, text.length - 1);  +"</font>";
+	text="<font color='#3366FF'>"+text.substr(0, text.length - 1);  +"</font>";
 	$("#item").append(text);
 	
 	function actionTime(value){
@@ -602,7 +610,10 @@
         			error="审定金额不能为空!";
         		}else if(availabeLength==null||availabeLength==""){
         			error="质保期不能为空!";
-        		}
+        		}else if(neaten_instance==null||neaten_instance==""){    				
+        			error="请填写整改详情说明!";
+    			}
+            	
         		
         		if(error!=""){
         			
@@ -620,7 +631,7 @@
     		    	happenTime:happenTime,
     		    	principal:principal,
     		    	progress:progress,
-    		    	state:progress,
+    		    	is_repair:is_repair,
     		    	remark:remark,
     		    	neaten_instance:neaten_instance,
     		    	addComp:addComp1,

@@ -1330,7 +1330,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		Hidden_Check hidden=new Hidden_Check();
 		
-		String[] where={"[Hidden_Check].exist !="," 0 ","[Hidden_Check].check_name =","异常"};
+		String[] where={"[Hidden_Check].exist !="," 0 ","[Hidden_Check].check_name =","异常",
+						"[Hidden_Check].state =", "未整改"};
 		hidden.setWhere(where);
 		
 		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
@@ -1386,7 +1387,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		Hidden_Check hidden=new Hidden_Check();
 		
-		String[] where={"[Hidden_Check].exist !="," 0 ","[Hidden_Check].state >","整改完成"};
+		String[] where={"[Hidden_Check].exist !="," 0 ","[Hidden_Check].state =","整改完成"};
 		hidden.setWhere(where);
 		
 		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");

@@ -310,7 +310,7 @@ public class WechatSendMessageController {
 			String openId=users.getOpenId();
 			
 			if(currentOpenId!=null&&!currentOpenId.equals("")&&openId.equals(currentOpenId)){
-			 	//continue; //跳过本人的微信号
+			 	continue; //跳过本人的微信号
 			}
 			
 			WeiXinMapper weiXinMapper=sqlSession.getMapper(WeiXinMapper.class);
