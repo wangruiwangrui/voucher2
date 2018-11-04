@@ -100,6 +100,7 @@
 	  	EventUtil.addHandler(window,"pageshow",function(){
 	  	  offset=0;
 	  	  $("#ul").children('li').remove();
+	  	  console.log("pageshow");
 		  loadlist();
 	  });
 	  
@@ -238,7 +239,92 @@
         	     
  	      }
  	 });
+   
+      var longitude=getQueryString("longitude");
+	  var latitude=getQueryString("latitude");
       
+      $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+        	 longitude:longitude,
+        	 latitude:latitude               	 
+         },function(text){
+        	 var obj = $.parseJSON(text);
+        	 var result=obj.result;
+        	var latitude=result[0].y;
+        	var longitude=result[0].x;
+
+
+         var html = "";
+         $.ajax({
+             type: "get",
+             url: url,
+             data: { "limit" : limit, 
+                     "offset" : offset,
+                     "search" : search,
+                     "lng" : longitude,
+                     "lat" : latitude,
+                     "distance":100000
+                     },
+             dataType: "json",
+             error: function (request){
+          	   console.log(request);
+                 $(".weui-loadmore").hide();         
+                 html += "网络连接故障";
+                 $("#ul").append(html);
+             },
+             success: function (text) {              	   
+          	   var data=text.rows;
+          	   var count=text.total;
+          	   var imgs=text.fileBytes;
+          	   console.log(data);
+          	   console.log(imgs);
+          	   
+          	   var span=document.createElement("span");
+                 span.innerHTML=" "+count+"条记录";
+                 var count = document.getElementById('count'); 
+                 $("#count").children().remove();
+                 count.appendChild(span);
+          	   
+                 if (data.length > 0) {
+              	   var i = 0;
+                     for(; i < data.length; i++){
+                  	   var obj = data[i];
+                  	   var guid=obj.guid;
+                  	   
+                  	   var img=null;
+                  	   if(imgs[guid]!=null){
+                  		   img="/voucher/"+imgs[guid];
+                  	   }
+      
+                  	   var time="时间:"+actionTime(obj.date);
+                  	   var distance=null;
+                  	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+                  	   if(obj.lng!=""&&obj.lat!=""){
+                  	   	  distance=getDistance(longitude,latitude,obj.lng,obj.lat);
+                  	   }
+                  	   var li_1=addDiv(img,obj.address,"距离:"+distance,obj.roomProperty+"("+obj.buildArea+"M<sup>2</sup>)"
+                  			   ,obj.region,"资产编号:"+obj.num);
+                         li_1.setAttribute("guid",guid);
+                  	   li_1.setAttribute("onclick","clickEvent('"+guid+"');");
+                  	   $("#ul").append(li_1);
+                     }
+                     offset=offset+i;
+                     if(i<limit){
+                  	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+                         $("#ul").append(html);
+                  	   loading = true;
+                     }
+                 }else {
+              	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+                     $("#ul").append(html);
+              	   loading = true;
+                 }
+                 $(".weui-loadmore").hide();
+             }
+         });
+        	
+        	
+     });    
+   
    // =======加载数据loadlist();
       function loadlist() {
     	  
@@ -259,85 +345,86 @@
 	                    },function(text){
 	                   	 var obj = $.parseJSON(text);
 	                   	 var result=obj.result;
-	                   	 var lat=result[0].y;
-	                   	 var lng=result[0].x;
-	                   	 var url  ="addCheckInfoList.html?latitude="+lat+"&longitude="+lng;
-	                     window.history.pushState({},0,url); 
+	                   	var latitude=result[0].y;
+	                   	var longitude=result[0].x;
+
+
+	                    var html = "";
+	                    $.ajax({
+	                        type: "get",
+	                        url: url,
+	                        data: { "limit" : limit, 
+	                                "offset" : offset,
+	                                "search" : search,
+	                                "lng" : longitude,
+	                                "lat" : latitude,
+	                                "distance":100000
+	                                },
+	                        dataType: "json",
+	                        error: function (request){
+	                     	   console.log(request);
+	                            $(".weui-loadmore").hide();         
+	                            html += "网络连接故障";
+	                            $("#ul").append(html);
+	                        },
+	                        success: function (text) {              	   
+	                     	   var data=text.rows;
+	                     	   var count=text.total;
+	                     	   var imgs=text.fileBytes;
+	                     	   console.log(data);
+	                     	   console.log(imgs);
+	                     	   
+	                     	   var span=document.createElement("span");
+	                            span.innerHTML=" "+count+"条记录";
+	                            var count = document.getElementById('count'); 
+	                            $("#count").children().remove();
+	                            count.appendChild(span);
+	                     	   
+	                            if (data.length > 0) {
+	                         	   var i = 0;
+	                                for(; i < data.length; i++){
+	                             	   var obj = data[i];
+	                             	   var guid=obj.guid;
+	                             	   
+	                             	   var img=null;
+	                             	   if(imgs[guid]!=null){
+	                             		   img="/voucher/"+imgs[guid];
+	                             	   }
+	                 
+	                             	   var time="时间:"+actionTime(obj.date);
+	                             	   var distance=null;
+	                             	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+	                             	   if(obj.lng!=""&&obj.lat!=""){
+	                             	   	  distance=getDistance(longitude,latitude,obj.lng,obj.lat);
+	                             	   }
+	                             	   var li_1=addDiv(img,obj.address,"距离:"+distance,obj.roomProperty+"("+obj.buildArea+"M<sup>2</sup>)"
+	                             			   ,obj.region,"资产编号:"+obj.num);
+	                                    li_1.setAttribute("guid",guid);
+	                             	   li_1.setAttribute("onclick","clickEvent('"+guid+"');");
+	                             	   $("#ul").append(li_1);
+	                                }
+	                                offset=offset+i;
+	                                if(i<limit){
+	                             	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+	                                    $("#ul").append(html);
+	                             	   loading = true;
+	                                }
+	                            }else {
+	                         	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+	                                $("#ul").append(html);
+	                         	   loading = true;
+	                            }
+	                            $(".weui-loadmore").hide();
+	                        }
+	                    });
+	                   	
+	                   	
 	                });                  
               }
            });
     	  
-    	  var longitude=getQueryString("longitude");
-    	  var latitude=getQueryString("latitude");
-    	  
-           var html = "";
-           $.ajax({
-               type: "get",
-               url: url,
-               data: { "limit" : limit, 
-                       "offset" : offset,
-                       "search" : search,
-                       "lng" : longitude,
-                       "lat" : latitude,
-                       "distance":100000
-                       },
-               dataType: "json",
-               error: function (request){
-            	   console.log(request);
-                   $(".weui-loadmore").hide();         
-                   html += "网络连接故障";
-                   $("#ul").append(html);
-               },
-               success: function (text) {              	   
-            	   var data=text.rows;
-            	   var count=text.total;
-            	   var imgs=text.fileBytes;
-            	   console.log(data);
-            	   console.log(imgs);
-            	   
-            	   var span=document.createElement("span");
-                   span.innerHTML=" "+count+"条记录";
-                   var count = document.getElementById('count'); 
-                   $("#count").children().remove();
-                   count.appendChild(span);
-            	   
-                   if (data.length > 0) {
-                	   var i = 0;
-                       for(; i < data.length; i++){
-                    	   var obj = data[i];
-                    	   var guid=obj.guid;
-                    	   
-                    	   var img=null;
-                    	   if(imgs[guid]!=null){
-                    		   img="/voucher/"+imgs[guid];
-                    	   }
-        
-                    	   var time="时间:"+actionTime(obj.date);
-                    	   var distance=null;
-                    	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
-                    	   if(obj.lng!=""&&obj.lat!=""){
-                    	   	  distance=getDistance(longitude,latitude,obj.lng,obj.lat);
-                    	   }
-                    	   var li_1=addDiv(img,obj.address,"距离:"+distance,obj.roomProperty+"("+obj.buildArea+"M<sup>2</sup>)"
-                    			   ,obj.region,"资产编号:"+obj.num);
-                           li_1.setAttribute("guid",guid);
-                    	   li_1.setAttribute("onclick","clickEvent('"+guid+"');");
-                    	   $("#ul").append(li_1);
-                       }
-                       offset=offset+i;
-                       if(i<limit){
-                    	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
-                           $("#ul").append(html);
-                    	   loading = true;
-                       }
-                   }else {
-                	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
-                       $("#ul").append(html);
-                	   loading = true;
-                   }
-                   $(".weui-loadmore").hide();
-               }
-           });
+  
+
        }
       
           function addDiv(src,title,content,time,interval,manageRegion){
@@ -415,8 +502,6 @@
       	              	 var result=obj.result;
       	              	 var lat=result[0].y;
       	              	 var lng=result[0].x;
-      	              	 var url  ="addCheckInfoList.html?latitude="+lat+"&longitude="+lng;
-	                     window.history.pushState({},0,url); 
       	              	 location.href="addCheckInfoDetail.html?guid="+guid+"&latitude="+lat+"&longitude="+lng;
       	            });
       	            
