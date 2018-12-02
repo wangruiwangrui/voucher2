@@ -414,7 +414,7 @@ public class HiddenController {
 			}else if((check_circs==null||check_circs.equals(""))&&!isItemNull){
 				check_circs=checkItem;
 			}else{
-				check_circs=check_circs.substring(0, check_circs.length()-2);
+				check_circs=check_circs.substring(0, check_circs.length());
 			}
         }catch (Exception e) {
 			// TODO Auto-generated catch block

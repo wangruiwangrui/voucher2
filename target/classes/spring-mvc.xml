@@ -71,25 +71,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
       </property>   
    </bean>  
   
-   <bean id="testSpringRMI" class="com.rmi.server.ServerImpl"/>  
-  
-  <!-- 服务端  配置rmi服务发布 -->  
-  <bean id="rmiServiceExporter" class="org.springframework.remoting.rmi.RmiServiceExporter">  
-     <!-- 配置service -->  
-     <property name="service" ref="testSpringRMI"></property>  
-     <!-- 客户端使用的serviceName -->  
-     <property name="serviceName" value="testrmiSpring"/>  
-     <!-- 服务接口 -->  
-     <property name="serviceInterface" value="com.rmi.server.Server"/>  
-    
-     <!-- 注册服务端口号，默认是1099 -->  
-     <property name="registryPort" value="1099"/>  
-     
-     <!-- 注册随机端口号 --> 
-     <property name="servicePort" value="10099"></property>
-       
-  </bean>  
-  
+   
   <!-- 服务端  配置rmi服务发布2 -->  
   <bean id="rmiServiceExporter2" class="org.springframework.remoting.rmi.RmiServiceExporter">  
      <!-- 配置service -->  

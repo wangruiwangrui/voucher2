@@ -71,87 +71,116 @@ public class WechatSendMessageController {
 	private MessageListMapper messageListMapper = sqlSession.getMapper(MessageListMapper.class);
 	
 	@RequestMapping("/send")
-	public @ResponseBody String template(HttpServletRequest request,HttpServletResponse response,
-			@RequestParam String title,@RequestParam String reportUser,
-			@RequestParam String reportContext,@RequestParam String place,@RequestParam String url) {
+	public @ResponseBody Integer template(@RequestParam String openId,@RequestParam String Template_Id,
+			@RequestParam String Send_Type,@RequestParam String url,
+			@RequestParam String first_data,@RequestParam String keyword1_data,
+			@RequestParam String keyword2_data,@RequestParam String keyword3_data,
+			@RequestParam String keyword4_data,@RequestParam String keyword5_data,
+			@RequestParam String remark_data) {
+		Integer campusId=1;
+		
 		String accessToken;
     	WeiXin weixin;
+
+		try {
+
+			ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(
+					"spring-mybatis2.xml");
+			DefaultSqlSessionFactory defaultSqlSessionFactory = (DefaultSqlSessionFactory) applicationContext
+					.getBean("sqlSessionFactory");
+			SqlSession sqlSession = defaultSqlSessionFactory.openSession();
+
+			UsersMapper usersMapper = sqlSession.getMapper(UsersMapper.class);
+
+			MessageListMapper messageListMapper = sqlSession.getMapper(MessageListMapper.class);
+
+			WeiXinMapper weiXinMapper = sqlSession.getMapper(WeiXinMapper.class);
+
+			weixin = weiXinMapper.getCampus(campusId);
+			accessToken = weixin.getAccessToken();
+
+			WxTemplate templateData = new WxTemplate();
+			templateData.setUrl(url);
+			templateData.setTouser(openId);
+			templateData.setTopcolor("#000000");
+			templateData.setTemplate_id(Template_Id);
+			Map<String, TemplateData> m = new HashMap<String, TemplateData>();
+			TemplateData first = new TemplateData();
+			first.setColor("#000000");
+			first.setValue(first_data);
+			m.put("first", first);
+
+			TemplateData keyword1 = new TemplateData();
+			keyword1.setColor("#328392");
+			keyword1.setValue(keyword1_data);
+			m.put("keyword1", keyword1);
+			TemplateData keyword2 = new TemplateData();
+			keyword2.setColor("#328392");
+			keyword2.setValue(keyword2_data);
+			m.put("keyword2", keyword2);
+			
+			if (keyword3_data != null && !keyword3_data.equals("")) {
+				TemplateData keyword3 = new TemplateData();
+				keyword3.setColor("#328392");
+				keyword3.setValue(keyword3_data);
+				m.put("keyword3", keyword3);
+			}
+			
+			if (keyword4_data != null && !keyword4_data.equals("")) {
+				TemplateData keyword4 = new TemplateData();
+				keyword4.setColor("#328392");
+				keyword4.setValue(keyword4_data);
+				m.put("keyword4", keyword4);
+			}
+
+			if (keyword5_data != null && !keyword5_data.equals("")) {
+				TemplateData keyword5 = new TemplateData();
+				keyword5.setColor("#328392");
+				keyword5.setValue(keyword5_data);
+				m.put("keyword5", keyword5);
+			}
+			
+			if (remark_data != null && !remark_data.equals("")) {
+				TemplateData remark = new TemplateData();
+				remark.setColor("#929232");
+				remark.setValue(remark_data);
+				m.put("remark", remark);
+			}
+			templateData.setData(m);
+
+			ChatTemplateProcessor wechatTemplate = new ChatTemplateProcessor();
+
+			String s = wechatTemplate.sendTemplateMessage(accessToken, templateData);
+
+			MessageList messageList = new MessageList();
+
+			messageList.setCampusId(campusId);
+			messageList.setOpenId(openId);
+			messageList.setContext(keyword1_data + "," + keyword2_data + "," + keyword3_data + "," + keyword4_data+ "," + keyword5_data+","+remark_data);
+			messageList.setType(Send_Type);
+			messageList.setSendTime(new Date());
+			
+			int i;
+			
+			if (s.equals("消息发送成功")) {
+				messageList.setState(1);
+				i=1;
+			} else {
+				messageList.setState(0);
+				i=0;
+			}
+
+			messageListMapper.insertMessageList(messageList);
+
+			return i;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			
+			return 0;
 		
-		weixin=weiXinMapper.getCampus(campusId);   	
-		accessToken=weixin.getAccessToken();
-    	
-		List userlist=usersMapper.getUserByGuidance();
-		
-    	ChatTemplateProcessor wechatTemplate=new ChatTemplateProcessor();
-    	
-    	Iterator<Users> iterator=userlist.iterator();
-    	
-    	String message="";
-    	
-    	while (iterator.hasNext()) {
-		
-    	Users users=iterator.next();	
-    	
-    	String openid=users.getOpenId();
-    	
-    	WxTemplate templateData=new WxTemplate();
-    	System.out.println("url="+url);
-    	templateData.setUrl(url);
-    	templateData.setTouser(openid);
-    	templateData.setTopcolor("#000000");
-    	templateData.setTemplate_id("TxvYImikyfvBejKmpBlwJ1-RB8nzQDI4YbljomErC_Q");
-    	Map<String,TemplateData> m = new HashMap<String,TemplateData>();
-    	TemplateData first = new TemplateData();
-    	first.setColor("#000000");
-    	first.setValue(title);
-    	m.put("first", first);
-    	TemplateData keyword1 = new TemplateData();
-    	keyword1.setColor("#328392");
-    	keyword1.setValue(reportUser);
-    	m.put("keyword1", keyword1);
-    	TemplateData keyword2 = new TemplateData();
-    	keyword2.setColor("#328392");
-    	keyword2.setValue(reportContext);
-    	m.put("keyword2", keyword2);
-    	TemplateData keyword3 = new TemplateData();
-    	keyword3.setColor("#328392");
-    	keyword3.setValue(place);
-    	m.put("keyword3", keyword3);
-    	SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-    	Date date=new Date();
-		String time=sdf.format(date);
-    	TemplateData keyword4 = new TemplateData();
-    	keyword4.setColor("#328392");
-    	keyword4.setValue(time);
-    	m.put("keyword4", keyword4);
-    	TemplateData remark = new TemplateData();
-    	remark.setColor("#929232");
-    	remark.setValue("点击查看事件位置");
-    	m.put("remark", remark);
-    	templateData.setData(m);
-    	
-    	String s=wechatTemplate.sendTemplateMessage(accessToken, templateData);
-    	
-    	message=message+"  "+users.getNickname()+"  "+s;
-    	
-    	MessageList messageList=new MessageList();
-    	
-    	messageList.setCampusId(campusId);
-    	messageList.setOpenId(openid);
-    	messageList.setContext(reportContext);
-    	messageList.setType("紧急报告");
-    	messageList.setSendTime(date);
-    	if(s.equals("消息发送成功")){
-    		messageList.setState(1);
-    	}else{
-    		messageList.setState(0);
-    	}
-    	
-    	messageListMapper.insertMessageList(messageList);
-    	
-       }
-    	
-      return message;
+		}
     	
 	}
 	
@@ -356,7 +385,7 @@ public class WechatSendMessageController {
 				m.put("keyword5", keyword5);
 			}
 			
-			if(remark_data!=null&&remark_data.equals("")){
+			if(remark_data!=null&&!remark_data.equals("")){
 				TemplateData remark = new TemplateData();
 				remark.setColor("#929232");
 				remark.setValue(remark_data);

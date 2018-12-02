@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.activemq.filter.function.splitFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import com.rmi.server.AssetsImpl;
+import com.rmi.server.Server;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoImpl.HiddenDAOImpl;
@@ -28,6 +30,7 @@ import com.voucher.manage.redis.RedisDao;
 import com.voucher.manage.service.AffairService;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.sqlserver.context.Connect;
+import com.voucher.sqlserver.context.ConnectRMI;
 
 
 @Controller
@@ -51,6 +54,8 @@ public class testController {
  	}
  	*/
      
+    com.rmi.server.Server server=new ConnectRMI().get();
+     
 	@Transactional(rollbackFor = { Exception.class })
 	@Autowired
 	public void setTestService(AffairService testService) {
@@ -62,10 +67,6 @@ public class testController {
 	public @ResponseBody
 	String aaa() {
 		
-		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
-		
-		hiddenDAO.selectAllHidden(10, 0, null, "asc", new HashMap<>());
-
 		return "aaa";
 		 
 	}
