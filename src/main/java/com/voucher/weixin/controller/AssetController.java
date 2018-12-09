@@ -270,7 +270,7 @@ public class AssetController {
 	
 	@RequestMapping("/getAll3")
 	public @ResponseBody Map<String, Object> RoomInfo3(@RequestParam Integer limit,@RequestParam Integer offset,String sort,String order,
-			String search,HttpServletRequest request){
+			String search,String search2,HttpServletRequest request){
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		String term="OR";
@@ -294,6 +294,10 @@ public class AssetController {
 		
 		where.put("[RoomInfo].State !=", "已划拨");
 		where.put("[RoomInfo].IsHidden > ", "0");
+		
+		if(search2!=null&&!search2.equals("")){
+			where.put("[RoomInfo].neaten_flow > ", "0");
+		}
 		
 		if(search!=null&&!search.trim().equals("")){
 			search="%"+search+"%";  

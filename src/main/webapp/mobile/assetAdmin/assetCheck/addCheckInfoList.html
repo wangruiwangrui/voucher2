@@ -254,30 +254,6 @@
    // =======加载数据loadlist();
       function loadlist() {
     	  
-    	  wx.getLocation({
-              success : function(res) {
-                   // alert(JSON.stringify(res));
-                   var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-                   // $("#latitude").val(latitude);
-                   var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-                   // $("#longitude").val(longitude);
-                   var speed = res.speed; // 速度，以米/每秒计
-                   // $("#speed").val(speed);
-                   var accuracy = res.accuracy; // 位置精度
-                   // $("#accuracy").val(accuracy);
-                   $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
-	                   	 longitude:longitude,
-	                   	 latitude:latitude               	 
-	                    },function(text){
-	                   	 var obj = $.parseJSON(text);
-	                   	 var result=obj.result;
-	                   	 var lat=result[0].y;
-	                   	 var lng=result[0].x;
-	                   	 var url  ="addCheckInfoList.html?latitude="+lat+"&longitude="+lng;
-	                     window.history.pushState({},0,url); 
-	                });                  
-              }
-           });
     	  
     	  var longitude=getQueryString("longitude");
     	  var latitude=getQueryString("latitude");
@@ -425,8 +401,6 @@
       	              	 var result=obj.result;
       	              	 var lat=result[0].y;
       	              	 var lng=result[0].x;
-      	              	 var url  ="addCheckInfoList.html?latitude="+lat+"&longitude="+lng;
-	                     window.history.pushState({},0,url); 
       	              	 location.href="addCheckInfoDetail.html?guid="+guid+"&latitude="+lat+"&longitude="+lng;
       	            });
       	            

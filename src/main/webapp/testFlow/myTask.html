@@ -29,7 +29,7 @@
 	$.ajax({
 		type : "post",
 		async : false,
-		url : "../test2/selectAttachMent.do?limit=10&offset=0",
+		url : "../test2/findMyTask.do?limit=10&offset=0",
 		data : {
 		}
 
@@ -45,7 +45,10 @@
              	   var obj = data[i];
              	   
              	   var taskId=obj.id;
-             	   var li_1=addDiv(obj.assignee,obj.executionId,obj.id,obj.name,actionTime(obj.createTime));
+             	  var li_1 = addDiv(obj.name,
+							"任务名称:"+obj.taskName, "流程编号:"+obj.id, 
+							"申请时间:"+actionTime(obj.createTime),
+							"申请人:"+obj.userName);
                     li_1.setAttribute("taskId",taskId);
              	   li_1.setAttribute("onclick","clickEvent('"+taskId+"');");
              	   $("#ul").append(li_1);
@@ -148,7 +151,7 @@
 				var data=JSON.parse(data);
 				var userId=data.userId;
 	  			
-				location.href="../test2/toRoute.do?taskId="+taskId+"&userId="+userId+"&className=neaten";
+				location.href="../test2/toRoute.do?taskId="+taskId+"&userId="+userId+"&className=test";
 			
 			}
 		});

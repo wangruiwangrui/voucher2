@@ -675,6 +675,116 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		return map;
 	}
 	
+	@Override
+	public Map findAssetHiddenByDistanceNotFlow(int limit,int offset,Double lng, Double lat,String search) {
+		// TODO Auto-generated method stub
+		
+		String sql0="SELECT TOP "+limit+" "+
+					"[Position].GUID,"+
+					"[Position].province,"+
+					"[Position].city,"+
+					"[Position].district,"+
+					"[Position].street,"+
+					"[Position].street_number,"+
+					"[Position].lng,"+
+					"[Position].lat,"+
+					"[Position].date,"+
+					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddress,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Region,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Segment,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Useful,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Floor,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Structure,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildArea,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomType,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsCity,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Manager,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManagerPhone,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsStreet,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FitMent,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BeFrom,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].InDate,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightNo,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightArea,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DesignUseful,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildYear,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightUnit,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit,"+		
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsHidden "+
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+					"WHERE [Position].lng is not null AND [Position].lat is not null "+
+					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+					"AND IsHidden>0 "+
+					" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].neaten_flow is null  "+
+					" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].neaten_flow = 0 )"+
+					"AND "+
+					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
+					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+					"AND IsHidden>0 "+
+					" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].neaten_flow is null  "+
+					" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].neaten_flow = 0 )";
+		
+		
+		String sql1="ORDER BY   "+
+					"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";
+		
+		String sql;
+		
+		String sql2="SELECT count(*) "+				   
+				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+				"WHERE [Position].lng is not null AND [Position].lat is not null "+
+				"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+				"AND IsHidden>0 "+
+				" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].neaten_flow is null  "+
+				" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].neaten_flow = 0 )";
+		
+		if(search.equals("")){
+			sql=sql0+sql1+")"+sql1;
+		}else{
+			sql=sql0+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+					+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )"+
+					sql1+")"+
+					" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+					+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )"+sql1;
+			sql2=sql2+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+					+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )";
+		}
+		
+		System.out.println("sql="+sql);
+		
+		RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+		
+		Position position=new Position();		
+		
+		RoomInfo roomInfo=new RoomInfo();
+		
+		Object[] objects={roomInfo,position};
+		
+		Map map=new HashMap<>();
+		
+		try{
+			List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,roomInfo_Position);
+			int total=(int) SelectSqlJoinExe.getCount(this.getJdbcTemplate(), sql2, objects).get("");
+			map.put("rows", list);
+			map.put("total", total);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return map;
+	}
 	
 	@Override
 	public Map findAssetByDistanceDate(int limit,int offset,Double lng, Double lat,String search,String search2,Integer type){

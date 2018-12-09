@@ -29,10 +29,10 @@
         <div class="weui-tab">
             <div class="weui-navbar">
                 <div id="tab1" class="weui-navbar__item weui-bar__item_on">
-                    	按位置查询
+                    	未整改隐患资产
                 </div>
                 <div id="tab2" class="weui-navbar__item">
-                   	 	按名称查询
+                   	 	正在维修申请流程
                 </div>
             </div>
         </div>
@@ -94,7 +94,7 @@
   var latitude=getQueryString("latitude");
   var map = new BMap.Map("allmap");
   
-  var url="/voucher/baiduMap/getAssetsHiddenByDistanceImg.do";
+  var url="/voucher/baiduMap/getAssetsHiddenByDistanceImgNotFlow.do";
   
     var limit = 10;
     var offset = 0;
@@ -127,7 +127,7 @@
     });
     
     $("#tab1").on("click",function(){
-    	url="/voucher/baiduMap/getAssetsHiddenByDistanceImg.do";
+    	url="/voucher/baiduMap/getAssetsHiddenByDistanceImgNotFlow.do";
     	  limit = 10;
           offset = 0;
           $("#ul").children('li').remove();
@@ -136,15 +136,13 @@
       });
     
     $("#tab2").on("click",function(){
-    	  url="/voucher/mobile/asset/getAll3.do";
+    	  url="/voucher/mobile/asset/getAll3.do?search2=1";
     	  limit = 10;
           offset = 0;
           $("#ul").children('li').remove();
           loading = false;
     	  loadlist();
-      });
-    
-    loadlist();
+      });    
     
     $(document.body).pullToRefresh().on("pull-to-refresh", function() {
           limit = 10;

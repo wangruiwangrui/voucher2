@@ -45,6 +45,8 @@ public class testController {
      
      RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
      
+     Server server=new ConnectRMI().get();
+     
 	/*
      private RedisDao orderDao;
  	
@@ -54,7 +56,7 @@ public class testController {
  	}
  	*/
      
-    com.rmi.server.Server server=new ConnectRMI().get();
+    //com.rmi.server.Server server=new ConnectRMI().get();
      
 	@Transactional(rollbackFor = { Exception.class })
 	@Autowired
@@ -205,6 +207,13 @@ public class testController {
 		}
 
 		return s;
+		
+	}
+	
+	@RequestMapping(value="/findAllHistory")
+	public @ResponseBody Map findAllHistory(@RequestParam Integer limit,@RequestParam Integer offset){
+		
+		return server.findAllHistory(limit, offset);
 		
 	}
 }

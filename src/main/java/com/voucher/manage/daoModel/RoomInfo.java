@@ -232,7 +232,10 @@ public class RoomInfo implements Serializable{
 
     @SQLInteger(name="IsHidden")
 	private Integer IsHidden;
-    
+
+    @SQLInteger(name="neaten_flow")
+	private Integer neaten_flow;
+
 	public void setGUID(String GUID){
 		this.GUID = GUID;
 	}
@@ -817,7 +820,6 @@ public class RoomInfo implements Serializable{
 		return asset_check_date;
 	}
 
-
 	public void setIsHidden(Integer IsHidden){
 		this.IsHidden = IsHidden;
 	}
@@ -825,6 +827,16 @@ public class RoomInfo implements Serializable{
 	public Integer getIsHidden(){
 		return IsHidden;
 	}
+
+	public void setNeaten_flow(Integer neaten_flow){
+		this.neaten_flow = neaten_flow;
+	}
+
+	public Integer getNeaten_flow(){
+		return neaten_flow;
+	}
+
+
 
 
 /*

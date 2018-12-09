@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.rmi.server.Server;
 import com.rmi.server.entity.FlowImage;
 import com.voucher.manage.dao.AffairDAO;
+import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.dao.FlowDao;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.ConnectRMI;
 
@@ -38,6 +41,9 @@ public class test2Controller {
 	
 	AffairDAO affairDAO=(AffairDAO) applicationContext.getBean("affairdao");
 	
+	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+	
+	FlowDao flowDao=(FlowDao) applicationContext.getBean("flowDao");
 	
 	Server server=new ConnectRMI().get();
 	
@@ -91,23 +97,30 @@ public class test2Controller {
 	
 	@RequestMapping(value = "/start")
 	public @ResponseBody Map startProcessInstance(@RequestParam String processDefinitionKey,
-			@RequestParam String userId,@RequestParam String variableData,@RequestParam String className){
+			@RequestParam String variableData,@RequestParam String className,HttpServletRequest request)throws Exception{
 		
-		return server.startProcessInstance(processDefinitionKey, userId, variableData, className);
+		String openId="ccc";
+		
+		Map map=flowDao.addProcessInstance(server,processDefinitionKey, openId, variableData, className);
+		
+		return map;
+	
+	}
+
+	@RequestMapping(value = "/personalTask")
+	public @ResponseBody Map completeMyPersonalTask(@RequestParam String taskId,@RequestParam Integer input,@RequestParam String variableData,
+			@RequestParam String className) throws Exception{
+		
+		return server.completeMyPersonalTask(taskId, input, variableData, className);
 		
 	}
 	
 	@RequestMapping(value = "/findMyTask")
-	public @ResponseBody List findMyPersonalTask(@RequestParam String assignee){
+	public @ResponseBody Map findMyTask(HttpServletRequest request,@RequestParam Integer limit,@RequestParam Integer offset){
 		
-		return server.findMyPersonalTask(assignee);
+		String openId="ccc";
 		
-	}
-	
-	@RequestMapping(value = "/toRoute")
-	public String toRoute(@RequestParam String taskId,@RequestParam String userId,@RequestParam String className){
-		
-		return server.toRoute(taskId, userId, className);
+		return server.findMyPersonalTask(openId,limit,offset);
 		
 	}
 	
@@ -119,54 +132,26 @@ public class test2Controller {
 		
 	}
 	
-	@RequestMapping(value = "/personalTask")
-	public @ResponseBody Map completeMyPersonalTask(@RequestParam String taskId,@RequestParam Integer input,@RequestParam String variableData,
-			@RequestParam String className){
+	@RequestMapping(value = "/toRoute")
+	public String toRoute(@RequestParam String taskId,@RequestParam String className){
 		
-		return server.completeMyPersonalTask(taskId, input, variableData, className);
+		return server.toRoute(taskId,className);
 		
 	}
 	
 	@RequestMapping(value = "/findHistoryById")
-	public @ResponseBody List findHistoryById(@RequestParam String id,HttpServletResponse response){
+	public @ResponseBody Map findHistoryById(@RequestParam String id,HttpServletResponse response){
 		
-		return server.findHistoryById(id, response);
-		
-	}
-	
-	@RequestMapping(value="/selectAttachMent")    
-	public @ResponseBody JSONObject selectAttachMent(@RequestParam Integer limit,@RequestParam Integer offset){
-		
-		JSONObject jsonObject=server.selectAttachMent(limit, offset);
-		
-		System.out.println("jsonObject="+jsonObject);
-		
-		MyTestUtil.print(jsonObject);
-		
-		return jsonObject;
-		
+		return server.findHistoryById(id);
 		
 	}
 	
-	 @RequestMapping(value = "/process/trace/auto")
-	 public void readResource(@RequestParam String executionId, HttpServletResponse response) throws Exception{
+	@RequestMapping(value="/findMyAllHistory")
+	public @ResponseBody Map findMyAllHistory(@RequestParam Integer limit,@RequestParam Integer offset,HttpServletRequest request){
 		
-		response.setHeader("Cache-Control", "no-store"); // 禁止浏览器缓存
-		response.setHeader("Pragrma", "no-cache"); // 禁止浏览器缓存
-		response.setDateHeader("Expires", 0); // 禁止浏览器缓存
-		response.setCharacterEncoding("UTF-8");
+		String openId="ccc";
 		
-		byte[] byt=server.readResource(executionId);
-
-	    ByteArrayInputStream in = new ByteArrayInputStream(byt);    //将b作为输入流；
- 		
-		// 输出资源内容到相应对象
-		byte[] b = new byte[1024];
-		int len;
-		while ((len = in.read(b, 0, 1024)) != -1) {
-			response.getOutputStream().write(b, 0, len);
-		}
-
-	 }
-	
+		return server.findMyAllHistory(openId, limit, offset);
+		
+	}
 }

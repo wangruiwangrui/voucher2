@@ -21,6 +21,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.alibaba.fastjson.JSONObject;
+import com.rmi.server.Server;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
@@ -55,10 +56,13 @@ import com.voucher.manage.tools.FileConvect;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
 import com.voucher.sqlserver.context.Connect;
+import com.voucher.sqlserver.context.ConnectRMI;
 import com.voucher.weixin.controller.WechatSendMessageController;
 
 public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 
+	Server server=new ConnectRMI().get();
+	
 	@Override
 	public Integer InsertIntoHiddenData(String GUID,String NAME,String TYPE,String uri) {
 		// TODO Auto-generated method stub
@@ -822,6 +826,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		// 写入整改记录
 		int i = InsertExe.get(this.getJdbcTemplate(), hidden_Neaten);
 
+		String guid=hidden_Neaten.getGUID();
+		
 		System.out.println("i="+i);
 		
 		if (i > 0) {
@@ -1033,6 +1039,32 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			}
 
+		RoomInfo roomInfo=new RoomInfo();
+		
+		roomInfo.setNeaten_flow(0);
+		
+		String[] where={"[GUID]=",guid};
+		
+		roomInfo.setWhere(where);
+		
+		i=UpdateExe.get(this.getJdbcTemplate(), roomInfo);
+		
+		if(i<1){
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+		
+		try {
+			i=server.del(guid);
+			if(i<1){
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+
+		
 		return i;
 	}
 

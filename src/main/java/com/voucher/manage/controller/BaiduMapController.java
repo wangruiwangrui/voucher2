@@ -302,6 +302,28 @@ public class BaiduMapController {
 		
 	}
 	
+	@RequestMapping("/getAssetsHiddenByDistanceImgNotFlow")
+	public @ResponseBody Map getAssetsHiddenByDistanceImgNotFlow(Integer limit,Integer offset,Double lng,Double lat,
+			Double distance,String search,HttpServletRequest request){
+		Map map;
+		
+		map=assetsDAO.findAssetHiddenByDistanceNotFlow(limit, offset, lng, lat, search);
+		
+		List list=(List) map.get("rows");
+		int total=(int) map.get("total");
+		
+		Map fileBytes=mobileDao.roomInfo_PositionImageQuery(request, list);
+		
+		Map result=new HashMap<>();
+		
+		result.put("rows", list);
+		result.put("total", total);
+		result.put("fileBytes", fileBytes);
+		
+		return result;
+		
+	}
+	
 	@RequestMapping("getManageRegion")
 	public @ResponseBody List getManageRegion(){
 		

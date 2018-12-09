@@ -3,13 +3,13 @@ package com.rmi.server.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Hidden_Neaten implements Serializable{
+public class Neaten implements Serializable{
 	/**
 	 * 
 	 */
 	
 	private static final long serialVersionUID = 1L;
-
+	
 	private Integer id;
 
 	private String GUID;
@@ -62,6 +62,18 @@ public class Hidden_Neaten implements Serializable{
 
 	private String AvailabeLength;
 
+	private String address;
+	
+	private String addComp;
+	
+	private Double lng;
+	
+	private Double lat;
+	
+	private String checkItemDate;
+	
+	private String applicationUser;
+	
 	public void setId(Integer id){
 		this.id = id;
 	}
@@ -268,6 +280,54 @@ public class Hidden_Neaten implements Serializable{
 
 	public String getAvailabeLength(){
 		return AvailabeLength;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getAddComp() {
+		return addComp;
+	}
+
+	public void setAddComp(String addComp) {
+		this.addComp = addComp;
+	}
+
+	public Double getLng() {
+		return lng;
+	}
+
+	public void setLng(Double lng) {
+		this.lng = lng;
+	}
+
+	public Double getLat() {
+		return lat;
+	}
+
+	public void setLat(Double lat) {
+		this.lat = lat;
+	}
+
+	public String getCheckItemDate() {
+		return checkItemDate;
+	}
+
+	public void setCheckItemDate(String checkItemDate) {
+		this.checkItemDate = checkItemDate;
+	}
+
+	public String getApplicationUser() {
+		return applicationUser;
+	}
+
+	public void setApplicationUser(String applicationUser) {
+		this.applicationUser = applicationUser;
 	}
 
 

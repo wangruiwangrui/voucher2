@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.aspectj.weaver.ast.Var;
+import org.bouncycastle.jce.provider.asymmetric.ec.Signature.ecCVCDSA;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.rmi.server.Server;
+import com.rmi.server.entity.Neaten;
+import com.rmi.server.entity.RoomInfoFlowIdEntity;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
@@ -48,6 +53,7 @@ import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TestDistance;
 import com.voucher.sqlserver.context.Connect;
+import com.voucher.sqlserver.context.ConnectRMI;
 
 @Controller
 @RequestMapping("/mobile/hidden")
@@ -70,6 +76,7 @@ public class HiddenController {
 		this.userService = userService;
 	}
 	
+	Server server=new ConnectRMI().get();
 		
 	@RequestMapping("/selectAllCheck")
 	public @ResponseBody Map selectAllCheck(@RequestParam Integer limit, @RequestParam Integer offset, 
@@ -668,6 +675,62 @@ public class HiddenController {
 		
 	}
 	
+	@RequestMapping("/insertHiddenRepair")
+	public @ResponseBody Map insertHiddenRepair(@RequestParam String id,@RequestParam String progress,HttpServletRequest request) throws JSONException{
+		
+		Map map=server.findHistoryById(id);
+		
+		Neaten neaten=(Neaten) map.get("neaten");
+		
+		org.json.JSONObject jsonObject;
+		
+		jsonObject = new org.json.JSONObject(neaten);
+		/*
+		String guid=jsonObject.getString("guid");
+		String address = jsonObject.getString("address");
+		String progress=jsonObject.getString("progress");
+		String neaten_instance=jsonObject.getString("neaten_instance");
+		String happenTime=jsonObject.getString("happenTime");
+		String principal=jsonObject.getString("principal");
+		String remark=jsonObject.getString("remark");
+		String addComp=jsonObject.getString("addComp");
+		Double lng=jsonObject.getDouble("lng");
+		Double lat=jsonObject.getDouble("lat");
+		String type=jsonObject.getString("type");
+		Float area=(float) jsonObject.getDouble("area");
+		Float amount=(float) jsonObject.getDouble("amount");
+		Float amountTotal=(float) jsonObject.getDouble("amountTotal");
+		Float auditingAmount=(float) jsonObject.getDouble("auditingAmount");
+		String availabeLength=jsonObject.getString("availabeLength");
+		String workUnit=jsonObject.getString("workUnit");
+		String checkItemDate=jsonObject.getString("checkItemDate");
+		 */
+		
+		String guid=neaten.getGUID();
+		String address = neaten.getAddress();
+		String neaten_instance=neaten.getNeaten_instance();
+		String happenTime=neaten.getHappen_time().toString();
+		String principal=neaten.getPrincipal();
+		String remark=neaten.getRemark();
+		String addComp=neaten.getAddComp();
+		Double lng=neaten.getLng();
+		Double lat=neaten.getLat();
+		String type=neaten.getType();
+		Float area=neaten.getArea();
+		Float amount=neaten.getAmount();
+		Float amountTotal=neaten.getAmountTotal();
+		Float auditingAmount=neaten.getAuditingAmount();
+		String availabeLength=neaten.getAvailabeLength();
+		String workUnit=neaten.getWorkUnit();
+		String checkItemDate=neaten.getCheckItemDate();
+		
+		return insertHiddenNeaten(guid, progress, 1, address, happenTime, principal, remark, 
+				neaten_instance, addComp, checkItemDate, lng, lat, type, area, amount,
+				amountTotal, auditingAmount, availabeLength, workUnit, request);
+		
+		
+	}
+	
 	@RequestMapping("/insertHiddenNeaten")
 	public @ResponseBody Map insertHiddenNeaten(
 			@RequestParam String guid,@RequestParam String progress,
@@ -682,6 +745,26 @@ public class HiddenController {
 			Float area,Float amount,Float amountTotal,Float auditingAmount,
 			String availabeLength,String workUnit,
 			HttpServletRequest request){
+		
+		if(is_repair==1){
+			
+			Map mapEntity=server.selectById(guid, 1, 1, 0);
+			
+			List<RoomInfoFlowIdEntity> list=(List<RoomInfoFlowIdEntity>) mapEntity.get("rows");
+			
+			try{
+				RoomInfoFlowIdEntity roomInfoFlowIdEntity=list.get(0);
+				if(roomInfoFlowIdEntity.getResult()!=1){
+					mapEntity.put("status", "failure");
+					return mapEntity;
+				}
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				mapEntity.put("status", "failure");
+				return mapEntity;
+			}
+		}
 		
 		Hidden_Neaten hidden_Neaten=new Hidden_Neaten();
 

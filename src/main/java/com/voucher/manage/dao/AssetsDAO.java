@@ -46,6 +46,8 @@ public interface AssetsDAO {
 	
 	public Map findAssetHiddenByDistance(int limit,int offset,Double lng, Double lat,String search);
 	
+	public Map findAssetHiddenByDistanceNotFlow(int limit,int offset,Double lng, Double lat,String search);
+	
 	public Map findAssetByDistanceDate(int limit,int offset,Double lng, Double lat,String search,String search2, Integer type);
 	
 	public Map findHiddenByPoint(Double lng, Double lat,Double distance,String search);

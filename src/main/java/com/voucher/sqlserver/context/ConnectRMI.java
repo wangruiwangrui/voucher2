@@ -30,9 +30,10 @@ public class ConnectRMI {
 		public Server call() throws Exception {
 			// TODO Auto-generated method stub
 
+			/*
 			ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(
 					"applicationContext-beans.xml");
-
+			 */
 			Server server = null;
 			
 			try {
@@ -54,6 +55,20 @@ public class ConnectRMI {
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
+				
+				RmiProxyFactoryBean factory = new RmiProxyFactoryBean();
+
+				factory.setServiceInterface(Server.class);
+
+				factory.setServiceUrl("rmi://127.0.0.1:1199/flowSpringRMI");
+
+				factory.setLookupStubOnStartup(false);
+
+				factory.setRefreshStubOnConnectFailure(true);
+
+				factory.afterPropertiesSet();
+
+				server = (Server) factory.getObject();
 
 			}
 			
