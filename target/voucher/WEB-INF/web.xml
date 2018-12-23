@@ -61,6 +61,11 @@
 	<listener>
 		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
 	</listener>
+	
+	<!-- 5. spring 注册监听，获取上下文中的 HttpServletRequest 对象（对 Global 支持）  -->
+	<listener>  
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>  
+	</listener>
 
 	<!-- spring mvc servlet -->
 	<servlet>
@@ -157,6 +162,7 @@
 		<filter-name>MobileAdminSessionFilter</filter-name>
 		<url-pattern>/mobile/1/*</url-pattern>
 		<url-pattern>/mobile/assetAdmin/*</url-pattern>
+		<url-pattern>/mobile/flow/*</url-pattern>
 	</filter-mapping>
 
 	<!-- 资产巡查的栏截 -->

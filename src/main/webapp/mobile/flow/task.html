@@ -69,7 +69,7 @@
 				</div>
 			</div>
 		</div>
-		
+		<!--  
 		<div class="weui-cells weui-cells_form">
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
@@ -91,7 +91,7 @@
 				</div>
 			</div>
 		</div>
-		
+		-->
 		<div class="weui-cells weui-cells_form">
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
@@ -195,7 +195,7 @@
 				<a href="javascript:;" onclick="audit(1)" class="weui-btn weui-btn_primary">通 过</a>
 			</div>
 			<div class="weui-flex__item">
-				<a href="javascript:;" onclick="audit(0)" class="weui-btn weui-btn_warn">拒 绝</a>
+				<a href="javascript:;" onclick="audit(0)" class="weui-btn weui-btn_default">拒 绝</a>
 			</div>
 			<div class="weui-flex__item">
 				<a href="javascript:;" onclick="audit(2)" class="weui-btn weui-btn_plain-primary">退 回</a>
@@ -301,13 +301,13 @@
                   
                   var amount=obj.amount;
                   $("#amount").val(amount);
-                  
+                  /*
                   var amountTotal=obj.amountTotal;
                   $("#amountTotal").val(amountTotal);
                   
                   var auditingAmount=obj.auditingAmount;
                   $("#auditingAmount").val(auditingAmount);
-                  
+                  */
                   var availabeLength=obj.availabeLength;
                   $("#availabeLength").val(availabeLength);
                   
@@ -501,8 +501,8 @@
         	variableData.type=type;
         	variableData.area=area;
         	variableData.amount=amount;
-        	variableData.amountTotal=amountTotal;
-        	variableData.auditingAmount=auditingAmount;
+        	//variableData.amountTotal=amountTotal;
+        	//variableData.auditingAmount=auditingAmount;
         	variableData.availabeLength=availabeLength;
         	variableData.workUnit=workUnit;
         	variableData.content=content;

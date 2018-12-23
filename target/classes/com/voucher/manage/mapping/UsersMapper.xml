@@ -272,7 +272,7 @@
 		on
 		users.open_id = usersinfo.open_id
 		<where>
-				users.place=2 or users.place>3
+				users.place=2
 		</where>	
 	</select>
 	

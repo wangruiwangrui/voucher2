@@ -8,13 +8,13 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <meta name="format-detection" content="telephone=no" />
 <meta charset="utf-8" />
-<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="../mobile/1/css/weui.css"/>
-    <link rel="stylesheet" href="../mobile/1/css/example.css"/>
-    <script src="../js/swiper.js"></script>
+ <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="../1/css/weui.css"/>
+    <link rel="stylesheet" href="../1/css/example.css"/>
+    <script src="../../js/swiper.js"></script>
     <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
- 	<script src="../js/jquery-weui.js"></script>
- 	<link rel="stylesheet" href="../mobile/1/css/jquery-weui.css">
+ 	<script src="../../js/jquery-weui.js"></script>
+ 	<link rel="stylesheet" href="../1/css/jquery-weui.css">
  	<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
 	<script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
 <style type="text/css">
@@ -69,7 +69,7 @@
 				</div>
 			</div>
 		</div>
-		
+		<!--  
 		<div class="weui-cells weui-cells_form">
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
@@ -91,7 +91,7 @@
 				</div>
 			</div>
 		</div>
-		
+		-->
 		<div class="weui-cells weui-cells_form">
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
@@ -218,10 +218,23 @@
 	   }
 	
 	var addressValue;
-	    
+	
+	var xhm=new XMLHttpRequest();
+    xhm.open("GET","/voucher/mobile/register/userinfoByopenId.do?campusId=1",false);
+    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhm.send();
+    var obj=JSON.parse(xhm.responseText);
+
+    if(obj.name!=null)
+     $("#principal").val(obj.name);
+    var username=document.createElement("span");
+	username.innerHTML=obj.user_name;
+    $("#username").append(obj.name);
+    username=obj.name;
+    
     $.ajax({
         type: "POST",
-        url: "../test2/findMyTaskById.do",
+        url: "../../mobile/flow/findMyTaskById.do",
         data: { "id":taskId},
         dataType: "json",
         error: function (request){
@@ -241,7 +254,7 @@
                   $("#neaten_name").val(neaten_name);                  
 				
                 var item=obj.neaten_item;
-				$("#item").append(item);
+				$("#item").append("<font color='#3366FF'>"+item+"</font>");
 				
 				 var time=actionTime(obj.happen_time);
 				 console.log(time);
@@ -270,13 +283,13 @@
                   
                   var amount=obj.amount;
                   $("#amount").val(amount);
-                  
+                  /*
                   var amountTotal=obj.amountTotal;
                   $("#amountTotal").val(amountTotal);
                   
                   var auditingAmount=obj.auditingAmount;
                   $("#auditingAmount").val(auditingAmount);
-                  
+                  */
                   var availabeLength=obj.availabeLength;
                   $("#availabeLength").val(availabeLength);
                   
@@ -405,7 +418,9 @@
         			error="面积不能为空!";
         		}else if(amount==null||amount==""){
         			error="送审金额不能为空!";
-        		}else if(amountTotal==null||amountTotal==""){
+        		}
+        		/*
+        		else if(amountTotal==null||amountTotal==""){
         			error="审减金额不能为空!";
         		}else if(auditingAmount==null||auditingAmount==""){
         			error="审定金额不能为空!";
@@ -414,7 +429,7 @@
         		}else if(neaten_instance==null||neaten_instance==""){    				
         			error="请填写整改详情说明!";
     			}
-            	
+            	*/
         		
         		if(error!=""){
         			
@@ -451,20 +466,19 @@
         	$.ajax({
                 type: "post",
                 async: false,
-                url: "../test2/personalTask.do",
+                url: "../../mobile/flow/personalTask.do",
                 data: {
                 	
                 	variableData: variable,
                 	input:1,
-                	className:"test",
+                	className:"neaten",
                 	taskId:taskId
                 	}
 
                 ,
                 success: function (data) {
-                	console.log(data);
                 	var data=JSON.parse(data);
-                	
+                	console.log(data);
                     if (data.state == "failed") {
                         alert("error");
                         return false;

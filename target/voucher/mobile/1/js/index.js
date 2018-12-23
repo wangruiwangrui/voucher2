@@ -467,6 +467,14 @@ var state=getQueryString("state");
 			
 		}
 		
+		try{
+			document.querySelector('#flow').onclick = function () {
+			location.href="../flow/index.html";
+	  	}
+		}catch(ex){
+			
+		}
+		
 		try{	
 			document.querySelector('#assetCheck').onclick =function(){
 				wx.getLocation({

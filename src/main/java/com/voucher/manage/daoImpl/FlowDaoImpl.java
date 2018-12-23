@@ -1,6 +1,7 @@
 package com.voucher.manage.daoImpl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -9,6 +10,8 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import com.rmi.server.Server;
 import com.voucher.manage.dao.FlowDao;
 import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
+import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.UpdateExe;
 
 public class FlowDaoImpl extends JdbcDaoSupport implements FlowDao{
@@ -72,6 +75,25 @@ public class FlowDaoImpl extends JdbcDaoSupport implements FlowDao{
 		
 		return map;
 		
+	}
+
+	@Override
+	public Integer upRoomNeatenFlowById(String guid) {
+		// TODO Auto-generated method stub
+				
+		RoomInfo roomInfo=new RoomInfo();
+		
+		roomInfo.setNeaten_flow(0);
+		
+		String[] where={"[GUID]=",guid};
+		
+		roomInfo.setWhere(where);
+		
+		int i=0;
+		
+		i=UpdateExe.get(this.getJdbcTemplate(), roomInfo);	
+
+		return i;
 	}
 
 }

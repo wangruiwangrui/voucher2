@@ -1,6 +1,7 @@
 package com.voucher.weixin.controller;
 
 import java.io.ByteArrayInputStream;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,7 +141,14 @@ public class FlowController {
 		
 	}
 	
+	@RequestMapping(value="/selectByGuid")
+	public @ResponseBody Map selectByGuid(String guid){
+		
+		return server.selectByGuid(guid);
+		
+	}
 	
+
 	 @RequestMapping(value = "/process/trace/auto")
 	 public void readResource(@RequestParam String executionId, HttpServletResponse response) throws Exception{
 		
