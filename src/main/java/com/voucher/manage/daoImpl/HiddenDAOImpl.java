@@ -1053,17 +1053,18 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		
-		try {
-			i=server.del(guid);
-			if(i<1){
+		if (hidden_Neaten.getIs_repair() > 0) {
+			try {
+				i = server.del(guid);
+				if (i < 1) {
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
-
 		
 		return i;
 	}

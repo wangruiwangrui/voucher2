@@ -396,15 +396,15 @@
   		return Y+M+D;
   	}
 	
-
-        
+   
   //happenTime设置为当前时间
 	var timestamp=actionTime(Date.parse(new Date()));
     console.log(timestamp);
     $("#happenTime").val(timestamp); 
   
     $("#save").on("click",function(){
-
+    	
+    	$.showLoading();
 	
     	geoc.getLocation(point, function(rs){
     	    var addComp;
@@ -477,7 +477,7 @@
         	var variable = JSON.stringify(variableData);
         	
         	console.log(variable);
-        	    	  
+            
         	 $.ajax({
                  type: "post",
                  async: false,
@@ -493,18 +493,19 @@
                  	var data=JSON.parse(data);
                  	console.log(data);
                      if (data.state == "succeed") {
-                    	 
-                    	 alert("提交成功");
+                    	 $.hideLoading();
+                    	 $.toast("提交成功");
                     	 history.go(-2);
                      } else {
-        
-                    	  alert(data.state);
+                    	 $.hideLoading();
+                    	 $.toast("提交错误", "forbidden");
                           return false;
                          	
                      	}
                  },
                  error:function (XMLHttpRequest, textStatus, errorThrown) { 
-                 	  alert("错误");
+                	 $.hideLoading();
+                	 $.toast("提交错误", "forbidden");
                        return false;
                  }
              });

@@ -746,6 +746,8 @@ public class HiddenController {
 			String availabeLength,String workUnit,
 			HttpServletRequest request){
 		
+		String processInstanceId="";
+		
 		if(is_repair==1){
 			
 			Map mapEntity=server.selectById(guid, 1, 1, 0);
@@ -754,6 +756,7 @@ public class HiddenController {
 			
 			try{
 				RoomInfoFlowIdEntity roomInfoFlowIdEntity=list.get(0);
+				processInstanceId=roomInfoFlowIdEntity.getProcessInstanceId();
 				if(roomInfoFlowIdEntity.getResult()!=1){
 					mapEntity.put("status", "failure");
 					return mapEntity;
@@ -785,6 +788,8 @@ public class HiddenController {
         Integer item = 0;
         
         Map map=new HashMap<>();
+        
+        hidden_Neaten.setProcessInstance_id(processInstanceId);
         
         hidden_Neaten.setGUID(guid);
         

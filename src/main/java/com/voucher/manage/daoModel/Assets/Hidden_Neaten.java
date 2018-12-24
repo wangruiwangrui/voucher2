@@ -89,6 +89,9 @@ public class Hidden_Neaten implements Serializable{
     @SQLString(name="AvailabeLength")
 	private String AvailabeLength;
 
+    @SQLString(name="processInstance_id")
+	private String processInstance_id;
+    
 	public void setId(Integer id){
 		this.id = id;
 	}
@@ -298,6 +301,13 @@ public class Hidden_Neaten implements Serializable{
 	}
 
 
+	public void setProcessInstance_id(String processInstance_id){
+		this.processInstance_id = processInstance_id;
+	}
+
+	public String getProcessInstance_id(){
+		return processInstance_id;
+	}
 
 /*
 *数据库查询参数
