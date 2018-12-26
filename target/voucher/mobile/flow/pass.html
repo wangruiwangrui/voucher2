@@ -12,7 +12,7 @@
 	<script type='text/javascript' src="../../js/jquery.js"></script>
 	 <link rel="stylesheet" href="../1/css/jquery-weui.css">
 	 <script src="../../js/jquery-weui.js"></script>
-    <title>我申请维修的资产</title>
+    <title>已通过验收审核的资产</title>
 </head>
 <body>
 	<div class="weui-pull-to-refresh__layer">
@@ -35,6 +35,13 @@
 		
 <script type="text/javascript">	
 
+
+	$.get("/voucher/mobile/flow/upUserAccessTime.do", {
+		parameter : "pass"
+	}, function(text) {
+
+	});
+	
 	var limit = 10;
 	var offset = 0;
 	var search = "";
@@ -46,46 +53,46 @@
 
 	var html = "";
 
-    loadlist();
-    
-    $(document.body).pullToRefresh().on("pull-to-refresh", function() {
-          limit = 10;
-          offset = 0;
-          $("#ul").children('li').remove();
-          loading = false;
-    	  loadlist();
-          $(document.body).pullToRefreshDone();
-      });
+	loadlist();
 
-    $(document.body).infinite().on("infinite", function() {
-    	  if (loading) 
-    		  return;
-    	  
-    	  $(".weui-loadmore").show();
-    	  loading = true;
-    	  setTimeout(function () {
-    		  loadlist();
-    		  loading = false;
-          }, 1500);   //模拟延迟
-    	  
-      });
-	
-   
+	$(document.body).pullToRefresh().on("pull-to-refresh", function() {
+		limit = 10;
+		offset = 0;
+		$("#ul").children('li').remove();
+		loading = false;
+		loadlist();
+		$(document.body).pullToRefreshDone();
+	});
+
+	$(document.body).infinite().on("infinite", function() {
+		if (loading)
+			return;
+
+		$(".weui-loadmore").show();
+		loading = true;
+		setTimeout(function() {
+			loadlist();
+			loading = false;
+		}, 1500); //模拟延迟
+
+	});
+
 	function loadlist() {
-		$.ajax({
+		$
+				.ajax({
 					type : "post",
 					async : false,
 					url : "../../mobile/flow/selectByOpenId.do",
 					data : {
 						"result" : 1,
-						"limit" : limit, 
-	                     "offset" : offset
+						"limit" : limit,
+						"offset" : offset
 					},
 					success : function(text) {
 						var obj = JSON.parse(text);
-						var data=obj.rows;
-		            	var count=obj.total;
-		            	
+						var data = obj.rows;
+						var count = obj.total;
+
 						var span = document.createElement("span");
 						span.innerHTML = " " + count + "条记录";
 						var count = document.getElementById('count');
@@ -99,16 +106,17 @@
 								var obj = data[i];
 								console.log(obj);
 								var processInstanceId = obj.processInstanceId;
-								var li_1 = addDiv(obj.address+"维修",
-										"申请时间:"+actionTime(obj.date), "审核结果:已通过", 
-										"批准时间:"+actionTime(obj.update_time),
-										"申请人:"+obj.applicationUser);
-								li_1.setAttribute("processInstanceId", processInstanceId);
+								var li_1 = addDiv(obj.address + "维修", "申请时间:"
+										+ actionTime(obj.date), "审核结果:已通过",
+										"批准时间:" + actionTime(obj.currentDate),
+										"申请人:" + obj.applicationUser);
+								li_1.setAttribute("processInstanceId",
+										processInstanceId);
 								li_1.setAttribute("onclick", "clickEvent('"
 										+ processInstanceId + "');");
 								$("#ul").append(li_1);
 							}
-							offset=offset+i;
+							offset = offset + i;
 						} else {
 							html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
 							$("#ul").append(html);
@@ -186,8 +194,8 @@
 
 	function clickEvent(processInstanceId) {
 
-				location.href = "addNeatenInfoDetail.html?processInstanceId=" + processInstanceId;
+		location.href = "addNeatenInfoDetail.html?processInstanceId="
+				+ processInstanceId;
 
-			}
-
+	}
 </script>

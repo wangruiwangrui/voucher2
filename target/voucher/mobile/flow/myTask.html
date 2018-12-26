@@ -35,6 +35,11 @@
 		
 <script type="text/javascript">	
 
+	$.get("/voucher/mobile/flow/upUserAccessTime.do", {
+		parameter : "myTask"
+	}, function(text) {
+
+	});
 
 	var url = "/voucher/baiduMap/getAssetsByDistanceImg.do";
 
@@ -49,45 +54,45 @@
 
 	var html = "";
 
-    loadlist();
-    
-    $(document.body).pullToRefresh().on("pull-to-refresh", function() {
-          limit = 10;
-          offset = 0;
-          $("#ul").children('li').remove();
-          loading = false;
-    	  loadlist();
-          $(document.body).pullToRefreshDone();
-      });
+	loadlist();
 
-    $(document.body).infinite().on("infinite", function() {
-    	  if (loading) 
-    		  return;
-    	  
-    	  $(".weui-loadmore").show();
-    	  loading = true;
-    	  setTimeout(function () {
-    		  loadlist();
-    		  loading = false;
-          }, 1500);   //模拟延迟
-    	  
-      });
-	
-   
+	$(document.body).pullToRefresh().on("pull-to-refresh", function() {
+		limit = 10;
+		offset = 0;
+		$("#ul").children('li').remove();
+		loading = false;
+		loadlist();
+		$(document.body).pullToRefreshDone();
+	});
+
+	$(document.body).infinite().on("infinite", function() {
+		if (loading)
+			return;
+
+		$(".weui-loadmore").show();
+		loading = true;
+		setTimeout(function() {
+			loadlist();
+			loading = false;
+		}, 1500); //模拟延迟
+
+	});
+
 	function loadlist() {
-		$.ajax({
+		$
+				.ajax({
 					type : "post",
 					async : false,
 					url : "../../mobile/flow/findMyTask.do",
 					data : {
-						"limit" : limit, 
-	                     "offset" : offset
+						"limit" : limit,
+						"offset" : offset
 					},
 					success : function(text) {
 						var obj = JSON.parse(text);
-						var data=obj.rows;
-		            	var count=obj.total;
-		            	
+						var data = obj.rows;
+						var count = obj.total;
+
 						var span = document.createElement("span");
 						span.innerHTML = " " + count + "条记录";
 						var count = document.getElementById('count');
@@ -101,16 +106,16 @@
 								var obj = data[i];
 								console.log(obj);
 								var taskId = obj.id;
-								var li_1 = addDiv(obj.name,
-										"任务名称:"+obj.taskName, "流程编号:"+obj.id, 
-										"申请时间:"+actionTime(obj.createTime),
-										"申请人:"+obj.userName);
+								var li_1 = addDiv(obj.name, "任务名称:"
+										+ obj.taskName, "流程编号:" + obj.id,
+										"申请时间:" + actionTime(obj.createTime),
+										"申请人:" + obj.userName);
 								li_1.setAttribute("taskId", taskId);
 								li_1.setAttribute("onclick", "clickEvent('"
 										+ taskId + "');");
 								$("#ul").append(li_1);
 							}
-							offset=offset+i;
+							offset = offset + i;
 						} else {
 							html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
 							$("#ul").append(html);

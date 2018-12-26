@@ -1,7 +1,7 @@
 package com.voucher.weixin.controller;
 
 import java.io.ByteArrayInputStream;
-import java.net.URLDecoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.rmi.server.Server;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.FlowDao;
+import com.voucher.manage.daoModel.Assets.User_AccessTime;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 import com.voucher.sqlserver.context.ConnectRMI;
@@ -170,4 +171,114 @@ public class FlowController {
 
 	 }
 
+	 
+	@RequestMapping("/getAccessCount")
+	public @ResponseBody Map getAccessCount(HttpServletRequest request,
+			HttpServletResponse response) {
+		
+		String openId = (String) request.getSession().getAttribute("openId");
+
+		User_AccessTime user_AccessTime = new User_AccessTime();
+		user_AccessTime.setOpen_id(openId);
+		String[] where = { "open_id=", openId };
+		user_AccessTime.setWhere(where);
+
+		Date taskDate = null;
+		
+		Date passDate = null;
+		
+		long taskCount = 0;
+
+		long passCount = 0;
+		
+		Map map=new HashMap<>();
+		
+		User_AccessTime user_AccessTime2 = null;
+
+		try {
+			List list = flowDao.selectUserAccessTime(openId);
+			user_AccessTime2 = (User_AccessTime) list.get(0);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			map.put("taskCount", taskCount);
+			map.put("passCount", passCount);
+			return map;
+		}
+		
+
+		taskDate = user_AccessTime2.getMy_task();
+		taskCount = server.findMyPersonalTaskCount(openId, taskDate);
+
+		passDate = user_AccessTime2.getPass();
+		System.out.println("passDate="+passDate);
+		MyTestUtil.print(user_AccessTime2);
+		passCount = server.selectCountAfter(openId, passDate);
+
+		map.put("taskCount", taskCount);
+		map.put("passCount", passCount);
+		
+		return map;
+		
+	}
+	 
+	 
+	@RequestMapping("/upUserAccessTime")
+	public void upUserAccessTime(@RequestParam String parameter, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		String openId = (String) request.getSession().getAttribute("openId");
+
+		Date date = new Date();
+
+		User_AccessTime user_AccessTime = new User_AccessTime();
+		user_AccessTime.setOpen_id(openId);
+		String[] where = { "open_id=", openId };
+		user_AccessTime.setWhere(where);
+
+		int count;
+
+		User_AccessTime user_AccessTime2 = null;
+
+		try {
+			List list = flowDao.selectUserAccessTime(openId);
+			user_AccessTime2 = (User_AccessTime) list.get(0);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		if (parameter.equals("first")) {
+			user_AccessTime.setFirst(date);
+			if (user_AccessTime2 != null) {
+				count = user_AccessTime2.getFirst_count() + 1;
+			} else {
+				count = 1;
+			}
+			user_AccessTime.setFirst_count(count);
+		} else if (parameter.equals("myTask")) {
+			user_AccessTime.setMy_task(date);
+			if (user_AccessTime2 != null) {
+				count = user_AccessTime2.getMy_task_count() + 1;
+			} else {
+				count = 1;
+			}
+			user_AccessTime.setMy_task_count(count);
+		} else if (parameter.equals("pass")) {
+			user_AccessTime.setPass(date);
+			if (user_AccessTime2 != null) {
+				count = user_AccessTime2.getPass_count() + 1;
+			} else {
+				count = 1;
+			}
+			user_AccessTime.setPass_count(count);
+		}
+
+		int i = flowDao.upUserAccessTime(user_AccessTime);
+
+		if (i == 0) {
+			flowDao.insertUserAccessTime(user_AccessTime);
+		}
+
+	}
+	 
 }

@@ -10,7 +10,6 @@ public class RoomInfoFlowIdEntity implements java.io.Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-
 	private Integer id; 
 
     private String guid;  
@@ -18,6 +17,8 @@ public class RoomInfoFlowIdEntity implements java.io.Serializable{
     private String processInstanceId;
 
 	private String openId;
+
+	private String currentOpenId;
 
 	private String type;
 
@@ -27,7 +28,7 @@ public class RoomInfoFlowIdEntity implements java.io.Serializable{
 
 	private String address;
 
-	private Date update_time;
+	private Date currentDate;
 
 	private Date date;
 
@@ -85,14 +86,6 @@ public class RoomInfoFlowIdEntity implements java.io.Serializable{
 		this.date = date;
 	}
 
-	public Date getUpdate_time() {
-		return update_time;
-	}
-
-	public void setUpdate_time(Date update_time) {
-		this.update_time = update_time;
-	}
-
 	public String getOpenId() {
 		return openId;
 	}
@@ -115,5 +108,21 @@ public class RoomInfoFlowIdEntity implements java.io.Serializable{
 
 	public void setState(Integer state) {
 		this.state = state;
+	}
+
+	public String getCurrentOpenId() {
+		return currentOpenId;
+	}
+
+	public void setCurrentOpenId(String currentOpenId) {
+		this.currentOpenId = currentOpenId;
+	}
+
+	public Date getCurrentDate() {
+		return currentDate;
+	}
+
+	public void setCurrentDate(Date currentDate) {
+		this.currentDate = currentDate;
 	}
 }

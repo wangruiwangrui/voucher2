@@ -78,27 +78,6 @@
 			</div>
 		</div>
 		
-		<div class="weui-cells weui-cells_form">
-			<div class="weui-cell">
-				<div class="weui-cell__hd">
-					<label class="weui-label">审减金额</label>
-				</div>
-				<div class="weui-cell__bd">
-					<input id="amountTotal" type="number" class="weui-input" />
-				</div>
-			</div>
-		</div>
-		
-		<div class="weui-cells weui-cells_form">
-			<div class="weui-cell">
-				<div class="weui-cell__hd">
-					<label class="weui-label">审定金额</label>
-				</div>
-				<div class="weui-cell__bd">
-					<input id="auditingAmount" type="number" class="weui-input" />
-				</div>
-			</div>
-		</div>
 		
 		<div class="weui-cells weui-cells_form">
 			<div class="weui-cell">
@@ -417,10 +396,6 @@
         			error="面积不能为空!";
         		}else if(amount==null||amount==""){
         			error="送审金额不能为空!";
-        		}else if(amountTotal==null||amountTotal==""){
-        			error="审减金额不能为空!";
-        		}else if(auditingAmount==null||auditingAmount==""){
-        			error="审定金额不能为空!";
         		}else if(availabeLength==null||availabeLength==""){
         			error="质保期不能为空!";
         		}else if(neaten_instance==null||neaten_instance==""){    				
@@ -454,8 +429,8 @@
         	variableData.type=type;
         	variableData.area=area;
         	variableData.amount=amount;
-        	variableData.amountTotal=amountTotal;
-        	variableData.auditingAmount=auditingAmount;
+        	//variableData.amountTotal=amountTotal;
+        	//variableData.auditingAmount=auditingAmount;
         	variableData.availabeLength=availabeLength;
         	variableData.workUnit=workUnit;
         	variableData.checkItemDate=JSON.stringify(checkItem);

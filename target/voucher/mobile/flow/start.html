@@ -77,7 +77,7 @@
 				</div>
 			</div>
 		</div>
-		
+	<!--  
 		<div class="weui-cells weui-cells_form">
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
@@ -99,7 +99,7 @@
 				</div>
 			</div>
 		</div>
-		
+	-->	
 		<div class="weui-cells weui-cells_form">
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
@@ -396,15 +396,15 @@
   		return Y+M+D;
   	}
 	
-
-        
+   
   //happenTime设置为当前时间
 	var timestamp=actionTime(Date.parse(new Date()));
     console.log(timestamp);
     $("#happenTime").val(timestamp); 
   
     $("#save").on("click",function(){
-
+    	
+    	$.showLoading();
 	
     	geoc.getLocation(point, function(rs){
     	    var addComp;
@@ -418,8 +418,8 @@
 
         	var area=$("#area").val();
         	var amount=$("#amount").val();
-        	var amountTotal=$("#amountTotal").val();
-        	var auditingAmount=$("#auditingAmount").val();
+        	//var amountTotal=$("#amountTotal").val();
+        	//var auditingAmount=$("#auditingAmount").val();
         	var availabeLength=$("#availabeLength").val();
         	var workUnit=$("#workUnit").val();
         	
@@ -429,16 +429,18 @@
         			error="面积不能为空!";
         		}else if(amount==null||amount==""){
         			error="送审金额不能为空!";
-        		}else if(amountTotal==null||amountTotal==""){
+        		}else if(availabeLength==null||availabeLength==""){
+        			error="质保期不能为空!";
+        		}
+        		/*
+        		else if(amountTotal==null||amountTotal==""){
         			error="审减金额不能为空!";
         		}else if(auditingAmount==null||auditingAmount==""){
         			error="审定金额不能为空!";
-        		}else if(availabeLength==null||availabeLength==""){
-        			error="质保期不能为空!";
         		}else if(neaten_instance==null||neaten_instance==""){    				
         			error="请填写整改详情说明!";
     			}
-            	
+            	*/
         		
         		if(error!=""){
         			
@@ -466,8 +468,8 @@
         	variableData.type=type;
         	variableData.area=area;
         	variableData.amount=amount;
-        	variableData.amountTotal=amountTotal;
-        	variableData.auditingAmount=auditingAmount;
+        	//variableData.amountTotal=amountTotal;
+        	//variableData.auditingAmount=auditingAmount;
         	variableData.availabeLength=availabeLength;
         	variableData.workUnit=workUnit;
         	variableData.checkItemDate=JSON.stringify(checkItem);
@@ -475,7 +477,7 @@
         	var variable = JSON.stringify(variableData);
         	
         	console.log(variable);
-        	    	  
+            
         	 $.ajax({
                  type: "post",
                  async: false,
@@ -491,18 +493,19 @@
                  	var data=JSON.parse(data);
                  	console.log(data);
                      if (data.state == "succeed") {
-                    	 
-                    	 alert("提交成功");
+                    	 $.hideLoading();
+                    	 $.toast("提交成功");
                     	 history.go(-2);
                      } else {
-        
-                    	  alert(data.state);
+                    	 $.hideLoading();
+                    	 $.toast("提交错误", "forbidden");
                           return false;
                          	
                      	}
                  },
                  error:function (XMLHttpRequest, textStatus, errorThrown) { 
-                 	  alert("错误");
+                	 $.hideLoading();
+                	 $.toast("提交错误", "forbidden");
                        return false;
                  }
              });

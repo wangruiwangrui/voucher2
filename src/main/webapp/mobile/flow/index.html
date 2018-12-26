@@ -72,7 +72,7 @@
         <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
           <button id="pass" class="button button-raised button-action button-circle button-jumbo"><i class="fa fa-check-square-o"></i></button>
-          <div><span>已通过维修申请</span></div>
+          <div><span>已通过验收审核</span></div>
         </div>
         
         <div class="col-xs-4 col-sm-3" 
@@ -123,29 +123,44 @@
 	xhm.send();
 
 	place = xhm.responseText;
-/*
-	var financeButton = document.getElementById("finance");
 
-	$.get("/voucher/mobile/finance/findFirstClew.do", {
-		days : 15
+	$.get("/voucher/mobile/flow/getAccessCount.do", {
+		
 	}, function(text) {
 
-		if (text > 0) {
+		var data=JSON.parse(text);
+		
+		var taskCount=data.taskCount;
+		
+		var passCount=data.passCount;
+		
+		if(taskCount>0){
+			
+			if(taskCount>100){
+				taskCount="•••";
+			}
+			
+			var myTaskButton = document.getElementById("myTask");
+			
+			myTaskButton.setAttribute("data-num",taskCount);
 
-			financeButton.setAttribute("data-num", text);
-
-			financeButton.setAttribute("class",
-					"button button-raised  button-circle button-jumbo corner");
+			myTaskButton.setAttribute("class","button button-raised button-primary button-circle button-jumbo corner");
 		}
+		
+		if(passCount>0){
+			
+			if(passCount>100){
+				passCount="•••";
+			}
+			
+			var passButton = document.getElementById("pass");
+			
+			passButton.setAttribute("data-num",passCount);
 
-		$.get("/voucher/mobile/asset/upUserAccessTime.do", {
-			parameter : "first"
-		}, function(text) {
-
-		});
-
+			passButton.setAttribute("class","button button-raised button-action button-circle button-jumbo corner");
+		}
+		
 	});
-	 */
 
 	 $("#myTask").on("click",function(){
 		 location.href="myTask.html";

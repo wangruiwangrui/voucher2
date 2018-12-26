@@ -509,7 +509,9 @@
     }
     
     function save(input){
-        	    	  	
+        	
+    	$.showLoading();
+    	
         	var principal=$("#principal").val();
         	var happenTime=$("#happenTime").val();
         	var remark=$("#remark").val();
@@ -593,17 +595,20 @@
                 	var data=JSON.parse(data);
                 	console.log(data);
                     if (data.state == "failed") {
-                        alert("error");
+                    	$.hideLoading();
+                   		 $.toast("提交错误", "forbidden");
                         return false;
                     } else {
        
-                           alert("提交成功");
+                    	$.hideLoading();
+                   		 $.toast("提交成功");
                            history.go(-1);
                         	
                     	}
                 },
                 error:function (XMLHttpRequest, textStatus, errorThrown) { 
-                	  alert("错误");
+                	$.hideLoading();
+              		 $.toast("提交错误", "forbidden");
                       return false;
                 }
             });

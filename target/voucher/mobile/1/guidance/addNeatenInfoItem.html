@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../css/jquery-weui.css">
     <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../../../js/jquery-weui.js"></script>
 </head>
 <body>
 
@@ -201,6 +202,29 @@
       }
    });
 
+  $.ajax({
+      type: "POST",
+      url: "/voucher//mobile/flow/selectByGuid.do",
+      data: { "guid":guid},
+      dataType: "json",
+      error: function (request){
+   	   console.log(request);
+      },
+      success: function (text) {
+    	  
+    	  var total=text.total;
+    	  
+    	  if(total>0){
+    		  
+    		  $.alert("正在申请维修的资产不能新建整改记录", "错误提示", function() {
+	    			  //点击确认后的回调函数
+	    				history.back();
+	    			});
+
+    		}
+    	  
+      	}
+  	});
   
   $("#save0").on("click", function() {
 		obj = document.getElementsByName("checkbox1");
@@ -212,8 +236,17 @@
 		var item=JSON.stringify(check_val);
 		guid=encodeURI(guid);
 		item=encodeURI(item);
-			  
-		  wx.getLocation({
+		
+		console.log(check_val);
+		
+		if(check_val==null||check_val==""){
+			
+			$.alert("至少选择一条维修项目", "提示", function() {
+	  			  //点击确认后的回调函数
+	  			});
+			
+		}else{
+			wx.getLocation({		
 		      success : function(res) {
 		           // alert(JSON.stringify(res));
 		           var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
@@ -238,7 +271,7 @@
 		            });                  
 		      }
 		   });
-
+		}
 	});
 	
   
@@ -252,7 +285,16 @@
 		var item=JSON.stringify(check_val);
 		guid=encodeURI(guid);
 		item=encodeURI(item);
-			  
+		
+		console.log(check_val);
+		
+		if(check_val==null||check_val==""){
+			
+			$.alert("至少选择一条维修项目", "提示", function() {
+	  			  //点击确认后的回调函数
+	  			});
+			
+		}else{		
 		  wx.getLocation({
 		      success : function(res) {
 		           // alert(JSON.stringify(res));
@@ -278,7 +320,7 @@
 		            });                  
 		      }
 		   });
-
+		}
 	});
 	
 </script>
