@@ -75,10 +75,10 @@
           <div><span>已通过验收审核</span></div>
         </div>
         
-        <div class="col-xs-4 col-sm-3" 
+       <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
-          <button id="putUp" class="button button-raised button-highlight button-circle button-jumbo"><i class="fa fa-calendar-check-o"></i></button>
-          <div><span>正在维修申请中</span></div>
+          <button id="process" class="button button-raised button-action3 button-circle button-jumbo"><i class="fa fa-search-plus"></i></button>
+          <div><span>运行中的流程</span></div>
         </div>
      
       </div>
@@ -87,23 +87,11 @@
  
      <div class="container">
      <div class="row" >
-        
-       <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="process" class="button button-raised button-action3 button-circle button-jumbo"><i class="fa fa-search-plus"></i></button>
-          <div><span>运行中的流程</span></div>
-        </div>
-        
-        <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="myHistoricProcess" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-camera"></i></button>
-          <div><span>我申请已结束流程</span></div>
-        </div>
-               
+                      
         <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
           <button id="historicProcess" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-camera"></i></button>
-          <div><span>全部已结束流程</span></div>
+          <div><span>已结束流程</span></div>
         </div>
 
        </div>
@@ -170,17 +158,11 @@
 		 location.href="pass.html";
 	 });
 	 
-	 $("#putUp").on("click",function(){
-		 location.href="putUp.html";
-	 });
 	 
 	 $("#process").on("click",function(){
 		 location.href="process.html";
 	 });
 	 
-	 $("#myHistoricProcess").on("click",function(){
-		 location.href="myHistoricProcess.html";
-	 });
 	 
 	 $("#historicProcess").on("click",function(){
 		 location.href="historicProcess.html";
