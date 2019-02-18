@@ -3,14 +3,17 @@ package com.voucher.manage.file;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.context.ApplicationContext;
 
+import com.rmi.server.entity.ImageData;
 import com.voucher.manage.dao.AssetCheckDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
@@ -120,7 +123,28 @@ public abstract class AbstractFileUpload {
             }else if(object==Assets_Check_Date.class){
               assetCheckDAO.InsertIntoAssetsCheckDate(ID, name, mimeType, uri);
               CopyFile.set(Singleton.ROOMINFOIMGPATH2, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);
-            }
+            }else if(object==ImageData.class){
+            	LinkedHashMap<String, List<ImageData>> imageDataMap=Singleton.getInstance().getImageDataMap();
+            	List<ImageData> imageDataList=new ArrayList<>();
+            	try{
+            		imageDataList=imageDataMap.get(ID);
+            	}catch (Exception e) {
+    				// TODO: handle exception
+            		e.printStackTrace();
+            		
+    			}
+            	if(imageDataList==null){
+            		imageDataList=new ArrayList<>();
+            	}
+            	ImageData imageData=new ImageData();
+            	imageData.setURI(uri);
+            	imageData.setName(name);
+            	imageData.setType(mimeType);
+            	imageData.setDate(new Date());
+            	imageDataList.add(imageData);
+            	imageDataMap.put(ID, imageDataList);
+                CopyFile.set(Singleton.ROOMINFOIMGPATH2, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);            	
+             }
             
             i++;
           }  

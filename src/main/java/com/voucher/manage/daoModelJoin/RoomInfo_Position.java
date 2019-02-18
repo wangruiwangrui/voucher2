@@ -268,6 +268,12 @@ public class RoomInfo_Position implements Serializable{
 	@SQLDouble(name="lat")
 	private Double lat;
 
+    @SQLDouble(name="wgs84_lng")
+	private Double wgs84_lng;
+
+    @SQLDouble(name="wgs84_lat")
+	private Double wgs84_lat;
+	
 	@SQLDateTime(name="date")
 	private Date date;
 	
@@ -889,6 +895,22 @@ public class RoomInfo_Position implements Serializable{
 		this.lat = lat;
 	}
 
+	public void setWgs84_lng(Double wgs84_lng){
+		this.wgs84_lng = wgs84_lng;
+	}
+
+	public Double getWgs84_lng(){
+		return wgs84_lng;
+	}
+
+	public void setWgs84_lat(Double wgs84_lat){
+		this.wgs84_lat = wgs84_lat;
+	}
+
+	public Double getWgs84_lat(){
+		return wgs84_lat;
+	}
+	
 	public Date getDate() {
 		return date;
 	}

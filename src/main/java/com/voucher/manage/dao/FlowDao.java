@@ -8,7 +8,7 @@ import com.voucher.manage.daoModel.Assets.User_AccessTime;
 
 public interface FlowDao {
 
-	public Map addProcessInstance(Server server,String processDefinitionKey,String userId,String variableData,String className)throws Exception;
+	public Map addProcessInstance(Server server,String processDefinitionKey,String userId,String variableData,String className,List imageDataList)throws Exception;
 	
 	public Integer upRoomNeatenFlowById( String neatenId);
 	

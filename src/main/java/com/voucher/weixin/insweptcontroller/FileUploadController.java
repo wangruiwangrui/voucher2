@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rmi.server.entity.ImageData;
 import com.voucher.manage.daoModel.Assets.Assets_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
@@ -30,6 +32,7 @@ import com.voucher.manage.file.ImageFileFactory;
 import com.voucher.manage.model.Photo;
 import com.voucher.manage.service.PhotoService;
 import com.voucher.manage.service.WeiXinService;
+import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.FileConvect;
 import com.voucher.manage.tools.FileTypeTest;
 import com.voucher.weixin.base.AutoAccessToken;  
@@ -139,6 +142,8 @@ public class FileUploadController {
         	objectClass=FileSelfBelong.class;
         }else if(classType.equals("assetCheck")){
         	objectClass=Assets_Check_Date.class;
+        }else if(classType.equals("imageData")){
+        	objectClass=ImageData.class;
         }
         
         new ImageFileFactory().upload(objectClass,id, names, files);

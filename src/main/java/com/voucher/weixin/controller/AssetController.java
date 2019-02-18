@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.sql.ast.statement.SQLIfStatement.Else;
+import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
@@ -727,7 +728,9 @@ public class AssetController {
     		@RequestParam Integer campusId,@RequestParam String id,
     		@RequestParam String classType,
     		@RequestParam String GUID,
-			@RequestParam Double lng,@RequestParam Double lat){
+			@RequestParam Double lng,@RequestParam Double lat,
+			@RequestParam Double wgs84_lng,@RequestParam Double wgs84_lat,
+			@RequestParam String addComp){
 		
 		int upload=0;
 		
@@ -764,7 +767,28 @@ public class AssetController {
 			position.setGUID(GUID);
 			position.setLat(lat);
 			position.setLng(lng);
+			position.setWgs84_lat(wgs84_lat);
+			position.setWgs84_lng(wgs84_lng);
+			
+			try {
+				
+				JSONObject jsonObject = JSONObject.parseObject(addComp);
 
+				String province = jsonObject.getString("province");
+				String city = jsonObject.getString("city");
+				String district = jsonObject.getString("district");
+				String street = jsonObject.getString("street");
+				String streetNumber = jsonObject.getString("streetNumber");
+				position.setProvince(province);
+				position.setCity(city);
+				position.setDistrict(district);
+				position.setStreet(streetNumber);
+				position.setStreet_number(streetNumber);
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
 			Date date=new Date();
 		    
 		    position.setDate(date);

@@ -378,6 +378,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"[Position].street_number,"+
 					"[Position].lng,"+
 					"[Position].lat,"+
+					"[Position].wgs84_lng,"+
+					"[Position].wgs84_lat,"+
 					"[Position].date,"+
 					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
 				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
@@ -1925,6 +1927,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 						"[Position].street_number,"+
 						"[Position].lng,"+
 						"[Position].lat,"+
+						"[Position].wgs84_lng,"+
+						"[Position].wgs84_lat,"+
 						"[Position].date,"+
 						Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
 					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+

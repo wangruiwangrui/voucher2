@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rmi.server.Server;
+import com.rmi.server.entity.FlowData;
+import com.rmi.server.entity.ImageData;
 import com.rmi.server.entity.Neaten;
 import com.rmi.server.entity.RoomInfoFlowIdEntity;
 import com.voucher.manage.dao.AssetsDAO;
@@ -42,6 +44,7 @@ import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Item;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
+import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
@@ -706,10 +709,12 @@ public class HiddenController {
 		String checkItemDate=jsonObject.getString("checkItemDate");
 		 */
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
 		String guid=neaten.getGUID();
 		String address = neaten.getAddress();
 		String neaten_instance=neaten.getNeaten_instance();
-		String happenTime=neaten.getHappen_time().toString();
+		String happenTime=sdf.format(neaten.getHappen_time());
 		String principal=neaten.getPrincipal();
 		String remark=neaten.getRemark();
 		String addComp=neaten.getAddComp();
@@ -724,9 +729,33 @@ public class HiddenController {
 		String workUnit=neaten.getWorkUnit();
 		String checkItemDate=neaten.getCheckItemDate();
 		
+		FlowData flowData=(FlowData) map.get("flowData");
+		
+		List imageDataList=flowData.getImageDataList();
+		
+		UUID uuid=UUID.randomUUID();
+		
+		if(imageDataList!=null){
+			Iterator iterator=imageDataList.iterator();
+			int n=0;
+			while (iterator.hasNext()) {
+				ImageData imageData=(ImageData) iterator.next();
+				Hidden_Neaten_Date hidden_Neaten_Date=new Hidden_Neaten_Date();
+				hidden_Neaten_Date.setNeaten_id(uuid.toString());
+				hidden_Neaten_Date.setNAME(imageData.getName());
+				hidden_Neaten_Date.setFileBelong("整改图片");
+				hidden_Neaten_Date.setURI(imageData.getURI());
+				hidden_Neaten_Date.setTYPE(imageData.getType());
+				hidden_Neaten_Date.setFileIndex(n);
+				hidden_Neaten_Date.setDate(imageData.getDate());
+				hiddenDAO.insertHidden_Neaten_Date(hidden_Neaten_Date);
+				n++;
+			}
+		}
+
 		return insertHiddenNeaten(guid, progress, 1, address, happenTime, principal, remark, 
 				neaten_instance, addComp, checkItemDate, lng, lat, type, area, amount,
-				amountTotal, auditingAmount, availabeLength, workUnit, request);
+				amountTotal, auditingAmount, availabeLength, workUnit,uuid.toString(),request);
 		
 		
 	}
@@ -743,7 +772,7 @@ public class HiddenController {
 			@RequestParam Double lng,@RequestParam Double lat,
 			String type,
 			Float area,Float amount,Float amountTotal,Float auditingAmount,
-			String availabeLength,String workUnit,
+			String availabeLength,String workUnit,String imgId,
 			HttpServletRequest request){
 		
 		String processInstanceId="";
@@ -1002,7 +1031,15 @@ public class HiddenController {
 		}else{
 			map.put("status", "failure");
 		}
-				
+
+		if(imgId!=null&&!imgId.equals("")){
+			Hidden_Neaten_Date hidden_Neaten_Date=new Hidden_Neaten_Date();
+			hidden_Neaten_Date.setNeaten_id(uuid.toString());
+			String[] where={"neaten_id=",imgId};
+			hidden_Neaten_Date.setWhere(where);
+			hiddenDAO.updateHidden_Neaten_Date(hidden_Neaten_Date);
+		}
+		
 		map.put("neaten_id", uuid.toString());
 				
 		return map;

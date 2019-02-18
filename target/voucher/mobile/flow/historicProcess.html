@@ -12,7 +12,7 @@
 	<script type='text/javascript' src="../../js/jquery.js"></script>
 	 <link rel="stylesheet" href="../1/css/jquery-weui.css">
 	 <script src="../../js/jquery-weui.js"></script>
-    <title>我的任务</title>
+    <title>已结束的流程</title>
 </head>
 <body>
 	<div class="weui-pull-to-refresh__layer">
@@ -34,9 +34,6 @@
 </body>
 		
 <script type="text/javascript">	
-
-
-	var url = "/voucher/baiduMap/getAssetsByDistanceImg.do";
 
 	var limit = 10;
 	var offset = 0;
@@ -78,7 +75,7 @@
 		$.ajax({
 					type : "post",
 					async : false,
-					url : "../../mobile/flow/findMyTask.do",
+					url : "../../mobile/flow/findMyAllHistory.do",
 					data : {
 						"limit" : limit, 
 	                     "offset" : offset
@@ -102,12 +99,12 @@
 								console.log(obj);
 								var taskId = obj.id;
 								var li_1 = addDiv(obj.name,
-										"任务名称:"+obj.taskName, "流程编号:"+obj.id, 
-										"申请时间:"+actionTime(obj.createTime),
-										"申请人:"+obj.userName);
+										"审批结果:"+getResult(obj.result), "流程编号:"+obj.id, 
+										"申请时间:"+actionTime(obj.endTime),
+										"申请人:"+obj.startUserId);
 								li_1.setAttribute("taskId", taskId);
 								li_1.setAttribute("onclick", "clickEvent('"
-										+ taskId + "');");
+										+ obj.id + "');");
 								$("#ul").append(li_1);
 							}
 							offset=offset+i;
@@ -120,6 +117,14 @@
 				})
 	}
 
+	function getResult(result){
+		if(result==1){
+			return "<font color='green'>"+"通过"+"</font>";
+		}else if(result==0){
+			return "<font color='#FF0000'>"+"拒绝"+"</font>";
+		}
+	}
+	
 	function addDiv(title, content, time, interval, manageRegion) {
 		var li = document.createElement("li");
 		var div_1 = document.createElement("div");
@@ -186,24 +191,10 @@
 		return Y + M + D + h + m + s;
 	}
 
-	function clickEvent(taskId) {
-		$.ajax({
-			type : "post",
-			async : false,
-			url : "../../mobile/flow/findMyTaskById.do",
-			data : {
-				id : taskId
-			}
+	function clickEvent(processDefinitionId) {
 
-			,
-			success : function(data) {
-				var data = JSON.parse(data);
-				var userId = data.userId;
+				location.href = "historicFlowDetail.html?processDefinitionId=" + processDefinitionId;
 
-				location.href = "../../mobile/flow/toRoute.do?taskId=" + taskId
-						+ "&userId=" + userId + "&className=neaten";
-
-			}
-		});
 	}
+	
 </script>

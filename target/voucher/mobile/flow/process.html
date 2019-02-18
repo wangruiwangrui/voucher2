@@ -12,7 +12,7 @@
 	<script type='text/javascript' src="../../js/jquery.js"></script>
 	 <link rel="stylesheet" href="../1/css/jquery-weui.css">
 	 <script src="../../js/jquery-weui.js"></script>
-    <title>我的任务</title>
+    <title>运行中流程</title>
 </head>
 <body>
 	<div class="weui-pull-to-refresh__layer">
@@ -34,9 +34,6 @@
 </body>
 		
 <script type="text/javascript">	
-
-
-	var url = "/voucher/baiduMap/getAssetsByDistanceImg.do";
 
 	var limit = 10;
 	var offset = 0;
@@ -78,7 +75,7 @@
 		$.ajax({
 					type : "post",
 					async : false,
-					url : "../../mobile/flow/findMyTask.do",
+					url : "../../mobile/flow/selectAttachMent.do",
 					data : {
 						"limit" : limit, 
 	                     "offset" : offset
@@ -101,13 +98,14 @@
 								var obj = data[i];
 								console.log(obj);
 								var taskId = obj.id;
-								var li_1 = addDiv(obj.name,
-										"任务名称:"+obj.taskName, "流程编号:"+obj.id, 
-										"申请时间:"+actionTime(obj.createTime),
-										"申请人:"+obj.userName);
+								var li_1 = addDiv(obj.name, "流程编号:" + obj.id,										
+										"执行人:" + obj.assignee,
+										"申请时间:" + actionTime(obj.createTime),
+										"任务名称:"
+										+ obj.description);
 								li_1.setAttribute("taskId", taskId);
 								li_1.setAttribute("onclick", "clickEvent('"
-										+ taskId + "');");
+										+ obj.id + "');");
 								$("#ul").append(li_1);
 							}
 							offset=offset+i;
@@ -119,7 +117,7 @@
 					}
 				})
 	}
-
+	
 	function addDiv(title, content, time, interval, manageRegion) {
 		var li = document.createElement("li");
 		var div_1 = document.createElement("div");
@@ -187,23 +185,9 @@
 	}
 
 	function clickEvent(taskId) {
-		$.ajax({
-			type : "post",
-			async : false,
-			url : "../../mobile/flow/findMyTaskById.do",
-			data : {
-				id : taskId
-			}
 
-			,
-			success : function(data) {
-				var data = JSON.parse(data);
-				var userId = data.userId;
+				location.href = "processFlowDetail.html?taskId=" + taskId;
 
-				location.href = "../../mobile/flow/toRoute.do?taskId=" + taskId
-						+ "&userId=" + userId + "&className=neaten";
-
-			}
-		});
 	}
+	
 </script>

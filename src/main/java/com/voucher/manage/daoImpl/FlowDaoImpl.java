@@ -18,7 +18,7 @@ import com.voucher.manage.daoSQL.UpdateExe;
 public class FlowDaoImpl extends JdbcDaoSupport implements FlowDao{
 
 	@Override
-	public Map addProcessInstance(Server server,String processDefinitionKey, String userId, String variableData, String className) {
+	public Map addProcessInstance(Server server,String processDefinitionKey, String userId, String variableData, String className,List imageDataList) {
 		// TODO Auto-generated method stub
 		
 		String guid="";
@@ -55,7 +55,7 @@ public class FlowDaoImpl extends JdbcDaoSupport implements FlowDao{
 			
 			try{
 				
-				map=server.startProcessInstance(processDefinitionKey, userId, variableData, className);
+				map=server.startProcessInstance(processDefinitionKey, userId, variableData, imageDataList,className);
 				
 				if(map.get("state").equals("流程启动失败"))
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

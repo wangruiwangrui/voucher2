@@ -1,8 +1,10 @@
 package com.voucher.weixin.controller;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rmi.server.Server;
+import com.rmi.server.entity.FlowData;
+import com.rmi.server.entity.ImageData;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.FlowDao;
+import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.daoModel.Assets.User_AccessTime;
+import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 import com.voucher.sqlserver.context.ConnectRMI;
@@ -34,15 +40,32 @@ public class FlowController {
 	
 	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
 	
+	MobileDAO mobileDao=(MobileDAO) applicationContext.getBean("mobileDao");
+	
 	Server server=new ConnectRMI().get();
 	
 	@RequestMapping(value = "/start")
 	public @ResponseBody Map startProcessInstance(@RequestParam String processDefinitionKey,
-			@RequestParam String variableData,@RequestParam String className,HttpServletRequest request)throws Exception{
+			@RequestParam String variableData,@RequestParam String className,
+			@RequestParam String id,HttpServletRequest request)throws Exception{
 		
 		String openId=( String ) request.getSession().getAttribute("openId");
 		
-		Map map=flowDao.addProcessInstance(server,processDefinitionKey, openId, variableData, className);
+		LinkedHashMap<String, List<ImageData>> imageDataMap=Singleton.getInstance().getImageDataMap();
+    	List<ImageData> imageDataList=new ArrayList<>();
+    	try{
+    		imageDataList=imageDataMap.get(id);
+    	}catch (Exception e) {
+			// TODO: handle exception
+    		e.printStackTrace();
+    		
+		}
+		
+    	if(imageDataList==null){
+    		imageDataList=new ArrayList<>();
+    	}
+    	
+		Map map=flowDao.addProcessInstance(server,processDefinitionKey, openId, variableData, className,imageDataList);
 		
 		return map;
 	
@@ -66,26 +89,72 @@ public class FlowController {
 	}
 	
 	@RequestMapping(value = "/findMyTaskById")
-	public @ResponseBody Object findMyPersonalTaskById(@RequestParam String id){
+	public @ResponseBody Object findMyPersonalTaskById(@RequestParam String id,HttpServletRequest request){
 		
-		return server.findMyPersonalTaskById(id);
+		Object object=server.findMyPersonalTaskById(id);
 	
+		try {
+			Map map = (Map) object;
+
+			FlowData flowData = (FlowData) map.get("flowData");
+
+			List<ImageData> imageDataList = flowData.getImageDataList();
+
+			if (imageDataList != null) {
+				mobileDao.flowImageData(request, imageDataList);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return object;
 		
 	}
 	
 	@RequestMapping(value = "/personalTask")
 	public @ResponseBody Map completeMyPersonalTask(@RequestParam String taskId,@RequestParam Integer input,@RequestParam String variableData,
-			@RequestParam String className) throws Exception{
+			@RequestParam String className,String id) throws Exception{
 		
-		return server.completeMyPersonalTask(taskId, input, variableData, className);
+		LinkedHashMap<String, List<ImageData>> imageDataMap=Singleton.getInstance().getImageDataMap();
+    	List<ImageData> imageDataList=new ArrayList<>();
+    	try{
+    		imageDataList=imageDataMap.get(id);
+    	}catch (Exception e) {
+			// TODO: handle exception
+    		e.printStackTrace();
+    		
+		}
+		
+    	if(imageDataList==null){
+    		imageDataList=new ArrayList<>();
+    	}
+    	
+		return server.completeMyPersonalTask(taskId, input, variableData, className,imageDataList);
 		
 	}
 	
 	@RequestMapping(value = "/findHistoryById")
-	public @ResponseBody Object findHistoryById(@RequestParam String id,HttpServletResponse response){
+	public @ResponseBody Object findHistoryById(@RequestParam String id,HttpServletRequest request){
 		
-		return server.findHistoryById(id);
+		Object object=server.findHistoryById(id);
 		
+		try {
+			Map map = (Map) object;
+
+			FlowData flowData = (FlowData) map.get("flowData");
+
+			List<ImageData> imageDataList = flowData.getImageDataList();
+
+			if (imageDataList != null) {
+				mobileDao.flowImageData(request, imageDataList);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		return object;
 	}
 	
 	@RequestMapping(value="/selectAttachMent")    
@@ -281,4 +350,21 @@ public class FlowController {
 
 	}
 	 
+	@RequestMapping(value="/findimagedata")
+	public @ResponseBody List findImageData(HttpServletRequest request,@RequestParam String id){
+		
+		LinkedHashMap<String, List<ImageData>> imageDataMap=Singleton.getInstance().getImageDataMap();
+    	List<ImageData> imageDataList=new ArrayList<>();
+    	try{
+    		imageDataList=imageDataMap.get(id);
+    	}catch (Exception e) {
+			// TODO: handle exception
+    		e.printStackTrace();
+    		
+		}
+    	
+    	return mobileDao.flowImageData(request, imageDataList);
+
+	}
+	
 }

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
+import com.rmi.server.entity.ImageData;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
@@ -714,6 +715,47 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), weiXin_User).get("");
 		
 		return count;
+	}
+
+
+	@Override
+	public List flowImageData(HttpServletRequest request,List list) {
+		// TODO Auto-generated method stub
+		String pathRoot = System.getProperty("user.home");
+		
+		String filePath=pathRoot+Singleton.filePath;
+        
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
+		
+		Iterator<ImageData> iterator=list.iterator();
+		
+		List fileBytes=new ArrayList<>();
+		
+		while (iterator.hasNext()) {
+			
+			ImageData imageData=iterator.next();
+			
+			try{			
+				String oldFile=filePath+"\\"+imageData.getURI();
+			
+				CopyFile.set(imgPath, oldFile, imageData.getURI());
+			
+				Map<String,String> map=new HashMap<>();
+				
+				map.put("name", imageData.getName());
+				map.put("uri", Singleton.filePath+"\\"+imageData.getURI());
+				map.put("compressUri", Singleton.filePath+"\\compressFile\\"+imageData.getURI());
+				map.put("date", imageData.getDate().toString());
+				
+				fileBytes.add(map);
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		
+		return fileBytes;
+		
 	}
 
 

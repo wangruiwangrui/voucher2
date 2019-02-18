@@ -155,15 +155,14 @@
         </div>
      </div>
     </div>
-
-	<div class="weui-cells weui-cells_form">
-     <div class="weui-cell">
+  
+   <div class="weui-cells weui-cells_form">
+    <div class="weui-cell">
         <div class="weui-cell__hd"><label class="weui-label">整改时间</label></div>
-        <div  class="weui-cell__bd">
-         <input id="happenTime" class="weui-input" type="date" readonly="readonly"/>
+        <div id="date" class="weui-cell__bd">
         </div>
-     </div>
     </div>
+  </div>
     
     <div class="weui-cells weui-cells_form">
            <div class="weui-cell">
@@ -179,7 +178,15 @@
 				<div class="weui-cells weui-cells_checkbox" id="deliverans"></div>
 			</div>			
 	</div>
-    	
+    
+    <div class="weui-panel weui-panel_access">
+		<div class="weui-panel__hd">维修照片</div>
+		<div id="img0" class="weui-panel__bd">
+		</div>
+		<div id="img" class="weui-panel__bd">
+		</div>
+	</div>
+    
 </body>
 
 <script type="text/javascript">
@@ -236,12 +243,8 @@
 				
                 var item=obj.neaten_item;
 				$("#item").append("<font color='#3366FF'>"+item+"</font>");
-				
-				 var time=actionTime(obj.happen_time);
-				 console.log(time);
-				 $("#happenTime").val(time);
                   
-                  var time=actionTime(obj.date);
+                  var time=actionHappenTime(obj.happen_time);
                   var date=document.createElement("span");
                   date.innerHTML=time;
                   $("#date").append(date);
@@ -335,7 +338,53 @@
                 	addDiv(i,deliverans[i].name,deliverans[i].content,deliverans[i].userName,deliverans[i].result,deliverans[i].date);
                 }
               	
-                  
+                var imgs=flowData.imageDataList;
+                
+                console.log(imgs);
+                
+                $("#img0").children('div').remove();
+	 		    	if(imgs!=null){
+	                  	   var i = 0;
+	                         for(; i < imgs.length; i++){
+	                      	   
+	                      	  var data=imgs[i];
+	                      	  var name=data.name;
+	                      	  var uri=data.uri;
+	                      	  var date=actionTime(data.date);
+	                      	  var panel=document.createElement("div");
+	                      	  panel.setAttribute("class","weui-panel__bd");
+	                        	   var a=document.createElement("a");
+	                       	   a.setAttribute("class","weui_grid");
+	                       	   var a=document.createElement("a");
+	                       	  a.setAttribute("href","javascript:void(0);");
+	                       	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+	                       	   var div=document.createElement("div");
+	                       	  	div.setAttribute("class","weui-media-box__hd");
+	                       	  
+	                  	   	 	 src="/voucher/Desktop/pasoft/photo/"+uri;
+	                  	  	  	var img=document.createElement("img");
+	                  	  	  	img.setAttribute("class","weui-media-box__thumb");
+	                            	img.setAttribute("src",src);
+	                          
+	                         	  	div.appendChild(img);
+	                         	   		
+	                         	  	div2=document.createElement("div");
+	                         	  		div2.setAttribute("class","weui-media-box__bd");
+	                         	 		h4=document.createElement("h4");
+	                         	 		h4.setAttribute("class","weui-media-box__title");
+	                         	 	 	h4.innerHTML=name;
+	                         	  	 	p=document.createElement("p");
+	                         	  	 	p.setAttribute("class","weui-media-box__desc");
+	                         	  	 	p.innerHTML=date;
+	                         	     div2.appendChild(h4);
+	                         	     div2.appendChild(p);
+	                         	   a.appendChild(div);
+	                         	   a.appendChild(div2);
+	                         	   panel.appendChild(a);
+	                  	      	  $("#img0").append(panel);
+	                         }
+	          		   
+	          	   		} 
                    	  
                var address=document.createElement("span");
                address.innerHTML=obj.address;
@@ -426,13 +475,16 @@
         return Y+M+D+h+m+s;
     }
 	
-
-	
-        
-  //happenTime设置为当前时间
-	var timestamp=actionTime(Date.parse(new Date()));
-    console.log(timestamp);
-    $("#happenTime").val(timestamp); 
+    function actionHappenTime(value){
+        var date = new Date(value);
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = date.getDate() + ' ';
+        h = date.getHours() + ':';
+        m = date.getMinutes() + ':';
+        s = date.getSeconds();
+        return Y+M+D;
+    }
   
     function audit(input){
     	

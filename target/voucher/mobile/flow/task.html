@@ -168,6 +168,14 @@
 		</div>			
 	</div>
 	
+	<div class="weui-panel weui-panel_access">
+		<div class="weui-panel__hd">维修照片</div>
+		<div id="img0" class="weui-panel__bd">
+		</div>
+		<div id="img" class="weui-panel__bd">
+		</div>
+	</div>
+	
 	<div class="weui-cells__title">审核意见</div>
     <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
@@ -268,7 +276,7 @@
                 var item=obj.neaten_item;
 				$("#item").append("<font color='#3366FF'>"+item+"</font>");
 				
-				 var time=actionTime(obj.happen_time);
+				 var time=actionTime0(obj.happen_time);
 				 console.log(time);
 				 $("#happenTime").val(time);
                   
@@ -361,11 +369,59 @@
                 
               	 var flowData=text.flowData;
                  var deliverans=flowData.deliverans;
-                 console.log(deliverans);
+                 console.log(flowData);
                  for(var i=0;i<deliverans.length;i++){
                  	addDiv(deliverans[i].name,deliverans[i].content,deliverans[i].userName,deliverans[i].result,deliverans[i].date);
                  }
               	
+ 				var imgs=flowData.imageDataList;
+                 
+                 console.log(imgs);
+                 
+                 $("#img0").children('div').remove();
+	 		    	if(imgs!=null){
+	                  	   var i = 0;
+	                         for(; i < imgs.length; i++){
+	                      	   
+	                      	  var data=imgs[i];
+	                      	  var name=data.name;
+	                      	  var uri=data.uri;
+	                      	  var date=actionTime(data.date);
+	                      	  var panel=document.createElement("div");
+	                      	  panel.setAttribute("class","weui-panel__bd");
+	                        	   var a=document.createElement("a");
+	                       	   a.setAttribute("class","weui_grid");
+	                       	   var a=document.createElement("a");
+	                       	  a.setAttribute("href","javascript:void(0);");
+	                       	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+	                       	   var div=document.createElement("div");
+	                       	  	div.setAttribute("class","weui-media-box__hd");
+	                       	  
+	                  	   	 	 src="/voucher/Desktop/pasoft/photo/"+uri;
+	                  	  	  	var img=document.createElement("img");
+	                  	  	  	img.setAttribute("class","weui-media-box__thumb");
+	                            	img.setAttribute("src",src);
+	                          
+	                         	  	div.appendChild(img);
+	                         	   		
+	                         	  	div2=document.createElement("div");
+	                         	  		div2.setAttribute("class","weui-media-box__bd");
+	                         	 		h4=document.createElement("h4");
+	                         	 		h4.setAttribute("class","weui-media-box__title");
+	                         	 	 	h4.innerHTML=name;
+	                         	  	 	p=document.createElement("p");
+	                         	  	 	p.setAttribute("class","weui-media-box__desc");
+	                         	  	 	p.innerHTML=date;
+	                         	     div2.appendChild(h4);
+	                         	     div2.appendChild(p);
+	                         	   a.appendChild(div);
+	                         	   a.appendChild(div2);
+	                         	   panel.appendChild(a);
+	                  	      	  $("#img0").append(panel);
+	                         }
+	          		   
+	          	   		}
+                 
                 guid=obj.guid;
                   
               	$.ajax({
@@ -474,6 +530,16 @@
     }
 	
 
+	function actionTime0(value){
+  	    var date = new Date(value); 
+  	    Y = date.getFullYear() + '-';
+  	    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+  	  	D = date.getDate()<10?'0'+date.getDate():date.getDate();
+  	    h = date.getHours() + ':';
+  	    m = date.getMinutes() + ':';
+  	    s = date.getSeconds(); 
+  		return Y+M+D;
+  	}
 	
         
   //happenTime设置为当前时间
@@ -508,10 +574,15 @@
 
     }
     
+    var point = new BMap.Point(105, 28);
+    
+    var geoc = new BMap.Geocoder();
+    
     function save(input){
         	
     	$.showLoading();
     	
+    	geoc.getLocation(point, function(rs){
         	var principal=$("#principal").val();
         	var happenTime=$("#happenTime").val();
         	var remark=$("#remark").val();
@@ -612,8 +683,159 @@
                       return false;
                 }
             });
-    	
+    	}); 
 
     }
     
+</script>
+
+
+ <script src="../../js/previewImage.min.js"></script>
+
+    <script>
+     
+     var im = {};
+     /**
+      * 得到多个元素
+      * @public
+      */
+     im.all = function(selector, contextElement) {
+         var nodeList,
+             list = [];
+         if (contextElement) {
+             nodeList = contextElement.querySelectorAll(selector);
+         } else {
+             nodeList = document.querySelectorAll(selector);
+         }
+         if (nodeList && nodeList.length > 0) {
+             list = Array.prototype.slice.call(nodeList);
+         }
+         return list;
+     }
+
+     /**
+      * 将事件委托给父元素
+      * @public
+      * @param  array     $el         父元素
+      * @param  string    eventType  事件类型名称
+      * @param  string    selector   目标的选择器
+      * @param  function  fn
+      */
+     im.delegate = function($el, eventType, selector, fn) {
+         if (!$el) { return; }
+         $el.addEventListener(eventType, function(e) {
+             var targets = im.all(selector, $el);
+             if (!targets) {
+                 return;
+             }
+             // findTarget:
+             for (var i=0; i<targets.length; i++) {
+                 var $node = e.target;
+                 while ($node) {
+                     if ($node == targets[i]) {
+                         fn.call($node, e);
+                         break; //findTarget;
+                     }
+                     $node = $node.parentNode;
+                     if ($node == $el) {
+                         break;
+                     }
+                 }
+             }
+         }, false);
+     };
+
+
+     im.delegate(document.querySelector('#img'), 'click','img',function(){
+    	 
+    	 var urls = [];
+    	 var imgs = im.all('img',im.all('#img')[0]);
+    	 imgs.forEach(function(v,i){
+    		 var str=v.src;
+    		 var url=str.replace(/\/compressFile/, "");
+    	     urls.push(url);
+    	 })
+         
+    	 var thisStr = this.src;
+    	 var current = thisStr.replace(/\/compressFile/, "");
+    	 console.log(current);
+         var obj = {
+             urls : urls,
+             current : current
+         };
+         previewImage.start(obj);
+     });  
+     
+ 	var im2 = {};
+	/**
+	 * 得到多个元素
+	 * @public
+	 */
+	im2.all = function (selector, contextElement) {
+		var nodeList,
+			list = [];
+		if (contextElement) {
+			nodeList = contextElement.querySelectorAll(selector);
+		} else {
+			nodeList = document.querySelectorAll(selector);
+		}
+		if (nodeList && nodeList.length > 0) {
+			list = Array.prototype.slice.call(nodeList);
+		}
+		return list;
+	}
+
+	/**
+	 * 将事件委托给父元素
+	 * @public
+	 * @param  array     $el         父元素
+	 * @param  string    eventType  事件类型名称
+	 * @param  string    selector   目标的选择器
+	 * @param  function  fn
+	 */
+	im2.delegate = function ($el, eventType, selector, fn) {
+		if (!$el) { return; }
+		$el.addEventListener(eventType, function (e) {
+			var targets = im2.all(selector, $el);
+			if (!targets) {
+				return;
+			}
+			// findTarget:
+			for (var i = 0; i < targets.length; i++) {
+				var $node = e.target;
+				while ($node) {
+					if ($node == targets[i]) {
+						fn.call($node, e);
+						break; //findTarget;
+					}
+					$node = $node.parentNode;
+					if ($node == $el) {
+						break;
+					}
+				}
+			}
+		}, false);
+	};
+
+
+	im2.delegate(document.querySelector('#img0'), 'click', 'img', function () {
+
+		var urls = [];
+		var imgs = im2.all('img', im2.all('#img0')[0]);
+		imgs.forEach(function (v, i) {
+			var str = v.src;
+			var url = str.replace(/\/compressFile/, "");
+			urls.push(url);
+		})
+
+		var thisStr = this.src;
+		var current = thisStr.replace(/\/compressFile/, "");
+		console.log(current);
+		var obj = {
+			urls: urls,
+			current: current
+		};
+		previewImage.start(obj);
+	});
+     
 </script>

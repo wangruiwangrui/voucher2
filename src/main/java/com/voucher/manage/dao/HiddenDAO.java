@@ -6,6 +6,7 @@ import java.util.Map;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Item;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
+import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Neaten_Check;
 import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
@@ -78,4 +79,8 @@ public interface HiddenDAO {
 	public Integer updateRoomInfo_Hidden_Item(RoomInfo_Hidden_Item roomInfo_Hidden_Item);
 	
 	public Integer insertIntoNeaten_Check(Neaten_Check neaten_Check);
+	
+	public Integer insertHidden_Neaten_Date(Hidden_Neaten_Date hidden_Neaten_Date);
+	
+	public Integer updateHidden_Neaten_Date(Hidden_Neaten_Date hidden_Neaten_Date);
 }

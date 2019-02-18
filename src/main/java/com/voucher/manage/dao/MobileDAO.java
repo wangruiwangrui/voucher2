@@ -39,4 +39,6 @@ public interface MobileDAO {
 	public Integer updateWeiXinUser(WeiXin_User weiXin_User);
 	
 	public Integer selectCountWeiXinUser(WeiXin_User weiXin_User);
+	
+	public List flowImageData(HttpServletRequest request,List list);
 }

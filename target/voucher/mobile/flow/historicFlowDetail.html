@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>流程详情</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta charset="utf-8" />
+ <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="../1/css/weui.css"/>
+    <link rel="stylesheet" href="../1/css/example.css"/>
+    <script src="../../js/swiper.js"></script>
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+ 	<script src="../../js/jquery-weui.js"></script>
+ 	<link rel="stylesheet" href="../1/css/jquery-weui.css">
+ 	<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+	<script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+<style type="text/css">
+    body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
+</style>
+
+</head>
+<body>
+
+	<div class="weui-cells weui-cells_form">
+		<div class="weui-panel__ft">
+			<a href="javascript:void(0);"
+				class="weui-cell weui-cell_access weui-cell_link">
+				<div class="weui-cell__bd">流程详情</div>
+			</a>
+		</div>
+	</div>
+
+	<div class="weui-cells weui-cells_form" id="other">
+	</div>
+
+  <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">资产地址</label></div>
+                <div id="address" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+
+	<div class="weui-cells weui-cells_form">
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">整改项目</label></div>
+			<div id="item" class="weui-cell__bd"></div>
+		</div>
+	</div>
+
+   	<div id="repair"><!-- 维修记录 -->
+	
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><label class="weui-label">维修类型</label></div>
+				<div id="type" class="weui-cell__bd"></div>
+			</div>
+		</div>
+
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">维修面积</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="area" type="number" class="weui-input" readonly="readonly"/>
+				</div>
+			</div>
+		</div>
+
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">送审金额</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="amount" type="number" class="weui-input" readonly="readonly"/>
+				</div>
+			</div>
+		</div>
+  
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">审减金额</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="amountTotal" type="number" class="weui-input" readonly="readonly"/>
+				</div>
+			</div>
+		</div>
+		
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">审定金额</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="auditingAmount" type="number" class="weui-input" readonly="readonly"/>
+				</div>
+			</div>
+		</div>
+
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">质保期(年)</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="availabeLength" class="weui-input" readonly="readonly"/>
+				</div>
+			</div>
+		</div>
+		
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">施工单位</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="workUnit"  class="weui-input" readonly="readonly"/>
+				</div>
+			</div>
+		</div>
+		
+
+	</div>
+   
+  <div class="weui-cells weui-cells_form">
+     <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">整改人员</label></div>
+        <div  class="weui-cell__bd">
+          <input id="principal" class="weui-input" readonly="readonly"/>
+        </div>
+     </div>
+    </div>
+
+	<div class="weui-cells weui-cells_form">
+     <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">整改详情</label></div>
+        <div  class="weui-cell__bd">
+         <input id="neaten_instance" class="weui-input" readonly="readonly"/>
+        </div>
+     </div>
+    </div>
+  
+  <div class="weui-cells weui-cells_form">
+     <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">备注</label></div>
+        <div  class="weui-cell__bd">
+         <input id="remark" class="weui-input" readonly="readonly"/>
+        </div>
+     </div>
+    </div>
+  
+   <div class="weui-cells weui-cells_form">
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">整改时间</label></div>
+        <div id="date" class="weui-cell__bd">
+        </div>
+    </div>
+  </div>
+    
+    <div class="weui-cells weui-cells_form">
+           <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">申请人员</label></div>
+                <div id="applicationUser" class="weui-cell__bd">
+                </div>
+          </div>
+    </div>
+	    
+    <div class="weui-cells weui-cells_form">	
+			<div class="cell">
+				<div class="weui-cells__title">审核详情</div>
+				<div class="weui-cells weui-cells_checkbox" id="deliverans"></div>
+			</div>			
+	</div>
+    
+    <div class="weui-panel weui-panel_access">
+		<div class="weui-panel__hd">维修照片</div>
+		<div id="img0" class="weui-panel__bd">
+		</div>
+		<div id="img" class="weui-panel__bd">
+		</div>
+	</div>
+    
+</body>
+
+<script type="text/javascript">
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+   }
+
+  var processDefinitionId=getQueryString("processDefinitionId");
+  
+  
+  
+	function keyDown(e) {   		  
+	　   var keycode = e.which;   //取得对应的键值（数字）  	  
+	　   var realkey = String.fromCharCode(e.which); //取得代表改键的真正字符  
+	   var val = document.getElementById("input").value;
+	　   if(keycode==13){
+		   local.search(val);
+	　   }
+	 }     
+        		
+	src="../flow/process/trace/auto.do?executionId="+processDefinitionId;
+	var div=document.createElement("div");
+	var img=document.createElement("img");
+ 	  	img.setAttribute("class","weui-media-box__thumb");
+ 	  	img.setAttribute("width","100%");
+     	img.setAttribute("src",src);
+   
+  	div.appendChild(img);
+	$("#other").append(div);
+  	  	
+  	  	
+    $.ajax({
+        type: "POST",
+        url: "../../mobile/flow/findHistoryById.do",
+        data: { "id":processDefinitionId},
+        dataType: "json",
+        error: function (request){
+     	   console.log(request);
+        },
+        success: function (text) {   
+     	   var obj=text.neaten;
+     	   
+     	   console.log(obj);
+             	 guid=obj.guid;
+             	  	  
+             	  var name=document.createElement("span");
+                  name.innerHTML=obj.name;
+                  $("#name").append(name);                 
+             	   
+             	  var neaten_name=obj.neaten_name;
+                  $("#neaten_name").val(neaten_name);                  
+				
+                var item=obj.neaten_item;
+				$("#item").append("<font color='#3366FF'>"+item+"</font>");
+                  
+                  var time=actionHappenTime(obj.happen_time);
+                  var date=document.createElement("span");
+                  date.innerHTML=time;
+                  $("#date").append(date);
+                  
+                  var remark=obj.remark;
+                  $("#remark").val(remark);
+                  
+                  var principal=obj.principal;
+                  $("#principal").val(principal);
+                  
+                  var applicationUser=document.createElement("span");
+                  applicationUser.innerHTML=obj.applicationUser;
+                  $("#applicationUser").append(applicationUser);
+                  
+                  var username=document.createElement("span");
+              	  username.innerHTML=obj.user_name;
+                  $("#username").append(obj.name);
+                  
+                  var neaten_instance=obj.neaten_instance;
+                  $("#neaten_instance").val(neaten_instance);
+                      
+                  var area=obj.area;
+                  $("#area").val(area);
+                  
+                  var amount=obj.amount;
+                  $("#amount").val(amount);
+                  
+                  var amountTotal=obj.amountTotal;
+                  $("#amountTotal").val(amountTotal);
+                  
+                  var auditingAmount=obj.auditingAmount;
+                  $("#auditingAmount").val(auditingAmount);
+                  
+                  var availabeLength=obj.availabeLength;
+                  $("#availabeLength").val(availabeLength);
+                  
+                  var workUnit=obj.workUnit;
+                  $("#workUnit").val(workUnit);
+                  
+                  var principal=obj.principal;
+                  $("#principal").val(principal);
+       
+                  var type=obj.type;
+                  var select2 = document.createElement("select");
+              	select2.setAttribute("id","select2");
+              	select2.setAttribute("onchange","gradeChange2()");
+
+              	var option2 = document.createElement("option");
+              	option2.innerHTML="排危工程";
+              	if(type=="排危工程"){
+              		option2.setAttribute("selected","selected");
+              		option2.setAttribute("value",0);
+                  	select2.appendChild(option2);	
+              	}
+              		
+              	
+              	var option2 = document.createElement("option");
+              	option2.innerHTML="小修";
+              	option2.setAttribute("value",1);
+              	if(type=="小修"){
+              		option2.setAttribute("selected","selected");
+              		select2.appendChild(option2);
+              	}
+              		
+
+              	var option2 = document.createElement("option");
+              	option2.innerHTML="大中修";
+              	option2.setAttribute("value",2);
+              	if(type=="大中修"){
+              		option2.setAttribute("selected","selected");
+              		select2.appendChild(option2);
+              	}
+              	
+              	
+              	var option2 = document.createElement("option");
+              	option2.innerHTML="其他";
+              	option2.setAttribute("value",3);
+              	if(type=="其他"){
+              		option2.setAttribute("selected","selected");
+              		select2.appendChild(option2);
+              	}
+              	
+              	
+              	select2.setAttribute("class","weui-input");
+              	$("#type").append(select2);	
+                
+              	var flowData=text.flowData;
+                var deliverans=flowData.deliverans;
+                console.log(deliverans);
+                for(var i=0;i<deliverans.length;i++){
+                	addDiv(i,deliverans[i].name,deliverans[i].content,deliverans[i].userName,deliverans[i].result,deliverans[i].date);
+                }
+              	
+                var imgs=flowData.imageDataList;
+                
+                console.log(imgs);
+                
+                $("#img0").children('div').remove();
+	 		    	if(imgs!=null){
+	                  	   var i = 0;
+	                         for(; i < imgs.length; i++){
+	                      	   
+	                      	  var data=imgs[i];
+	                      	  var name=data.name;
+	                      	  var uri=data.uri;
+	                      	  var date=actionTime(data.date);
+	                      	  var panel=document.createElement("div");
+	                      	  panel.setAttribute("class","weui-panel__bd");
+	                        	   var a=document.createElement("a");
+	                       	   a.setAttribute("class","weui_grid");
+	                       	   var a=document.createElement("a");
+	                       	  a.setAttribute("href","javascript:void(0);");
+	                       	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+	                       	   var div=document.createElement("div");
+	                       	  	div.setAttribute("class","weui-media-box__hd");
+	                       	  
+	                  	   	 	 src="/voucher/Desktop/pasoft/photo/"+uri;
+	                  	  	  	var img=document.createElement("img");
+	                  	  	  	img.setAttribute("class","weui-media-box__thumb");
+	                            	img.setAttribute("src",src);
+	                          
+	                         	  	div.appendChild(img);
+	                         	   		
+	                         	  	div2=document.createElement("div");
+	                         	  		div2.setAttribute("class","weui-media-box__bd");
+	                         	 		h4=document.createElement("h4");
+	                         	 		h4.setAttribute("class","weui-media-box__title");
+	                         	 	 	h4.innerHTML=name;
+	                         	  	 	p=document.createElement("p");
+	                         	  	 	p.setAttribute("class","weui-media-box__desc");
+	                         	  	 	p.innerHTML=date;
+	                         	     div2.appendChild(h4);
+	                         	     div2.appendChild(p);
+	                         	   a.appendChild(div);
+	                         	   a.appendChild(div2);
+	                         	   panel.appendChild(a);
+	                  	      	  $("#img0").append(panel);
+	                         }
+	          		   
+	          	   		} 
+                   	  
+               var address=document.createElement("span");
+               address.innerHTML=obj.address;
+              	$("#address").append(address);
+                              
+                var num=document.createElement("span");
+                num.innerHTML=obj.num;
+                $("#num").append(num);
+                              
+                var region=document.createElement("span");
+                region.innerHTML=obj.region;
+                $("#region").append(region);
+                               
+                               
+                 var fareItem=document.createElement("span");
+                 fareItem.innerHTML=obj.fareItem;
+                 $("#fareItem").append(fareItem);
+
+        	}
+        
+    });
+
+    function addDiv(i,name,content,userName,result,date){
+    	  var label=document.createElement("div");
+    	  label.setAttribute("class","weui-cells");
+    	  var div_0=document.createElement("div");
+    	  div_0.setAttribute("class","weui-cells__title");
+    	  var p=document.createElement("p");
+    	  p.setAttribute("class","weui-cell__bd");
+    	  p.innerHTML=(i+1)+"流程名称:"+name;
+    	  div_0.appendChild(p);
+    	  var div_1=document.createElement("div");
+    	  div_1.setAttribute("class","weui-cells__title");
+    	  var p=document.createElement("p");
+    	  p.setAttribute("class","weui-cell__bd");
+    	  p.innerHTML="审批意见:"+content;
+    	  if(content!=null&&content!="")
+    	  	div_1.appendChild(p);
+    	  var div_2=document.createElement("div");
+    	  div_2.setAttribute("class","weui-cells__title");
+    	  var p=document.createElement("p");
+    	  p.setAttribute("class","weui-cell__bd");
+    	  p.innerHTML="执行人:"+userName;
+    	  div_2.appendChild(p);
+    	  var div_3=document.createElement("div");
+    	  div_3.setAttribute("class","weui-cells__title");
+    	  var p=document.createElement("p");
+    	  p.setAttribute("class","weui-cell__bd");
+    	  var course;
+    	  if(result==1){
+    		  course="同意";
+    	  }else if(result==2){
+    		  course="退回";
+    	  }else if(result==3){
+    		  course="重新提交";
+    	  }else if(result==0){
+    		  course="拒绝";
+    	  }else{
+    		  course="拒绝";
+    	  }
+    	  p.innerHTML="审批结果:"+course;
+    	  if(result!=null&&result!=""&&result!=3)
+    	  	div_3.appendChild(p);
+    	  var div_4=document.createElement("div");
+    	  div_4.setAttribute("class","weui-cells__title");
+    	  var p=document.createElement("p");
+    	  p.setAttribute("class","weui-cell__bd");
+    	  p.innerHTML="时间:"+actionTime(date);
+    	  div_4.appendChild(p);
+    	  
+    	  label.appendChild(div_0);
+    	  label.appendChild(div_1);
+    	  label.appendChild(div_3);
+    	  label.appendChild(div_2);   	  
+    	  label.appendChild(div_4);
+    	  
+    	  $("#deliverans").append(label);
+      }
+		
+    function actionTime(value){
+        var date = new Date(value);
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = date.getDate() + ' ';
+        h = date.getHours() + ':';
+        m = date.getMinutes() + ':';
+        s = date.getSeconds();
+        return Y+M+D+h+m+s;
+    }
+	
+    function actionHappenTime(value){
+        var date = new Date(value);
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = date.getDate() + ' ';
+        h = date.getHours() + ':';
+        m = date.getMinutes() + ':';
+        s = date.getSeconds();
+        return Y+M+D;
+    }
+  
+    function audit(input){
+    	
+    	console.log(input);
+    	
+    	var clew="";
+    	
+    	if(input==0){
+    		clew="拒绝该申请?";
+    	}else if(input==1){
+    		clew="通过该申请";
+    	}else if(input==2){
+    		clew="退回申请人重新提交?";
+    	}
+    	
+   		 $.confirm(clew, function() {
+	    			//点击确认后的回调函数
+	            	
+	    			save(input);
+
+	            	}, function() {
+	    			//点击取消后的回调函数
+
+	    			
+	    	});
+
+    }
+    
+    function save(input){
+        	
+    	$.showLoading();
+    	
+        	var principal=$("#principal").val();
+        	var happenTime=$("#happenTime").val();
+        	var remark=$("#remark").val();
+        	var neaten_instance=$("#neaten_instance").val();
+
+        	var area=$("#area").val();
+        	var amount=$("#amount").val();
+        	var amountTotal=$("#amountTotal").val();
+        	var auditingAmount=$("#auditingAmount").val();
+        	var availabeLength=$("#availabeLength").val();
+        	var workUnit=$("#workUnit").val();
+        	var content=$("#content").val();
+
+        		var error="";
+				if(area==null||area==""){
+        			error="面积不能为空!";
+        		}else if(amount==null||amount==""){
+        			error="送审金额不能为空!";
+        		}else if(amountTotal==null||amountTotal==""){
+        			error="审减金额不能为空!";
+        		}else if(auditingAmount==null||auditingAmount==""){
+        			error="审定金额不能为空!";
+        		}else if(availabeLength==null||availabeLength==""){
+        			error="质保期不能为空!";
+        		}else if(neaten_instance==null||neaten_instance==""){    				
+        			error="请填写整改详情说明!";
+    			}
+            	
+        		
+        		if(error!=""){
+        			
+        			$.alert(error);
+        			
+        			return false;
+        		}
+        		        		
+        	
+        	console.log(item);
+        	
+        	var variableData = new Object();
+        	
+        	variableData.guid=guid;
+        	variableData.neatenitem=neatenitem;
+        	variableData.username=username;
+        	variableData.address=addressValue;
+        	variableData.happenTime=happenTime;
+        	variableData.principal=principal;
+        	variableData.remark=remark;
+        	variableData.neaten_instance=neaten_instance;
+        	variableData.type=type;
+        	variableData.area=area;
+        	variableData.amount=amount;
+        	variableData.amountTotal=amountTotal;
+        	variableData.auditingAmount=auditingAmount;
+        	variableData.availabeLength=availabeLength;
+        	variableData.workUnit=workUnit;
+        	variableData.content=content;
+        	
+        	var variable = JSON.stringify(variableData);
+        	
+        	console.log(variable);
+        	
+        	$.ajax({
+                type: "post",
+                async: false,
+                url: "../../mobile/flow/personalTask.do",
+                data: {
+                	
+                	variableData: variable,
+                	input:input,
+                	className:"neaten",
+                	taskId:taskId
+                	}
+
+                ,
+                success: function (data) {
+                	var data=JSON.parse(data);
+                	console.log(data);
+                    if (data.state == "failed") {
+                    	$.hideLoading();
+                  		 $.toast("提交错误", "forbidden");
+                        return false;
+                    } else {
+       
+                    	$.hideLoading();
+                   	 	$.toast("提交成功");
+                           history.go(-1);
+                        	
+                    	}
+                },
+                error:function (XMLHttpRequest, textStatus, errorThrown) { 
+                	$.hideLoading();
+               		 $.toast("提交错误", "forbidden");
+                      return false;
+                }
+            });
+    	
+
+    }
+    
+</script>

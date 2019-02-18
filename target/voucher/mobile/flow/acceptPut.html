@@ -173,6 +173,19 @@
 	<div class="weui-cells weui-cells_form"> 
     </div>
 
+	<div class="weui-panel weui-panel_access">
+		<div class="weui-panel__hd">维修照片</div>
+		<div id="img0" class="weui-panel__bd">
+		</div>
+		<div id="img" class="weui-panel__bd">
+		</div>
+	</div>
+
+	<div class="weui-panel weui-panel_access">
+		<div class="weui-uploader__input-box" id="showPicker">
+		</div>
+	</div>
+
 	<a href="javascript:;" id="save" class="weui-btn weui-btn_plain-primary">提交申请</a>
 	
 </body>
@@ -262,8 +275,8 @@
                 var item=obj.neaten_item;
 				$("#item").append("<font color='#3366FF'>"+item+"</font>");
 				
-				 var time=actionTime(obj.happen_time);
-				 console.log(time);
+				 var time=actionTime0(obj.happen_time);
+				 console.log("time="+time);
 				 $("#happenTime").val(time);
                   
                   var time=actionTime(obj.date);
@@ -352,6 +365,52 @@
                 	addDiv(i,deliverans[i].name,deliverans[i].content,deliverans[i].userName,deliverans[i].result,deliverans[i].date);
                 }
               	
+                var imgs=flowData.imageDataList;
+                
+                $("#img").children('div').remove();
+	 		    	if(imgs!=null){
+	                  	   var i = 0;
+	                         for(; i < imgs.length; i++){
+	                      	   
+	                      	  var data=imgs[i];
+	                      	  var name=data.name;
+	                      	  var uri=data.uri;
+	                      	  var date=actionTime(data.date);
+	                      	  var panel=document.createElement("div");
+	                      	  panel.setAttribute("class","weui-panel__bd");
+	                        	   var a=document.createElement("a");
+	                       	   a.setAttribute("class","weui_grid");
+	                       	   var a=document.createElement("a");
+	                       	  a.setAttribute("href","javascript:void(0);");
+	                       	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+	                       	   var div=document.createElement("div");
+	                       	  	div.setAttribute("class","weui-media-box__hd");
+	                       	  
+	                  	   	 	 src="/voucher/Desktop/pasoft/photo/"+uri;
+	                  	  	  	var img=document.createElement("img");
+	                  	  	  	img.setAttribute("class","weui-media-box__thumb");
+	                            	img.setAttribute("src",src);
+	                          
+	                         	  	div.appendChild(img);
+	                         	   		
+	                         	  	div2=document.createElement("div");
+	                         	  		div2.setAttribute("class","weui-media-box__bd");
+	                         	 		h4=document.createElement("h4");
+	                         	 		h4.setAttribute("class","weui-media-box__title");
+	                         	 	 	h4.innerHTML=name;
+	                         	  	 	p=document.createElement("p");
+	                         	  	 	p.setAttribute("class","weui-media-box__desc");
+	                         	  	 	p.innerHTML=date;
+	                         	     div2.appendChild(h4);
+	                         	     div2.appendChild(p);
+	                         	   a.appendChild(div);
+	                         	   a.appendChild(div2);
+	                         	   panel.appendChild(a);
+	                  	      	  $("#img0").append(panel);
+	                         }
+	          		   
+	          	   		}
+                
                 guid=obj.guid;
                   
               	$.ajax({
@@ -460,16 +519,33 @@
         return Y+M+D+h+m+s;
     }
 	
-
+	function actionTime0(value){
+  	    var date = new Date(value); 
+  	    Y = date.getFullYear() + '-';
+  	    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+  	  	D = date.getDate()<10?'0'+date.getDate():date.getDate();
+  	    h = date.getHours() + ':';
+  	    m = date.getMinutes() + ':';
+  	    s = date.getSeconds(); 
+  		return Y+M+D;
+  	}
+    
   //happenTime设置为当前时间
 	var timestamp=actionTime(Date.parse(new Date()));
     console.log(timestamp);
     $("#happenTime").val(timestamp); 
   
+    var id=Math.random().toString(36).substr(2);
+   
+    var point = new BMap.Point(105, 28);
+    
+    var geoc = new BMap.Geocoder();
+    
     $("#save").on("click",function(){
         	
     	$.showLoading();
     	
+    	geoc.getLocation(point, function(rs){
         	var principal=$("#principal").val();
         	var happenTime=$("#happenTime").val();
         	var remark=$("#remark").val();
@@ -526,6 +602,7 @@
         	variableData.auditingAmount=auditingAmount;
         	variableData.availabeLength=availabeLength;
         	variableData.workUnit=workUnit;
+        	variableData.content=neaten_instance;
         	
         	var variable = JSON.stringify(variableData);
         	
@@ -540,7 +617,8 @@
                 	variableData: variable,
                 	input:1,
                 	className:"neaten",
-                	taskId:taskId
+                	taskId:taskId,
+                	id:id
                 	}
 
                 ,
@@ -565,7 +643,334 @@
                       return false;
                 }
             });
-
+    	}); 
     });
+  
+	url = document.location.toString();
+
+	$.ajax({
+		url: "../../wechat/sign.do",
+		data: {
+			campusId: 1,
+			url: url
+		},
+		async: false,
+		type: "GET",
+		success: function (data) {
+			var ticket = JSON.parse(data);
+
+			wx.config({
+				debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				appId: ticket.appId,
+				timestamp: ticket.timestamp,
+				nonceStr: ticket.nonceStr,
+				signature: ticket.signature,
+				jsApiList: ['checkJsApi', 'onMenuShareTimeline',
+					'onMenuShareAppMessage', 'onMenuShareQQ',
+					'onMenuShareWeibo', 'hideMenuItems', 'showMenuItems',
+					'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem',
+					'translateVoice', 'startRecord', 'stopRecord',
+					'onRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice',
+					'uploadVoice', 'downloadVoice', 'chooseImage',
+					'previewImage', 'uploadImage', 'downloadImage',
+					'getNetworkType', 'openLocation', 'getLocation',
+					'hideOptionMenu', 'showOptionMenu', 'closeWindow',
+					'scanQRCode', 'chooseWXPay', 'openProductSpecificView',
+					'addCard', 'chooseCard', 'openCard']
+			});
+
+			var images = {
+				localId: [],
+				serverId: []
+			};
+			
+	document.querySelector('#showPicker').onclick = function () {
     
+	 $.modal({
+		title: "选择上传图片类型",
+		text: '<div class="weui-cell weui-cell_select weui-cell_select-after">' +
+			'<div class="weui-cell__bd">' +
+			'<select class="weui-select" id="select" name="select2">' +			
+			' <option value="2">维修后照片</option>' +
+			'<option value="1">维修前照片</option>' +
+			' </select>' +
+			'</div>' +
+			'</div>',
+		buttons: [
+			{
+				text: "确定", onClick: function () {
+
+					var objS = document.getElementById("select");
+					var grade = objS.options[objS.selectedIndex].value;
+					var imagename;
+					if (grade == 1) {
+						imagename = "维修前照片";
+					} else if (grade == 2) {
+						imagename = "维修后照片";
+					}
+					upImage(imagename);
+				}
+			},
+			{ text: "取消", imagename: "1", onClick: function () { console.log(3) } },
+		 ]
+	 });
+
+	 function upImage(imagename) {
+		wx.chooseImage({
+			success: function (res) {
+				images.localId = res.localIds;
+				console.log('已选择 ' + res.localIds.length
+					+ ' 张图片');
+				var i = 0, length = images.localId.length;
+				images.serverId = [];
+				function upload(imagename) {
+					wx.uploadImage({
+						localId: images.localId[i].toString(),
+						isShowProgressTips: images.localId[i]
+							.toString(),
+						success: function (res) {
+							i++;
+							console.log('已上传：' + i + '/'
+								+ length);
+							//返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
+							wxImgCallback(imagename, res.serverId);
+							if (i < length) {
+								upload(imagename);
+							}
+						},
+						fail: function (res) {
+							console.log(res);
+						}
+					});
+				}
+				upload(imagename);
+			}
+		});
+	  }
+    
+	}
+
+  }
+ });
+	 function wxImgCallback(imagename,serverId) {
+		    //将serverId传给wx_upload.php的upload方法
+		    var url = "../file/upload.do";
+		    $.get(url,{
+		    	campusId:1,
+		    	imagename:imagename,
+		    	serverId:serverId,
+		    	id:id,
+		    	classType:"imageData"
+		    }, function(data){
+		    	console.log(data);
+		        if (data == 0) {
+		        	alert("上传图片失败!");
+		        	console.log(data.msg);
+		        } else if (data == 1) {
+		            //存储到服务器成功后的处理
+		            //
+		        	 $.get("../flow/findimagedata.do",{
+		 		    	id:id
+		 		    }, function(text){
+		 		    	console.log("text="+text);
+		 		    	var imgs=JSON.parse(text);
+		 		    	console.log("imgs="+imgs.length);
+		 		    	$("#img").children('div').remove();
+		 		    	if(imgs!=null){
+		                  	   var i = 0;
+		                         for(; i < imgs.length; i++){
+		                      	   
+		                      	  var data=imgs[i];
+		                      	  var name=data.name;
+		                      	  var uri=data.uri;
+		                      	  var date=actionTime(data.date);
+		                      	  var panel=document.createElement("div");
+		                      	  panel.setAttribute("class","weui-panel__bd");
+		                        	   var a=document.createElement("a");
+		                       	   a.setAttribute("class","weui_grid");
+		                       	   var a=document.createElement("a");
+		                       	  a.setAttribute("href","javascript:void(0);");
+		                       	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+		                       	   var div=document.createElement("div");
+		                       	  	div.setAttribute("class","weui-media-box__hd");
+		                       	  
+		                  	   	 	 src="/voucher/"+uri;
+		                  	  	  	var img=document.createElement("img");
+		                  	  	  	img.setAttribute("class","weui-media-box__thumb");
+		                            	img.setAttribute("src",src);
+		                          
+		                         	  	div.appendChild(img);
+		                         	   		
+		                         	  	div2=document.createElement("div");
+		                         	  		div2.setAttribute("class","weui-media-box__bd");
+		                         	 		h4=document.createElement("h4");
+		                         	 		h4.setAttribute("class","weui-media-box__title");
+		                         	 	 	h4.innerHTML=name;
+		                         	  	 	p=document.createElement("p");
+		                         	  	 	p.setAttribute("class","weui-media-box__desc");
+		                         	  	 	p.innerHTML=date;
+		                         	     div2.appendChild(h4);
+		                         	     div2.appendChild(p);
+		                         	   a.appendChild(div);
+		                         	   a.appendChild(div2);
+		                         	   panel.appendChild(a);
+		                  	      	  $("#img").append(panel);
+		                         }
+		          		   
+		          	   		}
+		 		    });
+		        }
+		    });
+	  }	
+    
+</script>
+
+  <script src="../../js/previewImage.min.js"></script>
+
+    <script>
+     
+     var im = {};
+     /**
+      * 得到多个元素
+      * @public
+      */
+     im.all = function(selector, contextElement) {
+         var nodeList,
+             list = [];
+         if (contextElement) {
+             nodeList = contextElement.querySelectorAll(selector);
+         } else {
+             nodeList = document.querySelectorAll(selector);
+         }
+         if (nodeList && nodeList.length > 0) {
+             list = Array.prototype.slice.call(nodeList);
+         }
+         return list;
+     }
+
+     /**
+      * 将事件委托给父元素
+      * @public
+      * @param  array     $el         父元素
+      * @param  string    eventType  事件类型名称
+      * @param  string    selector   目标的选择器
+      * @param  function  fn
+      */
+     im.delegate = function($el, eventType, selector, fn) {
+         if (!$el) { return; }
+         $el.addEventListener(eventType, function(e) {
+             var targets = im.all(selector, $el);
+             if (!targets) {
+                 return;
+             }
+             // findTarget:
+             for (var i=0; i<targets.length; i++) {
+                 var $node = e.target;
+                 while ($node) {
+                     if ($node == targets[i]) {
+                         fn.call($node, e);
+                         break; //findTarget;
+                     }
+                     $node = $node.parentNode;
+                     if ($node == $el) {
+                         break;
+                     }
+                 }
+             }
+         }, false);
+     };
+
+
+     im.delegate(document.querySelector('#img'), 'click','img',function(){
+    	 
+    	 var urls = [];
+    	 var imgs = im.all('img',im.all('#img')[0]);
+    	 imgs.forEach(function(v,i){
+    		 var str=v.src;
+    		 var url=str.replace(/\/compressFile/, "");
+    	     urls.push(url);
+    	 })
+         
+    	 var thisStr = this.src;
+    	 var current = thisStr.replace(/\/compressFile/, "");
+    	 console.log(current);
+         var obj = {
+             urls : urls,
+             current : current
+         };
+         previewImage.start(obj);
+     });  
+     
+ 	var im2 = {};
+	/**
+	 * 得到多个元素
+	 * @public
+	 */
+	im2.all = function (selector, contextElement) {
+		var nodeList,
+			list = [];
+		if (contextElement) {
+			nodeList = contextElement.querySelectorAll(selector);
+		} else {
+			nodeList = document.querySelectorAll(selector);
+		}
+		if (nodeList && nodeList.length > 0) {
+			list = Array.prototype.slice.call(nodeList);
+		}
+		return list;
+	}
+
+	/**
+	 * 将事件委托给父元素
+	 * @public
+	 * @param  array     $el         父元素
+	 * @param  string    eventType  事件类型名称
+	 * @param  string    selector   目标的选择器
+	 * @param  function  fn
+	 */
+	im2.delegate = function ($el, eventType, selector, fn) {
+		if (!$el) { return; }
+		$el.addEventListener(eventType, function (e) {
+			var targets = im2.all(selector, $el);
+			if (!targets) {
+				return;
+			}
+			// findTarget:
+			for (var i = 0; i < targets.length; i++) {
+				var $node = e.target;
+				while ($node) {
+					if ($node == targets[i]) {
+						fn.call($node, e);
+						break; //findTarget;
+					}
+					$node = $node.parentNode;
+					if ($node == $el) {
+						break;
+					}
+				}
+			}
+		}, false);
+	};
+
+
+	im2.delegate(document.querySelector('#img0'), 'click', 'img', function () {
+
+		var urls = [];
+		var imgs = im2.all('img', im2.all('#img0')[0]);
+		imgs.forEach(function (v, i) {
+			var str = v.src;
+			var url = str.replace(/\/compressFile/, "");
+			urls.push(url);
+		})
+
+		var thisStr = this.src;
+		var current = thisStr.replace(/\/compressFile/, "");
+		console.log(current);
+		var obj = {
+			urls: urls,
+			current: current
+		};
+		previewImage.start(obj);
+	});
+     
 </script>

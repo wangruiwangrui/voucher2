@@ -1344,5 +1344,19 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	}
 
 
+	@Override
+	public Integer insertHidden_Neaten_Date(Hidden_Neaten_Date hidden_Neaten_Date) {
+		// TODO Auto-generated method stub
+		return InsertExe.get(this.getJdbcTemplate(), hidden_Neaten_Date);
+	}
+
+
+	@Override
+	public Integer updateHidden_Neaten_Date(Hidden_Neaten_Date hidden_Neaten_Date) {
+		// TODO Auto-generated method stub
+		return UpdateExe.get(this.getJdbcTemplate(), hidden_Neaten_Date);
+	}
+
+
 
 }

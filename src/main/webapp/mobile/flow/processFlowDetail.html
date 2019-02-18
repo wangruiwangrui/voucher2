@@ -179,6 +179,14 @@
 				<div class="weui-cells weui-cells_checkbox" id="deliverans"></div>
 			</div>			
 	</div>
+    
+    <div class="weui-panel weui-panel_access">
+		<div class="weui-panel__hd">维修照片</div>
+		<div id="img0" class="weui-panel__bd">
+		</div>
+		<div id="img" class="weui-panel__bd">
+		</div>
+	</div>
     	
 </body>
 
@@ -335,7 +343,53 @@
                 	addDiv(i,deliverans[i].name,deliverans[i].content,deliverans[i].userName,deliverans[i].result,deliverans[i].date);
                 }
               	
-                  
+                var imgs=flowData.imageDataList;
+                
+                console.log(imgs);
+                
+                $("#img0").children('div').remove();
+	 		    	if(imgs!=null){
+	                  	   var i = 0;
+	                         for(; i < imgs.length; i++){
+	                      	   
+	                      	  var data=imgs[i];
+	                      	  var name=data.name;
+	                      	  var uri=data.uri;
+	                      	  var date=actionTime(data.date);
+	                      	  var panel=document.createElement("div");
+	                      	  panel.setAttribute("class","weui-panel__bd");
+	                        	   var a=document.createElement("a");
+	                       	   a.setAttribute("class","weui_grid");
+	                       	   var a=document.createElement("a");
+	                       	  a.setAttribute("href","javascript:void(0);");
+	                       	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+	                       	   var div=document.createElement("div");
+	                       	  	div.setAttribute("class","weui-media-box__hd");
+	                       	  
+	                  	   	 	 src="/voucher/Desktop/pasoft/photo/"+uri;
+	                  	  	  	var img=document.createElement("img");
+	                  	  	  	img.setAttribute("class","weui-media-box__thumb");
+	                            	img.setAttribute("src",src);
+	                          
+	                         	  	div.appendChild(img);
+	                         	   		
+	                         	  	div2=document.createElement("div");
+	                         	  		div2.setAttribute("class","weui-media-box__bd");
+	                         	 		h4=document.createElement("h4");
+	                         	 		h4.setAttribute("class","weui-media-box__title");
+	                         	 	 	h4.innerHTML=name;
+	                         	  	 	p=document.createElement("p");
+	                         	  	 	p.setAttribute("class","weui-media-box__desc");
+	                         	  	 	p.innerHTML=date;
+	                         	     div2.appendChild(h4);
+	                         	     div2.appendChild(p);
+	                         	   a.appendChild(div);
+	                         	   a.appendChild(div2);
+	                         	   panel.appendChild(a);
+	                  	      	  $("#img0").append(panel);
+	                         }
+	          		   
+	          	   		}  
                    	  
                var address=document.createElement("span");
                address.innerHTML=obj.address;
