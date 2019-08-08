@@ -207,17 +207,6 @@
 	        
 	}
 	
-	
-	  
-		var xhm=new ActiveXObject("Microsoft.XMLHttp");
-	    xhm.open("GET","../baiduMap/get.do",false);
-	    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-	    xhm.send();
-	    var ticket=JSON.parse(xhm.responseText);
-	    
-	 addDeck(ticket);
-	
-	
   function addDeck(text){	
 
 	  map.clearOverlays();
