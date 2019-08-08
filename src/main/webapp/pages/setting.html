@@ -77,14 +77,19 @@
 							<th data-field="state" data-checkbox="true"></th>
 							<th data-align="left" data-field="campusId" >公众号ID</th>
 							<th data-align="left" data-field="campusName" >公众号名称</th>
-							<th data-align="left" data-field="customService" >电话号码</th>
-							<th data-align="left" data-field="homePage" >用户主页地址</th>
+							<th data-align="left" data-field="companyName" data-visible="false" >公司名称</th>
+							<th data-align="left" data-field="homePage" data-visible="false"  >用户主页地址</th>
 							<th data-align="left" data-field="url" >URL(服务器地址)</th>
 							<th data-align="left" data-field="token" data-visible="false">Token验证</th>
 							<th data-align="left" data-field="userName" data-visible="false" >原始ID</th>
 							<th data-align="left" data-field="appId" data-visible="false" >AppID</th>
 							<th data-align="left" data-field="appSecret" data-visible="false" >AppSecret</th>
+							<th data-align="left" data-field="mchId" data-visible="false" >MchID</th>
+							<th data-align="left" data-field="api" data-visible="false" >api</th>
 							<th data-align="left" data-field="accessToken" data-visible="false" >AccessToken</th>
+							<th data-align="left" data-field="uid" data-visible="false" >UID</th>
+							<th data-align="left" data-field="uidKey" data-visible="false" >KEY</th>
+							<th data-align="left" data-field="customService" data-visible="false"  >电话号码</th>
 							<th data-align="left" data-field="createTime" data-visible="false" >CreateTime</th>
 						</tr>
 					</thead>
@@ -137,6 +142,13 @@
 							   </div>							
 						</div>
 						<div class="form-group">
+							<label class="control-label col-md-4" for="companyName2">公司名称</label>
+							   <div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="companyName2" name="companyName2"
+									placeholder="companyName">
+							   </div>							
+						</div>
+						<div class="form-group">
 							<label class="control-label col-md-4" for="customService2">电话号码</label>
 							<div class="input-group  col-md-5">
 								<input class="form-control" type="text" id="customService2" name="customService"
@@ -166,10 +178,40 @@
 						</div>
 						
 						<div class="form-group">
+							<label class="control-label col-md-4" for="mchId">MchID</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="mchId2" name="mchId"
+									placeholder="mchId">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-4" for="api">API</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="api2" name="api"
+									placeholder="商户证书">
+							</div>
+						</div>
+						
+						<div class="form-group">
 							<label class="control-label col-md-4" for="token2">Token验证</label>
 							<div class="input-group  col-md-5">
 								<input class="form-control" type="text" id="token2" name="token"
 									placeholder="token">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4" for="uid2">UID</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="uid2" name="uid"
+									placeholder="uid">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4" for="uidKey2">KEY</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="uidKey2" name="uidKey"
+									placeholder="Key">
 							</div>
 						</div>
                  </div>
@@ -182,16 +224,26 @@
 		     <script type="text/javascript">
 		     function commitFoodDataButton(){
 				    //对表单的数据进行验证
-				    var campusId=$("#campusId2").val();
-		    	    var campusName=$("#campusName2").val();
-				    var customService=$("#customService2").val();
-				    var userName=$("#userName2").val();
-				    var appId=$("#appId2").val();
-				    var appSecret=$("#appSecret2").val();
-				    var token=$("#token2").val();
+				    var campusId = $("#campusId2").val();
+		    	    var campusName = $("#campusName2").val();
+		    	    var companyName = $("#companyName2").val();
+				    var customService = $("#customService2").val();
+				    var userName = $("#userName2").val();
+				    var appId = $("#appId2").val();
+				    var appSecret = $("#appSecret2").val();
+				    var mchId = $("#mchId2").val();
+				    var api = $("#api2").val();
+				    var token = $("#token2").val();
+				    var uid = $("#uid2").val();
+				    var uidKey = $("#uidKey2").val();
 				    
 				    if(campusName==null||campusName==""){
 				    	alert("公众号名称不能为空!");
+				    	return;
+				    }
+				    
+				    if(companyName==null||companyName==""){
+				    	alert("公司名称不能为空!");
 				    	return;
 				    }
 				    
@@ -210,19 +262,40 @@
 				    if(appSecret==null||appSecret==""){
 				    	appSecret="-";
 				    }
+				    
+				    if(mchId==null||mchId==""){
+				    	mchId="-";
+				    }
+				    
+				    if(api==null||api==""){
+				    	api="-";
+				    }
 				     
 				    if(token==null||token==""){
 				    	token="-";
 				    }
 				    
+				    if(uid==null||uid==""){
+				    	uid="-";
+				    }
+				    
+				    if(uidKey==null||uidKey==""){
+				    	uidKey="-";
+				    }
+				    
 				    $.post("weixinset/insertIntoCampus.do", {
                         campusId:campusId,
 				    	campusName:campusName,
+				    	companyName:companyName,
 				    	customService:customService,
 				    	userName:userName,
 				    	appId:appId,
 				    	appSecret:appSecret,
-				    	token:token
+				    	mchId:mchId,
+				    	api:api,
+				    	token:token,
+				    	uid:uid,
+				    	uidKey:uidKey
 					}, function(text) {
 						if (text == -1 || text == 0) {
 							$("#myModal").modal('hide');
@@ -274,10 +347,15 @@
 
 			$("#campusId2").val(array[0].campusId);
 			$("#campusName2").val(array[0].campusName);
+			$("#companyName2").val(array[0].companyName);
 			$("#customService2").val(array[0].customService);
 			$("#appId2").val(array[0].appId);
+			$("#mchId2").val(array[0].mchId);
+			$("#api2").val(array[0].api);
 			$("#appSecret2").val(array[0].appSecret);
 			$("#token2").val(array[0].token);
+			$("#uid2").val(array[0].uid);
+			$("#uidKey2").val(array[0].uidKey);
 			/*
 			var status=document.getElementsByName("status")
 			status[1-array[0].status].checked=true;

@@ -5,14 +5,19 @@
 	<resultMap id="BaseResultMap" type="com.voucher.manage.model.WeiXin">
 	 <id column="campus_id" property="campusId" jdbcType="INTEGER" />
 	 <result column="campus_name" property="campusName" jdbcType="VARCHAR" />
+	 <result column="company_name" property="companyName" jdbcType="VARCHAR" />
 	 <result column="city_id" property="cityId" jdbcType="INTEGER" />
 	 <result column="custom_service" property="customService" jdbcType="VARCHAR" />
 	 <result column="home_page" property="homePage" jdbcType="VARCHAR" />
 	 <result column="user_name" property="userName" jdbcType="VARCHAR" />
 	 <result column="app_id" property="appId" jdbcType="VARCHAR" />
 	 <result column="app_secret" property="appSecret" jdbcType="VARCHAR" />
+	 <result column="mch_id" property="mchId" jdbcType="VARCHAR" />
+	 <result column="api" property="api" jdbcType="VARCHAR" />
 	 <result column="token" property="token" jdbcType="VARCHAR" />
 	 <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
+	 <result column="uid" property="uid" jdbcType="VARCHAR" />
+	 <result column="uid_key" property="uidKey" jdbcType="VARCHAR" />
 	 <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 	</resultMap>
 	
@@ -28,13 +33,15 @@
 
     <select id="getAllCampus" resultMap="BaseResultMap">
      select
-        campus_id,campus_name,city_id,
+        campus_id,campus_name,company_name,city_id,
         custom_service,home_page,
         user_name,
-        app_id,app_secret,
+        app_id,app_secret,mch_id,api,
         token,
         access_token,
-        create_time
+        create_time,
+        uid,
+        uid_key
       from
       campus
       where
@@ -43,13 +50,15 @@
 
      <select id="getCampus" resultMap="BaseResultMap">
      select
-        campus_id,campus_name,city_id,
+        campus_id,campus_name,company_name,city_id,
         custom_service,home_page,
         user_name,
-        app_id,app_secret,
+        app_id,app_secret,mch_id,api,
         token,
         access_token,
-        create_time
+        create_time,
+        uid,
+        uid_key
       from
       campus
       where
@@ -70,6 +79,10 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 				campus_name,
                 city_id,
+                
+            <if test="companyName !=null">
+				company_name,
+			</if>
 			<if test="customService !=null">
 				custom_service,
 			</if>
@@ -82,13 +95,28 @@
 			<if test="appSecret !=null">
 				app_secret,
 			</if>
+			<if test="mchId != null">
+				mch_id,
+			</if>
+			<if test="api != null">
+				api,
+			</if>
 			<if test="token !=null">
 				token,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="uidKey != null">
+				uid_key,
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 				#{campusName,jdbcType=VARCHAR},
 				#{cityId,jdbcType=INTEGER},
+			<if test="companyName !=null">
+				#{companyName,jdbcType=VARCHAR},
+			</if>
 			<if test="customService!=null">
 				#{customService,jdbcType=VARCHAR},
 			</if>
@@ -101,8 +129,20 @@
 			<if test="appSecret!=null">
 				#{appSecret,jdbcType=VARCHAR},
 			</if>
+			<if test="mchId !=null">
+				#{mchId,jdbcType=VARCHAR},
+			</if>
+			<if test="api !=null">
+				#{api,jdbcType=VARCHAR},
+			</if>
 			<if test="token!=null">
 				#{token,jdbcType=VARCHAR},
+			</if>
+			<if test="uid!=null">
+				#{uid,jdbcType=VARCHAR},
+			</if>
+			<if test="uidKey!=null">
+				#{uidKey,jdbcType=VARCHAR},
 			</if>
 		</trim>
     </insert>
@@ -112,6 +152,9 @@
 		<set>
 		  <if test="campusName!=null">
 			 campus_name=#{campusName,jdbcType=VARCHAR},
+			</if>	
+			<if test="companyName!=null">
+			 company_name=#{companyName,jdbcType=VARCHAR},
 			</if>		
 		   <if test="customService!=null">
 			 custom_service=#{customService,jdbcType=VARCHAR},
@@ -125,6 +168,12 @@
 			<if test="appSecret!=null">
 			 app_secret=#{appSecret,jdbcType=VARCHAR},
 			</if>
+			<if test="mchId!=null">
+			 mch_id =#{mchId,jdbcType=VARCHAR},
+			</if>
+			<if test="api!=null">
+			 api =#{api,jdbcType=VARCHAR},
+			</if>
 			<if test="accessToken!=null">
 			 access_token=#{accessToken,jdbcType=VARCHAR},
 			</if>
@@ -133,6 +182,12 @@
 			</if>
 			<if test="token!=null">
 			 token=#{token,jdbcType=VARCHAR},
+			</if>
+			<if test="uid!=null">
+			 uid=#{uid,jdbcType=VARCHAR},
+			</if>
+			<if test="uidKey!=null">
+			 uid_key=#{uidKey,jdbcType=VARCHAR},
 			</if>			
 		</set>
         where 
@@ -155,5 +210,12 @@
      where
       user_name=#{userName,jdbcType=VARCHAR}
     </select>
+    
+    <select id="getCompanyName" resultType="String">
+		select
+		company_name
+		from campus
+		where campus_id=#{campusId,jdbcType=INTEGER}
+	</select>
     
 </mapper>

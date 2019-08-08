@@ -104,6 +104,14 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return usersMapper.upAtionFormatter(paramterMap);
 	}
+	
+
+	@Override
+	public int deleteByOpenId(Map<String, Object> paramterMap) {
+		// TODO Auto-generated method stub
+		return usersMapper.deleteByOpenId(paramterMap);
+	}
+
 
 	@Override
 	public int selectRepeatUser(String name) {

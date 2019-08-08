@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.voucher.manage.model.Campus;
 import com.voucher.manage.model.CampusAdmin;
+import com.voucher.manage.model.WeiXin;
 
 public interface CampusService {
 
@@ -31,4 +32,5 @@ public interface CampusService {
 	Integer updateCampus(Map<String, Object> paramMap);
 
 	String getCampusName(Integer campusId);          //根据校区id获取校区名称
+
 }

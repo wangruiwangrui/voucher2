@@ -61,6 +61,8 @@ public class WeiXinServiceImpl implements WeiXinService{
 	@Override
 	public Integer updateCampusById(Map<String, Object> paramMap) {
 		// TODO Auto-generated method stub
+		System.out.println("=======================");
+		System.out.println(weixinMapper.updateCampus(paramMap));
 		return weixinMapper.updateCampus(paramMap);
 	}
 
@@ -99,6 +101,11 @@ public class WeiXinServiceImpl implements WeiXinService{
 	public Integer getAllMessageCount(Integer campusId, String search) {
 		// TODO Auto-generated method stub
 		return messageListMapper.getAllMessageCount(campusId, search);
+	}
+
+	@Override
+	public String getCompanyName(Integer campusId) {
+		return weixinMapper.getCompanyName(campusId);
 	}
 
 

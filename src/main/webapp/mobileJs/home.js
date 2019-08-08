@@ -108,7 +108,7 @@ $(".weui_btn_primary").click(function(){
 });
 
 $.get("/voucher/oauth/getUserInfoByNull.do",{
-
+	campusId : campusId,
 },function(text) {
 	  var obj = $.parseJSON(text);
 

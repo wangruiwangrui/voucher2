@@ -161,7 +161,7 @@ if (typeof JSON !== "object") {
     JSON = {};
 }
 
-(function () {
+(function () { 
     "use strict";
 
     var rx_one = /^[\],:{}\s]*$/;

@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[YTRoomManage].[dbo].[ChartInfo]")
+@DBTable(name="[ChartInfo]")
 public class ChartInfo implements Serializable{
 
     private static final long serialVersionUID = 1L;
@@ -83,6 +83,9 @@ public class ChartInfo implements Serializable{
     @SQLString(name="AddType")
 	private String AddType;
 
+    @SQLString(name="AddFashion")
+	private String AddFashion;
+
     @SQLString(name="BeginAddDate")
 	private String BeginAddDate;
 
@@ -116,8 +119,8 @@ public class ChartInfo implements Serializable{
     @SQLString(name="Memo")
 	private String Memo;
 
-    @SQLInteger(name="IsHistory")
-	private Integer IsHistory;
+    @SQLBoolean(name="IsHistory")
+	private Boolean IsHistory;
 
     @SQLString(name="Region")
 	private String Region;
@@ -356,6 +359,14 @@ public class ChartInfo implements Serializable{
 		return AddType;
 	}
 
+	public void setAddFashion(String AddFashion){
+		this.AddFashion = AddFashion;
+	}
+
+	public String getAddFashion(){
+		return AddFashion;
+	}
+
 	public void setBeginAddDate(String BeginAddDate){
 		this.BeginAddDate = BeginAddDate;
 	}
@@ -444,11 +455,11 @@ public class ChartInfo implements Serializable{
 		return Memo;
 	}
 
-	public void setIsHistory(Integer IsHistory){
+	public void setIsHistory(Boolean IsHistory){
 		this.IsHistory = IsHistory;
 	}
 
-	public Integer getIsHistory(){
+	public Boolean getIsHistory(){
 		return IsHistory;
 	}
 

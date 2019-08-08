@@ -1,439 +1,285 @@
 <!doctype html>
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <head>
 <meta charset="utf-8">
 
-<script src="/voucher/js/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-<link rel="stylesheet" href="/voucher/bootstrap/3.3.7/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="/voucher/bootstrap/3.3.7/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
 
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="/voucher/bootstrap/3.3.7/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/voucher/bootstrap/3.3.7/bootstrap.min.js"
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	crossorigin="anonymous"></script>
 
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet">
 
 <script type="text/javascript" src="/voucher/mobile/singleton.js"></script>
 
 <script type="text/javascript">
-	var redirectUrl="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+APPID+"&redirect_uri="+DOMAIN+"/voucher/mobile/1/index.html&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+	var redirectUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+			+ APPID
+			+ "&redirect_uri="
+			+ DOMAIN
+			+ "/voucher/mobile/1/index.html&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
 </script>
 
 <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
-<link rel="stylesheet" href="../../weixinUI/style/weui.css"/>
-
-
-<title>泸州市国有公房经营管理有限公司</title>
-<!--  <link rel="icon" href="../../img/" type="image/x-icon"> -->
+<title>泸州工投智汇信息科技有限公司</title>
+<!-- <title>叙兴集团</title> -->
+<link rel="icon" href="../../img/xl.ico" type="image/x-icon">
 <!-- Buttons 库的核心文件 -->
-  <link rel="stylesheet" href="css/buttons.css">
- 
- <!-- 只有使用字体图标时才需要加载 Font-Awesome -->
- <link href="https://cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/buttons.css">
+
+<!-- 只有使用字体图标时才需要加载 Font-Awesome -->
+<link
+	href="https://cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css"
+	rel="stylesheet">
+
+<link rel="stylesheet" href="../../layui/layui/css/layui.css">
 </head>
- 
+<style type="text/css">
+.container img {
+	width: 100%;
+	margin-bottom: 12px;
+}
+
+p {
+	letter-spacing: 0.7em;
+	padding-left: 1.5em;
+	color: white;
+}
+
+.col-xs-4 {
+	padding: 10px
+}
+
+.corner {
+	color: #fff;
+	position: relative;
+}
+
+.btn {
+	border: none;
+	background-color: #f8f8f8;
+	display: block;
+	color: #777777;
+}
+</style>
+
 <body>
-<nav class="navbar navbar-default" role="navigation">
-    <div class="container-fluid">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse"
-                data-target="#example-navbar-collapse">
-            <span class="sr-only"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#"><img src="../../img/yt.ico" width="25px" height="25px"></a>
-        <a class="navbar-brand" href="#">资产与安全管理助手</a>
-    </div>
-    <div class="collapse navbar-collapse" id="example-navbar-collapse">
-        <ul class="nav navbar-nav">
-            <li><a href="userSetting.html">用户设置</a></li>
-            <li><a href="#">关于管理助手</a></li>
-        </ul>
-    </div>
-    </div>
-</nav>
-<div class="container">
-    <div class="row" >
-    <!--  
-    <div class="container">
-     <div class="row" >
-
-        <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="hiddenNeaten" class="button button-raised  button-circle button-jumbo"><i class="fa fa-file-text-o"></i></button>
-          <div><span>隐患整改</span></div>
-        </div>
-        
-        <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="addhiddenCheck" class="button button-raised button-action button-circle button-jumbo"><i class="fa fa-check-square-o"></i></button>
-          <div><span>安全巡查</span></div>
-        </div>
-        
-        <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="hiddenCheck" class="button button-raised button-highlight button-circle button-jumbo"><i class="fa fa-calendar-check-o"></i></button>
-          <div><span>巡查记录</span></div>
-        </div>
-     
-      </div>
-     </div>
-    
- 
-     <div class="container">
-     <div class="row" >
-        
-       <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="hiddentrouble" class="button button-raised button-action3 button-circle button-jumbo"><i class="fa fa-search-plus"></i></button>
-          <div><span>隐患检索</span></div>
-        </div>
-               
-        <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="photo" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-camera"></i></button>
-          <div><span>隐患上传</span></div>
-        </div>
-        
-        <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="map" class="button button-raised button-primary button-circle button-jumbo"><i class="fa fa-map-marker"></i></button>
-          <div><span>隐患地图</span></div>
-        </div>
-        
-       </div>
-      </div>
-     
-     <div class="container">
-     <div class="row" >
-     
-        <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="allAsset" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-institution"></i></button>
-          <div><span>全部资产</span></div>
-        </div>
-        
-        <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="assetMap" class="button button-raised button-primary button-circle button-jumbo"><i class="fa fa-map-marker"></i></button>
-          <div><span>资产地图</span></div>
-        </div>
-        
-        <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="finance" class="button button-raised  button-circle button-jumbo"><i class="fa fa-yen"></i></button>
-          <div><span>财务管理</span></div>
-        </div>
-          
-       </div>
-      </div>
-     
-      <div class="container">
-     <div class="row" >
-    
-
-     <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="hiddenCheckMap" class="button button-raised button-highlight button-circle button-jumbo"><i class="fa fa-map"></i></button>
-          <div><span>巡查路线图</span></div>
-        </div>
-     
-     <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="assetCheck" class="button button-raised button-action button-circle button-jumbo"><i class="fa fa-check-square-o"></i></button>
-          <div><span>资产巡查</span></div>
-        </div>
-     
-     <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="assetCheckList" class="button button-raised button-highlight button-circle button-jumbo"><i class="fa fa-calendar-check-o"></i></button>
-          <div><span>资产巡查记录</span></div>
-        </div>
-     
-     </div>
-    </div>
-     
-     
-      <div class="container">
-     <div class="row" >
-      
-     <div class="container">
-     <div class="row" >
-     
-     <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="hiddenStat" class="button button-raised button-action3 button-circle button-jumbo"><i class="fa fa-area-chart"></i></button>
-          <div><span>隐患统计</span></div>
-        </div>
-     
-       
-        
-        <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="safeLike" class="button button-raised button-royal button-circle button-jumbo"><i class="fa fa-address-book-o"></i></button>
-          <div><span>安全通讯录</span></div>
-        </div>
-        
-   
-       <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="report" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-warning"></i></button>
-          <div><span>紧急报告</span></div>
-        </div>
-       
-       
-     </div>
-    </div>
-    
-    	<div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="asseStat" class="button button-raised button-highlight button-circle button-jumbo"><i class="fa fa-bar-chart"></i></button>
-          <div><span>资产统计</span></div>
-        </div>
-
-     	<div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="userSetting" class="button button-raised button-action button-circle button-jumbo"><i class="fa fa-user-o"></i></button>
-          <div><span>用户设置</span></div>
-        </div>
-     
-     	
-     
-      	<div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="notPlace" class="button button-raised button-highlight button-circle button-jumbo"><i class="fa fa-map"></i></button>
-          <div><span>无位置资产</span></div>
-        </div>
-    
-     
-     </div>
-     </div>
-     
-     </div>
-    </div>
-    
-    
-    
-     <div class="container">
-     <div class="row" >
-        
-        
-        
-        
-     
-     </div> 
-     -->
-
-			<div id="actionSheet_wrap">
-				<div class="weui_mask_transition" id="mask" style="display: none;"></div>
-				<div class="weui_actionsheet" id="weui_actionsheet">
-					<div class="weui_actionsheet_menu">
-						<div class="weui_actionsheet_cell" id="sendMessage">发送短信</div>
-						<div class="weui_actionsheet_cell" id="preMessage">查看短信记录</div>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#example-navbar-collapse">
+					<span class="sr-only"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"><img src="../../img/gtimgs/3.png"
+					width="25px" height="25px"></a> <a class="navbar-brand" href="#">资产与安全管理助手</a>
+			</div>
+			<div class="collapse navbar-collapse" id="example-navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="userSetting.html">用户设置</a></li>
+					<div class="layui-form">
+						<li><button class="btn" lay-submit lay-filter="zhushou"
+								data-method="notice">关于管理助手</button></li>
 					</div>
-					<div class="weui_actionsheet_action">
-						<div class="weui_actionsheet_cell" id="actionsheet_cancel">取消</div>
-					</div>
-				</div>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			
+			<div style="background-image: url('../../img/gtimgs/1.png');">
+				<p>资产</p>
 			</div>
 
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='allAsset'>
+				<img alt='' src='../../img/gtimgs/imgs1/1@2x.png'>
+				<div>
+					<span>资产查询</span>
+				</div>
+			</div>
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='asseStat'>
+				<img alt='' src='../../img/gtimgs/imgs1/2@2x.png'>
+				<div>
+					<span>资产统计</span>
+				</div>
+			</div>
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='assetMap'>
+				<img alt='' src='../../img/gtimgs/imgs1/3@2x.png'>
+				<div>
+					<span>资产地图</span>
+				</div>
+			</div>
+			
+			<!-- <div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='notPlace'>
+				<img alt='' src='../../img/gtimgs/imgs1/4@2x.png'>
+				<div>
+					<span>资产定位</span>
+				</div>
+			</div> -->
 		</div>
-</div>
-
-<script type="text/javascript">
-
-	var a1 = ""
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenNeaten\" class=\"button button-raised button-royal button-circle button-jumbo\"><i class=\"fa fa-file-text-o\"></i></button><div><span>隐患整改</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"addhiddenCheck\" class=\"button button-raised button-action button-circle button-jumbo\"><i class=\"fa fa-check-square-o\"></i></button><div><span>安全巡查</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenCheck\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-calendar-check-o\"></i></button><div><span>安全巡查记录</span></div></div>"
-			+ "";
-	var a2 = ""
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddentrouble\" class=\"button button-raised button-action3 button-circle button-jumbo\"><i class=\"fa fa-calendar\"></i></button><div><span>整改记录</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenAssets\" class=\"button button-raised button-caution button-circle button-jumbo\"><i class=\"fa fa-fire\"></i></button><div><span>隐患资产</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"map\" class=\"button button-raised button-primary button-circle button-jumbo\"><i class=\"fa fa-map-marker\"></i></button><div><span>隐患地图</span></div></div>"
-			+ "";
-
-	var a21 = ""
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddentrouble\" class=\"button button-raised button-action3 button-circle button-jumbo\"><i class=\"fa fa-search-plus\"></i></button><div><span>隐患检索</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenStat\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-area-chart\"></i></button><div><span>隐患统计</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"map\" class=\"button button-raised button-primary button-circle button-jumbo\"><i class=\"fa fa-map-marker\"></i></button><div><span>隐患地图</span></div></div>"
-			+ "";
-
-	var a3 = ""
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"allAsset\" class=\"button button-raised button-caution button-circle button-jumbo\"><i class=\"fa fa-institution\"></i></button><div><span>全部资产</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"assetMap\" class=\"button button-raised button-primary button-circle button-jumbo\"><i class=\"fa fa-map-marker\"></i></button><div><span>资产地图</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"flow\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-hourglass-half\"></i></button><div><span>审批流程</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"asseStat\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-bar-chart\"></i></button><div><span>资产统计</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"notPlace\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-bar-chart\"></i></button><div><span>无位置资产</span></div></div>"
-			+ "";
-
-	var a4 = ""
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"userSetting\" class=\"button button-raised button-action button-circle button-jumbo\"><i class=\"fa fa-user-o\"></i></button><div><span>用户设置</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"safeLike\" class=\"button button-raised button-royal button-circle button-jumbo\"><i class=\"fa fa-address-book-o\"></i></button><div><span>管理通讯录</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"showActionSheet\" class=\"button button-raised button-caution button-circle button-jumbo\"><i class=\"fa fa-envelope-open-o\"></i></button><div><span>发送短信</span></div></div>"
-			+ "";
-
-	var a42 = ""
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenStat\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-area-chart\"></i></button><div><span>隐患统计</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-3' style=\"text-align:center;\"><button id=\"repairLog\" class=\"button button-raised button-primary button-circle button-jumbo\"><i class=\"fa fa-wrench\"></i></button><div><span>维修记录</span></div></div>"
-			+ "";
-
-	var a41 = ""
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"userSetting\" class=\"button button-raised button-action button-circle button-jumbo\"><i class=\"fa fa-user-o\"></i></button><div><span>用户设置</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"safeLike\" class=\"button button-raised button-royal button-circle button-jumbo\"><i class=\"fa fa-address-book-o\"></i></button><div><span>管理通讯录</span></div></div>"
-			+ "";
-
-	var a5 = ""
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenStat\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-area-chart\"></i></button><div><span>隐患统计</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"assetCheck\" class=\"button button-raised button-action button-circle button-jumbo\"><i class=\"fa fa-check-square-o\"></i></button><div><span>资产巡查</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"assetCheckList\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-calendar-check-o\"></i></button><div><span>资产巡查记录</span></div></div>"
-			+ "";
-
-	var a51 = ""
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"assetCheck\" class=\"button button-raised button-action button-circle button-jumbo\"><i class=\"fa fa-check-square-o\"></i></button><div><span>资产巡查</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"assetCheckList\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-calendar-check-o\"></i></button><div><span>资产巡查记录</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"repairLog\" class=\"button button-raised button-primary button-circle button-jumbo\"><i class=\"fa fa-wrench\"></i></button><div><span>维修记录</span></div></div>"
-			+ "";
-
-	var a52 = ""
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenAssets\" class=\"button button-raised button-caution button-circle button-jumbo\"><i class=\"fa fa-fire\"></i></button><div><span>隐患资产</span></div></div>"
-			+ "";
-
-	var a6 = ""
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenCheckMap\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-map\"></i></button><div><span>巡查路线图</span></div></div>"
-			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"repairLog\" class=\"button button-raised button-primary button-circle button-jumbo\"><i class=\"fa fa-wrench\"></i></button><div><span>维修记录</span></div></div>"
-			+ "";
-
-	var xhm = new XMLHttpRequest();
-	xhm.open("GET", "/voucher/mobile/assetCheck/selectPlace.do", false);
-	xhm.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xhm.send();
-
-	place = xhm.responseText;
-
-	console.log("place=" + place);
-
-	if (place == 2) {
-		$(".row").append(a1);
-		$(".row").append(a2);
-		$(".row").append(a3);
-		$(".row").append(a4);
-		$(".row").append(a42);
-	} else if (place == 3) {
-		$(".row").append(a21);
-		$(".row").append(a3);
-		$(".row").append(a41);
-		$(".row").append(a51);
-		$(".row").append(a52);
-	} else if (place > 3) {
-		$(".row").append(a1);
-		$(".row").append(a2);
-		$(".row").append(a3);
-		$(".row").append(a4);
-		$(".row").append(a5);
-		$(".row").append(a6);
-	} else {
-		$(".row").append(a21);
-		$(".row").append(a3);
-		$(".row").append(a41);
-	}
-
-	$.get("/voucher/mobile/flow/getAccessCount.do", {
+		<div class="row">
 		
-	}, function(text) {
+			<div style="background-image: url('../../img/gtimgs/1.png');">
+				<p>巡查</p>
+			</div>
 
-		var flowButton = document.getElementById("flow");
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='addhiddenCheck'>
+				<img alt='' src='../../img/gtimgs/imgs2/5@2x.png'>
+				<div>
+					<span>安全巡查</span>
+				</div>
+			</div>
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='hiddenCheck'>
+				<img alt='' src='../../img/gtimgs/imgs2/6@2x.png'>
+				<div>
+					<span>安全巡查记录</span>
+				</div>
+			</div>
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='assetCheck'>
+				<img alt='' src='../../img/gtimgs/imgs2/7@2x.png'>
+				<div>
+					<span>资产巡查</span>
+				</div>
+			</div>
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='assetCheckList'>
+				<img alt='' src='../../img/gtimgs/imgs2/8@2x.png'>
+				<div>
+					<span>资产巡查记录</span>
+				</div>
+			</div>
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='hiddenCheckMap'>
+				<img alt='' src='../../img/gtimgs/imgs2/9@2x.png'>
+				<div>
+					<span>巡查轨迹</span>
+				</div>
+			</div>
+			<!-- 
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='hiddenCheckMap'>
+				<img alt='' src='../../img/gtimgs/imgs2/10@2x.png'>
+				<div>
+					<span>清产核资</span>
+				</div>
+			</div>
+			 -->
+		</div>
+		<div class="row" >
+			<div style="background-image: url('../../img/gtimgs/1.png');">
+				<p>隐患</p>
+			</div>
 
-		var data=JSON.parse(text);
-		
-		var taskCount=data.taskCount;
-		
-		var passCount=data.passCount;
-		
-		var count=taskCount+passCount;
-		
-		if(count>0){
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='hiddenAssets'>
+				<img alt='' src='../../img/gtimgs/imgs3/11@2x.png'>
+				<div>
+					<span>隐患资产</span>
+				</div>
+			</div>
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='hiddenStat'>
+				<img alt='' src='../../img/gtimgs/imgs3/12@2x.png'>
+				<div>
+					<span>隐患统计</span>
+				</div>
+			</div>
 			
-			if(count>100){
-				count="•••";
-			}
 			
-			flowButton.setAttribute("data-num",count);
+			
+			<!-- 隐患整改 -->
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='hiddenNeaten'>
+				<img alt='' src='../../img/gtimgs/imgs3/24.png'>
+				<div>
+					<span>隐患整改</span>
+				</div>
+			</div>
+			
+			
+			
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='repairLog'>
+				<img alt='' src='../../img/gtimgs/imgs3/13@2x.png'>
+				<div>
+					<span>维修记录</span>
+				</div>
+			</div>
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='map'>
+				<img alt='' src='../../img/gtimgs/imgs3/14@2x.png'>
+				<div>
+					<span>隐患地图</span>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div style="background-image: url('../../img/gtimgs/1.png');"><p>其他</p></div>
 
-			flowButton.setAttribute("class","button button-raised button-highlight button-circle button-jumbo corner");
-		}
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='flow'>
+				<img alt='' src='../../img/gtimgs/imgs4/15@2x.png'>
+				<div>
+					<span>审批</span>
+				</div>
+			</div>
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='showActionSheet'>
+				<img alt='' src='../../img/gtimgs/imgs4/16@2x.png'>
+				<div>
+					<span>短信群发</span>
+				</div>
+			</div>
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='safeLike'>
+				<img alt='' src='../../img/gtimgs/imgs4/17@2x.png'>
+				<div>
+					<span>通讯录</span>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+
+	<script type="text/javascript">
+	
+		var xhm = new XMLHttpRequest();
+		xhm.open("GET", "/voucher/mobile/finance/selectPlace.do", false);
+		xhm.setRequestHeader("Content-type",
+				"application/x-www-form-urlencoded");
+		xhm.send();
+
+		place = xhm.responseText;
+
 		
-		$.get("/voucher/mobile/flow/upUserAccessTime.do", {
-			parameter : "first"
-		}, function(text) {
+	</script>
 
-		});
-		
-	});
-
-	$('#showActionSheet').on('click', function() {
-		var mask = $('#mask');
-		var weuiActionsheet = $('#weui_actionsheet');
-		weuiActionsheet.addClass('weui_actionsheet_toggle');
-		mask.show().focus()//加focus是为了触发一次页面的重排(reflow or layout thrashing),使mask的transition动画得以正常触发
-		.addClass('weui_fade_toggle').one('click', function() {
-			hideActionSheet(weuiActionsheet, mask);
-		});
-		$('#actionsheet_cancel').one('click', function() {
-			hideActionSheet(weuiActionsheet, mask);
-		});
-		mask.unbind('transitionend').unbind('webkitTransitionEnd');
-
-		function hideActionSheet(weuiActionsheet, mask) {
-			weuiActionsheet.removeClass('weui_actionsheet_toggle');
-			mask.removeClass('weui_fade_toggle');
-			mask.on('transitionend', function() {
-				mask.hide();
-			}).on('webkitTransitionEnd', function() {
-				mask.hide();
-			})
-		}
-	});
-
-	$("#sendMessage").on("click", function() {
-		location.href = "sendMessage.html";
-	});
-
-	$("#preMessage").on("click", function() {
-		location.href = "preMessage.html";
-	});
-</script>
-
-<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="/voucher/mobile/singleton.js"></script>
+	<script type="text/javascript" src="../../layui/layui/layui.js"></script>
+	<script type="text/javascript" src="js/assistant.js"></script>
 
 </body>
-<style type="text/css">
- .col-xs-4{
-   padding:15px
- }
 
-  .corner {
-         color: #fff;
-         position: relative;
-     }
-
-     .corner:after {
-         content: attr(data-num);
-         line-height: 25px;
-         text-align: center;
-         font-size:17px;
-         width: 25px;
-         height: 25px;
-         border-radius: 50%;
-         background-color: red;
-         position: absolute;
-         top: -10px;
-         right: -10px;
-     }
-
-</style>
 </html>

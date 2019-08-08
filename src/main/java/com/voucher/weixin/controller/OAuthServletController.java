@@ -250,10 +250,9 @@ public class OAuthServletController{
 	 */
 	@RequestMapping("getUserInfoByNull")
 	public @ResponseBody 
-	Map<String, Object> getUserInfo(HttpServletRequest request){
+	Map<String, Object> getUserInfo(HttpServletRequest request,@RequestParam Integer campusId){
 		HttpSession session = request.getSession();
 		String openId=session.getAttribute("openId").toString();
-		Integer campusId;
 		
 		campusId=Integer.parseInt(session.getAttribute("campusId").toString());
 		
@@ -280,4 +279,5 @@ public class OAuthServletController{
         return map;
 	}
 	
+
 }

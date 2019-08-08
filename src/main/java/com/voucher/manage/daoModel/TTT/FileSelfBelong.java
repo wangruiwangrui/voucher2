@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[YTRoomManage].[dbo].[FileSelfBelong]")
+@DBTable(name="[FileSelfBelong]")
 public class FileSelfBelong implements Serializable{
 
     private static final long serialVersionUID = 1L;
@@ -29,6 +29,12 @@ public class FileSelfBelong implements Serializable{
 
     @SQLString(name="ViewFileName")
 	private String ViewFileName;
+
+    @SQLInteger(name="sequence")
+	private Integer sequence;
+
+    @SQLString(name="date_time")
+	private String date_time;
 
 	public void setGUID(String GUID){
 		this.GUID = GUID;
@@ -84,6 +90,22 @@ public class FileSelfBelong implements Serializable{
 
 	public String getViewFileName(){
 		return ViewFileName;
+	}
+
+	public void setSequence(Integer sequence){
+		this.sequence = sequence;
+	}
+
+	public Integer getSequence(){
+		return sequence;
+	}
+
+	public void setDate_time(String date_time){
+		this.date_time = date_time;
+	}
+
+	public String getDate_time(){
+		return date_time;
 	}
 
 

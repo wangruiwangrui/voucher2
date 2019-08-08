@@ -54,7 +54,7 @@ public class FlowDaoImpl extends JdbcDaoSupport implements FlowDao{
 		if(i>0){
 			
 			try{
-				
+				System.out.println("processDefinitionKey==========="+processDefinitionKey+"userId++++++++"+userId+"variableData==============="+variableData+"imageDataList================="+imageDataList+"className========="+className);
 				map=server.startProcessInstance(processDefinitionKey, userId, variableData, imageDataList,className);
 				
 				if(map.get("state").equals("流程启动失败"))

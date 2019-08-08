@@ -9,12 +9,26 @@ public class Campus {
 	
 	private String campusAdmin;
 	
+	private String campanyName;
+	
 	private Integer telePhone;
 	
 	private String address;
 	
 	private Date loginTime;
 	
+	public String getCampanyName() {
+		return campanyName;
+	}
+
+	public void setCampanyName(String campanyName) {
+		this.campanyName = campanyName;
+	}
+
+	public void setLoginTime2(String loginTime2) {
+		this.loginTime2 = loginTime2;
+	}
+
 	private String loginTime2;
 
 	private String campusName;
@@ -73,7 +87,7 @@ public class Campus {
 
 	public String getLoginTime2() {
 		try{
-			loginTime2 = new java.text.SimpleDateFormat("yyyyÄêMMÔÂddÈÕ HH:mm").format(loginTime);
+			loginTime2 = new java.text.SimpleDateFormat("yyyyï¿½ï¿½MMï¿½ï¿½ddï¿½ï¿½ HH:mm").format(loginTime);
 			}catch (Exception e) {
 				// TODO: handle exception
 				loginTime2=null;

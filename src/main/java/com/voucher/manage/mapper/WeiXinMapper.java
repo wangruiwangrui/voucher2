@@ -22,4 +22,6 @@ public interface WeiXinMapper {
 	int updateHomePageByCampusId(Map<String, Object> paramMap);
 	
 	Integer getCampusIdByUserName(String userName);
+
+	String getCompanyName(Integer campusId);  //通过campusId查询公众号信息
 }

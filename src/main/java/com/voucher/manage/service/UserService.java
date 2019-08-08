@@ -41,6 +41,8 @@ public interface UserService {
 	
 	int upAtionFormatter(Map<String, Object> paramterMap);
 	
+	int deleteByOpenId(Map<String, Object> map);
+	
 	int selectRepeatUser(@Param(value="name") String name);
 	
 	int selectRepeatUserByOpenId(@Param(value="openId") String openId);
@@ -64,4 +66,6 @@ public interface UserService {
     Map selectAllAccess(Integer campusId,Integer limit, Integer offset, String sort,String order,String search,String page);
     
     Users getUserByAssetCharter(String charter, String phone);
+
+	
 }
