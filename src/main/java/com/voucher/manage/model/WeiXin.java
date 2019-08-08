@@ -34,6 +34,10 @@ public class WeiXin {
 	
 	private Date createTime;
 	
+	private String uid;
+	
+	private String uidKey;
+	
 	private String url;
 	
 	public Integer getCampusId() {
@@ -140,6 +144,22 @@ public class WeiXin {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
+	public String getUidKey() {
+		return uidKey;
+	}
+
+	public void setUidKey(String uidKey) {
+		this.uidKey = uidKey;
 	}
 
 	public String getUserName() {

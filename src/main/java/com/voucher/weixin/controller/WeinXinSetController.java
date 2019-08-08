@@ -69,7 +69,8 @@ private WeiXinService weixinService;
 	Integer insetIntoCampus(HttpServletRequest request , @RequestParam Integer campusId,@RequestParam String campusName
 			,@RequestParam String companyName,@RequestParam String customService,@RequestParam String appId 
 			,@RequestParam String mchId,@RequestParam String api, @RequestParam String appSecret
-			,@RequestParam String token,@RequestParam String userName) {
+			,@RequestParam String token, @RequestParam String uid, @RequestParam String uidKey
+			,@RequestParam String userName) {
 		Map<String, Object> paramMap=new HashMap<>();
 		Integer  cityId , flag ;
 		WeiXin be=null;
@@ -93,6 +94,8 @@ private WeiXinService weixinService;
 		paramMap.put("mchId", mchId);
 		paramMap.put("api", api);
 		paramMap.put("token", token);
+		paramMap.put("uid", uid);
+		paramMap.put("uidKey", uidKey);
 		paramMap.put("campusId", campusId);
 		 Date date=new Date();
 		 paramMap.put("createTime", date);

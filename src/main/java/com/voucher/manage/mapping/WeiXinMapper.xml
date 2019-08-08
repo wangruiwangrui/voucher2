@@ -16,6 +16,8 @@
 	 <result column="api" property="api" jdbcType="VARCHAR" />
 	 <result column="token" property="token" jdbcType="VARCHAR" />
 	 <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
+	 <result column="uid" property="uid" jdbcType="VARCHAR" />
+	 <result column="uid_key" property="uidKey" jdbcType="VARCHAR" />
 	 <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 	</resultMap>
 	
@@ -37,7 +39,9 @@
         app_id,app_secret,mch_id,api,
         token,
         access_token,
-        create_time
+        create_time,
+        uid,
+        uid_key
       from
       campus
       where
@@ -52,7 +56,9 @@
         app_id,app_secret,mch_id,api,
         token,
         access_token,
-        create_time
+        create_time,
+        uid,
+        uid_key
       from
       campus
       where
@@ -98,6 +104,12 @@
 			<if test="token !=null">
 				token,
 			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="uidKey != null">
+				uid_key,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 				#{campusName,jdbcType=VARCHAR},
@@ -125,6 +137,12 @@
 			</if>
 			<if test="token!=null">
 				#{token,jdbcType=VARCHAR},
+			</if>
+			<if test="uid!=null">
+				#{uid,jdbcType=VARCHAR},
+			</if>
+			<if test="uidKey!=null">
+				#{uidKey,jdbcType=VARCHAR},
 			</if>
 		</trim>
     </insert>
@@ -164,6 +182,12 @@
 			</if>
 			<if test="token!=null">
 			 token=#{token,jdbcType=VARCHAR},
+			</if>
+			<if test="uid!=null">
+			 uid=#{uid,jdbcType=VARCHAR},
+			</if>
+			<if test="uidKey!=null">
+			 uid_key=#{uidKey,jdbcType=VARCHAR},
 			</if>			
 		</set>
         where 
