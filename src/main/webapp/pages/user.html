@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <title>用户管理</title>
 
-<link rel="stylesheet"
-	href="assets/bootstrap-table/bootstrap-table.css">
+<link rel="stylesheet" href="assets/bootstrap-table/bootstrap-table.css">
 <link rel="stylesheet"
 	href="assets/bootstrap-table/bootstrap-editable.css">
 <script src="assets/bootstrap-table/jquery.min.js"></script>
@@ -17,7 +16,9 @@
 <script src="assets/bootstrap-table/bootstrap-editable.js"></script>
 <script src="js/bootstrap-table-zh-CN.min.js"></script>
 
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet">
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -32,11 +33,16 @@
 }
 
 #operate-success {
-
 	font-size: 16px;
 	background-color: #8AC007;
 	color: #FBFBFB;
 	visibility: hidden
+}
+
+tr>:last-child {
+	width: 66px;
+	position: relative;
+	border: solid #A4D3EE 1px;
 }
 </style>
 </head>
@@ -49,6 +55,7 @@
 			<span id="operate-success">设置成功</span>
 		</div>
 		<div>
+
 			<table id="table" data-toggle="table" data-show-export="false"
 				data-url="user/getAllUser.do" data-search="true"
 				data-show-refresh="true" data-show-toggle="true"
@@ -61,53 +68,56 @@
 						<th data-field="openId">openId</th>
 						<th data-field="imgUrl">头像</th>
 						<th data-field="sex" data-formatter="statusSex">性别</th>
-						<th data-field="place" data-formatter="statusFormatter" data-sortable="true">系统职务</th>
+						<th data-field="place" data-formatter="statusFormatter"
+							data-sortable="true">系统职务</th>
 						<th data-field="action" data-formatter="actionFormatter"
-							   data-events="actionEvents">权限修改</th>
-					    <th data-field="name">姓名</th>
+							data-events="actionEvents">权限修改</th>
+						<th data-field="name">姓名</th>
 						<th data-field="headship">实际职务</th>
 						<th data-field="email">Email</th>
 						<th data-field="phone">手机号</th>
 						<th data-field="address">家庭住址</th>
 						<th data-field="subScribe">关注</th>
-						<th data-field="subscribeTime" data-sortable="true">关注时间</th>												
+						<th data-field="subscribeTime" data-sortable="true">关注时间</th>
 						<th data-field="country" data-visible="false">国家</th>
 						<th data-field="province" data-visible="false">省份</th>
 						<th data-field="city" data-visible="false">城市</th>
 						<th data-field="groupId" data-visible="false">分组ID</th>
+						<th data-field="action" data-formatter="actionDelete"
+							data-events="actionEvents">操作</th>
 					</tr>
 				</thead>
 			</table>
 		</div>
 	</div>
 	<script>
-	var campusId=1;
-	
-	function statusSex(value, row, index) {
-		if (value == "0")
-			return "?";
-		else if (value == "1") {
-			return "男";
-		}else if (value == "2") {
-			return "女";
-		}
-	  }
-	
-   function statusFormatter(value, row, index) {
-	if (value == "0")
-		return "未认证";
-	else if (value == "1")
-		return "普通员工";
-	else if (value == "2") {
-		return "安全人员";
-	}else if (value == "3") {
-		return "资产管理人员";
-	}else if (value == "4") {
-		return "领导";
-	}
-  }
+		var campusId = 1;
 
-   function actionFormatter(value, row, index) {
+		function statusSex(value, row, index) {
+			if (value == "0")
+				return "?";
+			else if (value == "1") {
+				return "男";
+			} else if (value == "2") {
+				return "女";
+			}
+		}
+
+		function statusFormatter(value, row, index) {
+			if (value == "0")
+				return "未认证";
+			else if (value == "1")
+				return "普通员工";
+			else if (value == "2") {
+				return "安全人员";
+			} else if (value == "3") {
+				return "资产管理人员";
+			} else if (value == "4") {
+				return "领导";
+			}
+		}
+
+		function actionFormatter(value, row, index) {
 
 			return [
 					'<a class="superAdmin ml8 fa fa-user-plus" href="javascript:void(0)" title="设为领导">',
@@ -123,20 +133,19 @@
 					'&nbsp;&nbsp;',
 					'</a>',
 					'<a class="com ml8 fa fa-user-times" href="javascript:void(0)" title="未认证">',
-					'&nbsp;&nbsp;',
-					'</a>'].join('');
+					'&nbsp;&nbsp;', '</a>' ].join('');
 
-	}
-   
-   window.actionEvents = {
+		}
+
+		window.actionEvents = {
 			'click .superAdmin' : function(e, value, row, index) {
 				//alert("admin");
 				$.post("../../voucher/user/upAtionFormatter.do", {
 					openId : row.openId,
-					place:4,
-                   campusId:campusId,
+					place : 4,
+					campusId : campusId,
 				}, function(text) {
-					
+
 					if (text == -1 || text == 0) {
 						setSuccess("设置为领导失败。");
 					} else {
@@ -147,7 +156,9 @@
 								type : 2
 							}
 						});
-						$('#table').bootstrapTable('refresh', {silent: true});
+						$('#table').bootstrapTable('refresh', {
+							silent : true
+						});
 					}
 
 				});
@@ -156,10 +167,10 @@
 				//alert("admin");
 				$.post("../../voucher/user/upAtionFormatter.do", {
 					openId : row.openId,
-					place:3,
-                   campusId:campusId,
+					place : 3,
+					campusId : campusId,
 				}, function(text) {
-					
+
 					if (text == -1 || text == 0) {
 						setSuccess("设置为资产管理人员失败。");
 					} else {
@@ -170,7 +181,9 @@
 								type : 2
 							}
 						});
-						$('#table').bootstrapTable('refresh', {silent: true});
+						$('#table').bootstrapTable('refresh', {
+							silent : true
+						});
 					}
 
 				});
@@ -179,8 +192,8 @@
 				//alert("common");
 				$.post("../../voucher/user/upAtionFormatter.do", {
 					openId : row.openId,
-					place:2,
-					campusId:campusId,
+					place : 2,
+					campusId : campusId,
 				}, function(text) {
 					if (text == -1 || text == 0) {
 						setSuccess("设置为安全人员失败。");
@@ -192,7 +205,9 @@
 								type : 1
 							}
 						});
-						$('#table').bootstrapTable('refresh', {silent: true});
+						$('#table').bootstrapTable('refresh', {
+							silent : true
+						});
 					}
 
 				});
@@ -201,8 +216,8 @@
 				//alert("superAdmin");
 				$.post("../../voucher/user/upAtionFormatter.do", {
 					openId : row.openId,
-					place:1,
-					campusId:campusId,
+					place : 1,
+					campusId : campusId,
 				}, function(text) {
 					if (text == -1 || text == 0) {
 						setSuccess("设置为普通员工失败。");
@@ -214,7 +229,9 @@
 								type : 0
 							}
 						});
-						$('#table').bootstrapTable('refresh', {silent: true});
+						$('#table').bootstrapTable('refresh', {
+							silent : true
+						});
 					}
 
 				});
@@ -223,8 +240,8 @@
 				//alert("common");
 				$.post("../../voucher/user/upAtionFormatter.do", {
 					openId : row.openId,
-					place:0,
-					campusId:campusId,
+					place : 0,
+					campusId : campusId,
 				}, function(text) {
 					if (text == -1 || text == 0) {
 						setSuccess("设置为未认证人员失败。");
@@ -236,12 +253,43 @@
 								type : 1
 							}
 						});
-						$('#table').bootstrapTable('refresh', {silent: true});
+						$('#table').bootstrapTable('refresh', {
+							silent : true
+						});
 					}
 
 				});
 			}
 		};
+
+		function actionDelete(value, row, index) {
+			return [ '<button type="button" class="btn btn-success" onclick="deletcById(this);" >删除</button>' ]
+		}
+
+		function deletcById(temp) {
+			var hang = $(temp.parentNode).parent().prevAll().length + 1;
+			var openId = document.getElementById("table").rows[hang].cells[1].innerHTML;
+			var nickname = document.getElementById("table").rows[hang].cells[0].innerHTML;
+
+			var r = confirm("确认删除   " + nickname);
+			if (r == true) {
+				$.post("../../voucher/user/deleteByOpenId.do", {
+					openId : openId,
+					campusId : campusId,
+				}, function(text) {
+					if (text > 0) {
+						setSuccess("删除成功");
+						$('#table').bootstrapTable('refresh', {
+							silent : true
+						});
+					} else {
+						setSuccess("删除失败");
+					}
+
+				});
+			}
+
+		}
 	</script>
 </body>
 </html>

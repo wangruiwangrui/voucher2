@@ -691,6 +691,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"[Position].lng,"+
 					"[Position].lat,"+
 					"[Position].date,"+
+					"[Position].wgs84_lat,"+
+					"[Position].wgs84_lng,"+
 					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
 				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
 				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+

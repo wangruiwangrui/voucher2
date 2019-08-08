@@ -9,6 +9,8 @@ public class WeiXin {
 	private Integer campusId;
 
 	private String campusName;
+	
+	private String companyName;
 
 	private Integer cityId;
 	
@@ -21,6 +23,10 @@ public class WeiXin {
 	private String appId;
 	
 	private String appSecret;
+	
+	private String mchId;
+	
+	private String api;
 	
 	private String accessToken;
 	
@@ -44,6 +50,14 @@ public class WeiXin {
 
 	public void setCampusName(String campusName) {
 		this.campusName = campusName == null ? null : campusName.trim();
+	}
+	
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 
 	public void setCityId(Integer cityId) {
@@ -79,6 +93,22 @@ public class WeiXin {
 		return appSecret;
 	}
 	
+
+	public String getMchId() {
+		return mchId;
+	}
+
+	public void setMchId(String mchId) {
+		this.mchId = mchId;
+	}
+
+	public String getApi() {
+		return api;
+	}
+
+	public void setApi(String api) {
+		this.api = api;
+	}
 	
 	public void setAccessToken(String accessToken) {
 		this.accessToken=accessToken;

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -31,9 +32,11 @@ import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.PreMessage;
 import com.voucher.manage.mapper.MessageListMapper;
+import com.voucher.manage.mapper.NoticeMapper;
 import com.voucher.manage.mapper.UsersMapper;
 import com.voucher.manage.mapper.WeiXinMapper;
 import com.voucher.manage.model.MessageList;
+import com.voucher.manage.model.Notice;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.singleton.Singleton;
@@ -70,14 +73,15 @@ public class WechatSendMessageController {
 		
 	private MessageListMapper messageListMapper = sqlSession.getMapper(MessageListMapper.class);
 	
+	private NoticeMapper noticeMapper = sqlSession.getMapper(NoticeMapper.class);
+	
 	@RequestMapping("/send")
-	public @ResponseBody Integer template(@RequestParam String openId,@RequestParam String Template_Id,
+	public @ResponseBody Integer template(@RequestParam Integer campusId,@RequestParam String openId,@RequestParam String title,
 			@RequestParam String Send_Type,@RequestParam String url,
 			@RequestParam String first_data,@RequestParam String keyword1_data,
 			@RequestParam String keyword2_data,@RequestParam String keyword3_data,
 			@RequestParam String keyword4_data,@RequestParam String keyword5_data,
 			@RequestParam String remark_data) {
-		Integer campusId=1;
 		
 		String accessToken;
     	WeiXin weixin;
@@ -96,6 +100,8 @@ public class WechatSendMessageController {
 
 			WeiXinMapper weiXinMapper = sqlSession.getMapper(WeiXinMapper.class);
 
+			NoticeMapper noticeMapper = sqlSession.getMapper(NoticeMapper.class);
+			
 			weixin = weiXinMapper.getCampus(campusId);
 			accessToken = weixin.getAccessToken();
 
@@ -103,7 +109,8 @@ public class WechatSendMessageController {
 			templateData.setUrl(url);
 			templateData.setTouser(openId);
 			templateData.setTopcolor("#000000");
-			templateData.setTemplate_id(Template_Id);
+			Notice notice = noticeMapper.selectTemplate(title);
+			templateData.setTemplate_id(notice.getTemplateId());
 			Map<String, TemplateData> m = new HashMap<String, TemplateData>();
 			TemplateData first = new TemplateData();
 			first.setColor("#000000");
@@ -223,6 +230,18 @@ public class WechatSendMessageController {
 			
 			String Message="您承租的资产存在" + hidden.getCheck_circs() + "的隐患,请注意安全防范!";
 			
+			try{
+				
+				ClassPathXmlApplicationContext applicationContext=new ClassPathXmlApplicationContext("spring-mybatis2.xml");		
+				DefaultSqlSessionFactory defaultSqlSessionFactory= (DefaultSqlSessionFactory) applicationContext.getBean("sqlSessionFactory");				
+				SqlSession sqlSession=defaultSqlSessionFactory.openSession();
+
+				noticeMapper = sqlSession.getMapper(NoticeMapper.class);
+				
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+			
 			if (list2 != null) {
 				
 				ChartInfo chartInfo = list2.get(0);
@@ -243,7 +262,11 @@ public class WechatSendMessageController {
 					WxTemplate templateData = new WxTemplate();
 					templateData.setTouser(openId);
 					templateData.setTopcolor("#000000");
-					templateData.setTemplate_id("nBV50MfKYjpDlWqXJQAgjPZrW-925l45CYoxNaiMSI0");
+					
+					Notice notice = noticeMapper.selectTemplate("隐患通知");
+					
+					templateData.setTemplate_id(notice.getTemplateId());
+					
 					Map<String, TemplateData> m = new HashMap<String, TemplateData>();
 					TemplateData first = new TemplateData();
 					first.setColor("#000000");
@@ -300,7 +323,7 @@ public class WechatSendMessageController {
 	}
 	
 	
-	public void sendMessage(@RequestParam Integer place,@RequestParam String Template_Id,
+	public void sendMessage(@RequestParam Integer place,@RequestParam String title,
 			@RequestParam String Send_Type,@RequestParam String url,
 			@RequestParam String first_data,@RequestParam String keyword1_data,
 			@RequestParam String keyword2_data,@RequestParam String keyword3_data,
@@ -324,7 +347,9 @@ public class WechatSendMessageController {
 		MessageListMapper messageListMapper=sqlSession.getMapper(MessageListMapper.class);
 			
 		List<Users> list=usersMapper.getUserByGuidance();
-			
+		
+		NoticeMapper noticeMapper = sqlSession.getMapper(NoticeMapper.class);
+		
 	  if(list!=null){
 		
 		 Iterator<Users> iterator=list.iterator();
@@ -339,7 +364,7 @@ public class WechatSendMessageController {
 			String openId=users.getOpenId();
 			
 			if(currentOpenId!=null&&!currentOpenId.equals("")&&openId.equals(currentOpenId)){
-			 	continue; //跳过本人的微信号
+			 	//continue; //跳过本人的微信号
 			}
 			
 			WeiXinMapper weiXinMapper=sqlSession.getMapper(WeiXinMapper.class);
@@ -351,7 +376,10 @@ public class WechatSendMessageController {
 			templateData.setUrl(url);
 	    	templateData.setTouser(openId);
 	    	templateData.setTopcolor("#000000");
-	    	templateData.setTemplate_id(Template_Id);
+	    	
+	    	Notice notice = noticeMapper.selectTemplate(title);
+	    	
+	    	templateData.setTemplate_id(notice.getTemplateId());
 	    	Map<String,TemplateData> m = new HashMap<String,TemplateData>();
 	    	TemplateData first = new TemplateData();
 	    	first.setColor("#000000");
@@ -409,6 +437,7 @@ public class WechatSendMessageController {
 	    		messageList.setState(1);
 	    	}else{
 	    		messageList.setState(0);
+	    		messageList.setContext(s);
 	    	}
 	    	
 	    	messageListMapper.insertMessageList(messageList);

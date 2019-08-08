@@ -172,6 +172,17 @@ public class UserController {
 		return userService.upAtionFormatter(map);
 	}
 	
+	@RequestMapping(value="/deleteByOpenId")
+	public @ResponseBody Integer deleteByOpenId(HttpServletRequest request,@RequestParam String openId,
+			@RequestParam Integer campusId){
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("openId", openId);
+		map.put("campusId", campusId);
+		
+		return userService.deleteByOpenId(map);
+	}
+	
 	/**
 	 * 閫�鍑虹櫥褰�
 	 * @param request

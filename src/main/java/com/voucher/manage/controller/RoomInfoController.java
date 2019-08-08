@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.voucher.manage.dao.RoomInfoDao;
@@ -123,10 +124,9 @@ public class RoomInfoController {
 	
 	
 	@RequestMapping("/getAllMessageList")
-	public @ResponseBody Map<String, Object> getAllMessageList(Integer limit,Integer offset,String sort,String order,
+	public @ResponseBody Map<String, Object> getAllMessageList(@RequestParam Integer campusId,Integer limit,Integer offset,String sort,String order,
 			String search,HttpServletRequest request){
 		
-		Integer campusId=1;
 		
 		if(sort!=null&&sort.equals("sendTime")){
 			sort="send_time";

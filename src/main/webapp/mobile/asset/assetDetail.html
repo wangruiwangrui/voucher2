@@ -79,6 +79,7 @@
 </body>
 </html>
 <script type="text/javascript">
+	var campusId= 1;
   function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
     var r = window.location.search.substr(1).match(reg);
@@ -96,7 +97,6 @@
   
 	}
 
-	var campusId=1;
 	var page=pageName();
 
 	var httpRequest=new XMLHttpRequest();

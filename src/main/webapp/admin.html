@@ -5,8 +5,8 @@
 <title>Weixin后台管理</title>
 
 <link rel='stylesheet' type='text/css' href='css/bootstrap2.min.css'>
-<link rel="stylesheet"
-	href="assets/bootstrap-table/bootstrap.min.css"><!-- 必须注意引入顺序  -->
+<link rel="stylesheet" href="assets/bootstrap-table/bootstrap.min.css">
+<!-- 必须注意引入顺序  -->
 <link rel='stylesheet' type='text/css' href='css/style.css'>
 <link rel="shortcut icon" href="img/icon.png">
 <script type='text/javascript' src="js/jquery.js"></script>
@@ -14,14 +14,15 @@
 <script type='text/javascript' src="js/main.js"></script>
 <script type="text/javascript" src="js/util.js"></script>
 
-<link href="bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+<link href="bootstrap/css/bootstrap-datetimepicker.min.css"
+	rel="stylesheet" media="screen">
 
 <style>
 a:hover {
 	text-decoration: none
 }
 
-.sideBar ul{
+.sideBar ul {
 	border: 1px solid #eee;
 }
 </style>
@@ -32,8 +33,8 @@ a:hover {
 	<header class='navbar blue navbar-fixed-top'>
 		<div class='navbar-inner'>
 			<div class='container-fluid'>
-				<a class='brand pull-left' ><img src="img/icon.png" width="20px" height="auto">&nbsp;
-				</a><a  class='brand pull-left' id="brand">For</a>
+				<a class='brand pull-left'><img src="img/gtimgs/3.png" width="20px"
+					height="auto">&nbsp; </a><a class='brand pull-left' id="brand">For</a>
 				<ul class='nav pull-right'>
 					<li>
 						<!-- 添加公众号下拉菜单 -->
@@ -43,7 +44,7 @@ a:hover {
 								<span class="change">选择公众号</span> <span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" id="dropdown-campus"
-							  style="height: 200px; overflow: auto">
+								style="height: 200px; overflow: auto">
 
 							</ul>
 						</div>
@@ -60,46 +61,52 @@ a:hover {
 			<div class="sideBar left">
 				<br />
 				<ul>
-					
+
 					<li><figure id="wechatMenu">
 							<a href="javascript:void(0);" target="content"> <i
 								class='icon-cog'></i> 菜单管理&nbsp;&nbsp;
 							</a>
-					</figure><hr /></li>
-					
+						</figure>
+						<hr /></li>
+
 					<li><figure id="auser">
 							<a href="javascript:void(0);" target="content"> <i
 								class='icon-user'></i> 用戶管理&nbsp;&nbsp;
 							</a>
-					</figure><hr /></li>
-					
-				 
+						</figure>
+						<hr /></li>
+
+
 					<li><figure id="charters">
 							<a href="javascript:void(0);" target="content"> <i
 								class='icon-user'></i> 承租人&nbsp;&nbsp;
 							</a>
-					</figure><hr /></li>
-			
-					
+						</figure>
+						<hr /></li>
+
+
 					<li><figure id="access">
 							<a href="javascript:void(0);" target="content"> <i
 								class='icon-user'></i> 访问统计&nbsp;&nbsp;
 							</a>
-					</figure><hr /></li>
-					
+						</figure>
+						<hr /></li>
+
 					<li><figure id="roominfo">
 							<a href="javascript:void(0);" target="content"> <i
 								class='icon-user'></i> 房屋信息&nbsp;&nbsp;
 							</a>
-					</figure><hr /></li>
-					
-					 
+						</figure>
+						<hr /></li>
+
+
 					<li><figure id="messageList">
 							<a href="javascript:void(0);" target="content"> <i
 								class='icon-user'></i> 消息列表&nbsp;&nbsp;
 							</a>
-					</figure><hr /></li>
-					
+						</figure>
+						<hr /></li>
+
 					<!--  
 					<li><figure id="roomChange">
 							<a href="javascript:void(0);" target="content"> <i
@@ -108,74 +115,85 @@ a:hover {
 					</figure><hr /></li>
 					
 					-->
-										
-					
+
+
 					<li><figure id="qrCode">
 							<a href="javascript:void(0);" target="content"> <i
 								class='icon-user'></i> 二维码 &nbsp;&nbsp;
 							</a>
-					</figure><hr /></li>
-					
+						</figure>
+						<hr /></li>
+
 					<li><figure id="setting">
 							<a href="javascript:void(0);" target="content"> <i
 								class='icon-cog'></i> 微信设置&nbsp;&nbsp;
 							</a>
-					</figure><hr /></li>	
+						</figure>
+						<hr /></li>
+						
+					<!-- 通知 -->
+					<li><figure id="WXnotice">
+							<a href="javascript:void(0);" target="content"> <i
+								class='icon-cog'></i> 微信通知&nbsp;&nbsp;
+							</a>
+						</figure>
+						<hr /></li>
 				</ul>
 			</div>
 
 
-           <div id="content" src="">
-		
+			<div id="content" src="">
 		</section>
 	</section>
-			
-<style type="text/css">  <!--避免bootstrap框架窗口变化造成元素高度的变化 -->
- .left{           
-    position: absolute;
-    position: relative;
-    float: left;
- }
-#content{
-   margin-left:120px;
-   position: absolute;
+
+	<style type="text/css">
+<!--避免bootstrap框架窗口变化造成元素高度的变化 -->
+.left {
+	position: absolute;
+	position: relative;
+	float: left;
 }
 
-.change{
-  color:red;
+#content {
+	margin-left: 120px;
+	position: absolute;
 }
 
- .result-icon{
- position: relative;
-  top:2px;
-  display: inline-block;
-
-   width:26px;
-   height:15px;
-  }
- .result-fail{
-  background-image:url('img/weixin.png') ;
-  background-repeat:no-repeat;
-  -moz-background-size: 25px 18px;
-    -webkit-background-size: 25px 18px;
-    -o-background-size: 25px 18px;
-    background-size: 25px 18px;
+.change {
+	color: red;
 }
 
+.result-icon {
+	position: relative;
+	top: 2px;
+	display: inline-block;
+	width: 26px;
+	height: 15px;
 }
+
+.result-fail {
+	background-image: url('img/weixin.png');
+	background-repeat: no-repeat;
+	-moz-background-size: 25px 18px;
+	-webkit-background-size: 25px 18px;
+	-o-background-size: 25px 18px;
+	background-size: 25px 18px;
+}
+
 </style>
 
-<script type="text/javascript" src="assets/bootstrap-table/bootstrap-table.js"></script>
-<script type="text/javascript" src="pages/js/admin.js"></script>
+	<script type="text/javascript"
+		src="assets/bootstrap-table/bootstrap-table.js"></script>
+	<script type="text/javascript" src="pages/js/admin.js"></script>
 
-<script type="text/javascript">
- var u = navigator.userAgent;
- var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
- var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
- if(isAndroid||isiOS){
-	location.href="mobile/admin/index.html";
- }
-</script>
+	<script type="text/javascript">
+		var u = navigator.userAgent;
+		var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+		var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+		if (isAndroid || isiOS) {
+			location.href = "mobile/admin/index.html";
+		}
+	</script>
 
 </body>
 </html>

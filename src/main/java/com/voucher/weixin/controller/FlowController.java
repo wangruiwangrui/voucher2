@@ -176,6 +176,9 @@ public class FlowController {
 		
 		String openId=( String ) request.getSession().getAttribute("openId");
 		
+		System.out.println("=========================");
+		System.out.println(openId);
+		
 		return server.findMyAllHistory(openId, limit, offset);
 		
 	}

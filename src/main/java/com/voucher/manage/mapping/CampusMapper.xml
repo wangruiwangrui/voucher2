@@ -61,5 +61,7 @@
 		where campus_name=#{campusName,jdbcType=VARCHAR}
 		limit 1
 	</select>
+	
+	
    
 </mapper>

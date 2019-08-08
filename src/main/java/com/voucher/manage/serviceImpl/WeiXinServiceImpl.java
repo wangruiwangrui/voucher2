@@ -101,5 +101,10 @@ public class WeiXinServiceImpl implements WeiXinService{
 		return messageListMapper.getAllMessageCount(campusId, search);
 	}
 
+	@Override
+	public String getCompanyName(Integer campusId) {
+		return weixinMapper.getCompanyName(campusId);
+	}
+
 
 }

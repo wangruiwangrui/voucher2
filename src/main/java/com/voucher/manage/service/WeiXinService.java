@@ -31,5 +31,7 @@ public interface WeiXinService {
 	List<MessageList> getAllMessageList(Integer campusId,Integer limit, Integer offset,String sort, String order,String search);
     
     Integer getAllMessageCount(Integer campusId,String search);
+
+	String getCompanyName(Integer campusId);
     
 }

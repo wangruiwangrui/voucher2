@@ -26,6 +26,8 @@ public interface UsersMapper {
     
     int upAtionFormatter(Map<String, Object> paramterMap);
     
+    int deleteByOpenId(Map<String, Object> paramterMap);
+    
     int selectRepeatUser(@Param(value="name") String name);
     
     int selectRepeatUserByOpenId(@Param(value="openId") String openId);
@@ -97,4 +99,6 @@ public interface UsersMapper {
 	List<String> getUserByType(Map<String, Object> paramMap);
 	
 	Users getUserByAssetCharter(@Param(value="charter")String charter, @Param(value="phone")String phone);
+
+	
 }

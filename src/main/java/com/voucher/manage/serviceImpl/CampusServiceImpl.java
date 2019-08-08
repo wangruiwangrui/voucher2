@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.voucher.manage.mapper.CampusMapper;
 import com.voucher.manage.model.Campus;
 import com.voucher.manage.model.CampusAdmin;
+import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.CampusService;
 
 @Service("campusService")
@@ -85,7 +86,6 @@ public class CampusServiceImpl implements CampusService {
 	public String getCampusName(Integer campusId) {
 		return campusMapper.getCampusName(campusId);
 	}
-
 
 
 }

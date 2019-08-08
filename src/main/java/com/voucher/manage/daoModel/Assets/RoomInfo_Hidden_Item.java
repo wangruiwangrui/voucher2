@@ -1,6 +1,7 @@
 package com.voucher.manage.daoModel.Assets;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
@@ -272,6 +273,17 @@ public class RoomInfo_Hidden_Item implements Serializable{
 
 	public String getWhereTerm(){
 		return whereTerm;
+	}
+
+	@Override
+	public String toString() {
+		return "RoomInfo_Hidden_Item [guid=" + guid + ", fire_extinguisher=" + fire_extinguisher + ", high_power="
+				+ high_power + ", blow=" + blow + ", line_aging=" + line_aging + ", incline=" + incline + ", split="
+				+ split + ", down=" + down + ", break_off=" + break_off + ", destroy=" + destroy + ", invalidation="
+				+ invalidation + ", flaw=" + flaw + ", cesspool=" + cesspool + ", coast=" + coast + ", wall_up="
+				+ wall_up + ", is_other=" + is_other + ", other=" + other + ", limit=" + limit + ", offset=" + offset
+				+ ", notIn=" + notIn + ", sort=" + sort + ", order=" + order + ", where=" + Arrays.toString(where)
+				+ ", whereTerm=" + whereTerm + "]";
 	}
 
 }

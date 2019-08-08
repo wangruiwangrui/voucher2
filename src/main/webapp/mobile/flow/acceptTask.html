@@ -239,7 +239,7 @@
 	var addressValue;
 	
 	var xhm=new XMLHttpRequest();
-    xhm.open("GET","/voucher/mobile/register/userinfoByopenId.do?campusId=1",false);
+    xhm.open("GET","/voucher/mobile/register/userinfoByopenId.do?campusId="+campusId,false);
     xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhm.send();
     var obj=JSON.parse(xhm.responseText);

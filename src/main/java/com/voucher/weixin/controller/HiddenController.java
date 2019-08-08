@@ -334,6 +334,8 @@ public class HiddenController {
 			@RequestParam Double lng,@RequestParam Double lat,
 			HttpServletRequest request){
 		
+		System.out.println("insert========================");
+		
 		Hidden_Check hidden_Check=new Hidden_Check();
 
         UUID uuid=UUID.randomUUID();
@@ -506,7 +508,7 @@ public class HiddenController {
 							}
 							Users users=userService.getUserByOnlyOpenId(openId);
 							
-							String url="http://lzgfgs.com/voucher/mobile/1/guidance/addNeatenInfoItem.html?guid="+thisguid;
+							String url="http://xx.lzgtzh.com/voucher/mobile/1/guidance/addNeatenInfoItem.html?guid="+thisguid;
 							
 							SimpleDateFormat sdf  =   new  SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " ); 
 							String time = sdf.format(new Date());
@@ -515,7 +517,7 @@ public class HiddenController {
 							
 							WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
 							
-							wechatSendMessageController.sendMessage(2, "nBV50MfKYjpDlWqXJQAgjPZrW-925l45CYoxNaiMSI0",
+							wechatSendMessageController.sendMessage(2, "隐患通知",
 									"整改通知", url, "隐患资产:"+name, users.getName(), time, "安全巡查", checkCircs,
 									"限期整改","", currentOpenId);
 							
@@ -1214,7 +1216,7 @@ public class HiddenController {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		
+		System.out.println("roomInfo_Hidden_Item=================="+roomInfo_Hidden_Item.toString());
 		return roomInfo_Hidden_Item;
 	}
 	

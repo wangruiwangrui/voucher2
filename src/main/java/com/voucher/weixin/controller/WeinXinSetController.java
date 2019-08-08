@@ -67,7 +67,8 @@ private WeiXinService weixinService;
 	@RequestMapping("insertIntoCampus")
 	public @ResponseBody 
 	Integer insetIntoCampus(HttpServletRequest request , @RequestParam Integer campusId,@RequestParam String campusName
-			,@RequestParam String customService,@RequestParam String appId , @RequestParam String appSecret
+			,@RequestParam String companyName,@RequestParam String customService,@RequestParam String appId 
+			,@RequestParam String mchId,@RequestParam String api, @RequestParam String appSecret
 			,@RequestParam String token,@RequestParam String userName) {
 		Map<String, Object> paramMap=new HashMap<>();
 		Integer  cityId , flag ;
@@ -80,13 +81,17 @@ private WeiXinService weixinService;
 		if(type==1){
 			return 0;
 		}
-				
+		System.out.println("========"+companyName);
+		
 		paramMap.put("campusName", campusName);
+		paramMap.put("companyName", companyName);
 		paramMap.put("cityId", cityId);
 		paramMap.put("customService", customService);
 		paramMap.put("userName", userName);
 		paramMap.put("appId", appId);
 		paramMap.put("appSecret", appSecret);
+		paramMap.put("mchId", mchId);
+		paramMap.put("api", api);
 		paramMap.put("token", token);
 		paramMap.put("campusId", campusId);
 		 Date date=new Date();
@@ -101,6 +106,8 @@ private WeiXinService weixinService;
 		  paramMap.put("campusId", campusId);
 		  flag=weixinService.updateCampusById(paramMap);
 		}
+		
+		System.out.println("==========="+flag);
 		return flag;
 	}
 	

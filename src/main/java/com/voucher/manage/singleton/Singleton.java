@@ -12,21 +12,22 @@ import com.voucher.manage.tools.MyTestUtil;
 public class Singleton {
 	private static Singleton instance = new Singleton();
 		
-	public final static String ROOMDATABASE="[YTRoomManage]";
+//	public final static String ROOMDATABASE="[YTRoomManage]";
+	public final static String ROOMDATABASE="[RoomManage]";
 	
-	//本地文件目录
+	//鏈湴鏂囦欢鐩綍
 	public final static String filePath="\\Desktop\\pasoft\\photo";
 	
-	//资产管理系统图片目录
-	public static final String ROOMINFOIMGPATH	="E:\\GTJTSJ\\";
+	//璧勪骇绠＄悊绯荤粺鍥剧墖鐩綍
+	public static final String ROOMINFOIMGPATH	="D:\\image\\";
 	
-	//资产管理系统图片目录2
-	public static final String ROOMINFOIMGPATH2	="E:\\GTJTSJ\\pasoft";
+	//璧勪骇绠＄悊绯荤粺鍥剧墖鐩綍2
+	public static final String ROOMINFOIMGPATH2	="D:\\image\\pasoft";
 	
-	//短信帐号
+	//鐭俊甯愬彿
 	public static final String UID="泸州市国有公房经营管理有限公司";
 	
-	//短信密钥
+	//鐭俊瀵嗛挜
 	public static final String KEY="44d75966a2a94d79bb38";
 	
 	private LinkedHashMap<String,Map<String, Object>> registerMap;

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>通知管理</title>
+
+<link rel="stylesheet" href="assets/bootstrap-table/bootstrap-table.css">
+<link rel="stylesheet"
+	href="assets/bootstrap-table/bootstrap-editable.css">
+<script src="assets/bootstrap-table/jquery.min.js"></script>
+<script src="assets/bootstrap-table/bootstrap.min.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table-export.js"></script>
+<script src="assets/bootstrap-table/tableExport.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="assets/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript"
+	src="./bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+
+<link rel="stylesheet" type="text/css" href="date/css/pikaday.css" />
+<script type="text/javascript" src="date/js/pikaday.min.js"></script>
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js"></script>
+<![endif]-->
+<style>
+.ml10 {
+	margin-left: 10px;
+}
+
+#operate-success {
+	font-size: 16px;
+	background-color: #8AC007;
+	color: #FBFBFB;
+	visibility: hidden
+}
+
+.ID{
+	display: none;
+}
+</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="page-header">
+			<h1>通知管理&nbsp;&nbsp;</h1>
+		</div>
+		<div style="text-align: center;">
+			<span id="operate-success">设置成功</span>
+		</div>
+
+
+
+		<div id="toolbar" class="btn-group">
+
+			<button id="plus" type="button" class="btn btn-default">
+				<i class="glyphicon glyphicon-plus" title="添加模板消息"></i>
+				<sapn>&nbsp;&nbsp;添加模板消息</span>
+			</button>
+			<button id="edit" type="button" class="btn btn-default">
+				<i class="glyphicon glyphicon-edit" title="编辑微信公众号"></i>
+				<sapn>&nbsp;&nbsp;编辑</span>
+			</button>
+		</div>
+
+		<div id="maintable">
+			<table id="table" data-id-field="foodId" data-striped="true"
+				data-toolbar="#toolbar" data-search="true" data-show-refresh="true"
+				data-show-toggle="true" data-pagination="true"
+				data-show-columns="true" data-height="80%"
+				data-click-to-select="true">
+				<thead>
+					<tr>
+						<th data-field="state" data-checkbox="true"></th>
+						<th class="ID" data-align="left" data-field="id">ID</th>
+						<th data-align="left" data-field="title">标题</th>
+						<th data-align="left" data-field="templateId">模板ID</th>
+						<th data-align="left" data-field="action" data-sortable="true" data-formatter="actionReport">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+
+	<!-- 警告对话框 -->
+	<div class="modal fade" id="alertdialog" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header blue">
+					<div>
+						<strong id="alertchar" style="font-size: 20px"></strong>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" id="commitFoodDataButton"
+							class="btn btn-primary">确定</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 添加商品Modal start -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content" style="margin-top: 10em;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h3 class="modal-title" id="myModalLabel">新增模板消息</h3>
+				</div>
+				<form id="dataCommit" class="form-horizontal" method="post"
+					enctype="multipart/form-data" action="service/updateFoods.do">
+					<div class="modal-body">
+						<div class="form-group none">
+							<label for="campus_id_add_count" class="control-label col-md-4">ID</label>
+							<div class="col-md-8">
+								<input type="text" class="form-control" id="id2" name="id"
+									readonly>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4" for="title">标题</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="title2" name="title"
+									placeholder="标题">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4" for="templateId2">模板ID</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="templateId2"
+									name="customService" placeholder="模板ID">
+							</div>
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary"
+							onclick="commitFoodDataButton();">提交更改</button>
+					</div>
+				</form>
+				<script type="text/javascript">
+					function commitFoodDataButton() {
+						//对表单的数据进行验证
+						var id = $("#id2").val();
+						var title = $("#title2").val();
+						var templateId = $("#templateId2").val();
+
+						if (title == null || title == "") {
+							alert("模板标题不能为空!");
+							return;
+						}
+
+						if (templateId == null || templateId == "") {
+							customService = "-";
+						}
+						console.log("11111", id, title, templateId);
+						console.log($("#myModalLabel").html());
+
+						if ($("#myModalLabel").html() === "编辑模板消息") {
+							$.ajax({
+								type : 'POST',
+								url : "noticeset/updateNotice.do",
+								data : {
+									id : id,
+									title : title,
+									templateId : templateId
+								},
+								success : function(text) {
+									console.log(text)
+									if (text > 0) {
+										$("#myModal").modal('hide');
+										setSuccess("成功。");
+										var url = "noticeset/getNoticeList.do";
+
+										$(" #table").bootstrapTable('refresh',
+												{
+													url : url
+												});
+									} else {
+										alert("修改消息失败")
+									}
+
+								}
+							});
+						} else {
+							$.ajax({
+								type : 'POST',
+								url : "noticeset/insertNotice.do",
+								data : {
+
+									title : title,
+									templateId : templateId
+								},
+								success : function(text) {
+									console.log(text)
+									if (text > 0) {
+										$("#myModal").modal('hide');
+										setSuccess("成功。");
+										var url = "noticeset/getNoticeList.do";
+
+										$(" #table").bootstrapTable('refresh',
+												{
+													url : url
+												});
+									} else {
+										alert("添加消息失败")
+									}
+								}
+							});
+						}
+					}
+				</script>
+			</div>
+		</div>
+	</div>
+
+
+	<script type="text/javascript">
+		/*查询消息列表*/
+		$("#table").bootstrapTable({
+			url : "noticeset/getNoticeList.do"
+		});
+		function actionReport(value, row, index) {
+			return ['<button type="button" title="删除" onclick="deleteAction(this);" class="btn btn-danger">删除</button>' ]
+			.join('');
+		}
+		function deleteAction(temp){
+			var hang = $(temp.parentNode).parent().prevAll().length + 1;
+			var id = document.getElementById("table").rows[hang].cells[1].innerHTML;
+			$.ajax({
+				type : 'POST',
+				url : "noticeset/deleteNotice.do",
+				data : {
+					id:id
+				},success : function(text) {
+					console.log(text)
+					if (text > 0) {
+						$("#myModal").modal('hide');
+						setSuccess("成功。");
+						var url = "noticeset/getNoticeList.do";
+
+						$(" #table").bootstrapTable('refresh',
+								{
+									url : url
+								});
+					} else {
+						alert("添加消息失败")
+					}
+				}
+				
+			})
+		}
+
+		$('#plus').click(function() {
+			$("#myModalLabel").text("添加模板消息");
+			$("#myModal").modal('show');
+			$("#title2").val("");
+			$("#templateId2").val("");
+			tag = 0;
+		});
+
+		$('#edit').on('click', function() {
+			var array = $('#table').bootstrapTable('getSelections');
+			tag = 1;
+
+			if (array.length > 1) {
+				$('#alertchar').text('编辑操作不能同时选中多条记录！');
+				$('#commitFoodDataButton').hide();
+				$('#alertdialog').modal("show");
+			} else if (array.length == 0) {
+				$('#alertchar').text('请先选中某条记录！');
+				$('#commitFoodDataButton').hide();
+				$('#alertdialog').modal("show");
+			} else {
+
+				$("#myModalLabel").text("编辑模板消息");
+				$("#myModal").modal('show');
+
+				var id = $("#id2").val(array[0].id);
+				var title = $("#title2").val(array[0].title);
+				var templateId = $("#templateId2").val(array[0].templateId);
+
+				/*
+				var status=document.getElementsByName("status")
+				status[1-array[0].status].checked=true;
+				 */
+			}
+		});
+
+		$('#useHome').on('click', function() {
+			var array = $('#table').bootstrapTable('getSelections');
+			tag = 1;
+
+			if (array.length > 1) {
+				$('#alertchar').text('编辑操作不能同时选中多条记录！');
+				$('#commitFoodDataButton').hide();
+				$('#alertdialog').modal("show");
+			} else if (array.length == 0) {
+				$('#alertchar').text('请先选中某条记录！');
+				$('#commitFoodDataButton').hide();
+				$('#alertdialog').modal("show");
+			} else {
+				var campusId = array[0].campusId;
+				$.post("templet/getHomePageTemplet.do", {
+					campusId : campusId
+				}, function(text) {
+
+					var json = eval('(' + text + ')');
+					if (json.status == "success") {
+						setSuccess("更新成功。");
+
+						var url = "weixinset/getCampusInfo.do";
+
+						$(" #table").bootstrapTable('refresh', {
+							url : url
+						});
+
+					} else {
+						setSuccess(json.message);
+					}
+				});
+
+			}
+		});
+	</script>
