@@ -45,7 +45,6 @@
  	var json = JSON.parse(xhm.responseText);
 	var point = new BMap.Point(json.lng, json.lat);
     map.centerAndZoom(point, 15);  // 初始化地图,设置中心点坐标和地图级别
-
     
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
     map.addControl(top_left_control);        
@@ -55,10 +54,8 @@
 	var local = new BMap.LocalSearch(map,       
 		{renderOptions: {map: map,autoViewport: false},pageCapacity: 1}      
 	); 
-
 	
 	var openId;
-
 	var xhm=new ActiveXObject("Microsoft.XMLHttp");
 	 xhm.open("GET","../mobile/asset/getWetchatAllUsers.do",false);
 	 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
@@ -66,7 +63,6 @@
 	 var users=JSON.parse(xhm.responseText);
 	
 	 var select1 = document.getElementById("select1");
-
 	var option = document.createElement("option");
 	select1.appendChild(option);
 	for(var i=0;i<users.length;i++){
@@ -79,8 +75,6 @@
 		  }
 	user=users[0].name;
 		
-
-
 	
 	
 	 function gradeChange(){ 
@@ -116,7 +110,6 @@
 	       select2.appendChild(v);  
 	       select2.appendChild(v2);  
 	       select2.appendChild(v3); 
-
 	
 	function gradeChange1(){
 		
@@ -128,7 +121,6 @@
        
         var datepicker;
         var datepicker2
-
         if(grade==1){
         	
         	var Today=new Date();	    	
@@ -140,7 +132,6 @@
 	    	
 	    	var picker2 = document.getElementById("datepicker2"); 
 	    	picker2.value=datepicker2;
-
         }else if(grade==2){
         	
         	var Week=new Date();
@@ -168,7 +159,6 @@
         }
         
         checkMap();
-
         
 	}
 	
@@ -181,7 +171,6 @@
 		 		    {
 		 		        field: input
 		 		    });
-
 	
 			  
           
@@ -192,9 +181,6 @@
 		 		    {
 		 		        field: input2
 		 		    });
-
-
-
 	function checkMap(){
 		var datepicker=document.getElementById('datepicker').value;
   	   var datepicker2=document.getElementById('datepicker2').value;
@@ -207,19 +193,7 @@
 	        
 	}
 	
-	
-	  
-		var xhm=new ActiveXObject("Microsoft.XMLHttp");
-	    xhm.open("GET","../baiduMap/get.do",false);
-	    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-	    xhm.send();
-	    var ticket=JSON.parse(xhm.responseText);
-	    
-	 addDeck(ticket);
-	
-	
   function addDeck(text){	
-
 	  map.clearOverlays();
 	  
 		 var ticket=text.rows;
@@ -233,7 +207,6 @@
        //console.log(pois);
 	
     	var pois=[];
-
     	var n=300;
     	
     	if(ticket!=null){
@@ -243,9 +216,7 @@
     		}
     	
     		for(var i=0;i<n;i++){
-
     			pois.push(new BMap.Point(ticket[i].lng,ticket[i].lat));
-
     		}
     	}
     	var polyline =new BMap.Polyline(pois, {
@@ -255,7 +226,6 @@
     		   strokeOpacity: 0.8,//折线的透明度，取值范围0 - 1
     		   strokeColor:"#18a45b" //折线颜色
     		});
-
     	try{
     	 map.addOverlay(polyline);          //增加折线
     	}catch(err){
@@ -309,7 +279,6 @@
         var json = JSON.stringify(value); 
         alert(json);  
 	}	
-
     
 	function getByteLen(val) {    //传入一个字符串
         var len = 0;
