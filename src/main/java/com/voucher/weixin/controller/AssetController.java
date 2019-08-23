@@ -33,6 +33,7 @@ import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.PreMessage;
+import com.voucher.manage.daoModel.TTT.User_AccessTime;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.model.Access;
 import com.voucher.manage.model.Campus;
@@ -230,6 +231,73 @@ public class AssetController {
 		MyTestUtil.print(fileBytes);
 
 		return map;
+	}
+	
+	@RequestMapping("/upUserAccessTime")
+	public void upUserAccessTime(@RequestParam String parameter,HttpServletRequest request,
+			HttpServletResponse response){
+		
+		String openId=( String ) request.getSession().getAttribute("openId");
+		
+		Date date=new Date();
+		
+		User_AccessTime user_AccessTime=new User_AccessTime();
+		user_AccessTime.setOpen_id(openId);
+		String[] where = {"open_id=",openId};
+		user_AccessTime.setWhere(where);
+		
+		int count;
+		
+		User_AccessTime user_AccessTime2=null;
+		
+		try{
+			List list=assetsDAO.selectUserAccessTime(openId);	
+			user_AccessTime2=(User_AccessTime) list.get(0);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		if(parameter.equals("first")){
+			user_AccessTime.setFirst(date);
+			if(user_AccessTime2!=null){
+				count=user_AccessTime2.getFirst_count()+1;
+			}else{
+				count=1;
+			}
+			user_AccessTime.setFirst_count(count);
+		}else if(parameter.equals("finance")){
+			user_AccessTime.setFinance(date);
+			if(user_AccessTime2!=null){
+				count=user_AccessTime2.getFinance_count()+1;
+			}else{
+				count=1;
+			}
+			user_AccessTime.setFinance_count(count);
+		}else if(parameter.equals("matureChartInfo")){
+			user_AccessTime.setMatureChartInfo(date);
+			if(user_AccessTime2!=null){
+				count=user_AccessTime2.getMatureCharInfo_count()+1;
+			}else{
+				count=1;
+			}
+			user_AccessTime.setMatureCharInfo_count(count);
+		}else if(parameter.equals("overdueChartInfo")){
+			user_AccessTime.setOverdueChartInfo(date);
+			if(user_AccessTime2!=null){
+				count=user_AccessTime2.getOverdueChartInfo_count()+1;
+			}else{
+				count=1;
+			}
+			user_AccessTime.setOverdueChartInfo_count(count);
+		}
+		
+		int i=assetsDAO.upUserAccessTime(user_AccessTime);
+		
+		if(i==0){
+			assetsDAO.insertUserAccessTime(user_AccessTime);
+			assetsDAO.upUserAccessTime(user_AccessTime);
+		}
+		
 	}
 
 	@RequestMapping("/getAll2")

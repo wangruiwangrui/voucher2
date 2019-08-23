@@ -33,8 +33,8 @@
 
 <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
-<title>泸州工投智汇信息科技有限公司</title>
-<!-- <title>叙兴集团</title> -->
+<!-- <title>泸州工投智汇信息科技有限公司</title> -->
+<title>资产管理助手</title>
 <link rel="icon" href="../../img/xl.ico" type="image/x-icon">
 <!-- Buttons 库的核心文件 -->
 <link rel="stylesheet" href="css/buttons.css">
@@ -50,16 +50,13 @@
 .container img {
 	width: 100%;
 	margin-bottom: 12px;
+	margin-top: 12px;
 }
 
 p {
 	letter-spacing: 0.7em;
 	padding-left: 1.5em;
 	color: white;
-}
-
-.col-xs-3{
-	padding-top: 15px;
 }
 
 .col-xs-4 {
@@ -88,8 +85,9 @@ p {
 					<span class="sr-only"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span> <span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#"><img src="../../img/gtimgs/3.png"
-					width="25px" height="25px"></a> <a class="navbar-brand" href="#">资产与安全管理助手</a>
+				<a class="navbar-brand" href="#"><img
+					src="../../img/gtimgs/3.png" width="25px" height="25px"></a> <a
+					class="navbar-brand" href="#">资产与安全管理助手</a>
 			</div>
 			<div class="collapse navbar-collapse" id="example-navbar-collapse">
 				<ul class="nav navbar-nav">
@@ -104,7 +102,7 @@ p {
 	</nav>
 	<div class="container">
 		<div class="row">
-			
+
 			<div style="background-image: url('../../img/gtimgs/1.png');">
 				<p>资产</p>
 			</div>
@@ -131,6 +129,14 @@ p {
 				</div>
 			</div>
 			
+			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+				id='finance'>
+				<img alt='' src='../../img/gtimgs/imgs5/18.png'>
+				<div>
+					<span>财务</span>
+				</div>
+			</div>
+			
 			<!-- <div class='col-xs-3 col-sm-4' style='text-align: center;'
 				id='notPlace'>
 				<img alt='' src='../../img/gtimgs/imgs1/4@2x.png'>
@@ -140,7 +146,7 @@ p {
 			</div> -->
 		</div>
 		<div class="row">
-		
+
 			<div style="background-image: url('../../img/gtimgs/1.png');">
 				<p>巡查</p>
 			</div>
@@ -190,7 +196,7 @@ p {
 			</div>
 			 -->
 		</div>
-		<div class="row" >
+		<div class="row">
 			<div style="background-image: url('../../img/gtimgs/1.png');">
 				<p>隐患</p>
 			</div>
@@ -209,9 +215,9 @@ p {
 					<span>隐患统计</span>
 				</div>
 			</div>
-			
-			
-			
+
+
+
 			<!-- 隐患整改 -->
 			<div class='col-xs-3 col-sm-4' style='text-align: center;'
 				id='hiddenNeaten'>
@@ -220,9 +226,12 @@ p {
 					<span>隐患整改</span>
 				</div>
 			</div>
-			
-			
-			
+			<div class='col-xs-3 col-sm-4' style='text-align: center;' id='map'>
+				<img alt='' src='../../img/gtimgs/imgs3/14@2x.png'>
+				<div>
+					<span>隐患地图</span>
+				</div>
+			</div>
 			<div class='col-xs-3 col-sm-4' style='text-align: center;'
 				id='repairLog'>
 				<img alt='' src='../../img/gtimgs/imgs3/13@2x.png'>
@@ -231,18 +240,19 @@ p {
 				</div>
 			</div>
 			<div class='col-xs-3 col-sm-4' style='text-align: center;'
-				id='map'>
-				<img alt='' src='../../img/gtimgs/imgs3/14@2x.png'>
+				id='newHidden'>
+				<img alt='' src='../../img/gtimgs/imgs3/25.png'>
 				<div>
-					<span>隐患地图</span>
+					<span>申请维修隐患</span>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div style="background-image: url('../../img/gtimgs/1.png');"><p>其他</p></div>
+			<div style="background-image: url('../../img/gtimgs/1.png');">
+				<p>其他</p>
+			</div>
 
-			<div class='col-xs-3 col-sm-4' style='text-align: center;'
-				id='flow'>
+			<div class='col-xs-3 col-sm-4' style='text-align: center;' id='flow'>
 				<img alt='' src='../../img/gtimgs/imgs4/15@2x.png'>
 				<div>
 					<span>审批</span>
@@ -262,12 +272,11 @@ p {
 					<span>通讯录</span>
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
 
 	<script type="text/javascript">
-	
 		var xhm = new XMLHttpRequest();
 		xhm.open("GET", "/voucher/mobile/finance/selectPlace.do", false);
 		xhm.setRequestHeader("Content-type",
@@ -275,8 +284,6 @@ p {
 		xhm.send();
 
 		place = xhm.responseText;
-
-		
 	</script>
 
 	<script type="text/javascript" src="js/index.js"></script>

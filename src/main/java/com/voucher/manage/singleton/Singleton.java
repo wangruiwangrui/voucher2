@@ -11,24 +11,21 @@ import com.voucher.manage.tools.MyTestUtil;
 
 public class Singleton {
 	private static Singleton instance = new Singleton();
-		
-//	public final static String ROOMDATABASE="[YTRoomManage]";
+	//合江金宇
+	public static final String URL = "http://jinyu.lzgtzh.com";
+	
+//	public static final String URL = "http://test.lzgtzh.com";
+	
 	public final static String ROOMDATABASE="[RoomManage]";
 	
 	//鏈湴鏂囦欢鐩綍
 	public final static String filePath="\\Desktop\\pasoft\\photo";
 	
 	//璧勪骇绠＄悊绯荤粺鍥剧墖鐩綍
-	public static final String ROOMINFOIMGPATH	="D:\\image\\";
+	public static final String ROOMINFOIMGPATH	="D:\\PIC\\";
 	
 	//璧勪骇绠＄悊绯荤粺鍥剧墖鐩綍2
-	public static final String ROOMINFOIMGPATH2	="D:\\image\\pasoft";
-	
-	//鐭俊甯愬彿
-	public static final String UID="泸州市国有公房经营管理有限公司";
-	
-	//鐭俊瀵嗛挜
-	public static final String KEY="44d75966a2a94d79bb38";
+	public static final String ROOMINFOIMGPATH2	="D:\\PIC\\pasoft";
 	
 	private LinkedHashMap<String,Map<String, Object>> registerMap;
 	
@@ -42,6 +39,40 @@ public class Singleton {
     }
 
 	public LinkedHashMap<String, Map<String, Object>> getRegisterMap() {
+		if (registerMap == null) {
+			this.registerMap = new LinkedHashMap<String, Map<String, Object>>() {
+				/**
+				* 
+				*/
+				private static final long serialVersionUID = 1L;
+
+				protected boolean removeEldestEntry(Map.Entry<String, Map<String, Object>> eldest) {
+					long diff = 0;
+					try {
+						Date startDate = (Date) eldest.getValue().get("startTime");
+						Date nowDate = new Date();
+						diff = nowDate.getTime() - startDate.getTime();
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+						return true;
+					}
+
+					/*
+					 * System.out.println("endDate=   "+endDate.getTime());
+					 * System.out.println("noeDate=   "+nowDate.getTime());
+					 * System.out.println("diff="+diff/1000);
+					 */
+					return diff / 1000 > 60;
+				}
+			};
+			return registerMap;
+		} else {
+			return registerMap;
+		}
+	}
+  
+	public LinkedHashMap<String, Map<String, Object>> getRegisterMapLong() {
 		if (registerMap == null) {
 			this.registerMap = new LinkedHashMap<String, Map<String, Object>>() {
 				/**

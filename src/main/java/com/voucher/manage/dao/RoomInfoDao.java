@@ -77,4 +77,6 @@ public interface RoomInfoDao {
 	public Integer insertPreMessage(PreMessage preMessage);
 	
 	public List getAllChartInfo();
+	
+	public RoomInfo findRoomInfoByChartGUID(String chartGUID);
 }

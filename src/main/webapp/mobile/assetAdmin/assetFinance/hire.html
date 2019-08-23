@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta content="" name="description"/>
+    <meta content="webthemez" name="author"/>
+    <title>租金详情</title>
+    <link rel='stylesheet' type='text/css' href='../../../css/bootstrap2.min.css'>
+	<link rel="stylesheet"
+	href="../../../assets/bootstrap-table/bootstrap.min.css"><!-- 必须注意引入顺序  -->
+	<link rel="stylesheet"
+	href="../../../assets/bootstrap-table/bootstrap-table.css">
+	<link rel="stylesheet"
+	href="../../../assets/bootstrap-table/bootstrap-editable.css">
+	<script src="../../../assets/bootstrap-table/jquery.min.js"></script>
+	<script src="../../../assets/bootstrap-table/bootstrap.min.js"></script>
+	<script src="../../../assets/bootstrap-table/bootstrap-table.js"></script>
+	<script src="../../../assets/bootstrap-table/bootstrap-table-export.js"></script>
+	<script src="../../../assets/bootstrap-table/tableExport.js"></script>
+	<script src="../../../assets/bootstrap-table/bootstrap-table-editable.js"></script>
+	<script src="../../../assets/bootstrap-table/bootstrap-editable.js"></script>
+	<script src="../../../js/bootstrap-table-zh-CN.min.js"></script>
+
+    <script src="../../../js/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript" src="../../../bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+
+	<link rel="stylesheet" href="css/jquery-weui.css">
+	<link rel="stylesheet" href="css/weui.css"/>
+	<script src="../../../js/jquery-weui.js"></script>
+</head>
+
+<body>
+        <div class="header">
+            <h2 id="head" class="page-header"></h2>
+        </div>
+
+		<div id="toolbar" class="btn-group">
+					<button id="plus" type="button" class="btn btn-default" title="收租金">
+						<i class="glyphicon glyphicon-plus" ></i><span>&nbsp;&nbsp;收租金</span>
+					</button>						 
+		</div>
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table id="table" class="table " data-toggle="table" data-toolbar="#toolbar"
+                                	   data-toolbar="#toolbar"
+                                       data-url="" data-search="false" data-striped="true"
+                                       data-show-refresh="false" data-show-toggle="false"
+                                       data-side-pagination="server" data-pagination="true"
+                                       data-show-columns="false" data-sort-order="asc">
+                                    <thead>
+                                    <tr>
+                                    	<th  data-checkbox="true" data-formatter="checkFormatter"></th>
+                                        <th data-align="left" data-field="hire">金额</th>
+                                        <th data-align="left" data-field="state" data-sortable="true" data-formatter="statusFormatter">状态</th>
+                                        <th data-align="left" data-field="guid" data-formatter="actionHire">收租金</th>
+                                        <th data-align="left" data-field="hireDate" data-sortable="true">租金月份</th>                               
+										<th data-align="left" data-field="operator" >操作人</th>
+										<th data-align="left" data-field="optDate" data-formatter="actionTime">操作日期</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+</div>
+
+ <!-- 警告对话框 -->	
+	<div class="modal fade" id="alertdialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header blue">
+                   <div >
+                    	<strong id="alertchar" style="font-size:20px"></strong>
+                   </div>
+        
+                   <div class="modal-footer">
+			           <button type="button" class="btn btn-default" data-dismiss="modal">确 定</button>
+	               </div> 
+              </div>
+         </div>
+       </div>
+   </div>
+
+<script type="text/javascript">
+ 
+	function getQueryString(key) {
+    	var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+    	var result = window.location.search.substr(1).match(reg);
+    	return result ? decodeURIComponent(result[2]) : null;
+	}
+
+    var chartGUID=encodeURI(getQueryString("chartGUID"));
+
+    var name=getQueryString("name");
+    
+    var roomAddress=getQueryString("roomAddress");
+    
+    var span=document.createElement("span");
+    span.innerHTML=" 承租人 :"+name+"   资产地址 : "+roomAddress;
+    var head=document.getElementById("head");
+    head.appendChild(span);
+    
+    var place=0;
+    
+    var xhm = new XMLHttpRequest();
+	xhm.open("GET", "/voucher/mobile/finance/selectPlace.do", false);
+	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	xhm.send();
+
+	place = xhm.responseText;
+    
+	console.log("place="+place);
+	
+	if(place!=4){
+		$('#plus').addClass('disabled');
+	}
+	
+    function checkFormatter(value,row,index){
+		
+    	var state=(row.state);
+    	console.log(state);
+    	if(state=="未交"){
+    		return{
+    		 	disabled : false//设置是否可用   
+    		}
+    	}else{
+    		return{
+    			disabled : true
+    		}
+    	}
+    }
+    
+    function statusFormatter(value, row, index) {
+    	
+
+        var hiredate =row.hireDate;
+        
+        var date=actionDate(new Date());
+        
+        var compare=compareDate(hiredate,date);
+        
+    	if (value == "未交"){
+    		if(compare){
+    			return "<img src='../../../img/wrong.jpg' width='15px' height='15px'></i><font color='#FF0000'>已逾期</font>";
+    		}else{
+    			return "未交";
+    		}
+    	}else if (value == "已交"){
+    		return "<img src='../../../img/right.jpg' width='15px' height='15px'></i><font color='#3eb94e'>已交</font>";
+    	}
+    	
+    }
+    
+    $("#table").bootstrapTable({
+		url : "/voucher/mobile/finance/getHireListByGUID.do?chartGUID="+chartGUID
+	});
+    
+    $('#plus').on('click',function() {
+    	var array = $('#table').bootstrapTable('getSelections'); //获取选中的所有记录
+    	var file = "";
+    	var text="";
+    	if (array.length == 0){
+
+    			$('#alertchar').text('请先选中要收租金的行！');
+    			$('#alertdialog').modal("show");
+
+    	}else {
+    		var count=0;
+    		for ( var i=0;i < array.length ; i++) {
+    			if (i == (array.length-1)) {
+    				file += array[i].guid; //连接最末不加，号
+    				text+=array[i].hireDate+" ";
+    			} else {
+    				file += array[i].guid + ","; //id用逗号连接
+    				text+=array[i].hireDate+",";
+    			}
+    			count++;
+    		}
+            
+
+    		$.confirm("是否确定要收取 "+text+"共"+count+"个月租金 ? ", function() {
+    	        //点击确认后的回调函数
+    	            	
+       			$.post("/voucher/mobile/finance/uploadFilesHireList.do", {
+    				file : file
+    			}, function(text) {
+    				if (text == 1) {				
+
+    						/*
+    						 * 刷新页面
+    						 */
+    					    url="/voucher/mobile/finance/getHireListByGUID.do?chartGUID="+chartGUID;
+
+    				    	$(" #table").bootstrapTable('refresh',{
+    							url : url
+    						});
+    				    	
+    					$('#alertchar').text("收"+count+"租金成功");
+    					setTimeout(function(){
+    					 $('#alertdialog').modal("hide");
+    					},1000);
+    				} else {
+    					if(text==0){
+    						$('#alertchar').text("收租金失败");
+    					}else if(text==2){
+    						$('#alertchar').text("租金月份无效");
+    					}else if(text==3){
+    						$('#alertchar').text("没有收租金权限");
+    					}
+    					$('#alertdialog').modal("show");
+    					setTimeout(function(){
+    						 $('#alertdialog').modal("hide");
+    						},1000);
+    					}
+    				});
+    	    			
+    	           }, function() {
+    	    				//点击取消后的回调函数	  
+    	    			
+    	    });
+    	}
+
+    });
+    
+    function actionHire(value, row, index) {
+    	var state=(row.state);
+    	
+    	if(state=="未交"){
+    		if(place!=4){
+    			return [             
+                	'<button type="button" title="收租金"  class="btn btn-danger disabled">收租金</button>'
+            		].join('');
+    		}else{
+    			return [             
+                    	'<button type="button" title="收租金"  class="btn btn-danger">收租金</button>'
+                		].join('');
+    		}
+    	}
+    }
+
+    
+    $('#table').on("click-cell.bs.table",function(e, row, $element,field) {
+
+        console.log(row);
+        
+        var hireGUID=field.guid;
+        var hireTime=field.hireDate;
+        
+        if(row=="guid"){
+
+        	var roomAddress=encodeURI(field.roomAddress);
+        	var form = "";
+     		
+     		form=form+hireGUID;
+     		
+     		if(place==4){	
+       		   
+     			$.confirm("确认收取"+hireTime+"的租金", function() {
+    	        //点击确认后的回调函数
+    	            	
+       			$.post("/voucher/mobile/finance/uploadFilesHireList.do", {
+    				file : form
+    			}, function(text) {
+    				if (text == 1) {				
+
+    						/*
+    						 * 刷新页面
+    						 */
+    					    url="/voucher/mobile/finance/getHireListByGUID.do?chartGUID="+chartGUID;
+
+    				    	$(" #table").bootstrapTable('refresh',{
+    							url : url
+    						});
+    				    	
+    					$('#alertchar').text("收"+hireTime+"租金成功");
+    					setTimeout(function(){
+    					 $('#alertdialog').modal("hide");
+    					},1000);
+    				} else {
+    					if(text==0){
+    						$('#alertchar').text("收租金失败");
+    					}else if(text==2){
+    						$('#alertchar').text("租金月份无效");
+    					}else if(text==3){
+    						$('#alertchar').text("没有收租金权限");
+    					}
+    					$('#alertdialog').modal("show");
+    					setTimeout(function(){
+    						 $('#alertdialog').modal("hide");
+    						},1000);
+    					}
+    				});
+    	    			
+    	           }, function() {
+    	    				//点击取消后的回调函数	  
+    	    			
+    	    	 });
+     		}
+        }
+    });
+    
+    function repayment(temp){
+        var hang = $(temp.parentNode).parent().prevAll().length + 1;
+        var hireGUID =encodeURI(document.getElementById("table").rows[hang].cells[7].innerHTML);
+        
+        var hireTime =encodeURI(document.getElementById("table").rows[hang].cells[4].innerHTML);
+        
+ 		var form = "";
+ 		
+ 		form=form+hireGUID;
+ 			
+   		$.confirm("确认收取"+hireTime+"的租金", function() {
+	        //点击确认后的回调函数
+	            	
+   			$.post("/voucher/mobile/finance/uploadFilesHireList.do", {
+				file : form
+			}, function(text) {
+				if (text == 1) {				
+
+						/*
+						 * 刷新页面
+						 */
+					    url="/voucher/mobile/finance/getHireListByGUID.do?chartGUID="+chartGUID;
+
+				    	$(" #table").bootstrapTable('refresh',{
+							url : url
+						});
+				    	
+					$('#alertchar').text("收"+hireTime+"租金成功");
+					setTimeout(function(){
+					 $('#alertdialog').modal("hide");
+					},1000);
+				} else {
+					if(text==0){
+						$('#alertchar').text("收租金失败");
+					}else if(text==2){
+						$('#alertchar').text("租金月份无效");
+					}else if(text==3){
+						$('#alertchar').text("没有收租金权限");
+					}
+					$('#alertdialog').modal("show");
+					setTimeout(function(){
+						 $('#alertdialog').modal("hide");
+						},1000);
+					}
+				});
+	    			
+	           }, function() {
+	    				//点击取消后的回调函数	  
+	    			
+	    });
+ 		
+ 		
+ 		
+    }
+    
+    function actionTime(value, row, index){
+    	if(value==null){
+    		return null;
+    	}
+        var date = new Date(value);
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = date.getDate() + ' ';
+        h = date.getHours() + ':';
+        m = date.getMinutes() + ':';
+        s = date.getSeconds();
+        return Y+M+D+h+m+s;
+    }
+
+    function actionDate(value, row, index){
+        var date = new Date(value);
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1);
+        D = date.getDate() + ' ';
+        h = date.getHours() + ':';
+        m = date.getMinutes() + ':';
+        s = date.getSeconds();
+        return Y+M;
+    }
+
+    function compareDate(checkStartDate, checkEndDate) {      
+        var arys1= new Array();      
+        var arys2= new Array();      
+    if(checkStartDate != null && checkEndDate != null) {      
+        arys1=checkStartDate.split('-');   
+       // console.log(arys1[0],parseInt(arys1[1]-1));
+          var sdate=new Date(arys1[0],parseInt(arys1[1]-1));      
+        arys2=checkEndDate.split('-');      
+        var edate=new Date(arys2[0],parseInt(arys2[1]-1));   
+      //  console.log("checkStartDate="+checkStartDate+" checkEndDate ="+checkEndDate);
+      // console.log("sdate="+sdate+"edate="+edate);
+    if(sdate > edate) {      
+      //  console.log("日期开始时间大于结束时间");         
+        return false;         
+    }  else {   
+      //  console.log("通过");   
+        return true;      
+        }   
+        }      
+    }     
+
+    
+</script>
+</body>
+
+</html>

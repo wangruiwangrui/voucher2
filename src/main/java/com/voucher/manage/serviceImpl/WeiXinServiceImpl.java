@@ -108,5 +108,9 @@ public class WeiXinServiceImpl implements WeiXinService{
 		return weixinMapper.getCompanyName(campusId);
 	}
 
+	@Override
+	public WeiXin getWeiXinByCampusId(Integer campusId) {
+		return weixinMapper.getWeiXinByCampusId(campusId);
+	}
 
 }

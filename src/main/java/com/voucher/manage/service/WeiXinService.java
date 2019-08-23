@@ -33,5 +33,7 @@ public interface WeiXinService {
     Integer getAllMessageCount(Integer campusId,String search);
 
 	String getCompanyName(Integer campusId);
+
+	WeiXin getWeiXinByCampusId(Integer campusId);
     
 }

@@ -1,0 +1,262 @@
+<!doctype html>
+<html>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<head>
+<meta charset="utf-8">
+
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet"
+	href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script
+	src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	crossorigin="anonymous"></script>
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet">
+
+<script type="text/javascript" src="/voucher/mobile/singleton.js"></script>
+
+<script type="text/javascript">
+	var redirectUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+			+ APPID
+			+ "&redirect_uri="
+			+ DOMAIN
+			+ "/voucher/mobile/1/index.html&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+</script>
+
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+<title>资产管理助手</title>
+<!-- Buttons 库的核心文件 -->
+<link rel="stylesheet" href="css/buttons.css">
+
+<!-- 只有使用字体图标时才需要加载 Font-Awesome -->
+<link
+	href="https://cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css"
+	rel="stylesheet">
+</head>
+
+<body>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#example-navbar-collapse">
+					<span class="sr-only"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"></a> <a class="navbar-brand" href="#">财务管理助手</a>
+			</div>
+			<div class="collapse navbar-collapse" id="example-navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="userSetting.html">用户设置</a></li>
+					<li><a href="#">关于资产管理助手</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-4 col-sm-4" style="text-align: center;"
+						id="generalChartInfo">
+						<img alt="" src="../../../img/imgs2/zujin1.png">
+						<div>
+							<span>租金正常客户</span>
+						</div>
+
+					</div>
+					<div class="col-xs-4 col-sm-4" style="text-align: center;"
+						id="overdueChartInfo">
+						<img alt="" src="../../../img/imgs2/zujin5.png">
+						<div>
+							<span>租金已逾期客户</span>
+						</div>
+
+					</div>
+
+					<div class="col-xs-4 col-sm-4" style="text-align: center;"
+						id="15matureChartInfo">
+						<img class="fiv" alt="" src="../../../img/imgs2/zujin6.png">
+						<div>
+							<span>15天内租金到期客户</span>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="container">
+				<div class="row">
+
+					<div class="col-xs-4 col-sm-4" style="text-align: center;"
+						id="allChartInfo">
+						<img alt="" src="../../../img/imgs2/zujin4.png">
+						<div>
+							<span>全部客户</span>
+						</div>
+
+					</div>
+					<div class="col-xs-4 col-sm-4" style="text-align: center;"
+						id="successChartInfo">
+						<img alt="" src="../../../img/imgs2/zujin2.png">
+						<div>
+							<span>租金已完成客户</span>
+						</div>
+
+					</div>
+
+					<div class="col-xs-4 col-sm-4" style="text-align: center;"
+						id="historyOverdueChartInfo">
+						<img alt="" src="../../../img/imgs2/zujin3.png">
+						<div>
+							<span>历史租金逾期客户</span>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+
+			<div class="container">
+				<div class="row"></div>
+			</div>
+
+			<div class="container">
+				<div class="row"></div>
+			</div>
+		</div>
+	</div>
+</body>
+<style type="text/css">
+.container {
+	margin-bottom: 30px;
+}
+
+.container img {
+	width: 80%;
+	margin-bottom: 12px;
+}
+
+p {
+	letter-spacing: 0.7em;
+	padding-left: 1.5em;
+	color: white;
+}
+
+.corner {
+	color: #fff;
+	position: relative;
+}
+
+.corner span {
+	color: #333;
+}
+
+.corner img {
+	width: 21%;
+}
+
+.corner:after {
+	content: attr(data-num);
+	line-height: 25px;
+	text-align: center;
+	width: 25px;
+	height: 25px;
+	font-size: 14px;
+	border-radius: 50%;
+	background-color: red;
+	position: absolute;
+	top: -10px;
+	right: 15px;
+}
+</style>
+
+<script type="text/javascript">
+	$.get("/voucher/mobile/asset/upUserAccessTime.do", {
+		parameter : "finance"
+	}, function(text) {
+
+	});
+
+	$.get("/voucher/mobile/finance/findOverdueChartInfoClew.do",
+			{
+				days : 15
+			},
+			function(text) {
+
+				var overdueChartInfoButton = document
+						.getElementById("overdueChartInfo");
+
+				if (text > 0) {
+
+					if (text > 100) {
+						text = "•••";
+					}
+
+					overdueChartInfoButton.setAttribute("data-num", text);
+
+					overdueChartInfoButton.setAttribute("class", "fiv corner");
+				}
+
+			});
+
+	$.get("/voucher/mobile/finance/findMatureHireClew.do", {
+		days : 15
+	}, function(text) {
+		console.log(999999,text)
+		if (text > 0) {
+
+			if (text > 100) {
+				text = "•••";
+			}
+
+			var matureChartInfoButton = document
+					.getElementById("15matureChartInfo");
+
+			matureChartInfoButton.setAttribute("data-num", text);
+
+			matureChartInfoButton.setAttribute("class", "fiv corner");
+		}
+
+	});
+
+	$("#generalChartInfo").click(function() {
+		location.href = "generalChartInfo.html";
+	});
+
+	$("#overdueChartInfo").click(function() {
+		location.href = "overdueChartInfo.html";
+	});
+
+	$("#15matureChartInfo").click(function() {
+		location.href = "15matureChartInfo.html";
+	});
+
+	$("#successChartInfo").click(function() {
+		location.href = "successChartInfo.html";
+	});
+
+	$("#historyOverdueChartInfo").click(function() {
+		location.href = "historyOverdueChartInfo.html";
+	});
+
+	$("#allChartInfo").click(function() {
+		location.href = "allChartInfo.html";
+	});
+</script>
+
+</html>

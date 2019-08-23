@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>信息统计</title>
+<meta name="viewport"
+	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui" />
+<!--jquery weui-->
+<link rel="stylesheet"
+	href="https://cdn.bootcss.com/weui/1.1.3/style/weui.min.css">
+<link rel="stylesheet"
+	href="https://cdn.bootcss.com/jquery-weui/1.2.1/css/jquery-weui.min.css">
+
+</head>
+<style>
+.main {
+	width: 100%;
+	height: 500px;
+}
+
+
+</style>
+
+<body>
+
+	<div class="weui-tab">
+		<div class="weui-navbar">
+			<a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+				全部资产</a> <a class="weui-navbar__item" href="#tab2"> 资产状态</a> <a
+				class="weui-navbar__item" href="#tab3">D级资产</a>
+		</div>
+		<div class="weui-tab__bd">
+			<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+				<div class="main" id="main"></div>
+			</div>
+			<div id="tab2" class="weui-tab__bd-item">
+				<div class="main" id="main2"></div>
+			</div>
+			<div id="tab3" class="weui-tab__bd-item">
+				<div class="main" id="main3"></div>
+			</div>
+		</div>
+	</div>
+	<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+
+	<script src="https://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+	<script
+		src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
+	<script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
+	<script src="../js/echarts.common.min.js"></script>
+	<script>
+    $(function () {
+      FastClick.attach(document.body);
+    });
+  </script>
+
+	<script>
+    $(function () {
+      tab1();
+      //echarts只能在显示的容器中渲染，tab2tab3没显示出来导致渲染失败 解决办法：在tab切换之后再渲染，也就是在触发tab切换的事件中操作
+      $('a').click(function () {
+        if ($(this).attr('href') == "#tab1") {
+          setTimeout(function () {
+            tab1();
+          }, 200);
+          return;
+        }
+        else if ($(this).attr('href') == "#tab2") {
+          setTimeout(function () {
+            tab2();
+          }, 200);
+          return;
+        }
+        else if ($(this).attr('href') == "#tab3") {
+          setTimeout(function () {
+            tab3();
+          }, 200);
+          return;
+        }
+      })
+    });
+
+
+    function tab1() {
+      var myChart = echarts.init(document.getElementById('main'), 'light');
+      var xhm=new XMLHttpRequest();
+	    	xhm.open("GET","/voucher/mobile/asset/getAssetByDangerClass.do",false);
+	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	    	xhm.send();
+	    	
+       
+	   var data=JSON.parse(xhm.responseText);
+	   console.log("option=",data);
+	   
+	   var option = {
+			  	title: {
+	                text: '全部资产'
+	            },
+	            legend: {
+	                /* top: '30%', */
+	           		right: 'center',
+	                bottom: 0,
+	                orient: 'horizontal',
+					y: 'bottom',
+					data: ['正常资产', '隐患资产']
+				},
+				series: {
+					
+                    radius: '50%',
+                    center: ['50%', '50%'],
+	                y:'bottom',
+	                bottom: '20%',
+	                type: 'pie',
+	                data:[
+	                    {name: '正常资产', value: data.normal},
+	                    {name: '隐患资产', value: data.danger}
+	                    
+	                ] 
+	           }
+	           	
+			}
+
+      myChart.setOption(option);
+      myChart.resize();
+    }
+    
+    
+    function tab2() {
+      var myChart = echarts.init(document.getElementById('main2'), 'light');
+      
+      var xhm=new XMLHttpRequest();
+      xhm.open("GET","/voucher/mobile/asset/getAssetByState.do",false);
+      xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+      xhm.send();
+
+      var data2=JSON.parse(xhm.responseText);
+      
+      var option2 = {
+			  	title: {
+	                text: '资产状态'
+	            },
+	            legend: {
+	                /* top: '30%', */
+	           		right: 'center',
+	                bottom: 0,
+	                orient: 'horizontal',
+					y: 'bottom',
+					data: ['空置资产', '已出租资产','不可出租资产']
+				},
+				series: {
+					
+                  radius: '50%',
+                  center: ['50%', '50%'],
+	                y:'bottom',
+	                bottom: '20%',
+	                type: 'pie',
+	                data:[
+	                    {name: '空置资产', value: data2.notHire},
+	                    {name: '已出租资产', value: data2.alreadyHire},
+	                    {name: '不可出租资产', value: data2.catnotHire}
+	                ] 
+	           }
+	           	
+			}
+      
+      myChart.setOption(option2);
+      myChart.resize();
+    }
+    function tab3() {
+      var myChart = echarts.init(document.getElementById('main3'), 'light');
+      
+      var xhm=new XMLHttpRequest();
+      xhm.open("GET","/voucher/mobile/hidden/hiddenStat.do",false);
+      xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+      xhm.send();
+
+      var data3=JSON.parse(xhm.responseText);
+      
+      var option2 = {
+			  	title: {
+	                text: '资产状态'
+	            },
+	            legend: {
+	                /* top: '30%', */
+	           		right: 'center',
+	                bottom: 0,
+	                orient: 'horizontal',
+					y: 'bottom',
+					data: ['allAsset', 'allAssetsHidden','inHidden','notHidden','successHidden']
+				},
+				series: {
+					
+                radius: '50%',
+                center: ['50%', '50%'],
+	                y:'bottom',
+	                bottom: '20%',
+	                type: 'pie',
+	                data:[
+	                    {name: 'allAsset置资产', value: data3.allAsset},
+	                    {name: 'allAssetsHidden', value: data3.allAssetsHidden},
+	                    {name: 'inHidden', value: data3.inHidden},
+	                    {name: 'notHidden', value: data3.notHidden},
+	                    {name: 'successHidden', value: data3.successHidden}
+	                ] 
+	           }
+	           	
+			}
+      
+      myChart.setOption(option2);
+      myChart.resize();
+    }
+  
+  </script>
+
+</body>
+
+</html>

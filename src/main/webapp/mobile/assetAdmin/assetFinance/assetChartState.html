@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>承租人详情</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta charset="utf-8" />
+ <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/weui.css"/>
+    <link rel="stylesheet" href="css/example.css"/>
+<style type="text/css">
+    body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
+</style>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+
+  <form action="" novalidate>
+
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">管理分区</label></div>
+                <div id="manageRegion" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">合同编号</label></div>
+                <div id="corporation" class="weui-cell__bd">
+                </div>
+            </div>
+    </div> 
+    
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">承租人</label></div>
+                <div id="charter" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">承租人电话</label></div>
+                <div id="phone" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>  
+    
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">承租人证件</label></div>
+                <div id="cardType" class="weui-cell__bd">
+                </div>
+            </div>
+    </div> 
+    
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">证件号码</label></div>
+                <div id="IDNo" class="weui-cell__bd">
+                </div>
+            </div>
+    </div> 
+    
+
+     <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">承租人地址</label></div>
+                <div id="homeAddress" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>    
+    
+     <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">开始日期</label></div>
+                <div id="chartBeginDate" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    
+     <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">结束日期</label></div>
+                <div id="chartEndDate" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    
+    
+  
+  </form>
+   
+    
+      
+</body>
+</html>
+<script type="text/javascript">
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+   }
+
+  var chartGUID=getQueryString("chartGUID");
+  
+    
+	$.ajax({
+        type: "POST",
+        url: "/voucher/mobile/asset/getChartInfoByChartGUID.do",
+        data: { "chartGUID":chartGUID},
+        dataType: "json",
+        error: function (request){
+     	   console.log(request);
+        },
+        success: function (text) {
+        	console.log(text);
+     	   var obj=text.chartInfo;
+     		
+     	   var guid=obj.guid;
+            	     
+                 var manageRegion=document.createElement("span");
+                  manageRegion.innerHTML=obj.manageRegion;
+                  $("#manageRegion").append(manageRegion);
+             	  
+                  var corporation=document.createElement("span");
+       	  		  corporation.innerHTML=obj.corporation;
+            	  $("#corporation").append(corporation);
+                  
+             	  var charter=document.createElement("span");
+             	 charter.innerHTML=obj.charter;
+                  $("#charter").append(charter);
+                  
+                  var phone=document.createElement("a");
+                  phone.setAttribute("href","tel:"+obj.phone);
+                  phone.innerHTML=obj.phone;
+                  $("#phone").append(phone);
+                  
+                  
+                  var cardType=document.createElement("span");
+                  cardType.innerHTML=obj.cardType;
+                  $("#cardType").append(cardType);
+
+
+                  var IDNo=document.createElement("span");
+                  IDNo.innerHTML=obj.idno;
+                  $("#IDNo").append(IDNo);
+                  
+
+                  var homeAddress=document.createElement("span");
+                  homeAddress.innerHTML=obj.homeAddress;
+                  $("#homeAddress").append(homeAddress);
+ 
+                  var time=actionTime(obj.chartBeginDate);
+                  var chartBeginDate=document.createElement("span");
+                  chartBeginDate.innerHTML=time;
+                  $("#chartBeginDate").append(chartBeginDate);
+                  
+                  var time=actionTime(obj.chartEndDate);
+                  var chartEndDate=document.createElement("span");
+                  chartEndDate.innerHTML=time;
+                  $("#chartEndDate").append(chartEndDate);
+                             	 
+        }
+    });
+    
+    
+	  //线路
+    function navigation(p1, p2) {
+            var points = [p1,p2];
+        	var curve = new BMapLib.CurveLine(points, {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
+        	map.addOverlay(curve);
+    }
+	
+	function actionTime(value){
+  	    var date = new Date(value); 
+  	    Y = date.getFullYear() + '年';
+  	    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '月';
+  	    D = date.getDate() + '日 ';
+  	    h = date.getHours() + ':';
+  	    m = date.getMinutes() + ':';
+  	    s = date.getSeconds(); 
+  		return Y+M+D;
+  	}
+
+    
+    function getByteLen(val) {    //传入一个字符串
+        var len = 0;
+        for (var i = 0; i < val.length; i++) {
+            if (val[i].match(/[^\x00-\xff]/ig) != null) //全角 
+                len += 2; //如果是全角，占用两个字节  如果mysql中某字段是text, 如果设置编码为utf-8,那么一个中文是占3个字节, gbk是两个字节
+            else
+                len += 1; //半角占用一个字节
+        }
+        return len;
+     }  
+    
+    function getDistance(lng,lat){
+    	var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
+    	var pointB = new BMap.Point(lng,lat);  // 创建点坐标B--江北区
+    	var d=map.getDistance(pointA,pointB)/1000;
+    	return d.toFixed(2)+' KM';  //获取两点距离,保留小数点后两位
+    }
+    
+    url=document.location.toString();
+
+	
+</script>
+
+
+<script src="../../../js/previewImage.min.js"></script>
+
+<script>
+ 
+ var im = {};
+ /**
+  * 得到多个元素
+  * @public
+  */
+ im.all = function(selector, contextElement) {
+     var nodeList,
+         list = [];
+     if (contextElement) {
+         nodeList = contextElement.querySelectorAll(selector);
+     } else {
+         nodeList = document.querySelectorAll(selector);
+     }
+     if (nodeList && nodeList.length > 0) {
+         list = Array.prototype.slice.call(nodeList);
+     }
+     return list;
+ }
+
+ /**
+  * 将事件委托给父元素
+  * @public
+  * @param  array     $el         父元素
+  * @param  string    eventType  事件类型名称
+  * @param  string    selector   目标的选择器
+  * @param  function  fn
+  */
+ im.delegate = function($el, eventType, selector, fn) {
+     if (!$el) { return; }
+     $el.addEventListener(eventType, function(e) {
+         var targets = im.all(selector, $el);
+         if (!targets) {
+             return;
+         }
+         // findTarget:
+         for (var i=0; i<targets.length; i++) {
+             var $node = e.target;
+             while ($node) {
+                 if ($node == targets[i]) {
+                     fn.call($node, e);
+                     break; //findTarget;
+                 }
+                 $node = $node.parentNode;
+                 if ($node == $el) {
+                     break;
+                 }
+             }
+         }
+     }, false);
+ };
+
+
+ im.delegate(document.querySelector('#img'), 'click','img',function(){
+	 
+	 var urls = [];
+	 var imgs = im.all('img',im.all('#img')[0]);
+	 imgs.forEach(function(v,i){
+		 var str=v.src;
+		 var url=str.replace(/\/compressFile/, "");
+	     urls.push(url);
+	 })
+     
+	  var thisStr = this.src;
+	 var current = thisStr.replace(/\/compressFile/, "");
+	 console.log(current);
+     var obj = {
+         urls : urls,
+         current : current
+     };
+     previewImage.start(obj);
+ });
+ 
+</script>

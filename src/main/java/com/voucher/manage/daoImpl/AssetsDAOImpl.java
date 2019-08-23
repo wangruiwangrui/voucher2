@@ -29,6 +29,7 @@ import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.daoModel.TTT.User_AccessTime;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Position_Check_Join;
@@ -2054,6 +2055,35 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 
 			return map;
 		
+	}
+	
+	@Override
+	public List<User_AccessTime> selectUserAccessTime(String openId) {
+		// TODO Auto-generated method stub
+		User_AccessTime user_AccessTime=new User_AccessTime();
+		user_AccessTime.setLimit(1);
+		user_AccessTime.setOffset(0);
+		user_AccessTime.setNotIn("open_id");
+		
+		String[] where={"open_id=",openId};
+		
+		user_AccessTime.setWhere(where);
+		
+		List<User_AccessTime> list=SelectExe.get(this.getJdbcTemplate(), user_AccessTime);
+		
+		return list;
+	}
+	
+	@Override
+	public Integer upUserAccessTime(User_AccessTime user_AccessTime) {
+		// TODO Auto-generated method stub
+		return UpdateExe.get(this.getJdbcTemplate(), user_AccessTime);
+	}
+	
+	@Override
+	public Integer insertUserAccessTime(User_AccessTime user_AccessTime) {
+		// TODO Auto-generated method stub
+		return InsertExe.get(this.getJdbcTemplate(), user_AccessTime);
 	}
 
 	@Override
