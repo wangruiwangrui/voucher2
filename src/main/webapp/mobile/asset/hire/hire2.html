@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<style>
+body {
+	background-color: #F4F5F6;
+	width: 100%;
+	height: 100%;
+	font-size: 0.9375rem;
+}
+
+.btn_rent {
+	box-shadow: 3px 3px 3px rgb(222, 214, 214);
+	margin: 0.5825rem;
+	background-color: #FFFFFF;
+	background-image:;
+}
+
+.menu_content {
+	display: inline-block;
+	margin-left: 5px;
+	height: 0.9375rem;
+	font-size: 0.5rem;
+	line-height: 17px;
+	padding: 0px 6px;
+	border-radius: 2760px;
+}
+
+.cub_bg_orange {
+	background-color: #f37b1d;
+	color: #ffffff;
+}
+
+.cub_bg_gray {
+	background-color: #959FA6;
+	color: #ffffff;
+}
+
+.weui-icon-disabled:before {
+	content: "\EA03";
+	color: #959FA6;
+	font-size: 23px;
+	margin-left: 0em !important;
+}
+</style>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>合同详情页</title>
+<link href="https://cdn.bootcss.com/weui/2.0.1/style/weui.min.css"
+	rel="stylesheet">
+</head>
+<body>
+	<div id="app">
+		<!-- <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary btn_rent">收租</a> -->
+		<a href="javascript:;" v-if="checkboxShow===false"
+			@click="handleRents"
+			class="weui-btn weui-btn_mini weui-btn_default btn_rent">多条交租</a> <a
+			href="javascript:;" v-if="checkboxShow" @click="checkboxShow=false"
+			class="weui-btn weui-btn_mini weui-btn_default btn_rent">取消交租</a> <a
+			href="javascript:;" v-if="checkboxShow" @click="handleConfirm"
+			class="weui-btn weui-btn_mini weui-btn_default btn_rent">确认交租</a>
+
+		<div v-for="(item,index) in chartData.rows"
+			@click="handleCheck(index,item)" :key="index"
+			class="weui-check__label weui-cell weui-cells_checkbox weui-cell_example btn_rent">
+			<!-- <div class="weui-cell__hd"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII="
+					 alt="" style="width:20px;margin-right:16px;display:block"></div> -->
+			<div v-show="checkboxShow" class="weui-cell__hd">
+				<input ref="checkbox" type="checkbox" class="weui-check"> <i
+					v-if="item.state==='未交'" class="weui-icon-checked"></i> <i v-else
+					class="weui-icon-disabled"></i>
+			</div>
+			<div class="weui-cell__bd">
+				租金:{{item.hire}}
+				<div v-if="item.state==='已交'" class="menu_content cub_bg_orange">{{item.state}}</div>
+				<div v-if="item.state==='未交'" class="menu_content cub_bg_gray">{{item.state}}</div>
+			</div>
+			<div class="weui-cell__ft">
+				<span>{{item.hireDate}}</span>
+			</div>
+			<a v-if="item.state==='未交'" v-show="!checkboxShow"
+				@click="handleRent(item)"
+				class="weui-btn weui-btn_mini weui-btn_warn btn_rent">交租</a> <a
+				v-else v-show="!checkboxShow"
+				class="weui-btn weui-btn_mini weui-btn_default btn_success">已交</a>
+		</div>
+		<!-- 弹出窗口 -->
+		<div class="js_dialog" v-if="dialogShow">
+			<div class="weui-mask"></div>
+			<div class="weui-dialog">
+				<div class="weui-form-preview">
+					<div class="weui-form-preview__hd">
+						<label class="weui-form-preview__label">付款金额</label> <em
+							class="weui-form-preview__value">{{dialogItem.hire}}</em>
+					</div>
+					<div class="weui-form-preview__bd">
+						<div class="weui-form-preview__item">
+							<label class="weui-form-preview__label">商品</label> <span
+								class="weui-form-preview__value">{{dialogItem.hireDate}}共{{dialogItem.count}}个月房屋租金</span>
+						</div>
+					</div>
+					<div class="weui-form-preview__ft">
+						<a @click="cancel(dialogShow)"
+							class="weui-form-preview__btn weui-form-preview__btn_default"
+							href="javascript:">取消</a>
+						<button type="submit" @click="ensure"
+							class="weui-form-preview__btn weui-form-preview__btn_primary"
+							href="javascript:">支付</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="moreinfo" v-if="flag">
+			<span>加载中</span> <a class="active"> <span class="mui-spinner"></span>
+			</a>
+		</div>
+		<div class="noinfo" v-if="noinfo">已加载全部数据</div>
+	</div>
+	<script src="https://unpkg.com/vue"></script>
+	<script src="https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js"></script>
+	<script src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
+	<script type="text/javascript"
+		src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					message: 'Hello Vue!',
+					dialogShow:false,
+					dialogItem: {},
+					checkboxShow: false,
+					chartGuids: [],
+					chartData: {},
+					num: 1,
+                    flag: false,
+                    noinfo: false,
+                    totalPage: '',
+                    temp:false,
+				},
+				created: function() {
+					this.initdata();
+					//console.log('bb', data);
+				},
+				mounted: function() {
+					
+				},
+				methods: {
+					getQueryString: function(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+						var r = window.location.search.substr(1).match(reg);
+						if (r != null) return unescape(r[2]);
+						return null;
+					},
+					initdata: function() {
+						let data = this.getQueryString('hireGUID');
+						//data =encodeURI(data); 
+						console.log("data",data);
+						axios.get('/voucher/mobile/asset/getHireListByGUID.do',{
+ 			 				params:{
+ 			 					limit:10,
+ 								hireGUID:data,
+ 								sort:"",
+								order:"",
+								offset:0
+							}  
+					
+						  }).then(res=>{
+								this.chartData = res.data;
+						})
+					},
+					handleScroll: function() {
+                        var that = this
+                        if($(window).scrollTop() >= $(document).height() - $(window).height()) {
+                            that.temp = false            //temp决定了是用 = 还是用cancat
+                            that.flag = true           //flag决定是否显示加载中字样
+                            that.num ++             //传入后端的页数
+                            if(that.totalPage<that.num){ //totalPage是后端返回来的总页数
+                                //即使没有发起请求也要有加载的动作
+                                setTimeout(function(){
+                                    that.noinfo = true   //noinfo 决定是否显示“已加载全部”
+                                    that.flag =false
+                                 },500)
+                                 that.noinfo =false
+                                return
+                            }else{
+                                that.temp = true
+                                that.jydetail() //后端请求的方法
+                            }
+                        }
+
+                    },
+					//checkbox事件
+					handleCheck(index,item) {
+						/* console.log('item',item); */
+						if (this.checkboxShow) {
+							var checkItem = this.$refs.checkbox[index];
+							var disable = item.state;
+							console.log("checkItem",checkItem);
+							var isChecked = checkItem.checked;
+							if(disable==='未交'){
+								if (isChecked) {
+									checkItem.removeAttribute('checked', '')
+								} else {
+									checkItem.setAttribute('checked', '');
+								}
+							}
+							
+						}
+					},
+					//单条收租
+					handleRent(item) {
+						var count = 1;
+						var state = item.state;
+						if(state==='未交'){
+							this.dialogShow = true;
+							this.dialogItem = item;
+							this.dialogItem.count = count;
+						}
+					},
+					handleRents() {
+						this.checkboxShow = true;
+					},
+					//多条收租
+					handleConfirm() {
+						var count = 0;
+						var guid = [];
+						var text = [];
+						var hire = [];
+						var guid2 = "";
+						var text2 = "";
+						var hire2 = 0;
+						var dialogItem = this.dialogItem;
+						for (let i = 0; i < this.$refs.checkbox.length; i++) {
+							if (this.$refs.checkbox[i].checked) {
+								guid.push(this.chartData.rows[i].guid);
+								text.push(this.chartData.rows[i].hireDate);
+								hire.push(this.chartData.rows[i].hire);
+							}
+						}
+						console.log(guid)
+						for (var i = 0; i < guid.length; i++) {
+							if (i == (guid.length - 1)) {
+								guid2 += guid[i]; //连接最末不加，号
+							} else {
+								guid2 += guid[i] + ","; //id用逗号连接
+							}
+							count++;
+						}
+						dialogItem.count = count;
+						dialogItem.guid = guid2;
+						for (var i = 0; i < hire.length; i++) {
+							hire2 += hire[i];
+						}
+						dialogItem.hire = hire2;
+						for (var i = 0; i < text.length; i++) {
+							if (i == (text.length - 1)) {
+								text2 += text[i];
+							} else {
+								text2 += text[i] + ",";
+							}
+						}
+						dialogItem.hireDate = text2;
+						this.dialogShow = true;
+					},
+					cancel(dialogShow) {
+						this.dialogShow = false;
+						this.initdata();
+					},
+					ensure(){
+						var value = this.dialogItem;
+						value.campusId = 1;
+						axios.get('/voucher/mobile/weinXinPay/getHire.do',{
+ 			 				params:{
+ 			 					value:value
+							}  
+						  }).then(result=>{
+							  	var mes = result.data[0];
+				 				var payMap = result.data[1];
+					 			if(mes == "SUCCESS"){
+					 				var appId = payMap.appId;
+					 				var timeStamp = payMap.timeStamp;
+					 				var nonceStr = payMap.nonceStr;
+					 				var package = payMap.package;
+					 				var signType = payMap.signType;
+					 				var paySign = payMap.paySign;
+					 				this.onBridgeReady(appId,timeStamp,nonceStr,package,signType,paySign);
+							     }else if(mes == "ERR"){
+								 	console.log("ERR",ERR);
+								 	var err_code = payMap.err_code;
+								 	var err_code_des = payMap.err_code_des;
+							 	}else{
+							 		var return_msg = payMap.return_msg;
+							 		console.log("return_msg",return_msg)
+							 		return_msg = encodeURI(encodeURI(return_msg));
+							 		location.href = "error.html?return_msg="+return_msg;
+							 	}
+						})  
+					},
+					/* 微信支付调用接口 */
+					onBridgeReady(appId,timeStamp,nonceStr,package,signType,paySign){
+						   WeixinJSBridge.invoke( 'getBrandWCPayRequest', {
+							  "appId":appId,     //公众号名称,由商户传入     
+					          "timeStamp":timeStamp,         //时间戳,自1970年以来的秒数     
+					          "nonceStr":nonceStr, //随机串     
+					          "package":package,     
+					          "signType":signType,         //微信签名方式：     
+					          "paySign":paySign //微信签名 
+					         }, 
+					         function(res){
+					        	 console.log("res",res);
+					      	   	 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+					      		   alert("支付成功")
+					      		   window.location.reload();
+					                 console.log('支付成功');
+					      		 //支付成功后跳转的页面
+					             }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
+					            	 alert("支付取消")
+					          	     console.log('支付取消');
+					             }else if(res.err_msg == "get_brand_wcpay_request:fail"){
+					            	 alert("支付失败")
+					          	   	 console.log('支付失败');
+					                 WeixinJSBridge.call('closeWindow');
+					             } //使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok,但并不保证它绝对可靠。
+					   });   
+					}
+				}
+			})
+		</script>
+</body>
+</html>

@@ -1,3 +1,4 @@
+var campusId=1; //公众号id
 
 function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");

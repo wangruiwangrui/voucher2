@@ -18,6 +18,7 @@
 	 <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
 	 <result column="uid" property="uid" jdbcType="VARCHAR" />
 	 <result column="uid_key" property="uidKey" jdbcType="VARCHAR" />
+	 <result column="url" property="url" jdbcType="VARCHAR" />
 	 <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 	</resultMap>
 	
@@ -216,6 +217,10 @@
 		company_name
 		from campus
 		where campus_id=#{campusId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getWeiXinByCampusId" resultMap="BaseResultMap" parameterType="int">
+		select * from campus where campus_id = #{campusId,jdbcType=INTEGER}
 	</select>
     
 </mapper>

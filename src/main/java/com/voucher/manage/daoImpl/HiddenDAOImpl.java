@@ -1358,5 +1358,35 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	}
 
 
+	@Override
+	public Map insertHiddenNeaten(Hidden_Neaten hidden_Neaten) {
+		// TODO Auto-generated method stub
+		int i=InsertExe.get(this.getJdbcTemplate(), hidden_Neaten);
+		
+		Map map=new HashMap();
+		
+		if(i>0){
+			try {
+				i = server.del(hidden_Neaten.getGUID());
+				if (i < 1) {
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			}
+			if(i>0){
+				map.put("status", "succeed");
+			}else {
+				map.put("status", "failure");
+			}
+		}else{
+			map.put("status", "failure");
+		}
+		
+		return map;
+	}
+
 
 }

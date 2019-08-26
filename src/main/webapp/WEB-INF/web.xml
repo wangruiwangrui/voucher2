@@ -167,7 +167,7 @@
 	</filter-mapping>
 
 	<!-- 财务管理的栏截 -->
-	<!-- <filter>
+	 <filter>
 		<filter-name>MobileAssetFinanceIsLoginFilter</filter-name>
 		<filter-class>com.voucher.manage.filter.MobileAssetFinanceIsLoginFilter</filter-class>
 		<init-param>
@@ -192,7 +192,7 @@
 		<filter-name>MobileAssetFinanceIsLoginFilter</filter-name>
 		<url-pattern>/mobile/assetAdmin/assetFinance/*</url-pattern>
 	</filter-mapping>
--->
+
 	<!-- 资产巡查的栏截 -->
 	<filter>
 		<filter-name>MobileAssetCheckIsLoginFilter</filter-name>

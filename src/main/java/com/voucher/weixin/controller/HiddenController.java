@@ -20,11 +20,14 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 import org.aspectj.weaver.ast.Var;
 import org.bouncycastle.jce.provider.asymmetric.ec.Signature.ecCVCDSA;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,8 +53,11 @@ import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
+import com.voucher.manage.mapper.WeiXinMapper;
 import com.voucher.manage.model.Users;
+import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.UserService;
+import com.voucher.manage.service.WeiXinService;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TestDistance;
@@ -78,6 +84,9 @@ public class HiddenController {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+	
+	@Autowired
+	private WeiXinService weixinService;
 	
 	Server server=new ConnectRMI().get();
 		
@@ -333,8 +342,9 @@ public class HiddenController {
 			@RequestParam String addComp,@RequestParam String remark,
 			@RequestParam Double lng,@RequestParam Double lat,
 			HttpServletRequest request){
+		Integer campusId=1;
 		
-		System.out.println("insert========================");
+		WeiXin weixin=weixinService.getWeiXinByCampusId(campusId);
 		
 		Hidden_Check hidden_Check=new Hidden_Check();
 
@@ -508,7 +518,7 @@ public class HiddenController {
 							}
 							Users users=userService.getUserByOnlyOpenId(openId);
 							
-							String url="http://xx.lzgtzh.com/voucher/mobile/1/guidance/addNeatenInfoItem.html?guid="+thisguid;
+							String url=weixin.getUrl()+"/voucher/mobile/1/guidance/addNeatenInfoItem.html?guid="+thisguid;
 							
 							SimpleDateFormat sdf  =   new  SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " ); 
 							String time = sdf.format(new Date());
@@ -713,6 +723,15 @@ public class HiddenController {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
+		Integer neaten_type=0;
+		
+		//是否不需要安全巡查直接建立维修记录标识
+		try {
+			neaten_type=neaten.getNeaten_type();
+		}catch(Exception e) {
+			
+		}
+		
 		String guid=neaten.getGUID();
 		String address = neaten.getAddress();
 		String neaten_instance=neaten.getNeaten_instance();
@@ -755,6 +774,97 @@ public class HiddenController {
 			}
 		}
 
+		if(neaten_type!=null&&neaten_type==1) {
+			
+			String processInstanceId = "";
+
+			Map mapEntity = server.selectById(guid, 1, 1, 0);
+
+			List<RoomInfoFlowIdEntity> list = (List<RoomInfoFlowIdEntity>) mapEntity.get("rows");
+
+			try {
+				RoomInfoFlowIdEntity roomInfoFlowIdEntity = list.get(0);
+				processInstanceId = roomInfoFlowIdEntity.getProcessInstanceId();
+				if (roomInfoFlowIdEntity.getResult() != 1) {
+					mapEntity.put("status", "failure");
+					return mapEntity;
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				mapEntity.put("status", "failure");
+				return mapEntity;
+			}
+			
+			String openId=( String ) request.getSession().getAttribute("openId");
+			
+			Hidden_Neaten hidden_Neaten=new Hidden_Neaten();
+			
+			hidden_Neaten.setProcessInstance_id(processInstanceId);
+	        
+	        hidden_Neaten.setGUID(guid);
+	        
+	        hidden_Neaten.setNeaten_name(address);
+	        
+	        System.out.println("address="+address);
+	        
+	        hidden_Neaten.setNeaten_id(uuid.toString());
+	                
+	        hidden_Neaten.setPrincipal(principal);
+	        
+	        hidden_Neaten.setRemark(remark);
+	        
+	        hidden_Neaten.setNeaten_instance(neaten_instance);
+	        
+	        hidden_Neaten.setAmount(amount);
+	        
+	        hidden_Neaten.setAmountTotal(amountTotal);
+	        
+	        hidden_Neaten.setAuditingAmount(auditingAmount);
+	        
+	        hidden_Neaten.setAvailabeLength(availabeLength);
+	        
+	        hidden_Neaten.setWorkUnit(workUnit);
+	        
+	        hidden_Neaten.setCampusAdmin(openId);
+	        
+	        Users users=userService.getUserByOnlyOpenId(openId);
+	        
+	        String userName=users.getName();
+	        
+	        hidden_Neaten.setUserName(userName);
+	        
+	        hidden_Neaten.setProgress(progress);
+	        
+	        hidden_Neaten.setIs_repair(1);
+	        
+	        hidden_Neaten.setArea(area);
+	        
+	        hidden_Neaten.setType(type);
+	        
+	        DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
+			Date date;		
+			try {
+				date = fmt.parse(happenTime);
+				hidden_Neaten.setHappen_time(date);
+				hidden_Neaten.setDate(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+	        
+	        String check_circs=getRoomInfoHiddenItemDataByGUID(guid);
+	        
+	        hidden_Neaten.setCheck_circs(check_circs);
+	        
+	        System.out.println("=========================");
+	        System.out.println(hidden_Neaten.toString());
+	        
+	        
+	        return hiddenDAO.insertHiddenNeaten(hidden_Neaten);
+			
+		}
+		
 		return insertHiddenNeaten(guid, progress, 1, address, happenTime, principal, remark, 
 				neaten_instance, addComp, checkItemDate, lng, lat, type, area, amount,
 				amountTotal, auditingAmount, availabeLength, workUnit,uuid.toString(),request);

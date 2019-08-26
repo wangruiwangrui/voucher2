@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<style>
+		body {
+			background-color: #F4F5F6;
+			width: 100%;
+			height: 100%;
+			font-size: 0.9375rem;
+		}
+
+		.btn_rent {
+			box-shadow: 3px 3px 3px rgb(222, 214, 214);
+			margin: 0.5825rem;
+			background-color: #FFFFFF;
+			background-image: ;
+		}
+		.menu_content{
+			display: inline-block;
+			margin-left: 5px;
+			height: 0.9375rem;
+			font-size: 0.5rem;
+			line-height: 17px;
+			padding: 0px 6px;
+			border-radius:2760px;
+		}
+		.cub_bg_orange{
+			background-color: #f37b1d;
+			color: #ffffff;
+		}
+		.cub_bg_gray{
+			background-color: #959FA6;
+			color: #ffffff;
+		}
+		 .weui-icon-disabled:before {
+    		content: "\EA03";
+    		color: #959FA6;	
+    		font-size:23px;
+   			margin-left:0em !important;
+		} 
+
+	</style>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>合同详情页</title>
+		<link href="https://cdn.bootcss.com/weui/2.0.1/style/weui.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="app">
+	        <!-- 支付失败弹出页面 -->
+	        <div class="weui-msg">
+		        <div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+		        <div class="weui-msg__text-area">
+		            <h2 class="weui-msg__title">支付失败</h2>
+		            <p class="weui-msg__desc"><a href="javascript:void(0);"></a></p>
+		        </div>
+		        <div class="weui-msg__tips-area">
+		          <p class="weui-msg__tips">{{return_msg}}<a href="javascript:void(0);"></a></p>
+		          <p class="weui-msg__tips">请重新支付<a href="javascript:void(0);"></a></p>
+		        </div>
+		        <div class="weui-msg__opr-area">
+		            <p class="weui-btn-area">
+		                <a href="javascript:history.back();" class="weui-btn weui-btn_default">确定</a>
+		            </p>
+		        </div>
+		        <div class="weui-msg__extra-area">
+		            <div class="weui-footer">
+		                <p class="weui-footer__links">
+		                    <a href="javascript:void(0);" class="weui-footer__link"></a>
+		                </p>
+		                <p class="weui-footer__text">管理助手</p>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		<script src="https://unpkg.com/vue"></script>
+		<script src="https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js"></script>
+		<script src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
+		<script type="text/javascript"src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					message: 'Hello Vue!',
+					return_msg:{}
+				},
+				created: function() {
+					this.initdata();
+					//console.log('bb', data);
+				},
+				mounted: function() {
+					
+				},
+				methods: {
+					getQueryString: function(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+						var r = window.location.search.substr(1).match(reg);
+						if (r != null) return unescape(r[2]);
+						return null;
+					},
+					initdata: function() {
+						let return_msg = this.getQueryString('return_msg');
+						this.return_msg = decodeURI(return_msg);
+					}
+
+					  
+				}
+			})
+		</script>
+	</body>
+</html>

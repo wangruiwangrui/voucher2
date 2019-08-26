@@ -6,16 +6,25 @@
 var campusId = "1";
 // 工投
 // var APPID="wxc4d4aea5eff9b124"
+
 // 兴泸
 // var APPID="wx99b133fdd397c949";
-// 叙兴
-// var APPID="wx3ac0d670268db73c";
-// var DOMAIN="http://xx.lzgtzh.com";
+
+// 本地测试
 var DOMAIN = "http://nwx.wtsms.net";
+
+//测试服务器
+//var DOMAIN = "http://test.lzgtzh.com";
+
+//工投演示服务器
+//var DOMAIN="http://wx.lzgtzh.com";
+
 // 叙兴
 // var DOMAIN="http://xxsyjt.cn";
 // var DOMAIN="http://xx.lzgtzh.com";
-// var DOMAIN="http://wx.lzgtzh.com";
+
+// 合江金宇
+// var DOMAIN="http://jinyu.lzgtzh.com";
 
 var VERSION="V10.0.004Beta";
 var APPID = "";

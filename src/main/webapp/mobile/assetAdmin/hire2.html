@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+	<style>
+		body {
+			background-color: #F4F5F6;
+			width: 100%;
+			height: 100%;
+		}
+		.current {
+		}
+	
+		.weui-flex {
+			padding: 10px;
+		}
+		.fade-enter-active, .fade-leave-active {
+		transition: opacity .5s;
+		}
+		.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+		  opacity: 0;
+		}
+	</style>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title></title>
+		<link href="https://cdn.bootcss.com/weui/2.0.1/style/weui.min.css" rel="stylesheet">
+		<link href="css/icon.css" rel="stylesheet" />
+	</head>
+	<body>
+		<div id="app">
+			<div class="weui-search-bar" id="searchBar">
+				<form class="weui-search-bar__form">
+					<div class="weui-search-bar__box">
+						<i class="weui-icon-search"></i>
+						<input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+						<a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+					</div>
+					<label class="weui-search-bar__label" id="searchText">
+						<i class="weui-icon-search"></i>
+						<span>搜索</span>
+					</label>
+				</form>
+				<a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+			</div>
+			<div class="page list js_show">
+				<div v-for="(item,index) in jsondata.rows" :key="index">
+					<div class="page__bd">
+						<div class="weui-cells weui-cells_form menu_list">
+							<div class="weui-flex current" @click="showItem(item)">
+								<div class="weui-flex__item">{{item.operator}}</div>
+								<i v-if="item.show" class="icon icon-74"></i>
+								<i v-else class="icon icon-35"></i>
+							</div>
+						</div>
+					</div>
+					<transition name="fade">
+						<div v-if="item.show" class="weui-panel">
+							<div class="weui-panel__bd">
+								<div class="weui-form-preview__bd">
+									<div class="weui-form-preview__item">
+										<label class="weui-form-preview__label">姓名</label>
+										<span class="weui-form-preview__value">{{item.operator}}</span>
+									</div>
+									<div class="weui-form-preview__item">
+										<label class="weui-form-preview__label">证件号</label>
+										<span class="weui-form-preview__value">{{item.idno}}</span>
+									</div>
+									<div class="weui-form-preview__item">
+										<label class="weui-form-preview__label">金额</label>
+										<span class="weui-form-preview__value">{{item.hire}}</span>
+									</div>
+									<div class="weui-form-preview__item">
+										<label class="weui-form-preview__label">开始日期</label>
+										<span class="weui-form-preview__value">{{item.chartBeginDate}}</span>
+									</div>
+									<div class="weui-form-preview__item">
+										<label class="weui-form-preview__label">结束日期</label>
+										<span class="weui-form-preview__value">{{item.chartEndDate}}</span>
+									</div>
+									<div class="weui-form-preview__item">
+										<label class="weui-form-preview__label">地址</label>
+										<span class="weui-form-preview__value">{{item.roomAddress}}</span>
+									</div>
+									<div class="weui-form-preview__item">
+										<label class="weui-form-preview__label">合同编号</label>
+										<span class="weui-form-preview__value">{{item.contractNo}}</span>
+									</div>
+								</div>
+								<ul class="weui-media-box__info">
+									<li class="weui-media-box__info__meta">操作人员</li>
+									<li class="weui-media-box__info__meta weui-media-box__info__meta_extra">维修时间</li>
+									<li class="weui-media-box__info__meta weui-media-box__info__meta_extra">其它信息</li>
+								</ul>
+								<div class="weui-form-preview__ft">
+									<a @click="handleDetials(item)" class="weui-form-preview__btn weui-form-preview__btn_primary">合同详情</a>
+								</div>
+							</div>
+						</div>
+					</transition>
+				</div>
+				<!-- <div class="weui-loadmore">
+					<i class="weui-loading"></i>
+					<span class="weui-loadmore__tips">正在加载</span>
+				</div> -->
+			</div>
+		</div>
+		<script src="https://unpkg.com/vue"></script>
+		<script src="https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js"></script>
+
+		<script>
+			new Vue({
+						el: '#app',
+						data: {
+							show: false,
+							jsondata: {
+								"total": 8,
+								"rows": [{
+									"limit": null,
+									"offset": null,
+									"notIn": null,
+									"sort": null,
+									"order": null,
+									"where": null,
+									"whereTerm": null,
+									"region": null,
+									"manager": "郭大露",
+									"manageRegion": "国资公司",
+									"guid": "{FF890E00-DBEE-4C82-8C12-0506E0D21C6E}",
+									"charter": "余万钧",
+									"phone": "18980259923",
+									"accountBalance": 0.0,
+									"dangerClassification": null,
+									"stopHireInResion": null,
+									"calculateHireDay": 0,
+									"chartCriterion": 0.0,
+									"charterProperty": "",
+									"chartBeginDate": 1514736000000,
+									"chartType": "",
+									"contractNo": "LCTZ-ZCZL0000116",
+									"concludeDate": 1515513600000,
+									"assureAmount": 0.0,
+									"hire": 1000.0,
+									"cardType": "身份证",
+									"roomAddress": "回龙湾长江商城水电农机局一层39号,回龙湾长江商城水电农机局一层40号",
+									"hireGUID": "{FF890E00-DBEE-4C82-8C12-0506E0D21C6E}",
+									"homeAddress": "",
+									"chartProperty": "",
+									"chartEndDate": 1546185600000,
+									"corporation": "",
+									"beginAddDate": "",
+									"totalHire": 12000.0,
+									"fareItem": "",
+									"shopName": "",
+									"hireEndDate": null,
+									"originalUnit": null,
+									"charterCode": "ywj",
+									"memo": "0",
+									"nsrsbh": null,
+									"isHistory": null,
+									"useful": null,
+									"addRate": 0.0,
+									"operator": "郭大露",
+									"belongUnit": "{12C9E34F-89FD-404E-8BFF-047C2808CB0E}",
+									"khh": null,
+									"isStopHireIn": null,
+									"creditRating": "",
+									"lowProtect": "",
+									"addType": "",
+									"segment": null,
+									"roomProperty": "营业房",
+									"addFashion": null,
+									"area": 0.0,
+									"ageLimite": 0,
+									"oweHireResion": null,
+									"sex": "",
+									"idno": "510402197811164415"
+								}, {
+									"limit": null,
+									"offset": null,
+									"notIn": null,
+									"sort": null,
+									"order": null,
+									"where": null,
+									"whereTerm": null,
+									"region": null,
+									"manager": "郭大露",
+									"manageRegion": "国资公司",
+									"guid": "{FF890E00-DBEE-4C82-8C12-0506E0D21C6E}",
+									"charter": "余万钧",
+									"phone": "18980259923",
+									"accountBalance": 0.0,
+									"dangerClassification": null,
+									"stopHireInResion": null,
+									"calculateHireDay": 0,
+									"chartCriterion": 0.0,
+									"charterProperty": "",
+									"chartBeginDate": 1514736000000,
+									"chartType": "",
+									"contractNo": "LCTZ-ZCZL0000116",
+									"concludeDate": 1515513600000,
+									"assureAmount": 0.0,
+									"hire": 1000.0,
+									"cardType": "身份证",
+									"roomAddress": "回龙湾长江商城水电农机局一层39号,回龙湾长江商城水电农机局一层40号",
+									"hireGUID": "{FF890E00-DBEE-4C82-8C12-0506E0D21C6E}",
+									"homeAddress": "",
+									"chartProperty": "",
+									"chartEndDate": 1546185600000,
+									"corporation": "",
+									"beginAddDate": "",
+									"totalHire": 12000.0,
+									"fareItem": "",
+									"shopName": "",
+									"hireEndDate": null,
+									"originalUnit": null,
+									"charterCode": "ywj",
+									"memo": "0",
+									"nsrsbh": null,
+									"isHistory": null,
+									"useful": null,
+									"addRate": 0.0,
+									"operator": "郭大露",
+									"belongUnit": "{12C9E34F-89FD-404E-8BFF-047C2808CB0E}",
+									"khh": null,
+									"isStopHireIn": null,
+									"creditRating": "",
+									"lowProtect": "",
+									"addType": "",
+									"segment": null,
+									"roomProperty": "营业房",
+									"addFashion": null,
+									"area": 0.0,
+									"ageLimite": 0,
+									"oweHireResion": null,
+									"sex": "",
+									"idno": "510402197811164415"
+								}]
+							}
+						},
+						created: function() {
+							this.initdata();
+						},
+						methods: {
+							initdata: function() {
+								this.jsondata.rows = this.jsondata.rows.map(v => {
+									this.$set(v, "show", false);
+									return v;
+								});
+							},
+							showItem: function(item) {
+								item.show = !item.show;
+							},
+							handleDetials: function(item) {
+								console.log('item', item);
+								location.href = "detail.html?guid=" + item.guid;
+							}
+						},
+					})
+		</script>
+	</body>
+</html>

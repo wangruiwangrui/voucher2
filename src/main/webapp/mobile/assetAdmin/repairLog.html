@@ -131,6 +131,8 @@
     
     function actionTime(value, row, index){
         var date = new Date(value);
+        console.log("value",value);
+        console.log("data",date);
         Y = date.getFullYear() + '-';
         M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
         D = date.getDate() + ' ';

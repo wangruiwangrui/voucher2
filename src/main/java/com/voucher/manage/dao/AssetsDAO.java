@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.daoModel.TTT.User_AccessTime;
 
 public interface AssetsDAO {
 
@@ -101,6 +102,12 @@ public interface AssetsDAO {
 	public Integer getAllAssetByHidden_GUID(String guid);
 	
 	public Map getTestOr(Map search);
+	
+	public List<User_AccessTime> selectUserAccessTime(String openId);
+	
+	public Integer upUserAccessTime(User_AccessTime user_AccessTime);
+	
+	public Integer insertUserAccessTime(User_AccessTime user_AccessTime);
 	
 	public Map<String, Object> findAllRoomInfo_Position(Integer limit, Integer offset, String sort,
 			 String order,String term,Map search);
