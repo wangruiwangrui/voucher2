@@ -11,6 +11,7 @@ import com.rmi.server.Server;
 import com.voucher.manage.dao.FlowDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.User_AccessTime;
+import com.voucher.manage.daoModel.TTT.DataDictionary;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.UpdateExe;
@@ -114,6 +115,22 @@ public class FlowDaoImpl extends JdbcDaoSupport implements FlowDao{
 		return list;
 	}
 	
+
+	@Override
+	public List getVersion(Integer limit, Integer offset, String sort, String order, String item) {
+		
+		DataDictionary dataDictionary = new DataDictionary();
+		
+		dataDictionary.setLimit(1);
+		dataDictionary.setOffset(0);
+		
+		String[] where = {"item=", item};
+		dataDictionary.setWhere(where);
+		
+		List<DataDictionary> list = SelectExe.get(getJdbcTemplate(), dataDictionary);
+		return list;
+	}
+	
 	
 	@Override
 	public Integer insertUserAccessTime(User_AccessTime user_AccessTime) {
@@ -126,5 +143,6 @@ public class FlowDaoImpl extends JdbcDaoSupport implements FlowDao{
 		// TODO Auto-generated method stub
 		return UpdateExe.get(this.getJdbcTemplate(), user_AccessTime);
 	}
+
 	
 }

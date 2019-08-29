@@ -17,4 +17,6 @@ public interface FlowDao {
 	public Integer insertUserAccessTime(User_AccessTime user_AccessTime);
 	
 	public Integer upUserAccessTime(User_AccessTime user_AccessTime);
+
+	public List getVersion(Integer limit, Integer offset, String sort, String order, String item);
 }

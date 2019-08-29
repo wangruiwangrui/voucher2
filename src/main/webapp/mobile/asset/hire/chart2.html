@@ -42,6 +42,20 @@
 				</form>
 				<a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
 			</div> -->
+			
+			<div class="weui-cells">
+	            <div class="weui-cell">
+	                <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+	                    <img src="images/pic_160.png" style="width: 50px;display: block"/>
+	                    <span class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</span>
+	                </div>
+	                <div class="weui-cell__bd">
+	                    <p>{{item.charter}}</p>
+	                    <p style="font-size: 13px;color: #888888;">摘要信息</p>
+	                </div>
+	            </div>
+        	</div>
+			
 			<div class="page list js_show">
 				<div v-for="(item,index) in jsondata.rows" :key="index">
 					<div class="page__bd">
@@ -110,6 +124,8 @@
 					<span class="weui-loadmore__tips">正在加载</span>
 				</div> -->
 			</div>
+			
+    </div>
 		</div>
 		<script src="https://unpkg.com/vue"></script>
 		<script src="https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js"></script>
@@ -143,6 +159,18 @@
 						},
 						methods: {
 							initdata: function() {
+								
+								axios.get('/voucher/mobile/asset/getChartByGUID.do',{
+									params:{
+										order:"desc",limit:10,offset:0
+									}
+									
+								  }).then(res=>{
+										this.jsondata = res.data;
+										console.log("res",res);
+									 })
+								})
+								
 								axios.get('/voucher/mobile/asset/getChartInfoByGUID.do',{
 									params:{
 										order:"desc",limit:10,offset:0

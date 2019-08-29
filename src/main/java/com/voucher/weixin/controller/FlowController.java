@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,8 @@ import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.FlowDao;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.daoModel.Assets.User_AccessTime;
+import com.voucher.manage.daoModel.TTT.DataDictionary;
+import com.voucher.manage.service.WeiXinService;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
@@ -369,5 +372,31 @@ public class FlowController {
     	return mobileDao.flowImageData(request, imageDataList);
 
 	}
+	
+	
+	//查询版本号
+	@RequestMapping("/getVersion")
+	@ResponseBody
+	public Map<String,String> getVersion(@RequestParam Integer limit, @RequestParam Integer offset, String sort,
+			String order,@RequestParam String item, HttpServletRequest request) {
+		
+		if (sort == "" || sort.equals("")) {
+			sort = "HireDate";
+		}
+
+		if (order == "" || order.equals("")) {
+			order = "asc";
+		}
+		
+		List<DataDictionary> list = flowDao.getVersion(limit, offset, sort, order, item);
+		
+		String content = list.get(0).getContent();
+		
+		Map<String,String> map = new HashMap<String, String>();
+		
+		map.put("content",content);
+		return map;
+	}
+
 	
 }

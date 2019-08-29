@@ -1389,4 +1389,11 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	}
 
 
+	@Override
+	public Integer insertHidden_Check_Date(Hidden_Check_Date hidden_Check_Date){
+		// TODO Auto-generated method stub
+		return InsertExe.get(this.getJdbcTemplate(), hidden_Check_Date);
+	}
+
+
 }

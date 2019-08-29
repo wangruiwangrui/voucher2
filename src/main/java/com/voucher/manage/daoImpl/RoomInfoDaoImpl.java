@@ -1015,5 +1015,5 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		return (RoomInfo) SelectExe.get(this.getJdbcTemplate(), roomInfo).get(0);
 	}
-	
+
 }

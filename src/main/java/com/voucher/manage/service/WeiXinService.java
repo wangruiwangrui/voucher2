@@ -35,5 +35,5 @@ public interface WeiXinService {
 	String getCompanyName(Integer campusId);
 
 	WeiXin getWeiXinByCampusId(Integer campusId);
-    
+
 }

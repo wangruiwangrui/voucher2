@@ -19,6 +19,7 @@ public class WeiXinServiceImpl implements WeiXinService{
 	private WeiXinMapper weixinMapper;
 	
 	private MessageListMapper messageListMapper;
+
 	
 	@Autowired
 	public void setWeiXinMapper(WeiXinMapper weixinMapper) {
