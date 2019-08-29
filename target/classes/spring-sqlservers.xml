@@ -88,6 +88,9 @@ http://www.springframework.org/schema/context
    <bean id="flowDao" class="com.voucher.manage.daoImpl.FlowDaoImpl">
         <property name="jdbcTemplate" ref="jdbcTemplate"></property>
    </bean>
+   <bean id="financeDao" class="com.voucher.manage.daoImpl.FinanceDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+   </bean>
    
    <!-- 配置事务管理器 -->
 	<bean id="transactionManager"
