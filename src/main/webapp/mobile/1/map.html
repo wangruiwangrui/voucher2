@@ -62,6 +62,13 @@ body, html, #allmap {
 
 	var point = new BMap.Point(lng, lat);
 	map.centerAndZoom(point, 12);
+	
+	var options1 = {
+			size: BMAP_POINT_SIZE_SMALL,
+			shape: BMAP_POINT_SHAPE_STAR,
+			color: '#00897b'
+		}
+	
 	var marker = new BMap.Marker(point); // 创建点
 	//map.addOverlay(marker);    //增加点
 	var str = "我的位置";

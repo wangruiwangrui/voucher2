@@ -26,4 +26,9 @@ public interface WeiXinMapper {
 	String getCompanyName(Integer campusId);  //通过campusId查询公众号信息
 
 	WeiXin getWeiXinByCampusId(Integer campusId);    //通过campusId查询当前公众号所有信息
+<<<<<<< HEAD
 }
+=======
+
+}
+>>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa

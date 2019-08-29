@@ -3,6 +3,9 @@ package voucher;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.voucher.manage.mapper.WeiXinMapper;
 import com.voucher.manage.tools.TransMapToString;
 
 public class maptest {
@@ -15,6 +18,7 @@ public class maptest {
 		for(String b :a){
 			System.out.println(b);
 		}
+		
 	}
 	
 }
