@@ -86,21 +86,12 @@ public class HiddenController {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-<<<<<<< HEAD
-	
-	@Autowired
-	private WeiXinService weixinService;
-	
-	Server server=new ConnectRMI().get();
-		
-=======
 
 	@Autowired
 	private WeiXinService weixinService;
 
 	Server server = new ConnectRMI().get();
 
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
 	@RequestMapping("/selectAllCheck")
 	public @ResponseBody Map selectAllCheck(@RequestParam Integer limit, @RequestParam Integer offset, String sort,
 			String order, @RequestParam String search, String search2, String search3, String search4, String search5,
@@ -340,40 +331,6 @@ public class HiddenController {
 	}
 
 	@RequestMapping("/insertHiddenCheck")
-<<<<<<< HEAD
-	public @ResponseBody Map insertHiddenCheck(
-			@RequestParam String guid,@RequestParam String checkItemDate,
-			String name, //资产名称
-			@RequestParam String happenTime,@RequestParam String check_name,
-			@RequestParam String check_circs,
-			@RequestParam String addComp,@RequestParam String remark,
-			@RequestParam Double lng,@RequestParam Double lat,
-			HttpServletRequest request){
-		Integer campusId=1;
-		
-		WeiXin weixin=weixinService.getWeiXinByCampusId(campusId);
-		
-		Hidden_Check hidden_Check=new Hidden_Check();
-
-        UUID uuid=UUID.randomUUID();
-        
-        String openId=( String ) request.getSession().getAttribute("openId");
-        
-        JSONObject jsonObject1;
-        
-        Hidden_Check_Item hidden_Check_Item=new Hidden_Check_Item();
-        
-        RoomInfo_Hidden_Item roomInfo_Hidden_Item=new RoomInfo_Hidden_Item();
-        
-        String checkItem = null;
-        
-        boolean isNull = false;
-        
-        Integer item = null;
-        
-        try {
-			jsonObject1= JSONObject.parseObject(checkItemDate);
-=======
 	public @ResponseBody Map insertHiddenCheck(@RequestParam String guid, @RequestParam String checkItemDate,
 			String name, // 资产名称
 			@RequestParam String happenTime, @RequestParam String check_name, @RequestParam String check_circs,
@@ -419,7 +376,6 @@ public class HiddenController {
 
 		try {
 			jsonObject1 = JSONObject.parseObject(checkItemDate);
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
 			hidden_Check_Item.setFire_extinguisher(jsonObject1.getInteger("fire_extinguisher"));
 			hidden_Check_Item.setHigh_power(jsonObject1.getInteger("high_power"));
 			hidden_Check_Item.setBlow(jsonObject1.getInteger("blow"));
@@ -587,8 +543,7 @@ public class HiddenController {
 		final String checkCircs = hidden_Check.getCheck_circs();
 
 		if (check_name != null && check_name.equals("异常")) {
-<<<<<<< HEAD
-								
+				
 				//发送隐患通知
 				try{						
 					Runnable r = new Runnable() {
@@ -618,41 +573,8 @@ public class HiddenController {
 									"限期整改","", currentOpenId);
 							
 							wechatSendMessageController.send(guid, uuid.toString(), users.getName(), openId, request);
-							
-=======
 
-			// 发送隐患通知
-			try {
-				Runnable r = new Runnable() {
-					@Override
-					public void run() {
-						String thisguid = null;
-						try {
-							thisguid = URLEncoder.encode(guid, "utf-8");
-							System.out.println("thisguid=" + thisguid);
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
 						}
-						Users users = userService.getUserByOnlyOpenId(openId);
-
-						String url = weixin.getUrl() + "/voucher/mobile/1/guidance/addNeatenInfoItem.html?guid="
-								+ thisguid;
-
-						SimpleDateFormat sdf = new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss ");
-						String time = sdf.format(new Date());
-
-						String currentOpenId = (String) request.getSession().getAttribute("openId");
-
-						WechatSendMessageController wechatSendMessageController = new WechatSendMessageController();
-
-						wechatSendMessageController.sendMessage(2, "隐患通知", "整改通知", url, "隐患资产:" + name, users.getName(),
-								time, "安全巡查", checkCircs, "限期整改", "", currentOpenId);
-
-						wechatSendMessageController.send(guid, uuid.toString(), users.getName(), openId, request);
-
-					}
 				};
 
 				Thread t = new Thread(r);
@@ -836,7 +758,6 @@ public class HiddenController {
 		 */
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-<<<<<<< HEAD
 		
 		Integer neaten_type=0;
 		
@@ -874,45 +795,7 @@ public class HiddenController {
 		if(imageDataList!=null){
 			Iterator iterator=imageDataList.iterator();
 			int n=0;
-=======
 
-		Integer neaten_type = 0;
-
-		// 是否不需要安全巡查直接建立维修记录标识
-		try {
-			neaten_type = neaten.getNeaten_type();
-		} catch (Exception e) {
-
-		}
-
-		String guid = neaten.getGUID();
-		String address = neaten.getAddress();
-		String neaten_instance = neaten.getNeaten_instance();
-		String happenTime = sdf.format(neaten.getHappen_time());
-		String principal = neaten.getPrincipal();
-		String remark = neaten.getRemark();
-		String addComp = neaten.getAddComp();
-		Double lng = neaten.getLng();
-		Double lat = neaten.getLat();
-		String type = neaten.getType();
-		Float area = neaten.getArea();
-		Float amount = neaten.getAmount();
-		Float amountTotal = neaten.getAmountTotal();
-		Float auditingAmount = neaten.getAuditingAmount();
-		String availabeLength = neaten.getAvailabeLength();
-		String workUnit = neaten.getWorkUnit();
-		String checkItemDate = neaten.getCheckItemDate();
-
-		FlowData flowData = (FlowData) map.get("flowData");
-
-		List imageDataList = flowData.getImageDataList();
-
-		UUID uuid = UUID.randomUUID();
-
-		if (imageDataList != null) {
-			Iterator iterator = imageDataList.iterator();
-			int n = 0;
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
 			while (iterator.hasNext()) {
 				ImageData imageData = (ImageData) iterator.next();
 				Hidden_Neaten_Date hidden_Neaten_Date = new Hidden_Neaten_Date();
@@ -928,13 +811,9 @@ public class HiddenController {
 			}
 		}
 
-<<<<<<< HEAD
-		if(neaten_type!=null&&neaten_type==1) {
-			
-=======
+
 		if (neaten_type != null && neaten_type == 1) {
 
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
 			String processInstanceId = "";
 
 			Map mapEntity = server.selectById(guid, 1, 1, 0);
@@ -954,57 +833,7 @@ public class HiddenController {
 				mapEntity.put("status", "failure");
 				return mapEntity;
 			}
-<<<<<<< HEAD
-			
-			String openId=( String ) request.getSession().getAttribute("openId");
-			
-			Hidden_Neaten hidden_Neaten=new Hidden_Neaten();
-			
-			hidden_Neaten.setProcessInstance_id(processInstanceId);
-	        
-	        hidden_Neaten.setGUID(guid);
-	        
-	        hidden_Neaten.setNeaten_name(address);
-	        
-	        System.out.println("address="+address);
-	        
-	        hidden_Neaten.setNeaten_id(uuid.toString());
-	                
-	        hidden_Neaten.setPrincipal(principal);
-	        
-	        hidden_Neaten.setRemark(remark);
-	        
-	        hidden_Neaten.setNeaten_instance(neaten_instance);
-	        
-	        hidden_Neaten.setAmount(amount);
-	        
-	        hidden_Neaten.setAmountTotal(amountTotal);
-	        
-	        hidden_Neaten.setAuditingAmount(auditingAmount);
-	        
-	        hidden_Neaten.setAvailabeLength(availabeLength);
-	        
-	        hidden_Neaten.setWorkUnit(workUnit);
-	        
-	        hidden_Neaten.setCampusAdmin(openId);
-	        
-	        Users users=userService.getUserByOnlyOpenId(openId);
-	        
-	        String userName=users.getName();
-	        
-	        hidden_Neaten.setUserName(userName);
-	        
-	        hidden_Neaten.setProgress(progress);
-	        
-	        hidden_Neaten.setIs_repair(1);
-	        
-	        hidden_Neaten.setArea(area);
-	        
-	        hidden_Neaten.setType(type);
-	        
-	        DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
-			Date date;		
-=======
+
 
 			String openId = (String) request.getSession().getAttribute("openId");
 
@@ -1054,7 +883,7 @@ public class HiddenController {
 
 			DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 			Date date;
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
+
 			try {
 				date = fmt.parse(happenTime);
 				hidden_Neaten.setHappen_time(date);
@@ -1062,28 +891,8 @@ public class HiddenController {
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-<<<<<<< HEAD
 			}	
 	        
-	        String check_circs=getRoomInfoHiddenItemDataByGUID(guid);
-	        
-	        hidden_Neaten.setCheck_circs(check_circs);
-	        
-	        System.out.println("=========================");
-	        System.out.println(hidden_Neaten.toString());
-	        
-	        
-	        return hiddenDAO.insertHiddenNeaten(hidden_Neaten);
-			
-		}
-		
-		return insertHiddenNeaten(guid, progress, 1, address, happenTime, principal, remark, 
-				neaten_instance, addComp, checkItemDate, lng, lat, type, area, amount,
-				amountTotal, auditingAmount, availabeLength, workUnit,uuid.toString(),request);
-		
-		
-=======
-			}
 
 			String check_circs = getRoomInfoHiddenItemDataByGUID(guid);
 
@@ -1100,7 +909,6 @@ public class HiddenController {
 				checkItemDate, lng, lat, type, area, amount, amountTotal, auditingAmount, availabeLength, workUnit,
 				uuid.toString(), request);
 
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
 	}
 
 	@RequestMapping("/insertHiddenNeaten")

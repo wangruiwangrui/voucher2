@@ -86,9 +86,7 @@ public interface HiddenDAO {
 	public Integer updateHidden_Neaten_Date(Hidden_Neaten_Date hidden_Neaten_Date);
 
 	public Map insertHiddenNeaten(Hidden_Neaten hidden_Neaten);
-<<<<<<< HEAD
-=======
-
+	
 	public Integer insertHidden_Check_Date(Hidden_Check_Date hidden_Check_Date);
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
+
 }

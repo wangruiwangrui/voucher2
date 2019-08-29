@@ -30,6 +30,7 @@ import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.manage.daoModel.Assets.Patrol_Cycle;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.PreMessage;
@@ -1105,4 +1106,105 @@ public class AssetController {
 		return place;
 	}
 
+	@RequestMapping("getPatrolCycle")
+	public @ResponseBody Patrol_Cycle getPatrolCycle(HttpServletRequest request){
+		
+		return assetsDAO.selectPatrolCycle();
+		
+	}
+	
+	@RequestMapping("getPatrolCycleH")
+	public @ResponseBody Map getPatrolCycleH(HttpServletRequest request){
+		
+		Patrol_Cycle patrol_Cycle=assetsDAO.selectPatrolCycle();
+		
+		int cycle=1;
+		
+		if(patrol_Cycle!=null)
+			cycle=patrol_Cycle.getHidden_cycle();
+		
+		Calendar cal = Calendar.getInstance();  
+		int start=cal.get(Calendar.MONTH)+1;
+		
+		int m=cal.get(Calendar.MONTH)%cycle;
+		
+        Map map=new HashMap<>();
+        
+        if(cycle!=1){
+        	if(cycle==2){
+        		if(m!=0){
+					map.put("start", start-1);
+					map.put("end", start);
+        		}else{
+        			map.put("start", start);
+					map.put("end", start+1);
+        		}
+        	}else{
+        		int i=1;
+        		int r=start-cycle;
+        		while(r>0&&r>cycle){
+        			r=r-cycle;
+        			i++;
+        		}
+        		map.put("start", i*cycle);
+        		map.put("end", (i+1)*cycle);
+        	}
+        }else{
+        	map.put("start", start);
+        	map.put("end", start);
+        }
+        
+        return map;
+        
+	}
+	
+	@RequestMapping("getPatrolCycleA")
+	public @ResponseBody Map getPatrolCycleA(HttpServletRequest request){
+		
+		Patrol_Cycle patrol_Cycle=assetsDAO.selectPatrolCycle();
+		
+		int cycle=1;
+		
+		if(patrol_Cycle!=null)
+			cycle=patrol_Cycle.getAsset_cycle();
+		
+		Calendar cal = Calendar.getInstance();  
+		int start=cal.get(Calendar.MONTH)+1;
+		
+		System.out.print("start="+start);
+		
+		int m=cal.get(Calendar.MONTH)%cycle;
+		
+        Map map=new HashMap<>();
+        
+        
+        
+        if(cycle!=1){
+        	if(cycle==2){
+        		if(m!=0){
+					map.put("start", start-1);
+					map.put("end", start);
+        		}else{
+        			map.put("start", start);
+					map.put("end", start+1);
+        		}
+        	}else{
+        		int i=1;
+        		int r=start-cycle;
+        		while(r>0&&r>cycle){
+        			r=r-cycle;
+        			i++;
+        		}
+        		map.put("start", i*cycle);
+        		map.put("end", (i+1)*cycle);
+        	}
+        }else{
+        	map.put("start", start);
+        	map.put("end", start);
+        }
+        
+        return map;
+		
+	}
+	
 }

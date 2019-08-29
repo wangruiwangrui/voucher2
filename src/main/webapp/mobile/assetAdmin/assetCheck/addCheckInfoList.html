@@ -159,6 +159,7 @@
   	  loadlist();
     });
     
+    /*
     var today = new Date();//获得当前日期
     var month = today.getMonth() + 1;
     var m=month%2;
@@ -180,7 +181,45 @@
     }
     var tab2=document.getElementById('tab3');
     tab3.appendChild(span3);
+    */
     
+    var xhm=new XMLHttpRequest();
+   	xhm.open("GET","../../asset/getPatrolCycleA.do",false);
+   	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+   	xhm.send();
+   	var ticket=JSON.parse(xhm.responseText);
+    
+   	var start=ticket.start;
+   	var end=ticket.end;
+   	
+   	if(start==end){
+   		var today = new Date();//获得当前日期
+   	    var month = today.getMonth() + 1;
+   	    var span2=document.createElement("span");
+   	    span2.innerHTML=month+"月未巡查";
+   	    var tab2=document.getElementById('tab2');
+   	    tab2.appendChild(span2);
+   	    
+   	    var span3=document.createElement("span");
+   	    span3.innerHTML=month+"月已巡查";
+   	    var tab2=document.getElementById('tab3');
+   	    tab3.appendChild(span3);
+   	}else{
+   		var span2=document.createElement("span");
+
+   	    span2.innerHTML=start+"-"+end+"月未巡查";
+
+   	    var tab2=document.getElementById('tab2');
+   	    tab2.appendChild(span2);
+   	    
+   	    var span3=document.createElement("span");
+
+   	    span3.innerHTML=start+"-"+end+"月已巡查";
+   	    
+   	    var tab2=document.getElementById('tab3');
+   	    tab3.appendChild(span3);
+   	}
+   	
     loadlist();
     
     $(document.body).pullToRefresh().on("pull-to-refresh", function() {

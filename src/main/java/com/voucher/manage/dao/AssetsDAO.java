@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.voucher.manage.daoModel.Assets.Patrol_Cycle;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.User_AccessTime;
@@ -121,4 +123,8 @@ public interface AssetsDAO {
 	
 	public Map<String, Object> getAllChartInfo(Integer limit, Integer offset, String sort,
 			String order,Map search);
+	
+	public int updatePatrolCycle(Patrol_Cycle patrol_Cycle);
+	
+	public Patrol_Cycle selectPatrolCycle();
 }
