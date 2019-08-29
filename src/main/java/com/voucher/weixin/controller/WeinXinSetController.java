@@ -25,7 +25,7 @@ import com.voucher.manage.service.WeiXinService;
 @RequestMapping("/weixinset")
 public class WeinXinSetController {
 
-private WeiXinService weixinService;
+    private WeiXinService weixinService;
 	
 	@Autowired
 	public void setAccessTokenService(WeiXinService weiXinService) {
@@ -113,5 +113,4 @@ private WeiXinService weixinService;
 		System.out.println("==========="+flag);
 		return flag;
 	}
-	
 }

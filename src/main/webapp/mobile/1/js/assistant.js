@@ -7,10 +7,25 @@ function getQueryString(name) {
     if (r != null) return unescape(r[2]); return null;
    }
 
-
 var code=getQueryString("code");
 var state=getQueryString("state");
 
+var VERSION='';
+
+//进入index2.html初始化当前版本号
+$.post('/voucher/mobile/flow/getVersion.do', {
+	item : 'Version',
+	limit : 1,
+	offset : 0,
+	sort : "",
+	order : ""
+}, function(data) {
+	data = JSON.parse(data);
+	VERSION = data.content;
+});
+
+
+//yayui弹出界面显示版本号
 layui.use(['layer','form'],function() { //独立版的layer无需执行这一句
 	var $ = layui.jquery, layer = layui.layer,form = layui.form; //独立版的layer无需执行这一句
 	form.on("submit(zhushou)",function(data){
@@ -36,3 +51,4 @@ layui.use(['layer','form'],function() { //独立版的layer无需执行这一句
 	//触发事件
 
 });
+

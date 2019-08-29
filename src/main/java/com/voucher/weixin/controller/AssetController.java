@@ -531,6 +531,25 @@ public class AssetController {
 		return map;
 
 	}
+	
+	@RequestMapping("/getChartByGUID")
+	public @ResponseBody Map<String,String> getChartByGUID(HttpServletRequest request) {
+		
+		String openId = (String) request.getSession().getAttribute("openId");
+
+		Users users = userService.getUserByOnlyOpenId(openId);
+
+		String Charter = users.getCharter();
+		String phone = users.getHirePhone();
+		
+		Map<String,String> map = new HashMap<String,String>();
+			
+		map.put("Charter", Charter);
+		
+		map.put("phone", phone);
+		return map;
+
+	}
 
 	@RequestMapping("/getHireListByGUID")
 	public @ResponseBody Map getHireListByGUID(@RequestParam Integer limit, @RequestParam Integer offset,

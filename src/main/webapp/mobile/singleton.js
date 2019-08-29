@@ -22,11 +22,17 @@ var DOMAIN = "http://nwx.wtsms.net";
 // 叙兴
 // var DOMAIN="http://xxsyjt.cn";
 // var DOMAIN="http://xx.lzgtzh.com";
+<<<<<<< HEAD
+
+// 合江金宇
+// var DOMAIN="http://jinyu.lzgtzh.com";
+=======
+>>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
 
 // 合江金宇
 // var DOMAIN="http://jinyu.lzgtzh.com";
 
-var VERSION="V10.0.004Beta";
+//var VERSION="V10.0.004Beta";
 var APPID = "";
 
 $.ajax({
