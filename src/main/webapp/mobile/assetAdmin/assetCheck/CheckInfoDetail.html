@@ -532,6 +532,7 @@
 				}
 			});
 		  }
+	 
 
 	 function wxImgCallback(imagename,serverId) {
 		    //将serverId传给wx_upload.php的upload方法
@@ -548,8 +549,11 @@
 		        	alert("上传图片失败!");
 		        	console.log(data.msg);
 		        } else if (data == 1) {
-		            //存储到服务器成功后的处理
-		            //
+		        	
+		        	//存储到服务器成功后的处理
+		        	findimagedata(id);
+		        	
+		            /* 
 		        	 $.get("../../flow/findimagedata.do",{
 		 		    	id:check_id
 		 		    }, function(text){
@@ -599,10 +603,66 @@
 		                     }
 		          		   
 		          	   	}
-		 		    });
+		 		    }); */
 		        }
 		    });
 	  }	
+	 
+	 function findimagedata(id){
+
+         //存储到服务器成功后的处理
+         //
+     	 $.get("../../flow/findimagedata.do",{
+		    	id:check_id
+		    }, function(text){
+		    	console.log("text="+text);
+		    	var imgs=JSON.parse(text);
+		    	console.log("imgs="+imgs.length);
+		    	$("#img").children('div').remove();
+		    	if(imgs!=null){
+               	   var i = 0;
+                      for(; i < imgs.length; i++){
+                   	   
+                   	  var data=imgs[i];
+                   	  var name=data.name;
+                   	  var uri=data.uri;
+                   	  var date=actionTime(data.date);
+                   	  var panel=document.createElement("div");
+                   	  panel.setAttribute("class","weui-panel__bd");
+                 	  var a=document.createElement("a");
+                    	  a.setAttribute("class","weui_grid");
+                    	  var a=document.createElement("a");
+                    	  a.setAttribute("href","javascript:void(0);");
+                    	  a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+                    	  var div=document.createElement("div");
+                    	  div.setAttribute("class","weui-media-box__hd");
+                    	  
+           	   	 	  src="/voucher/"+uri;
+               	  	  var img=document.createElement("img");
+               	  	  img.setAttribute("class","weui-media-box__thumb");
+                       img.setAttribute("src",src);
+                       
+                       div.appendChild(img);
+                      	   		
+                  	  div2=document.createElement("div");
+                  	  div2.setAttribute("class","weui-media-box__bd");
+                  	  h4=document.createElement("h4");
+                  	  h4.setAttribute("class","weui-media-box__title");
+                  	  h4.innerHTML=name;
+                  	  p=document.createElement("p");
+                  	  p.setAttribute("class","weui-media-box__desc");
+                  	  p.innerHTML=date;
+                  	  div2.appendChild(h4);
+                  	  div2.appendChild(p);
+                  	  a.appendChild(div);
+                  	  a.appendChild(div2);
+                  	  panel.appendChild(a);
+           	      	  $("#img").append(panel);
+                  }
+       		   
+       	   	}
+		    });
+     }
     
 </script>
 
