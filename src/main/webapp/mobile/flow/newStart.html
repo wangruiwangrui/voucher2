@@ -192,6 +192,8 @@
 
  	<div class="weui-cells weui-cells_form"> 
     </div>
+<<<<<<< HEAD
+=======
     
     <div class="weui-panel weui-panel_access">
 		<div class="weui-panel__hd">维修照片</div>
@@ -202,6 +204,7 @@
 	<div class="weui-panel weui-panel_access">
 		<div class="weui-uploader__input-box" id="showPicker"></div>
 	</div>
+>>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
 <!-- 
 	<div class="weui-panel weui-panel_access">
 		<div class="weui-panel__hd">维修照片</div>
@@ -296,6 +299,8 @@
     xhm.send();
     var obj=JSON.parse(xhm.responseText);
 
+<<<<<<< HEAD
+=======
 /*     $("#img").children('div').remove();
  	if(imgs!=null){
     	var i = 0;
@@ -337,6 +342,7 @@
         }
 		   
 	} */
+>>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
     if(obj.name!=null)
      $("#principal").val(obj.name);
     var username=document.createElement("span");
@@ -553,7 +559,11 @@
 				localId: [],
 				serverId: []
 			};
+<<<<<<< HEAD
+	/*		
+=======
 		
+>>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
 	document.querySelector('#showPicker').onclick = function () {
     
 	 $.modal({
@@ -618,7 +628,11 @@
 		});
 	  }
     
+<<<<<<< HEAD
+	}*/
+=======
 	}
+>>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
 
   }
  });
@@ -641,7 +655,11 @@
 		            //
 		        	 $.get("../flow/findimagedata.do",{
 		 		    	id:id
+<<<<<<< HEAD
+		 		    }, function(text){
+=======
 		 		    }, function(text){ 
+>>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
 		 		    	console.log("text="+text);
 		 		    	var imgs=JSON.parse(text);
 		 		    	console.log("imgs="+imgs.length);

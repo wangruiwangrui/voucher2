@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>访问统计</title>
+
+<link rel="stylesheet" href="layui/layui/css/layui.css"  media="all">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js"></script>
+<![endif]-->
+<style>
+
+
+</style>
+</head>
+<body>
+
+<fieldset class="layui-elem-field layui-field-title titi" style="margin-top: 100px;">
+  <legend>巡查周期设置</legend>
+</fieldset>
+ 
+<div class="layui-form">
+  <table class="layui-table">
+    <colgroup>
+      <col width="200">
+      <col width="200">
+      <col width="200">
+      <col width="100">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>巡查项目</th>
+        <th>巡查周期</th>
+        <th>巡查开始时间</th>
+        <th>操作</th>
+      </tr> 
+    </thead>
+    <tbody>
+      <tr>
+        <td>资产巡查</td>
+        <td>
+            <div class="layui-input-inline">
+      			<input id="assetInput" type="number" name="patrol" lay-verify="pass" placeholder="请设置巡查周期" autocomplete="off" class="layui-input">
+    		</div>
+		</td>
+        <td>
+        	<div class="layui-input-inline">
+      			<input id="assetTime" name="patrol" lay-verify="pass" autocomplete="off" class="layui-input">
+    		</div>
+        </td>
+        <td>
+        	<button id="assetbutton" type="button" class="layui-btn">提交</button>
+        </td>
+      </tr>
+      <tr>
+        <td>安全巡查</td>
+        <td>
+        	<div class="layui-input-inline">
+      			<input id="hiddenInput" type="number" name="patrol" lay-verify="pass" placeholder="请设置巡查周期" autocomplete="off" class="layui-input">
+    		</div>
+        </td>
+        <td>
+			<div class="layui-input-inline">
+      			<input id="hiddenTime" name="patrol" lay-verify="pass" autocomplete="off" class="layui-input">
+    		</div>
+		</td>
+        <td>
+        	<button id="hiddenbutton" type="button" class="layui-btn">提交</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+	
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<!-- <script src="../assets/bootstrap-table/jquery.min.js"></script> -->
+<!-- <script src="js/layui.js"></script> -->
+<script src="assets/bootstrap-table/bootstrap.min.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table-export.js"></script>
+<script src="assets/bootstrap-table/tableExport.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="assets/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/bootstrap-table-zh-CN.min.js"></script>
+
+<script type="text/javascript">
+
+loadFuc();
+
+function loadFuc(){
+	$.post("/voucher/weixinset/getPatrolCycle.do", {
+	}, function(text) {
+		var obj = $.parseJSON(text);
+		var asset_date = actionTime(obj.asset_date);
+		var hidden_date = actionTime(obj.hidden_date);
+		$("#assetTime").val(asset_date);
+		$("#assetInput").val(obj.asset_cycle);
+		$("#hiddenInput").val(obj.hidden_cycle);
+		$("#hiddenTime").val(hidden_date);
+		
+	}); 
+}
+
+$("#assetbutton").click(function(){
+	var d = $("#assetInput").val();
+	if(d<=0||d==""){
+		alert('输入周期错误');
+	}else{
+		console.log("dddddd",d)
+		$.post("/voucher/weixinset/setPatrolCycleA.do", {
+			d : d
+		}, function(text) {
+			var obj = $.parseJSON(text);
+			if(obj == 1){
+				alert("设置资产巡查周期成功");
+				loadFuc();
+			}else{
+				alert("设置资产巡查周期失败");
+			}
+		}); 
+	}
+
+})
+
+$("#hiddenbutton").click(function(){
+	var d = $("#hiddenInput").val();
+	if(d<=0||d==""){
+		alert('输入周期错误');
+	}else{
+		console.log("dddddd",d)
+		$.post("/voucher/weixinset/setPatrolCycleH.do", {
+			d : d
+		}, function(text) {
+			var obj = $.parseJSON(text);
+			if(obj == 1){
+				alert("设置安全巡查周期成功");
+				loadFuc();
+			}else{
+				alert("设置安全巡查周期失败");
+			}
+		}); 
+	}
+
+})
+	
+function actionTime(value){
+	    var date = new Date(value); 
+	    Y = date.getFullYear() + '-';
+	    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+	    D = date.getDate() + ' ';
+	    h = date.getHours() + ':';
+	    m = date.getMinutes() + ':';
+	    s = date.getSeconds(); 
+		return Y+M+D+h+m+s;
+	}
+
+</script>	
+	
+</body>
+</html>

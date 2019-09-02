@@ -20,6 +20,7 @@ import com.voucher.manage.daoModel.Assets.Assets_Check;
 import com.voucher.manage.daoModel.Assets.Assets_Check;
 import com.voucher.manage.daoModel.Assets.Assets_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
+import com.voucher.manage.daoModel.Assets.Patrol_Cycle;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.WeiXin_User;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
@@ -43,12 +44,35 @@ public class AssetCheckDAOImpl extends JdbcDaoSupport implements AssetCheckDAO{
 		
 		String checkName = null;
 		
+		int cycle=1;
+		
 		if(type==1){
 			checkName="hidden_check_date";
 		}else{
 			checkName="asset_check_date";
 		}
 		
+		Patrol_Cycle patrol_Cycle=new Patrol_Cycle();
+		
+		patrol_Cycle.setLimit(1);
+		patrol_Cycle.setOffset(0);
+		patrol_Cycle.setNotIn("id");
+		
+		List list1=SelectExe.get(this.getJdbcTemplate(), patrol_Cycle);
+		
+		try{
+			if(list1.size()>0){
+				patrol_Cycle=(Patrol_Cycle) list1.get(0);
+				if(type==1){
+					cycle=patrol_Cycle.getHidden_cycle();
+				}else{
+					cycle=patrol_Cycle.getAsset_cycle();
+				}
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+
 				String sql0="SELECT TOP "+limit+" "+
 							"[Position].GUID,"+
 							"[Position].province,"+
@@ -107,18 +131,30 @@ public class AssetCheckDAOImpl extends JdbcDaoSupport implements AssetCheckDAO{
 				
 				if(search3!=null&&search3.equals("0")){
 					
-					Calendar cal = Calendar.getInstance();  
-					int m=cal.get(Calendar.MONTH)%2;
+					Calendar cal = Calendar.getInstance();
+					int start=cal.get(Calendar.MONTH);
+					int m=cal.get(Calendar.MONTH)%cycle;
 			        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
 			        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-			        if(m!=0){
-			        	cal.add(Calendar.MONTH, -1);
+			        
+			        if(cycle!=1){
+			        	if(m!=0&&cycle==2){
+			        		cal.add(Calendar.MONTH, -(cycle-1));
+			        	}else{
+			        		int r=start-cycle;
+			        		while(r>0&&r>cycle){
+			        			r=r-cycle;
+			        		}
+			        		cal.add(Calendar.MONTH, -r);
+			        	}
 			        }
+			        
 			        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 					
 					String startTime = null;
 					
 					startTime=sdf.format(cal.getTime());
+					
 					
 					sql02=" convert(varchar(11),"+Singleton.ROOMDATABASE+
 							".[dbo].[RoomInfo]."+checkName+" ,120 )< '"+startTime+"' "+
@@ -132,17 +168,29 @@ public class AssetCheckDAOImpl extends JdbcDaoSupport implements AssetCheckDAO{
 				}else if(search3!=null&&search3.equals("1")){
 					
 					Calendar cal = Calendar.getInstance();  
+					int start=cal.get(Calendar.MONTH);
 					int m=cal.get(Calendar.MONTH)%2;
 			        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
 			        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-			        if(m!=0){
-			        	cal.add(Calendar.MONTH, -1);
+			        
+			        if(cycle!=1){
+			        	if(m!=0&&cycle==2){
+			        		cal.add(Calendar.MONTH, -(cycle-1));
+			        	}else{
+			        		int r=start-cycle;
+			        		while(r>0&&r>cycle){
+			        			r=r-cycle;
+			        		}
+			        		cal.add(Calendar.MONTH, -r);
+			        	}
 			        }
+			        
 			        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 					
 					String startTime = null;
 					
 					startTime=sdf.format(cal.getTime());
+					
 					
 					sql02=" convert(varchar(11),"+Singleton.ROOMDATABASE+
 							".[dbo].[RoomInfo]."+checkName+" ,120 )> '"+startTime+"' ";

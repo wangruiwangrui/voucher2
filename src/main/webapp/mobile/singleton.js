@@ -26,6 +26,10 @@ var DOMAIN = "http://nwx.wtsms.net";
 // 合江金宇
 // var DOMAIN="http://jinyu.lzgtzh.com";
 
+
+// 合江金宇
+// var DOMAIN="http://jinyu.lzgtzh.com";
+
 //var VERSION="V10.0.004Beta";
 var APPID = "";
 

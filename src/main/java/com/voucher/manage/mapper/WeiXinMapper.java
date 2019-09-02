@@ -28,3 +28,4 @@ public interface WeiXinMapper {
 	WeiXin getWeiXinByCampusId(Integer campusId);    //通过campusId查询当前公众号所有信息
 
 }
+

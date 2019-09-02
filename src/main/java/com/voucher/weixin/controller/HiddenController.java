@@ -543,38 +543,38 @@ public class HiddenController {
 		final String checkCircs = hidden_Check.getCheck_circs();
 
 		if (check_name != null && check_name.equals("异常")) {
+				
+				//发送隐患通知
+				try{						
+					Runnable r = new Runnable() {
+						@Override
+						public void run() {
+							String thisguid = null;
+							try {
+								thisguid = URLEncoder.encode(guid, "utf-8");
+								System.out.println("thisguid="+thisguid);
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							Users users=userService.getUserByOnlyOpenId(openId);
+							
+							String url=weixin.getUrl()+"/voucher/mobile/1/guidance/addNeatenInfoItem.html?guid="+thisguid;
+							
+							SimpleDateFormat sdf  =   new  SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " ); 
+							String time = sdf.format(new Date());
+							
+							String currentOpenId=( String ) request.getSession().getAttribute("openId");
+							
+							WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
+							
+							wechatSendMessageController.sendMessage(2, "隐患通知",
+									"整改通知", url, "隐患资产:"+name, users.getName(), time, "安全巡查", checkCircs,
+									"限期整改","", currentOpenId);
+							
+							wechatSendMessageController.send(guid, uuid.toString(), users.getName(), openId, request);
 
-			// 发送隐患通知
-			try {
-				Runnable r = new Runnable() {
-					@Override
-					public void run() {
-						String thisguid = null;
-						try {
-							thisguid = URLEncoder.encode(guid, "utf-8");
-							System.out.println("thisguid=" + thisguid);
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
-						Users users = userService.getUserByOnlyOpenId(openId);
-
-						String url = weixin.getUrl() + "/voucher/mobile/1/guidance/addNeatenInfoItem.html?guid="
-								+ thisguid;
-
-						SimpleDateFormat sdf = new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss ");
-						String time = sdf.format(new Date());
-
-						String currentOpenId = (String) request.getSession().getAttribute("openId");
-
-						WechatSendMessageController wechatSendMessageController = new WechatSendMessageController();
-
-						wechatSendMessageController.sendMessage(2, "隐患通知", "整改通知", url, "隐患资产:" + name, users.getName(),
-								time, "安全巡查", checkCircs, "限期整改", "", currentOpenId);
-
-						wechatSendMessageController.send(guid, uuid.toString(), users.getName(), openId, request);
-
-					}
 				};
 
 				Thread t = new Thread(r);
@@ -758,43 +758,44 @@ public class HiddenController {
 		 */
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-		Integer neaten_type = 0;
-
-		// 是否不需要安全巡查直接建立维修记录标识
+		
+		Integer neaten_type=0;
+		
+		//是否不需要安全巡查直接建立维修记录标识
 		try {
-			neaten_type = neaten.getNeaten_type();
-		} catch (Exception e) {
-
+			neaten_type=neaten.getNeaten_type();
+		}catch(Exception e) {
+			
 		}
-
-		String guid = neaten.getGUID();
+		
+		String guid=neaten.getGUID();
 		String address = neaten.getAddress();
-		String neaten_instance = neaten.getNeaten_instance();
-		String happenTime = sdf.format(neaten.getHappen_time());
-		String principal = neaten.getPrincipal();
-		String remark = neaten.getRemark();
-		String addComp = neaten.getAddComp();
-		Double lng = neaten.getLng();
-		Double lat = neaten.getLat();
-		String type = neaten.getType();
-		Float area = neaten.getArea();
-		Float amount = neaten.getAmount();
-		Float amountTotal = neaten.getAmountTotal();
-		Float auditingAmount = neaten.getAuditingAmount();
-		String availabeLength = neaten.getAvailabeLength();
-		String workUnit = neaten.getWorkUnit();
-		String checkItemDate = neaten.getCheckItemDate();
+		String neaten_instance=neaten.getNeaten_instance();
+		String happenTime=sdf.format(neaten.getHappen_time());
+		String principal=neaten.getPrincipal();
+		String remark=neaten.getRemark();
+		String addComp=neaten.getAddComp();
+		Double lng=neaten.getLng();
+		Double lat=neaten.getLat();
+		String type=neaten.getType();
+		Float area=neaten.getArea();
+		Float amount=neaten.getAmount();
+		Float amountTotal=neaten.getAmountTotal();
+		Float auditingAmount=neaten.getAuditingAmount();
+		String availabeLength=neaten.getAvailabeLength();
+		String workUnit=neaten.getWorkUnit();
+		String checkItemDate=neaten.getCheckItemDate();
+		
+		FlowData flowData=(FlowData) map.get("flowData");
+		
+		List imageDataList=flowData.getImageDataList();
+		
+		UUID uuid=UUID.randomUUID();
+		
+		if(imageDataList!=null){
+			Iterator iterator=imageDataList.iterator();
+			int n=0;
 
-		FlowData flowData = (FlowData) map.get("flowData");
-
-		List imageDataList = flowData.getImageDataList();
-
-		UUID uuid = UUID.randomUUID();
-
-		if (imageDataList != null) {
-			Iterator iterator = imageDataList.iterator();
-			int n = 0;
 			while (iterator.hasNext()) {
 				ImageData imageData = (ImageData) iterator.next();
 				Hidden_Neaten_Date hidden_Neaten_Date = new Hidden_Neaten_Date();
@@ -809,6 +810,7 @@ public class HiddenController {
 				n++;
 			}
 		}
+
 
 		if (neaten_type != null && neaten_type == 1) {
 
@@ -831,6 +833,7 @@ public class HiddenController {
 				mapEntity.put("status", "failure");
 				return mapEntity;
 			}
+
 
 			String openId = (String) request.getSession().getAttribute("openId");
 
@@ -880,6 +883,7 @@ public class HiddenController {
 
 			DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 			Date date;
+
 			try {
 				date = fmt.parse(happenTime);
 				hidden_Neaten.setHappen_time(date);
@@ -887,7 +891,8 @@ public class HiddenController {
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}	
+	        
 
 			String check_circs = getRoomInfoHiddenItemDataByGUID(guid);
 

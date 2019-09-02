@@ -64,6 +64,11 @@ $('#qrCode').click(function(){
 	   $('#content').attr('src','pages/qrCode.html');
 	 });
 
+$('#patrol').click(function(){
+	   $('#content').load('pages/patrol.html');
+	   $('#content').attr('src','pages/patrol.html');
+	 });
+
 if(getCookie("type")==0)
  $('#brand').text("用户 : "+getCookie("campusAdmin")+" (管理员)");
 else

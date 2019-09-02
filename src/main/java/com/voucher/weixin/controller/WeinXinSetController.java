@@ -11,13 +11,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.dao.RoomInfoDao;
+import com.voucher.manage.daoModel.Assets.Patrol_Cycle;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.WeiXinService;
+import com.voucher.sqlserver.context.Connect;
 
 
 
@@ -31,6 +36,10 @@ public class WeinXinSetController {
 	public void setAccessTokenService(WeiXinService weiXinService) {
 		this.weixinService=weiXinService;
 	}
+	
+	ApplicationContext applicationContext = new Connect().get();
+
+	AssetsDAO assetsDAO = (AssetsDAO) applicationContext.getBean("assetsdao");
 	
 	@RequestMapping("getCampusInfo")
 	public @ResponseBody List<WeiXin>
@@ -113,4 +122,38 @@ public class WeinXinSetController {
 		System.out.println("==========="+flag);
 		return flag;
 	}
+	
+	
+	@RequestMapping("setPatrolCycleA")
+	public @ResponseBody Integer setPatrolCycleA(@RequestParam Integer d,HttpServletRequest request){
+		
+		Patrol_Cycle patrol_Cycle=new Patrol_Cycle();
+		
+		patrol_Cycle.setAsset_cycle(d);
+		patrol_Cycle.setAsset_date(new Date());
+		
+		return assetsDAO.updatePatrolCycle(patrol_Cycle);
+		
+	}
+	
+	@RequestMapping("setPatrolCycleH")
+	public @ResponseBody Integer setPatrolCycleH(@RequestParam Integer d,HttpServletRequest request){
+		
+		Patrol_Cycle patrol_Cycle=new Patrol_Cycle();
+		
+		patrol_Cycle.setHidden_cycle(d);
+		patrol_Cycle.setHidden_date(new Date());
+		
+		return assetsDAO.updatePatrolCycle(patrol_Cycle);
+		
+	}
+	
+	@RequestMapping("getPatrolCycle")
+	public @ResponseBody Patrol_Cycle getPatrolCycle(HttpServletRequest request){
+		
+		return assetsDAO.selectPatrolCycle();
+		
+	}
+		
+	
 }
