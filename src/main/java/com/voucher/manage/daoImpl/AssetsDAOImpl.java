@@ -887,6 +887,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					Calendar cal = Calendar.getInstance();  
 					int start=cal.get(Calendar.MONTH);
 					int m=cal.get(Calendar.MONTH)%cycle;
+				
 			        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
 			        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
 			        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
@@ -895,11 +896,18 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 			        	if(m!=0&&cycle==2){
 			        		cal.add(Calendar.MONTH, -(cycle-1));
 			        	}else{
+			        		int i=1;
 			        		int r=start-cycle;
 			        		while(r>0&&r>cycle){
 			        			r=r-cycle;
+			        			i++;
 			        		}
-			        		cal.add(Calendar.MONTH, -r);
+			        		System.out.println("start====----"+start+"  r="+r+"  cycle="+cycle+"  i="+i);
+			        		int year=cal.get(Calendar.YEAR);
+			        		if(cycle==12)
+			        			year=year-1;
+			        		System.out.println("year======"+year);
+			        		cal.set(year, i*cycle, cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
 			        	}
 			        }
 			        
@@ -929,11 +937,18 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 			        	if(m!=0&&cycle==2){
 			        		cal.add(Calendar.MONTH, -(cycle-1));
 			        	}else{
+			        		int i=1;
 			        		int r=start-cycle;
 			        		while(r>0&&r>cycle){
 			        			r=r-cycle;
+			        			i++;
 			        		}
-			        		cal.add(Calendar.MONTH, -r);
+			        		System.out.println("start====----"+start+"  r="+r+"  cycle="+cycle+"  i="+i);
+			        		int year=cal.get(Calendar.YEAR);
+			        		if(cycle==12)
+			        			year=year-1;
+			        		System.out.println("year======"+year);
+			        		cal.set(year, i*cycle, cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
 			        	}
 			        }
 			        

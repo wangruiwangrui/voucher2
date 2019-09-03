@@ -1146,8 +1146,15 @@ public class AssetController {
         			r=r-cycle;
         			i++;
         		}
-        		map.put("start", i*cycle);
-        		map.put("end", (i+1)*cycle);
+        		System.out.println("start===="+start+"  r="+r+"  cycle="+cycle+"  i="+i);
+        		if(cycle==12) {
+        			
+        			map.put("start", 1);
+            		map.put("end",  cycle);
+        		}else {
+	        		map.put("start", i*cycle+1);
+	        		map.put("end", (i+1)*cycle);
+        		}
         	}
         }else{
         	map.put("start", start);
@@ -1195,8 +1202,14 @@ public class AssetController {
         			r=r-cycle;
         			i++;
         		}
-        		map.put("start", i*cycle);
-        		map.put("end", (i+1)*cycle);
+        		System.out.println("start===="+start+"  r="+r+"  cycle="+cycle+"  i="+i);
+        		if(cycle==12) {
+        			map.put("start", 1);
+            		map.put("end",  cycle);
+        		}else {
+	        		map.put("start", i*cycle+1);
+	        		map.put("end", (i+1)*cycle);
+        		}
         	}
         }else{
         	map.put("start", start);

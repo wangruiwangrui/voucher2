@@ -50,6 +50,7 @@ import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Item;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
+import com.voucher.manage.daoModel.Assets.Patrol_Cycle;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
@@ -208,7 +209,7 @@ public class HiddenController {
 		}
 
 		if (search2 != null && !search2.equals("")) {
-
+			/*
 			Calendar cal = Calendar.getInstance();
 			cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
 			cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
@@ -217,7 +218,45 @@ public class HiddenController {
 			String startTime = null;
 
 			startTime = sdf.format(cal.getTime());
+			*/
+			
+			int cycle=1;
+			
+			Patrol_Cycle patrol_Cycle=assetsDAO.selectPatrolCycle();
+			
+			if(patrol_Cycle!=null)
+				cycle=patrol_Cycle.getHidden_cycle();
 
+			Calendar cal = Calendar.getInstance();  
+			int start=cal.get(Calendar.MONTH)+1;
+			int m=cal.get(Calendar.MONTH)%cycle;
+	        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
+	        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+	        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+			
+	        if(cycle!=1){
+	        	if(m!=0&&cycle==2){
+	        		cal.add(Calendar.MONTH, -(cycle-1));
+	        	}else{
+	        		int i=1;
+	        		int r=start-cycle;
+	        		while(r>0&&r>cycle){
+	        			r=r-cycle;
+	        			i++;
+	        		}
+	        		System.out.println("start====++"+start+"  r="+r+"  cycle="+cycle+"  i="+i);
+	        		int year=cal.get(Calendar.YEAR);
+	        		if(cycle==12)
+	        			year=year-1;
+	        		System.out.println("year======"+year);
+	        		cal.set(year, i*cycle, cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+	        	}
+	        }
+	        
+			String startTime = null;
+			
+			startTime=sdf.format(cal.getTime());
+			
 			searchMap.put("convert(varchar(11),[Hidden_Check].date,120 ) >", startTime);
 
 			System.out.println("startTime=" + startTime);
