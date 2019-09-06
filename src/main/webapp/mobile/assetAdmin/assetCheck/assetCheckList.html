@@ -135,15 +135,32 @@
 	  loadlist();
   	});
     
-  	var today = new Date();//获得当前日期
-    var month = today.getMonth() + 1;
-    var m=month%2;
-    var span2=document.createElement("span");
-    if(m==0){
-    	span2.innerHTML=(month-1)+"-"+month+"月巡查记录";
-    }else{
-    	span2.innerHTML=month+"-"+(month+1)+"月巡查记录";
-    }
+  	var xhm=new XMLHttpRequest();
+ 	xhm.open("GET","../../asset/getPatrolCycleA.do",false);
+ 	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+ 	xhm.send();
+ 	var ticket=JSON.parse(xhm.responseText);
+  
+ 	var start=ticket.start;
+ 	var end=ticket.end;
+    
+    if(start==end){
+   		var today = new Date();//获得当前日期
+   	    var month = today.getMonth() + 1;
+   	    var span2=document.createElement("span");
+   	    span2.innerHTML=month+"月巡查记录";
+   	    var tab2=document.getElementById('tab2');
+   	    tab2.appendChild(span2);
+   	    
+   	}else{
+   		var span2=document.createElement("span");
+
+   	    span2.innerHTML=start+"-"+end+"月巡查记录";
+
+   	    var tab2=document.getElementById('tab2');
+   	    tab2.appendChild(span2);
+   	    
+   	}
     var tab2=document.getElementById('tab2');
     tab2.appendChild(span2);
   	

@@ -51,15 +51,8 @@
 
      <select id="getCampus" resultMap="BaseResultMap">
      select
-        campus_id,campus_name,company_name,city_id,
-        custom_service,home_page,
-        user_name,
-        app_id,app_secret,mch_id,api,
-        token,
-        access_token,
-        create_time,
-        uid,
-        uid_key
+        *
+        
       from
       campus
       where

@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.sql.ast.statement.SQLIfStatement.Else;
 import com.alibaba.fastjson.JSONObject;
+import com.rmi.server.entity.ImageData;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
@@ -1218,6 +1220,23 @@ public class AssetController {
         
         return map;
 		
+	}
+	
+	@RequestMapping(value="/findimagedata")
+	public @ResponseBody List findImageData(HttpServletRequest request,@RequestParam String id){
+		
+		LinkedHashMap<String, List<ImageData>> imageDataMap=Singleton.getInstance().getImageDataMap();
+    	List<ImageData> imageDataList=new ArrayList<>();
+    	try{
+    		imageDataList=imageDataMap.get(id);
+    	}catch (Exception e) {
+			// TODO: handle exception
+    		e.printStackTrace();
+    		
+		}
+    	
+    	return mobileDao.flowImageData(request, imageDataList);
+
 	}
 	
 }

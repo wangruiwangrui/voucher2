@@ -127,9 +127,9 @@
 
 	var str = "我的位置";
 	var opts = {
-			   position : point,    // 指定文本标注所在的地理位置
-			   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
-			}	
+	   position : point,    // 指定文本标注所在的地理位置
+	   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
+	}	
 	var label = new BMap.Label(str, opts);  // 创建文本标注对象
 	label.setStyle({
 					 fontSize : "12px",
@@ -391,7 +391,7 @@
     		            //
     		            var check_id=obj.check_id;
     		        	alert("更新"+name+"安全巡查记录成功!");
-    		        	location.href="../index2.html";
+    		        	location.href="hiddenCheckList.html";
     		        	//location.href="CheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
     		        	
     		       	 }

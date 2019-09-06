@@ -401,7 +401,8 @@
 		    	check_circs:check_circs,
 		    	addComp:addComp1,
 		    	lng:longitude,
-		    	lat:latitude
+		    	lat:latitude,
+		    	id:check_id
 		    }, function(data){
 	        	var obj = $.parseJSON(data);
 		    	if (obj.status == 0) {
@@ -411,8 +412,8 @@
 		            //存储到服务器成功后的处理
 		            //
 		            var check_id=obj.check_id;
-		        	alert("新建"+name+"资产巡查记录成功!");
-		        	location.href="../../1/index2.html"
+		        	//alert("新建"+name+"资产巡查记录成功!");
+		        	location.href="addCheckInfoList.html";
 		        	//location.href="CheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
 		        	
 		        /* 	$.confirm("是否上传资产巡查记录"+name+"的照片", function() {
@@ -529,7 +530,7 @@
 		    	imagename:imagename,
 		    	serverId:serverId,
 		    	id:check_id,
-		    	classType:"assetCheck"
+		    	classType:"imageData"
 		    }, function(data){
 		    	console.log(data);
 		        if (data == 0) {
@@ -537,12 +538,148 @@
 		        	console.log(data.msg);
 		        } else if (data == 1) {
 		            //存储到服务器成功后的处理
+		            //存储到服务器成功后的处理
+		        	findimagedata(check_id);
 		            //
-		            alert("上传图片"+name+"成功!");
+		            //alert("上传图片"+name+"成功!");
 		            //location.href="../../1/index2.html";
 		            //location.href="CheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
 		        }
 		    });
 		}	 
     
+	  
+	  function findimagedata(check_id){
+
+	         //存储到服务器成功后的处理
+	         //
+	     	 $.get("/voucher/mobile/asset/findimagedata.do",{
+			    	id:check_id
+			    }, function(text){
+			    	console.log("text="+text);
+			    	var imgs=JSON.parse(text);
+			    	console.log("imgs="+imgs.length);
+			    	$("#img").children('div').remove();
+			    	if(imgs!=null){
+	               	   var i = 0;
+	                      for(; i < imgs.length; i++){
+	                   	   
+	                   	  var data=imgs[i];
+	                   	  var name=data.name;
+	                   	  var uri=data.uri;
+	                   	  var date=actionTime(data.date);
+	                   	  var panel=document.createElement("div");
+	                   	  panel.setAttribute("class","weui-panel__bd");
+	                 	  var a=document.createElement("a");
+	                    	  a.setAttribute("class","weui_grid");
+	                    	  var a=document.createElement("a");
+	                    	  a.setAttribute("href","javascript:void(0);");
+	                    	  a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+	                    	  var div=document.createElement("div");
+	                    	  div.setAttribute("class","weui-media-box__hd");
+	                    	  
+	           	   	 	  src="/voucher/"+uri;
+	               	  	  var img=document.createElement("img");
+	               	  	  img.setAttribute("class","weui-media-box__thumb");
+	                       img.setAttribute("src",src);
+	                       
+	                       div.appendChild(img);
+	                      	   		
+	                  	  div2=document.createElement("div");
+	                  	  div2.setAttribute("class","weui-media-box__bd");
+	                  	  h4=document.createElement("h4");
+	                  	  h4.setAttribute("class","weui-media-box__title");
+	                  	  h4.innerHTML=name;
+	                  	  p=document.createElement("p");
+	                  	  p.setAttribute("class","weui-media-box__desc");
+	                  	  p.innerHTML=date;
+	                  	  div2.appendChild(h4);
+	                  	  div2.appendChild(p);
+	                  	  a.appendChild(div);
+	                  	  a.appendChild(div2);
+	                  	  panel.appendChild(a);
+	           	      	  $("#img").append(panel);
+	                  }
+	       		   
+	       	   	}
+			    });
+	     }
+</script>
+
+<script src="../../../js/previewImage.min.js"></script>
+
+<script>
+ 
+ var im = {};
+ /**
+  * 得到多个元素
+  * @public
+  */
+ im.all = function(selector, contextElement) {
+     var nodeList,
+         list = [];
+     if (contextElement) {
+         nodeList = contextElement.querySelectorAll(selector);
+     } else {
+         nodeList = document.querySelectorAll(selector);
+     }
+     if (nodeList && nodeList.length > 0) {
+         list = Array.prototype.slice.call(nodeList);
+     }
+     return list;
+ }
+
+ /**
+  * 将事件委托给父元素
+  * @public
+  * @param  array     $el         父元素
+  * @param  string    eventType  事件类型名称
+  * @param  string    selector   目标的选择器
+  * @param  function  fn
+  */
+ im.delegate = function($el, eventType, selector, fn) {
+     if (!$el) { return; }
+     $el.addEventListener(eventType, function(e) {
+         var targets = im.all(selector, $el);
+         if (!targets) {
+             return;
+         }
+         // findTarget:
+         for (var i=0; i<targets.length; i++) {
+             var $node = e.target;
+             while ($node) {
+                 if ($node == targets[i]) {
+                     fn.call($node, e);
+                     break; //findTarget;
+                 }
+                 $node = $node.parentNode;
+                 if ($node == $el) {
+                     break;
+                 }
+             }
+         }
+     }, false);
+ };
+
+
+ im.delegate(document.querySelector('#img'), 'click','img',function(){
+	 
+	 var urls = [];
+	 var imgs = im.all('img',im.all('#img')[0]);
+	 imgs.forEach(function(v,i){
+		 var str=v.src;
+		 var url=str.replace(/\/compressFile/, "");
+	     urls.push(url);
+	 })
+     
+	 var thisStr = this.src;
+	 var current = thisStr.replace(/\/compressFile/, "");
+	 
+     var obj = {
+         urls : urls,
+         current : current
+     };
+     previewImage.start(obj);
+ });
+ 
 </script>

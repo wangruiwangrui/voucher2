@@ -77,7 +77,7 @@
 		<div class="weui-cells weui-cells_form">
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
-					<label class="weui-label">维修面积</label>
+					<label class="weui-label">维修面积(㎡)</label>
 				</div>
 				<div class="weui-cell__bd">
 					<input id="area" type="number" class="weui-input" />
@@ -88,7 +88,7 @@
 		<div class="weui-cells weui-cells_form">
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
-					<label class="weui-label">送审金额</label>
+					<label class="weui-label">送审金额(元)</label>
 				</div>
 				<div class="weui-cell__bd">
 					<input id="amount" type="number" class="weui-input" />
@@ -124,7 +124,7 @@
 					<label class="weui-label">质保期(年)</label>
 				</div>
 				<div class="weui-cell__bd">
-					<input id="availabeLength" class="weui-input" />
+					<input id="availabeLength" type="number" class="weui-input" />
 				</div>
 			</div>
 		</div>
@@ -192,8 +192,7 @@
 
  	<div class="weui-cells weui-cells_form"> 
     </div>
-<<<<<<< HEAD
-=======
+
     
     <div class="weui-panel weui-panel_access">
 		<div class="weui-panel__hd">维修照片</div>
@@ -204,7 +203,7 @@
 	<div class="weui-panel weui-panel_access">
 		<div class="weui-uploader__input-box" id="showPicker"></div>
 	</div>
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
+
 <!-- 
 	<div class="weui-panel weui-panel_access">
 		<div class="weui-panel__hd">维修照片</div>
@@ -299,8 +298,7 @@
     xhm.send();
     var obj=JSON.parse(xhm.responseText);
 
-<<<<<<< HEAD
-=======
+
 /*     $("#img").children('div').remove();
  	if(imgs!=null){
     	var i = 0;
@@ -342,7 +340,7 @@
         }
 		   
 	} */
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
+
     if(obj.name!=null)
      $("#principal").val(obj.name);
     var username=document.createElement("span");
@@ -559,83 +557,8 @@
 				localId: [],
 				serverId: []
 			};
-<<<<<<< HEAD
-	/*		
-=======
-		
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
-	document.querySelector('#showPicker').onclick = function () {
-    
-	 $.modal({
-		title: "选择上传图片类型",
-		text: '<div class="weui-cell weui-cell_select weui-cell_select-after">' +
-			'<div class="weui-cell__bd">' +
-			'<select class="weui-select" id="select" name="select2">' +
-			'<option value="1">维修前照片</option>' +
-			' <option value="2">维修后照片</option>' +
-			' </select>' +
-			'</div>' +
-			'</div>',
-		buttons: [
-			{
-				text: "确定", onClick: function () {
-
-					var objS = document.getElementById("select");
-					var grade = objS.options[objS.selectedIndex].value;
-					var imagename;
-					if (grade == 1) {
-						imagename = "维修前照片";
-					} else if (grade == 2) {
-						imagename = "维修后照片";
-					}
-					upImage(imagename);
-				}
-			},
-			{ text: "取消", imagename: "1", onClick: function () { console.log(3) } },
-		 ]
-	 }); 
-
-	 function upImage(imagename) {
-		wx.chooseImage({
-			success: function (res) {
-				images.localId = res.localIds;
-				console.log('已选择 ' + res.localIds.length
-					+ ' 张图片');
-				var i = 0, length = images.localId.length;
-				images.serverId = [];
-				function upload(imagename) {
-					wx.uploadImage({
-						localId: images.localId[i].toString(),
-						isShowProgressTips: images.localId[i]
-							.toString(),
-						success: function (res) {
-							i++;
-							console.log('已上传：' + i + '/'
-								+ length);
-							//返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
-							wxImgCallback(imagename, res.serverId);
-							if (i < length) {
-								upload(imagename);
-							}
-						},
-						fail: function (res) {
-							console.log(res);
-						}
-					});
-				}
-				upload(imagename);
-			}
-		});
-	  }
-    
-<<<<<<< HEAD
-	}*/
-=======
-	}
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
-
-  }
- });
+		}
+	 });
 	 function wxImgCallback(imagename,serverId) {
 		    //将serverId传给wx_upload.php的upload方法
 		    var url = "../file/upload.do";
@@ -655,11 +578,9 @@
 		            //
 		        	 $.get("../flow/findimagedata.do",{
 		 		    	id:id
-<<<<<<< HEAD
-		 		    }, function(text){
-=======
+
 		 		    }, function(text){ 
->>>>>>> 1bcb55cc73926c8ca8de173170efc028e8df4faa
+
 		 		    	console.log("text="+text);
 		 		    	var imgs=JSON.parse(text);
 		 		    	console.log("imgs="+imgs.length);

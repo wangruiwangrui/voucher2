@@ -3,9 +3,12 @@ package com.voucher.weixin.controller;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.rmi.server.entity.ImageData;
 import com.voucher.manage.dao.AssetCheckDAO;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
@@ -28,6 +32,9 @@ import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Assets_Check;
+import com.voucher.manage.daoModel.Assets.Assets_Check_Date;
+import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
+import com.voucher.manage.daoModel.Assets.Patrol_Cycle;
 import com.voucher.manage.daoModel.Assets.Assets_Check;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
@@ -119,7 +126,7 @@ public class AssetCheckController {
 			@RequestParam String happenTime,@RequestParam String remark,
 			@RequestParam String check_circs,@RequestParam String addComp,
 			@RequestParam Double lng,@RequestParam Double lat,
-			HttpServletRequest request){
+			@RequestParam String id,HttpServletRequest request){
 		
 		Assets_Check assets_Check=new Assets_Check();
 
@@ -156,7 +163,43 @@ public class AssetCheckController {
 		assets_Check.setDate(date);
 		assets_Check.setTerminal("Wechat");
 		
+		LinkedHashMap<String, List<ImageData>> imageDataMap = Singleton.getInstance().getImageDataMap();
+		List<ImageData> imageDataList = new ArrayList<>();
+		try {
+			imageDataList = imageDataMap.get(id);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+
+		}
+
+		if (imageDataList == null) {
+			imageDataList = new ArrayList<>();
+		}
+		
 		int i=assetCheckDAO.insertAssetCheck(assets_Check);
+		
+		if (i > 0) { // 执行插入成功的方法
+
+			Iterator iterator = imageDataList.iterator();
+			int n = 0;
+			while (iterator.hasNext()) {
+				ImageData imageData = (ImageData) iterator.next();
+				
+				Assets_Check_Date assets_Check_Date = new Assets_Check_Date();
+				assets_Check_Date.setCheck_id(uuid.toString());
+				assets_Check_Date.setNAME(imageData.getName());
+				assets_Check_Date.setFileBelong("检查图片");
+				assets_Check_Date.setURI(imageData.getURI());
+				assets_Check_Date.setTYPE(imageData.getType());
+				assets_Check_Date.setFileIndex(n);
+				assets_Check_Date.setDate(imageData.getDate());
+				Integer in = assetCheckDAO.insertAssets_Check_Date(assets_Check_Date);
+				MyTestUtil.print(in);
+				n++;
+			}
+			
+		}
 		
 		JSONObject jsonObject=JSONObject.parseObject(addComp);
 		
@@ -319,15 +362,39 @@ public class AssetCheckController {
 		
 		if(search2!=null&&!search2.equals("")){
 			
+int cycle=1;
+			
+			Patrol_Cycle patrol_Cycle=assetsDAO.selectPatrolCycle();
+			
+			if(patrol_Cycle!=null)
+				cycle=patrol_Cycle.getAsset_cycle();
+
 			Calendar cal = Calendar.getInstance();  
-			int m=cal.get(Calendar.MONTH)%2;
+			int start=cal.get(Calendar.MONTH)+1;
+			int m=cal.get(Calendar.MONTH)%cycle;
 	        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
 	        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-	        if(m!=0){
-	        	cal.add(Calendar.MONTH, -1);
-	        }
 	        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 			
+	        if(cycle!=1){
+	        	if(m!=0&&cycle==2){
+	        		cal.add(Calendar.MONTH, -(cycle-1));
+	        	}else{
+	        		int i=1;
+	        		int r=start-cycle;
+	        		while(r>0&&r>cycle){
+	        			r=r-cycle;
+	        			i++;
+	        		}
+	        		System.out.println("start====++"+start+"  r="+r+"  cycle="+cycle+"  i="+i);
+	        		int year=cal.get(Calendar.YEAR);
+	        		if(cycle==12)
+	        			year=year-1;
+	        		System.out.println("year======"+year);
+	        		cal.set(year, i*cycle, cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+	        	}
+	        }
+	        
 			String startTime = null;
 			
 			startTime=sdf.format(cal.getTime());

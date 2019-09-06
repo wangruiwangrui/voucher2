@@ -884,10 +884,9 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 				
 				if(search2!=null&&search2.equals("0")){
 					
-					Calendar cal = Calendar.getInstance();  
-					int start=cal.get(Calendar.MONTH);
+					Calendar cal = Calendar.getInstance();
+					int start=cal.get(Calendar.MONTH)+1;
 					int m=cal.get(Calendar.MONTH)%cycle;
-				
 			        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
 			        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
 			        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
@@ -927,7 +926,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 				}else if(search2!=null&&search2.equals("1")){
 					
 					Calendar cal = Calendar.getInstance();
-					int start=cal.get(Calendar.MONTH);
+					int start=cal.get(Calendar.MONTH)+1;
 					int m=cal.get(Calendar.MONTH)%cycle;
 			        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
 			        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));

@@ -27,5 +27,5 @@ public interface FinanceDAO {
 	public Integer updateHireSetHireList(Users users,List files);
 	
 	public Integer updateHireSetHireListWinXinPay(List files);
-	
+
 }

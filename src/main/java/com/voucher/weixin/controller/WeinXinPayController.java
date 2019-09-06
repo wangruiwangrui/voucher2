@@ -86,7 +86,7 @@ public class WeinXinPayController {
 		WeiXin weixin = weixinService.getCampusById(campusId);
 		
 		String notify_url = weixin.getUrl()+WXConstant.notify_url;
-
+		logger.info("+++++++++????????????????????++++++++++++++++++++++++++++++++++++++++++notify_url:{}", notify_url);
 		String text = json.getString("text");
 		String guids = json.getString("guid");
 		int hire = (int) (json.getFloat("hire")* 100);
@@ -254,14 +254,16 @@ public class WeinXinPayController {
 	//微信支付回调函数
 	@RequestMapping("/callback")
 	public String callback(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		logger.info("+++++++++++++++++++++++++++++++++++++++++++++++++++============");
 		
 		BufferedReader reader = null;
-
-		reader = request.getReader();
+		String xmlString = null;
+		try {
+			reader = request.getReader();
 
 		String line = "";
 
-		String xmlString = null;
+		
 
 		StringBuffer inputString = new StringBuffer();
 
@@ -271,7 +273,9 @@ public class WeinXinPayController {
 
 		xmlString = inputString.toString();
 
-		request.getReader().close();
+		}finally {
+			request.getReader().close();
+		}
 
 		Map<String, String> map = new HashMap<String, String>();
 
@@ -309,6 +313,7 @@ public class WeinXinPayController {
 					list.add(URLDecoder.decode(fileString,"utf-8"));
 					
 				}
+				logger.info("+++++++++++++++++++++++++++++++++++=========================", list);
 				
 				int i=financeDAO.updateHireSetHireListWinXinPay(list);
 				

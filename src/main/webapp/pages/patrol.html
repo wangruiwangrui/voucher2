@@ -15,8 +15,17 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js"></script>
 <![endif]-->
 <style>
-
-
+.table{
+    margin-left: 4em;
+}
+.table th{
+	text-align:center;
+}
+.table td{
+	vertical-align:middle;
+	text-align:center;
+} 
+ 
 </style>
 </head>
 <body>
@@ -24,34 +33,32 @@
 <fieldset class="layui-elem-field layui-field-title titi" style="margin-top: 100px;">
   <legend>巡查周期设置</legend>
 </fieldset>
- 
-<div class="layui-form">
-  <table class="layui-table">
-    <colgroup>
-      <col width="200">
-      <col width="200">
-      <col width="200">
-      <col width="100">
-    </colgroup>
-    <thead>
+
+<table class="table table-bordered table-hover">
+	<thead>
       <tr>
         <th>巡查项目</th>
-        <th>巡查周期</th>
+        <th>巡查周期(月)</th>
         <th>巡查开始时间</th>
         <th>操作</th>
       </tr> 
     </thead>
-    <tbody>
+	<tbody>
       <tr>
         <td>资产巡查</td>
         <td>
-            <div class="layui-input-inline">
-      			<input id="assetInput" type="number" name="patrol" lay-verify="pass" placeholder="请设置巡查周期" autocomplete="off" class="layui-input">
-    		</div>
+        	<select id="assetInput" class="form-control">
+				<option>1</option>
+ 				<option>2</option>
+ 				<option>3</option>
+ 				<option>4</option>
+ 				<option>6</option>
+ 				<option>12</option>
+			</select>
 		</td>
         <td>
         	<div class="layui-input-inline">
-      			<input id="assetTime" name="patrol" lay-verify="pass" autocomplete="off" class="layui-input">
+      			<input id="assetTime" name="patrol" lay-verify="pass" autocomplete="off" class="layui-input" readonly="true">
     		</div>
         </td>
         <td>
@@ -61,13 +68,18 @@
       <tr>
         <td>安全巡查</td>
         <td>
-        	<div class="layui-input-inline">
-      			<input id="hiddenInput" type="number" name="patrol" lay-verify="pass" placeholder="请设置巡查周期" autocomplete="off" class="layui-input">
-    		</div>
+        	<select id="hiddenInput" class="form-control">
+				<option>1</option>
+  				<option>2</option>
+  				<option>3</option>
+  				<option>4</option>
+  				<option>6</option>
+  				<option>12</option>
+			</select>
         </td>
         <td>
 			<div class="layui-input-inline">
-      			<input id="hiddenTime" name="patrol" lay-verify="pass" autocomplete="off" class="layui-input">
+      			<input id="hiddenTime" name="patrol" lay-verify="pass" autocomplete="off" class="layui-input" readonly="true">
     		</div>
 		</td>
         <td>
@@ -75,9 +87,8 @@
         </td>
       </tr>
     </tbody>
-  </table>
-</div>
-	
+</table>
+
 <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 <!-- <script src="../assets/bootstrap-table/jquery.min.js"></script> -->
 <!-- <script src="js/layui.js"></script> -->
@@ -124,7 +135,7 @@ $("#assetbutton").click(function(){
 				alert("设置资产巡查周期失败");
 			}
 		}); 
-	}
+	} 
 
 })
 

@@ -793,6 +793,4 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
         }
 	}
 
-			
-	
 }
