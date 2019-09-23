@@ -12,20 +12,27 @@ import com.voucher.manage.tools.MyTestUtil;
 public class Singleton {
 	private static Singleton instance = new Singleton();
 	//合江金宇
-//	public static final String URL = "http://jinyu.lzgtzh.com";
+//	public static final String URL = "http://www.gulinguozi.com";
 	
-	public static final String URL = "http://test.lzgtzh.com";
+	public static final String URL = "http://wx.lzgtzh.com";
+//	public static final String URL = "http://test.lzgtzh.com";
 	
 	public final static String ROOMDATABASE="[RoomManage]";
 	
-	//鏈湴鏂囦欢鐩綍
+	
+	//本地文件目录
 	public final static String filePath="\\Desktop\\pasoft\\photo";
 	
-	//璧勪骇绠＄悊绯荤粺鍥剧墖鐩綍
+	//资产管理系统图片目录
+//	public static final String ROOMINFOIMGPATH	="D:\\SYSPICTURE\\";
+//		public static final String ROOMINFOIMGPATH	="D:\\GTJTSJ\\";
 	public static final String ROOMINFOIMGPATH	="D:\\PIC\\";
 	
-	//璧勪骇绠＄悊绯荤粺鍥剧墖鐩綍2
-	public static final String ROOMINFOIMGPATH2	="D:\\PIC\\pasoft";
+	//资产管理系统图片目录2
+//	public static final String ROOMINFOIMGPATH2	="D:\\SYSPICTURE\\pasoft";
+//		public static final String ROOMINFOIMGPATH2	="D:\\GTJTSJ\\pasoft";	
+		public static final String ROOMINFOIMGPATH2	="D:\\PIC\\pasoft";
+	
 	
 	private LinkedHashMap<String,Map<String, Object>> registerMap;
 	

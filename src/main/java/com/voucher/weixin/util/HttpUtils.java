@@ -24,6 +24,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
@@ -31,78 +32,113 @@ import common.HttpClientManager;
 
 public class HttpUtils {
 	
-	 private HttpClient httpClient;
+	private HttpClient httpClient;
 
-	    public HttpUtils(){
-	    	
-		if (httpClient == null) {
-			BasicHttpClientConnectionManager connManager;
+    public HttpUtils(){
+    	
+	if (httpClient == null) {
+		BasicHttpClientConnectionManager connManager;
 
-			connManager = new BasicHttpClientConnectionManager(
-					RegistryBuilder.<ConnectionSocketFactory>create()
-							.register("http", PlainConnectionSocketFactory.getSocketFactory())
-							.register("https", SSLConnectionSocketFactory.getSocketFactory()).build(),
-					null, null, null);
-			httpClient = HttpClientBuilder.create().setConnectionManager(connManager).build();
-			}
-	    }
-	
-	    /**
-	     * get 请求
-	     *
-	     * @param url
-	     * @return
-	     */
-	    public String doGet(String url,String params){
-	        String result="";
-	        HttpEntity entity = null;
-	        HttpResponse response=null;
-	        HttpGet method=new HttpGet(url);
-	        try{
-	            if(params != null && !params.isEmpty()){
-	                String str = params;
-	                method.setURI(new URI(method.getURI().toString() + "?" + str));
-	            }
-	            response=httpClient.execute(method);
-	            if(response.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
-	                entity=response.getEntity();
-	                result=EntityUtils.toString(entity);
-	            }
-	        }catch (Exception ex){
-	            throw new RuntimeException(ex);
-	        }
-	        return result;
-	    }
+		connManager = new BasicHttpClientConnectionManager(
+				RegistryBuilder.<ConnectionSocketFactory>create()
+						.register("http", PlainConnectionSocketFactory.getSocketFactory())
+						.register("https", SSLConnectionSocketFactory.getSocketFactory()).build(),
+				null, null, null);
+		httpClient = HttpClientBuilder.create().setConnectionManager(connManager).build();
+		}
+    }
 
-	    /**
-	     * post 请求
-	     *
-	     * @param url
-	     * @return
-	     */
-	    public String doPost(String url,String params){
-	        String result="";
-	        HttpEntity entity = null;
-	        HttpResponse response=null;
-	        HttpPost httpPost=new HttpPost(url);
-	        httpPost.addHeader("Content-Type", "text/xml");
-	        httpPost.addHeader("User-Agent", "wxpay sdk java v1.0 ");
-	        try{
-	            if(params != null && !params.isEmpty()){
-	            	StringEntity stringEntity = new StringEntity(params, "UTF-8");
-	            	httpPost.setEntity(stringEntity);
-	            }
-	            
-	            response=httpClient.execute(httpPost);
-	            if(response.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
-	                entity=response.getEntity();
-	                result=EntityUtils.toString(entity,"UTF-8");
-	            }
-	        }catch (Exception ex){
-	            throw new RuntimeException(ex);
-	        }
-	        return result;
-	    }
+    /**
+     * get 请求
+     *
+     * @param url
+     * @return
+     */
+    public String doGet(String url,String params){
+        String result="";
+        HttpEntity entity = null;
+        HttpResponse response=null;
+        HttpGet method=new HttpGet(url);
+        try{
+            if(params != null && !params.isEmpty()){
+                String str = params;
+                method.setURI(new URI(method.getURI().toString() + "?" + str));
+            }
+            response=httpClient.execute(method);
+            if(response.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+                entity=response.getEntity();
+                result=EntityUtils.toString(entity);
+            }
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
+        return result;
+    }
+
+    /**
+     * post 请求
+     *
+     * @param url
+     * @return
+     */
+    public String doPost(String url,String params){
+        String result="";
+        HttpEntity entity = null;
+        HttpResponse response=null;
+        HttpPost httpPost=new HttpPost(url);
+        httpPost.addHeader("Content-Type", "text/xml");
+        httpPost.addHeader("User-Agent", "wxpay sdk java v1.0 ");
+        try{
+            if(params != null && !params.isEmpty()){
+            	StringEntity stringEntity = new StringEntity(params, "UTF-8");
+            	httpPost.setEntity(stringEntity);
+            }
+            
+            response=httpClient.execute(httpPost);
+            if(response.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+                entity=response.getEntity();
+                result=EntityUtils.toString(entity,"UTF-8");
+            }
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
+        return result;
+    }
+	  
+    /**
+     * post 请求
+     *
+     * @param url
+     * @return
+     */
+    public String doPost2(String url,String params){
+        String result="";
+        HttpEntity entity = null;
+        HttpResponse response=null;
+        HttpClient httpClient = new DefaultHttpClient();
+
+        // 设置超时时间
+        httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 2000);
+        httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 2000);
+        HttpPost httpPost=new HttpPost(url);
+        httpPost.addHeader("Content-Type", "application/json");
+        httpPost.addHeader("User-Agent", "wxpay sdk java v1.0 ");
+        try{
+            if(params != null && !params.isEmpty()){
+            	StringEntity stringEntity = new StringEntity(params, "UTF-8");
+            	httpPost.setEntity(stringEntity);
+            }
+            
+            response=httpClient.execute(httpPost);
+            if(response.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+                entity=response.getEntity();
+                result=EntityUtils.toString(entity,"UTF-8");
+            }
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
+        return result;
+    }
 	    
 	/**
      * @Description: http post 请求 json 数据

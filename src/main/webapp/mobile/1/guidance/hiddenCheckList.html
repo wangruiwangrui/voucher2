@@ -113,7 +113,7 @@
  	    
  	}else{
  		var span2=document.createElement("span");
- 	    span2.innerHTML=start+"-"+end+"月未巡查";
+ 	    span2.innerHTML=start+"-"+end+"月已巡查";
  	    var tab2=document.getElementById('tab2');
  	    tab2.appendChild(span2);
  	    
@@ -147,20 +147,20 @@
         offset = 0;
         $("#ul").children('li').remove();
         loading = false;
-        if(url=="/voucher/mobile/hidden/selectAllCheck.do?search5=1"){
+        if(url=="../../hidden/selectAllCheck.do?search5=1"){
 			  loadlist2();
 		 }else{
 		  	  loadlist();
 		 }
     });
     
-    url="/voucher/mobile/hidden/selectAllCheck.do";
+    url="../../hidden/selectAllCheck.do";
     
     $("#tab1").on("click",function(){
       $("#input").attr("placeholder","");
       $("#input").val("");
       search = "";
-  	  url="/voucher/mobile/hidden/selectAllCheck.do";
+  	  url="../../hidden/selectAllCheck.do";
   	  limit = 10;
         offset = 0;
         $("#ul").children('li').remove();
@@ -172,7 +172,7 @@
 	  $("#input").attr("placeholder","输入数字查其它月份记录");
 	  $("#input").val("");
 	  search = "";
-	  url="/voucher/mobile/hidden/selectAllCheck.do?search2=1";
+	  url="../../hidden/selectAllCheck.do?search2=1";
 	  limit = 10;
       offset = 0;
       $("#ul").children('li').remove();
@@ -184,7 +184,7 @@
 	  $("#input").attr("placeholder","输入数字查其它月份记录");
 	  $("#input").val("");
 	  search = "";
-	  url="/voucher/mobile/hidden/selectAllCheck.do?search5=1";
+	  url="../../hidden/selectAllCheck.do?search5=1";
 	  limit = 10;
       offset = 0;
       $("#ul").children('li').remove();
@@ -210,7 +210,7 @@
     	  $(".weui-loadmore").show();
     	  loading = true;
     	  setTimeout(function () {
-    		  if(url=="/voucher/mobile/hidden/selectAllCheck.do?search5=1"){
+    		  if(url=="../../hidden/selectAllCheck.do?search5=1"){
     			  loadlist2();
     		  }else{
     		  	  loadlist();
@@ -261,6 +261,7 @@
                     	   
                     	   var img=null;
                     	   if(imgs[check_id]!=null){
+                    		   
                     		   img="/voucher/"+imgs[check_id];
                     	   }
         
@@ -283,12 +284,12 @@
                        }
                        offset=offset+i;
                        if(i<limit){
-                    	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+                    	   html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
                            $("#ul").append(html);
                     	   loading = true;
                        }
                    }else {
-                	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+                	   html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
                        $("#ul").append(html);
                 	   loading = true;
                    }
@@ -309,7 +310,7 @@
            img.setAttribute("class","img");
            div_1_1.appendChild(img);
           }else{
-        	  img.setAttribute("src","/voucher/img/notImg.jpg");
+        	  img.setAttribute("src","../../../img/notImg.jpg");
               img.setAttribute("class","img");
               div_1_1.appendChild(img); 
           }
@@ -465,12 +466,12 @@
         	                       }
         	                       offset=offset+i;
         	                       if(i<limit){
-        	                    	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+        	                    	   html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
         	                           $("#ul").append(html);
         	                    	   loading = true;
         	                       }
         	                   }else {
-        	                	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+        	                	   html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
         	                       $("#ul").append(html);
         	                	   loading = true;
         	                   }
@@ -491,7 +492,7 @@
                        img.setAttribute("class","img");
                        div_1_1.appendChild(img);
                       }else{
-                    	  img.setAttribute("src","/voucher/img/notImg.jpg");
+                    	  img.setAttribute("src","../../../img/notImg.jpg");
                           img.setAttribute("class","img");
                           div_1_1.appendChild(img); 
                       }

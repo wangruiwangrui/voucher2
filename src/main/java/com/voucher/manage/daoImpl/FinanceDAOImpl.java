@@ -3,7 +3,6 @@ package com.voucher.manage.daoImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,35 +11,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.collect.MapMaker;
 import com.voucher.manage.dao.FinanceDAO;
-import com.voucher.manage.daoImpl.AssetsDAOImpl.allHire;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.ChartInfo2;
 import com.voucher.manage.daoModel.TTT.HireList;
 import com.voucher.manage.daoModel.TTT.HirePay;
+import com.voucher.manage.daoModel.TTT.Payment_Info;
 import com.voucher.manage.daoModel.TTT.User_AccessTime;
 import com.voucher.manage.daoModelJoin.Finance.HireList_ChartInfo_Join;
 import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe2;
-import com.voucher.manage.daoSQL.SelectSQL;
 import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.model.Users;
-import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
 
-import voucher.Mybatis;
-
 public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 
+	Logger logger = LoggerFactory.getLogger(FinanceDAOImpl.class);
 	@Override
 	public Map findMatureHire(Integer days,Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
 		// TODO Auto-generated method stub
@@ -688,7 +684,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 
 
 	@Override
-	public Integer updateHireSetHireListWinXinPay(List files) {
+	public Integer updateHireSetHireListWinXinPay(Map<String,String> map,List files) {
 		// TODO Auto-generated method stub
 		Date date = new Date();
 				
@@ -779,6 +775,23 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
             		return 0;
             	}
                 
+				//支付成功生成支付记录
+				Payment_Info payment = new Payment_Info();
+				payment.setOpenid(map.get("openId"));
+				payment.setOut_trade_no(map.get("out_trade_no"));
+				payment.setTotal_fee(Float.valueOf(map.get("total_fee")));
+				payment.setCreateTime(date);
+				payment.setUnit("元");
+				payment.setName(map.get("name"));
+				payment.setNonceStr(map.get("nonce_str"));
+				payment.setSign(map.get("sign"));
+				payment.setPrepay_id(map.get("prepay_id"));
+				payment.setTrade_type(map.get("trade_type"));
+				
+				Integer payResult = InsertExe.get(this.getJdbcTemplate(), payment);
+				logger.info("+++++++++++++===============payResult", payResult);
+                
+                
                 return u;
                
             } catch (Exception e) {
@@ -791,6 +804,12 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
         	return -2;
         	
         }
+	}
+
+
+	@Override
+	public Integer insertPaymentInfo(Payment_Info payment) {
+		return InsertExe.get(this.getJdbcTemplate(), payment);
 	}
 
 }

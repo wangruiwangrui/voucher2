@@ -247,12 +247,12 @@
                        }
                        offset=offset+i;
                        if(i<limit){
-                    	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+                    	   html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
                            $("#ul").append(html);
                     	   loading = true;
                        }
                    }else {
-                	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+                	   html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
                        $("#ul").append(html);
                 	   loading = true;
                    }

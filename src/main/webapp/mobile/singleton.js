@@ -1,9 +1,10 @@
-/**
- * 
- */
-// 公房
-// var APPID="wx040a468505773e18";
 var campusId = "1";
+
+/*定义项目名*/
+var progress = "/voucher";
+
+//var APPID="wx040a468505773e18";
+
 // 工投
 // var APPID="wxc4d4aea5eff9b124"
 
@@ -12,7 +13,7 @@ var campusId = "1";
 
 // 本地测试
 var DOMAIN = "http://nwx.wtsms.net";
-
+//var DOMAIN="http://lzxlzc.com";
 //测试服务器
 //var DOMAIN = "http://test.lzgtzh.com";
 
@@ -27,14 +28,14 @@ var DOMAIN = "http://nwx.wtsms.net";
 // var DOMAIN="http://jinyu.lzgtzh.com";
 
 
-// 合江金宇
-// var DOMAIN="http://jinyu.lzgtzh.com";
+// 古蔺国资
+//var DOMAIN="http://www.gulinguozi.com";
 
 var APPID = "";
 
 $.ajax({
 	data : "get",
-	url : "/voucher/noticeset/mobile/getWeiXin.do?campusId=" + campusId,
+	url : progress+"/noticeset/mobile/getWeiXin.do?campusId=" + campusId,
 	async : false,
 	success : function(data) {
 		data = JSON.parse(data);

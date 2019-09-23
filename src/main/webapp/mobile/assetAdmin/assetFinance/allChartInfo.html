@@ -15,62 +15,48 @@
 	href="../../../assets/bootstrap-table/bootstrap-table.css">
 	<link rel="stylesheet"
 	href="../../../assets/bootstrap-table/bootstrap-editable.css">
-	<script src="../../../assets/bootstrap-table/jquery.min.js"></script>
-	<script src="../../../assets/bootstrap-table/bootstrap.min.js"></script>
-	<script src="../../../assets/bootstrap-table/bootstrap-table.js"></script>
-	<script src="../../../assets/bootstrap-table/bootstrap-table-export.js"></script>
-	<script src="../../../assets/bootstrap-table/tableExport.js"></script>
-	<script src="../../../assets/bootstrap-table/bootstrap-table-editable.js"></script>
-	<script src="../../../assets/bootstrap-table/bootstrap-editable.js"></script>
-	<script src="../../../js/bootstrap-table-zh-CN.min.js"></script>
-    <script src="../../../js/bootstrap-table-zh-CN.min.js"></script>
-    <script type="text/javascript" src="../../../bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-
 	
 </head>
 
 <body>
-        <div class="header">
-            <h1 class="page-header">全部客户列表</h1>
-        </div>
+   <div class="header">
+       <h1 class="page-header">全部客户列表</h1>
+   </div>
 
 
-        <div id="page-inner">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="table-responsive">
-                                <table id="table" class="table " data-toggle="table" data-toolbar="#toolbar"
-                                       data-url="/voucher/mobile/finance/getAllChartInfo.do" data-search="true"
-                                       data-striped="true"
-                                       data-show-refresh="false" data-show-toggle="false"
-                                       data-side-pagination="server" data-pagination="true"
-                                       data-show-columns="false" data-sort-order="desc">
-                                    <thead>
-                                    <tr>
-                                        <th data-align="left" data-field="charter" data-sortable="true" data-formatter="actionUser">姓名</th>
-                                        <th data-align="left" data-field="idno">证件号</th>
-                                        <th data-align="left" data-field="status" data-formatter="actionReport">查看详情</th>
-                                        <th data-align="left" data-field="totalHire" data-sortable="true">金额</th>
-                                        <th data-align="left" data-field="chartBeginDate" data-formatter="actionTime" data-sortable="true">开始日期</th>     
-                                        <th data-align="left" data-field="chartEndDate" data-formatter="actionTime" data-sortable="true">结束日期</th>                            
-                                        <th data-align="left" data-field="roomAddress" data-formatter="actionAddress">地址</th>
-                                        <th data-align="left" data-field="contractNo" >合同编号</th>
-                                        <th data-align="left" data-field="guid" data-visible="false">合同ID</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+   <div id="page-inner">
+       <div class="row">
+           <div class="col-xs-12">
+               <div class="panel panel-default">
+                   <div class="panel-body">
+                       <div class="table-responsive">
+                           <table id="table" class="table " data-toggle="table" data-toolbar="#toolbar"
+                                  data-url="../../finance/getAllChartInfo.do" data-search="true"
+                                  data-striped="true"
+                                  data-show-refresh="false" data-show-toggle="false"
+                                  data-side-pagination="server" data-pagination="true"
+                                  data-show-columns="false" data-sort-order="desc">
+                               <thead>
+                               <tr>
+                                   <th data-align="left" data-field="charter" data-sortable="true" data-formatter="actionUser">姓名</th>
+                                   <th data-align="left" data-field="idno">证件号</th>
+                                   <th data-align="left" data-field="status" data-formatter="actionReport">查看详情</th>
+                                   <th data-align="left" data-field="totalHire" data-sortable="true">金额</th>
+                                   <th data-align="left" data-field="chartBeginDate" data-formatter="actionTime" data-sortable="true">开始日期</th>     
+                                   <th data-align="left" data-field="chartEndDate" data-formatter="actionTime" data-sortable="true">结束日期</th>                            
+                                   <th data-align="left" data-field="roomAddress" data-formatter="actionAddress">地址</th>
+                                   <th data-align="left" data-field="contractNo" >合同编号</th>
+                                   <th data-align="left" data-field="guid" data-visible="false">合同ID</th>
+                               </tr>
+                               </thead>
+                           </table>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
 
-
-
-</div>
 <!-- 警告对话框 -->
 <div class="modal fade" id="alertdialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -88,7 +74,17 @@
     </div>
 </div>
 
+<script type="text/javascript" src="../../../assets/bootstrap-table/jquery.min.js"></script>
+<script type="text/javascript" src="../../../assets/bootstrap-table/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../assets/bootstrap-table/bootstrap-table.js"></script>
+<script type="text/javascript" src="../../../assets/bootstrap-table/bootstrap-table-export.js"></script>
+<script type="text/javascript" src="../../../assets/bootstrap-table/tableExport.js"></script>
+<script type="text/javascript" src="../../../assets/bootstrap-table/bootstrap-table-editable.js"></script>
+<script type="text/javascript" src="../../../assets/bootstrap-table/bootstrap-editable.js"></script>
+<script type="text/javascript" src="../../../js/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript" src="../../../bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 
+	
 <script type="text/javascript">
  
     function getcookie(name) {
@@ -127,7 +123,7 @@
         }else if(row=="charter"){
         	var idNo = field.idno;
         	
-        	$.get("/voucher/mobile/finance/getChartInfoByIdNo.do", {
+        	$.get("../../finance/getChartInfoByIdNo.do", {
             	idNo:idNo
             },function(text){
             	
@@ -142,7 +138,7 @@
         	
         }else if(row=="roomAddress"){
         	var idNo = field.idno;
-        	$.get("/voucher/mobile/finance/getRoomInfoByIdNo.do", {
+        	$.get("../../finance/getRoomInfoByIdNo.do", {
             	idNo:idNo
             },function(text){
             	

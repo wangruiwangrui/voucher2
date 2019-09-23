@@ -1398,7 +1398,6 @@ public class HiddenController {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		System.out.println("roomInfo_Hidden_Item==================" + roomInfo_Hidden_Item.toString());
 		return roomInfo_Hidden_Item;
 	}
 

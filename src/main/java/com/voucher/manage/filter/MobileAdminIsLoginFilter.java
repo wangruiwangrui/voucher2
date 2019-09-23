@@ -72,7 +72,7 @@ public class MobileAdminIsLoginFilter implements Filter {
 	        	System.out.println("mobileAdminIsLoginFilter openid="+openId);
 	        	Users users=usersMapper.getUserByOnlyOpenId(openId);
 	        	System.out.println("mobileAdminIsLoginFilter openId ="+openId);
-	           if(users.getPlace()>0){  //通过place判断用户的访问权限，数字越大权限越高
+	           if(users!=null&&users.getPlace()>0){  //通过place判断用户的访问权限，数字越大权限越高
 	             chain.doFilter(request, response);
 	            }else{
 	        	 wrapper.sendRedirect(redirectPath);

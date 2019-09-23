@@ -36,5 +36,5 @@ xmlns:task="http://www.springframework.org/schema/task"
         <task:scheduled ref="taskJob" method="sendMatureHire" cron="0 0 9 * * ?"/>
         <task:scheduled ref="taskJob" method="sendMatureHire2" cron="0 30 9 * * ?"/>
 	</task:scheduled-tasks>  
-	
+	<bean id="billAccessTokenUtil" class ="com.voucher.weixin.util.BillAccessTokenUtil"></bean>
 </beans>

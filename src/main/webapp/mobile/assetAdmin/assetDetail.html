@@ -8,15 +8,13 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <meta name="format-detection" content="telephone=no" />
 <meta charset="utf-8" />
- <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="css/weui.css"/>
-    <link rel="stylesheet" href="css/example.css"/>
+ 
+<link rel="stylesheet" href="css/weui.css"/>
+<link rel="stylesheet" href="css/example.css"/>
 <style type="text/css">
     body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
 </style>
-<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
-<script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
-<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
 </head>
 
 <body>
@@ -140,8 +138,13 @@
        </div>
    </div>  
       
-</body>
-</html>
+
+
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
 <script type="text/javascript">
   function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
@@ -161,7 +164,7 @@
   var place=0;
   
 	var xhm = new XMLHttpRequest();
-	xhm.open("GET", "/voucher/mobile/asset/selectPlace.do", false);
+	xhm.open("GET", "../../asset/selectPlace.do", false);
 	xhm.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhm.send();
 
@@ -203,7 +206,7 @@
     
 	$.ajax({
         type: "POST",
-        url: "/voucher/mobile/asset/getRoomInfoByGUID.do",
+        url: "../asset/getRoomInfoByGUID.do",
         data: { "guid":guid},
         dataType: "json",
         error: function (request){
@@ -316,14 +319,14 @@
                   });
                   
                   var hidden=document.createElement("span");
-            	  $.get("/voucher/mobile/asset/getAllAssetByHidden_GUID.do",{
+            	  $.get("../asset/getAllAssetByHidden_GUID.do",{
   				 		guid:guid
   			  		},function(text){
   			  			if(text>0){
                     		
                     		$.ajax({
                                 type: "POST",
-                                url: "/voucher/mobile/hidden/getRoomInfoHiddenItemDataByGUID.do",
+                                url: "../hidden/getRoomInfoHiddenItemDataByGUID.do",
                                 data: { "guid":guid},
                                 dataType: "json",
                                 error: function (request){
@@ -364,7 +367,7 @@
   			  		
   			  		});
                   
-            	  $.get("/voucher/mobile/asset/getCountCheckByGUID.do",{
+            	  $.get("../asset/getCountCheckByGUID.do",{
 				 		guid:guid
 			  		},function(text){
 			  			var data=JSON.parse(text);
@@ -654,7 +657,7 @@
 							var wgs84_lng = res.longitude; // 经度，浮点数，范围为180 ~ -180。
 							var speed = res.speed; // 速度，以米/每秒计
 							var accuracy = res.accuracy; // 位置精度
-							$.get("/voucher/mobile/map/baiduSwitch.do", { //微信地理位置坐标转换成百度地图坐标
+							$.get("../map/baiduSwitch.do", { //微信地理位置坐标转换成百度地图坐标
 								longitude: wgs84_lng,
 								latitude: wgs84_lat
 							}, function (text) {
@@ -713,7 +716,7 @@
 			var addComp;
 			addComp = rs.addressComponents;
 			var addComp1 = JSON.stringify(addComp);
-		    var url = "/voucher/mobile/asset/updatePositionByRoomInfo.do";
+		    var url = "../asset/updatePositionByRoomInfo.do";
 		    $.get(url,{
 		    	campusId:1,
 		    	imagename:imagename,
@@ -818,3 +821,5 @@
  });
  
 </script>
+</body>
+</html>

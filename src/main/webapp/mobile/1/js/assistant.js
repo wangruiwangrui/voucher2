@@ -10,10 +10,10 @@ function getQueryString(name) {
 var code=getQueryString("code");
 var state=getQueryString("state");
 
-var VERSION='';
+var VERSION='V10.0.004Beta';
 
 //进入index2.html初始化当前版本号
-$.post('/voucher/mobile/flow/getVersion.do', {
+/*$.post('/voucher/mobile/flow/getVersion.do', {
 	item : 'Version',
 	limit : 1,
 	offset : 0,
@@ -22,7 +22,7 @@ $.post('/voucher/mobile/flow/getVersion.do', {
 }, function(data) {
 	data = JSON.parse(data);
 	VERSION = data.content;
-});
+});*/
 
 
 //yayui弹出界面显示版本号

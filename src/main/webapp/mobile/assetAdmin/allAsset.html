@@ -12,9 +12,7 @@
 <link rel="stylesheet" href="css/weui.css" />
 <link rel="stylesheet" href="css/example.css" />
 <link rel="stylesheet" href="css/jquery-weui.css">
-<script type="text/javascript"
-	src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
-<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
 </head>
 <body>
 
@@ -73,9 +71,11 @@
 
 	<!--<input type="file" style="/* visibility: hidden */" capture="camera" accept="image/*,video/*" name="" value="" >-->
 </body>
-<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<script src="../../js/jquery-weui.js"></script>
 
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/jquery-weui.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script type="text/javascript" class="navbar js_show">
 	$(function() {
 		$('.weui-navbar__item').on(
@@ -101,7 +101,7 @@
 	var latitude = getQueryString("latitude");
 	var map = new BMap.Map("allmap");
 
-	var url = "/voucher/baiduMap/getAssetsByDistanceImg.do";
+	var url = "../../baiduMap/getAssetsByDistanceImg.do";
 
 	var limit = 10;
 	var offset = 0;
@@ -125,7 +125,7 @@
 
 	$("#tab1").on("click", function() {
 		$("#input").attr("placeholder", "输入距离查询周围资产");
-		url = "/voucher/baiduMap/getAssetsByDistanceImg.do";
+		url = "../../baiduMap/getAssetsByDistanceImg.do";
 		limit = 10;
 		offset = 0;
 		$("#ul").children('li').remove();
@@ -133,10 +133,10 @@
 		$("#textt").text("");
 		loadlist();
 	});
-
+	
 	$("#tab2").on("click", function() {
 		$("#input").attr("placeholder", "请输入资产名称");
-		url = "/voucher/mobile/asset/getAll.do";
+		url = "../asset/getAll.do";
 		limit = 10;
 		offset = 0;
 		$("#ul").children('li').remove();
@@ -147,7 +147,7 @@
 
 	$("#tab3").on("click", function() {
 		$("#input").attr("placeholder", "请输入资产名称");
-		url = "/voucher/mobile/asset/getNotPlace.do";
+		url = "../asset/getNotPlace.do";
 		var limit = 10;
 		var offset = 0;
 		var search = "";
@@ -286,12 +286,12 @@
 							}
 							offset = offset + i;
 							if (i < limit) {
-								html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+								html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
 								$("#ul").append(html);
 								loading = true;
 							}
 						} else {
-							html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+							html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
 							$("#ul").append(html);
 							loading = true;
 						}
@@ -312,7 +312,7 @@
 			img.setAttribute("class", "img");
 			div_1_1.appendChild(img);
 		} else {
-			img.setAttribute("src", "/voucher/img/notImg.jpg");
+			img.setAttribute("src", "../../../img/notImg.jpg");
 			img.setAttribute("class", "img");
 			div_1_1.appendChild(img);
 		}
@@ -364,7 +364,7 @@
 				// $("#latitude").val(latitude);
 				var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
 
-				$.get("/voucher/mobile/map/baiduSwitch.do", { //微信地理位置坐标转换成百度地图坐标
+				$.get("../map/baiduSwitch.do", { //微信地理位置坐标转换成百度地图坐标
 					longitude : longitude,
 					latitude : latitude
 				}, function(text) {

@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html>
 <head>
   <script src="jquery.min.js"></script>
   <!-- Plotly.js -->
@@ -16,7 +18,7 @@
   
   <div id="myDiv6"><!-- Plotly chart will be drawn inside this DIV --></div>
   
- <!--   <div id="myDiv2"><!-- Plotly chart will be drawn inside this DIV --></div> 
+ <!--   <div id="myDiv2"><!-- Plotly chart will be drawn inside this DIV </div> -->
   
   <!--  
   <div class="weui-cells weui-cells_form">
@@ -27,7 +29,7 @@
         </div>
     </div>
   
-  <div id="myDiv3"><!-- Plotly chart will be drawn inside this DIV --></div>
+  <div id="myDiv3"><!-- Plotly chart will be drawn inside this DIV </div>-->
 
  <!--  
    <div class="weui-cells weui-cells_form">
@@ -37,230 +39,213 @@
                 </div>              
         </div>
     </div>
+  <div id="myDiv4"><!-- Plotly chart will be drawn inside this DIV </div>-->
 
-  <div id="myDiv4"><!-- Plotly chart will be drawn inside this DIV --></div>
 
-  
+<script>
+   <!-- JAVASCRIPT CODE GOES HERE -->
+   $.post("../../hidden/hiddenStat.do",{
+   	
+   },function(text){
+   	var obj = $.parseJSON(text);
+   	var data = [{
+ 			values: [obj.allAsset-obj.allAssetsHidden, obj.allAssetsHidden],
+ 			labels: ['正常资产'+(obj.allAsset-obj.allAssetsHidden)+"处","隐患资产"+obj.allAssetsHidden+"处"],
+ 			hoverinfo: 'label+percent',
+	  	type: 'pie'
+		}];
+	 var layout = {
+			title: '全部资产数量'
+		};
+	Plotly.newPlot('myDiv', data ,layout);
 
-</body>  
+});
 
-  <script>
-    <!-- JAVASCRIPT CODE GOES HERE -->
-    $.post("/voucher/mobile/hidden/hiddenStat.do",{
-    	
-    },function(text){
-    	var obj = $.parseJSON(text);
-    	var data = [{
-  			values: [obj.allAsset-obj.allAssetsHidden, obj.allAssetsHidden],
-  			labels: ['正常资产'+(obj.allAsset-obj.allAssetsHidden)+"处","隐患资产"+obj.allAssetsHidden+"处"],
-  			hoverinfo: 'label+percent',
-		  	type: 'pie'
-			}];
+   /*
+$.post("/voucher/mobile/asset/getAllHire.do",{
+   	
+   },function(text){
+   	//console.log(text);
+   	var obj = $.parseJSON(text);
+   	
+   	var data2 = [{
+  		values: [obj.totalHire, obj.alreadyHire,obj.notHire],
+  		labels: ['合同金额'+obj.totalHire+"万元","已交金额"+obj.alreadyHire+"万元",
+  		       		'未交金额'+obj.notHire+"万元"],
+  		hoverinfo: 'label+percent',
+  		hole: .4,
+ 		  	type: 'pie'
+		}];
+		 var layout2 = {
+				title: '租金总额统计'
+		};
+	Plotly.newPlot('myDiv2', data2 ,layout2);
+   });
+   */
 
-		 var layout = {
-				title: '全部资产数量'
+$.post("../../asset/getAssetByState.do",{
+   	
+   },function(text){
+   	var obj = $.parseJSON(text);
+   	var data = [{
+ 			values: [obj.alreadyHire, obj.notHire,obj.catnotHire],
+ 			labels: ['已出租资产'+obj.alreadyHire+"处","空置资产"+obj.notHire+"处",
+ 			       "不可出租资产"+obj.catnotHire+"处"],
+ 			hoverinfo: 'label+percent',
+	  	type: 'pie'
+		}];
+	 var layout = {
+			title: '资产状态统计'
+		};
+	Plotly.newPlot('myDiv5', data ,layout);
+
+});
+
+$.post("../../asset/getAssetByDangerClass.do",{
+   	
+   },function(text){
+   	var obj = $.parseJSON(text);
+   	var data = [{
+ 			values: [obj.normal, obj.danger],
+ 			labels: ['正常资产'+obj.normal+"处","D级资产"+obj.danger+"处"],
+ 			hoverinfo: 'label+percent',
+	  	type: 'pie'
+		}];
+	 var layout = {
+			title: 'D级资产数量'
+		};
+	Plotly.newPlot('myDiv6', data ,layout);
+
+});
+
+
+/*
+$.get("/voucher/mobile/asset/findChartInfoByYear.do", { 
+  }, function(data) {
+	var chartInfoYears=JSON.parse(data);
+	console.log(chartInfoYears);
+	var select = document.createElement("select");
+	select.setAttribute("id","select");
+	select.setAttribute("onchange","gradeChangeChart()");
+	var option = document.createElement("option");
+	for(var i=0;i<chartInfoYears.length;i++){
+		console.log(chartInfoYears[i]);
+  			var option = document.createElement("option");
+  			option.innerHTML=chartInfoYears[i]+"年";
+  			option.setAttribute("value",chartInfoYears[i]);
+  			select.appendChild(option);
+		 }
+	 select.setAttribute("class","weui-input");
+	 $("#chartYear").append(select);
+	 
+	 chartInfoByMonth(chartInfoYears[0]);
+	 
+ });
+
+
+function gradeChangeChart(){ 
+       var objS = document.getElementById("select"); 
+       var grade = objS.options[objS.selectedIndex].value; 
+       //alert(objS.options[objS.selectedIndex]);
+       chartInfoByMonth(grade);
+   }
+
+function chartInfoByMonth(year){
+   	console.log(year);
+   	$.post("/voucher/mobile/asset/getChartInfoByMonthOfYear.do",{
+       	year:year
+   	},function(text){
+   		var chartMonth=JSON.parse(text);
+   		var x=[];
+   		var y=[];
+   		for(var i=0;i<chartMonth.length;i++){   			
+   			x[i]=chartMonth[i].month+"月  "+chartMonth[i].monthHire+"万元";
+   			y[i]=chartMonth[i].monthHire;
+   		}
+   		var data3 = [
+    		            {
+    		              x: x,
+     		              y: y,
+    		              type: 'bar'
+    		            }
+    		          ];
+   		
+   	//	console.log(x);
+   	//	console.log(y);
+   		
+   		var layout3 = {
+  					title: year+'年每月新增合同金额'
+   			};
+    		Plotly.newPlot('myDiv3', data3,layout3);
+   	});
+   }
+
+$.get("/voucher/mobile/asset/findHireListByYear.do", { 
+  }, function(data) {
+	var hireListByYears=JSON.parse(data);
+	console.log(hireListByYears);
+	var select = document.createElement("select");
+	select.setAttribute("id","select2");
+	select.setAttribute("onchange","gradeChangeHire()");
+	var option = document.createElement("option");
+	for(var i=0;i<hireListByYears.length;i++){
+		//console.log(hireListByYears[i]);
+  			var option = document.createElement("option");
+  			option.innerHTML=hireListByYears[i]+"年";
+  			option.setAttribute("value",hireListByYears[i]);
+  			select.appendChild(option);
+		 }
+	 select.setAttribute("class","weui-input");
+	 $("#hireYear").append(select);
+	 
+	 hireListByMonth(hireListByYears[0]);
+	 
+ });
+
+
+function gradeChangeHire(){ 
+       var objS = document.getElementById("select2"); 
+       var grade = objS.options[objS.selectedIndex].value; 
+       console.log(objS.options[objS.selectedIndex]);
+       hireListByMonth(grade);
+   }
+
+function hireListByMonth(year){
+	$.post("/voucher/mobile/asset/getHireListByMonthOfYear.do",{
+       	year:year
+   	},function(text){
+   		var hireMonth=JSON.parse(text);
+   		var x=[];
+   		var y=[];
+   		var z=[];
+   		console.log(hireMonth);
+   		for(var i=0;i<hireMonth.length;i++){   			
+   			x[i]=hireMonth[i].month+"月  "+(parseFloat(hireMonth[i].nothireMonth)+
+   					parseFloat(hireMonth[i].alreadyhireMonth))+"万元";
+   			y[i]=hireMonth[i].nothireMonth;
+   			z[i]=hireMonth[i].alreadyhireMonth;
+   		}
+		var trace1 = {
+			  x: x,
+			  y: z,
+			  name: '(万)已交金额',
+			  type: 'bar'
 			};
-
-		Plotly.newPlot('myDiv', data ,layout);
-	
-	});
-	
-    /*
-	$.post("/voucher/mobile/asset/getAllHire.do",{
-    	
-    },function(text){
-    	//console.log(text);
-    	var obj = $.parseJSON(text);
-    	
-    	var data2 = [{
-	  		values: [obj.totalHire, obj.alreadyHire,obj.notHire],
-	  		labels: ['合同金额'+obj.totalHire+"万元","已交金额"+obj.alreadyHire+"万元",
-	  		       		'未交金额'+obj.notHire+"万元"],
-	  		hoverinfo: 'label+percent',
-	  		hole: .4,
-  		  	type: 'pie'
-			}];
-
-			 var layout2 = {
-					title: '租金总额统计'
+		var trace2 = {
+			  x: x,
+			  y: y,
+			  name: '(万)未交金额',
+			  type: 'bar'
 			};
-
-		Plotly.newPlot('myDiv2', data2 ,layout2);
-    });
-    */
-	
-	$.post("/voucher/mobile/asset/getAssetByState.do",{
-    	
-    },function(text){
-    	var obj = $.parseJSON(text);
-    	var data = [{
-  			values: [obj.alreadyHire, obj.notHire,obj.catnotHire],
-  			labels: ['已出租资产'+obj.alreadyHire+"处","空置资产"+obj.notHire+"处",
-  			       "不可出租资产"+obj.catnotHire+"处"],
-  			hoverinfo: 'label+percent',
-		  	type: 'pie'
-			}];
-
-		 var layout = {
-				title: '资产状态统计'
-			};
-
-		Plotly.newPlot('myDiv5', data ,layout);
-	
-	});
-	
-	$.post("/voucher/mobile/asset/getAssetByDangerClass.do",{
-    	
-    },function(text){
-    	var obj = $.parseJSON(text);
-    	var data = [{
-  			values: [obj.normal, obj.danger],
-  			labels: ['正常资产'+obj.normal+"处","D级资产"+obj.danger+"处"],
-  			hoverinfo: 'label+percent',
-		  	type: 'pie'
-			}];
-
-		 var layout = {
-				title: 'D级资产数量'
-			};
-
-		Plotly.newPlot('myDiv6', data ,layout);
-	
-	});
-	
-	
-	/*
-	$.get("/voucher/mobile/asset/findChartInfoByYear.do", { 
-	  }, function(data) {
-		var chartInfoYears=JSON.parse(data);
-		console.log(chartInfoYears);
-		var select = document.createElement("select");
-		select.setAttribute("id","select");
-		select.setAttribute("onchange","gradeChangeChart()");
-		var option = document.createElement("option");
-		for(var i=0;i<chartInfoYears.length;i++){
-			console.log(chartInfoYears[i]);
-	  			var option = document.createElement("option");
-	  			option.innerHTML=chartInfoYears[i]+"年";
-	  			option.setAttribute("value",chartInfoYears[i]);
-	  			select.appendChild(option);
-			 }
-
-		 select.setAttribute("class","weui-input");
-		 $("#chartYear").append(select);
-		 
-		 chartInfoByMonth(chartInfoYears[0]);
-		 
-	 });
-	
-	
-	function gradeChangeChart(){ 
-        var objS = document.getElementById("select"); 
-        var grade = objS.options[objS.selectedIndex].value; 
-        //alert(objS.options[objS.selectedIndex]);
-        chartInfoByMonth(grade);
-    }
-	
-	function chartInfoByMonth(year){
-    	console.log(year);
-    	$.post("/voucher/mobile/asset/getChartInfoByMonthOfYear.do",{
-        	year:year
-    	},function(text){
-    		var chartMonth=JSON.parse(text);
-    		var x=[];
-    		var y=[];
-    		for(var i=0;i<chartMonth.length;i++){   			
-    			x[i]=chartMonth[i].month+"月  "+chartMonth[i].monthHire+"万元";
-    			y[i]=chartMonth[i].monthHire;
-    		}
-    		var data3 = [
-     		            {
-     		              x: x,
-      		              y: y,
-     		              type: 'bar'
-     		            }
-     		          ];
-    		
-    	//	console.log(x);
-    	//	console.log(y);
-    		
-    		var layout3 = {
-   					title: year+'年每月新增合同金额'
-    			};
-
-     		Plotly.newPlot('myDiv3', data3,layout3);
-    	});
-    }
-	
-	$.get("/voucher/mobile/asset/findHireListByYear.do", { 
-	  }, function(data) {
-		var hireListByYears=JSON.parse(data);
-		console.log(hireListByYears);
-		var select = document.createElement("select");
-		select.setAttribute("id","select2");
-		select.setAttribute("onchange","gradeChangeHire()");
-		var option = document.createElement("option");
-		for(var i=0;i<hireListByYears.length;i++){
-			//console.log(hireListByYears[i]);
-	  			var option = document.createElement("option");
-	  			option.innerHTML=hireListByYears[i]+"年";
-	  			option.setAttribute("value",hireListByYears[i]);
-	  			select.appendChild(option);
-			 }
-
-		 select.setAttribute("class","weui-input");
-		 $("#hireYear").append(select);
-		 
-		 hireListByMonth(hireListByYears[0]);
-		 
-	 });
-	
-	
-	function gradeChangeHire(){ 
-        var objS = document.getElementById("select2"); 
-        var grade = objS.options[objS.selectedIndex].value; 
-        console.log(objS.options[objS.selectedIndex]);
-        hireListByMonth(grade);
-    }
-	
-	function hireListByMonth(year){
-		$.post("/voucher/mobile/asset/getHireListByMonthOfYear.do",{
-        	year:year
-    	},function(text){
-    		var hireMonth=JSON.parse(text);
-    		var x=[];
-    		var y=[];
-    		var z=[];
-    		console.log(hireMonth);
-    		for(var i=0;i<hireMonth.length;i++){   			
-    			x[i]=hireMonth[i].month+"月  "+(parseFloat(hireMonth[i].nothireMonth)+
-    					parseFloat(hireMonth[i].alreadyhireMonth))+"万元";
-    			y[i]=hireMonth[i].nothireMonth;
-    			z[i]=hireMonth[i].alreadyhireMonth;
-    		}
-			var trace1 = {
-				  x: x,
-				  y: z,
-				  name: '(万)已交金额',
-				  type: 'bar'
+		var data4 = [trace1, trace2];
+		var layout4 = {
+				 title: year+'年每月交租金情况',
+				 barmode: 'stack'
 				};
-
-			var trace2 = {
-				  x: x,
-				  y: y,
-				  name: '(万)未交金额',
-				  type: 'bar'
-				};
-
-			var data4 = [trace1, trace2];
-
-			var layout4 = {
-					 title: year+'年每月交租金情况',
-					 barmode: 'stack'
-					};
-
-			Plotly.newPlot('myDiv4', data4, layout4);
-    	});
-	}
-	*/
-  </script>
+		Plotly.newPlot('myDiv4', data4, layout4);
+   	});
+}
+*/
+</script>
+</body> 
+</html>

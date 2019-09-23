@@ -3,6 +3,7 @@ package com.voucher.manage.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.voucher.manage.daoModel.TTT.Payment_Info;
 import com.voucher.manage.model.Users;
 
 public interface FinanceDAO {
@@ -26,6 +27,8 @@ public interface FinanceDAO {
 	
 	public Integer updateHireSetHireList(Users users,List files);
 	
-	public Integer updateHireSetHireListWinXinPay(List files);
+	public Integer updateHireSetHireListWinXinPay(Map<String,String> map,List files);
+
+	public Integer insertPaymentInfo(Payment_Info payment);
 
 }

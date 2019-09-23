@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.FinanceDAO;
+import com.voucher.manage.daoModel.TTT.Payment_Info;
 import com.voucher.manage.model.Notice;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.model.WeiXin;
@@ -36,6 +37,7 @@ import com.voucher.manage.tools.Md5;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 import com.voucher.weixin.util.HttpUtils;
+import com.voucher.weixin.util.OrderNum;
 import com.voucher.weixin.wxpay.sdk.WXConstant;
 import com.voucher.weixin.wxpay.sdk.WXPayUtil;
 
@@ -105,7 +107,7 @@ public class WeinXinPayController {
 
 		String nonce_str = WXPayUtil.generateNonceStr();
 
-		String out_trade_no = Md5.GetMD5Code(UUID.randomUUID().toString());
+		String out_trade_no = OrderNum.getOrderNum();
 
 		int total_fee = hire;
 
@@ -174,7 +176,9 @@ public class WeinXinPayController {
 				String paySign = WXPayUtil.generateSignature(payMap, weixin.getApi());
 				
 				payMap.put("paySign", paySign);
-
+				
+				payMap.put("total_fee", String.valueOf(total_fee));
+				
 				MyTestUtil.print(payMap);
 				
 				String xmlpay=WXPayUtil.mapToXml(payMap);
@@ -293,10 +297,6 @@ public class WeinXinPayController {
 			
 			Map tradeMap=registerMap.get(out_trade_no);
 			
-			//System.out.println("trademp==========");
-			
-			//MyTestUtil.print(tradeMap);
-			
 			if(tradeMap.get("guids")==null)
 				return WXConstant.FAIL;
 			
@@ -313,33 +313,38 @@ public class WeinXinPayController {
 					list.add(URLDecoder.decode(fileString,"utf-8"));
 					
 				}
+				
+				Map map2=(Map) tradeMap.get("map");
+				
+				String openId=(String) map2.get("openid");
+				
+				SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		    	
+				Date date=new Date();
+				
+				String time=sdf.format(date);
+				
+				Users users=userService.getUserByOnlyOpenId(openId);
+				
+				String name=users.getName();
+				
+				float total_fee=Float.valueOf(map.get("total_fee"))/100;
 				logger.info("+++++++++++++++++++++++++++++++++++=========================", list);
 				
-				int i=financeDAO.updateHireSetHireListWinXinPay(list);
+				map.put("openId",openId);
+				map.put("total_fee",String.valueOf(total_fee));
+				map.put("name", name);
+				int i=financeDAO.updateHireSetHireListWinXinPay(map,list);
 				
 				if(i>0){
 										
-					Map map2=(Map) tradeMap.get("map");
-					
-					String openId=(String) map2.get("openid");
-					
-					SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-			    	Date date=new Date();
-					String time=sdf.format(date);
-					
-					Users users=userService.getUserByOnlyOpenId(openId);
-					
-					String name=users.getName();
-					
-					float total_fee=Float.valueOf(map.get("total_fee"))/100;
-					
 					WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
 					
 					Notice notice = noticeService.getTemplateIdByTitle("支付成功提醒");
 					
 					wechatSendMessageController.sendMessage(openId, notice.getTemplateId(),
 							"支付成功提醒", "", 
-							name+"你好，你已支付成功", out_trade_no, String.valueOf(total_fee), "支付租金", time,
+							name+"你好，你已支付成功", String.valueOf(total_fee), "微信支付", "房屋租金",out_trade_no,
 							"", "感谢你的使用");					
 
 					return WXConstant.SUCCESS;

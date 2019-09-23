@@ -67,7 +67,8 @@ public class AssetController {
 	
 	private CampusService campusService;
 	  
-	@Autowired public void setCampusService(CampusService campusService) {
+	@Autowired 
+	public void setCampusService(CampusService campusService) {
 	this.campusService = campusService; }
 	 
 
@@ -564,7 +565,10 @@ public class AssetController {
 		if (order == "" || order.equals("")) {
 			order = "asc";
 		}
-
+		sort = sort.replaceAll("^,*|,*$", "");
+		order = order.replaceAll("^,*|,*$", "");
+		System.out.println("sort ="+sort+"       order="+order);
+		
 		Map searchMap = new HashMap<>();
 
 		searchMap.put("[HireList].HireGUID=", hireGUID);

@@ -149,7 +149,7 @@ body, html, #allmap {
 		var guid=encodeURI(data.guid);
 		
 		xhm.open("GET",
-				"/voucher/mobile/asset/getAssetByHidden.do?limit=100&offset=0"
+				"../../mobile/asset/getAssetByHidden.do?limit=100&offset=0"
 						+ "&hiddenGuid=" +guid , false);
 		xhm.setRequestHeader("Content-type",
 				"application/x-www-form-urlencoded");

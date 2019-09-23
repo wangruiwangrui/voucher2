@@ -98,7 +98,7 @@
 <script>
 	var campusId = 1;
 	$(function(){
-		$.get("/voucher/mobile/asset/getCompanyName.do", { 
+		$.get("../../mobile/asset/getCompanyName.do", { 
 			campusId:campusId
 		  }, function(data) {
 			console.log(data)
@@ -109,7 +109,7 @@
 
 	xhm = new XMLHttpRequest();
 
-	xhm.open("GET", "/voucher/mobile/asset/getMessageNumber.do", false);
+	xhm.open("GET", "../../mobile/asset/getMessageNumber.do", false);
 	xhm.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 	xhm.send();
@@ -175,7 +175,7 @@
 		} catch (e) {
 		}
 
-		xhm.open("GET", "/voucher/mobile/asset/sendMessage.do?Message="
+		xhm.open("GET", "../../mobile/asset/sendMessage.do?Message="
 				+ Contents.value + "&numbers=" + Mob.value, false);
 		xhm.setRequestHeader("Content-type",
 				"application/x-www-form-urlencoded");
@@ -244,7 +244,7 @@
 		} catch (e) {
 		}
 
-		xhm.open("GET", "/voucher/mobile/asset/sendAllMessage.do?Message="
+		xhm.open("GET", "../../mobile/asset/sendAllMessage.do?Message="
 				+ Contents.value, false);
 		xhm.setRequestHeader("Content-type",
 				"application/x-www-form-urlencoded");

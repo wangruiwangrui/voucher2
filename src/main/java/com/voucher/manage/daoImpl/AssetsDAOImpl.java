@@ -1,6 +1,5 @@
 package com.voucher.manage.daoImpl;
 
-import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -17,16 +16,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.AssetsDAO;
-import com.voucher.manage.daoImpl.RoomInfoDaoImpl.allHire;
 import com.voucher.manage.daoModel.HiddenAssetByMonthAmount;
 import com.voucher.manage.daoModel.HiddenByMonthAmount;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.Users;
 import com.voucher.manage.daoModel.Assets.Assets_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
-import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
-import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Patrol_Cycle;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
@@ -36,19 +31,15 @@ import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Position_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Position_Neaten_Join;
 import com.voucher.manage.daoRowMapper.RowMappers;
-import com.voucher.manage.daoRowMapper.RowMappersJoin;
 import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.SelectSqlJoinExe;
 import com.voucher.manage.daoSQL.UpdateExe;
-import com.voucher.manage.file.AbstractFileUpload;
 import com.voucher.manage.singleton.Singleton;
-import com.voucher.manage.tools.FileConvect;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
-import com.voucher.weixin.controller.WechatSendMessageController;
 
 public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 

@@ -403,9 +403,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		HireList hireList=new HireList();
 		
 		hireList.setLimit(limit);
-		hireList.setOffset(offset);
-		hireList.setSort(sort);
-		hireList.setOffset(offset);
+		hireList.setOffset(offset);		
 		hireList.setNotIn("GUID");
 		
 		if(sort==null){
@@ -415,6 +413,9 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		if(order==null){
 			order="desc";
 		}
+		
+		hireList.setSort(sort);
+		hireList.setOffset(offset);
 		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);

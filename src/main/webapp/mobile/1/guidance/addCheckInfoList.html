@@ -8,13 +8,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <meta name="format-detection" content="telephone=no" />
 <meta charset="utf-8" />
-    <link rel="stylesheet" href="../css/weui.css"/>
-    <link rel="stylesheet" href="../css/example.css"/>
-    <link rel="stylesheet" href="../css/jquery-weui.css">
-    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
-    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-    <script src="../../../js/jquery.min.js"></script>
-	<script src="../../../js/jquery-weui.js"></script>
+<link rel="stylesheet" href="../css/weui.css"/>
+<link rel="stylesheet" href="../css/example.css"/>
+<link rel="stylesheet" href="../css/jquery-weui.css">
+
 </head>
 <body>
 
@@ -48,6 +45,7 @@
                 <div class="weui-cell__bd weui_cell_primary name">
                     <input id="input" class="weui-input" type="text" placeholder="输入距离(米)查询周围资产"/>
                 </div class="weui-cell__bd weui_cell_primary name">
+                <div>
                   <a href="javascript:;" id="search" class="weui-btn weui-btn_mini weui-btn_primary">查询</a>
                </div>
         </div>
@@ -77,6 +75,11 @@
 </body>
 
 
+<script type="text/javascript" src="../../EventUtil.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="../../../js/jquery.min.js"></script>
+<script type="text/javascript" src="../../../js/jquery-weui.js"></script>
 <script type="text/javascript" class="navbar js_show">
     $(function(){
         $('.weui-navbar__item').on('click', function () {
@@ -84,9 +87,6 @@
         });
     });
 </script>
-
-<script src="../../EventUtil.js"></script>
-
 <script>
 
 	var limit = 10;
@@ -151,7 +151,7 @@
     
   var map = new BMap.Map("allmap");
   
-  var url="/voucher/baiduMap/getAssetsByDistanceImg.do";
+  var url="../../../baiduMap/getAssetsByDistanceImg.do";
 
     $(".weui-loadmore").hide();
     $(".weui-cells__title").hide();
@@ -169,7 +169,7 @@
     
     $("#tab1").on("click",function(){
     	$("#input").attr("placeholder","输入距离查询周围资产");
-    	url="/voucher/baiduMap/getAssetsByDistanceImg.do";
+    	url="../../../baiduMap/getAssetsByDistanceImg.do";
     	  limit = 10;
           offset = 0;
           $("#ul").children('li').remove();
@@ -179,7 +179,7 @@
     
     $("#tab2").on("click",function(){
     	$("#input").attr("placeholder","");
-    	  url="/voucher/baiduMap/getAssetsByDistanceImg.do?search2=0";
+    	  url="../../../baiduMap/getAssetsByDistanceImg.do?search2=0";
     	  limit = 10;
           offset = 0;
           $("#ul").children('li').remove();
@@ -189,7 +189,7 @@
     
     $("#tab3").on("click",function(){
       $("#input").attr("placeholder","");
-  	  url="/voucher/baiduMap/getAssetsByDistanceImg.do?search2=1";
+  	  url="../../../baiduMap/getAssetsByDistanceImg.do?search2=1";
   	  limit = 10;
         offset = 0;
         $("#ul").children('li').remove();
@@ -268,7 +268,7 @@
       var longitude=getQueryString("longitude");
 	  var latitude=getQueryString("latitude");
       
-      $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+      $.get("../../map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
         	 longitude:longitude,
         	 latitude:latitude               	 
          },function(text){
@@ -334,12 +334,12 @@
                      }
                      offset=offset+i;
                      if(i<limit){
-                  	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+                  	   html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
                          $("#ul").append(html);
                   	   loading = true;
                      }
                  }else {
-              	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+              	   html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
                      $("#ul").append(html);
               	   loading = true;
                  }
@@ -364,7 +364,7 @@
                    // $("#speed").val(speed);
                    var accuracy = res.accuracy; // 位置精度
                    // $("#accuracy").val(accuracy);
-                   $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+                   $.get("../../map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
 	                   	 longitude:longitude,
 	                   	 latitude:latitude               	 
 	                    },function(text){
@@ -430,12 +430,12 @@
 	                                }
 	                                offset=offset+i;
 	                                if(i<limit){
-	                             	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+	                             	   html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
 	                                    $("#ul").append(html);
 	                             	   loading = true;
 	                                }
 	                            }else {
-	                         	   html += "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+	                         	   html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
 	                                $("#ul").append(html);
 	                         	   loading = true;
 	                            }
@@ -464,7 +464,7 @@
                img.setAttribute("class","img");
                div_1_1.appendChild(img);
               }else{
-            	  img.setAttribute("src","/voucher/img/notImg.jpg");
+            	  img.setAttribute("src","../../img/notImg.jpg");
                   img.setAttribute("class","img");
                   div_1_1.appendChild(img); 
               }
@@ -519,7 +519,7 @@
       	            // $("#latitude").val(latitude);
       	            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
       	            
-      	            $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+      	            $.get("../../map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
       	              	 longitude:longitude,
       	              	 latitude:latitude               	 
       	               },function(text){
