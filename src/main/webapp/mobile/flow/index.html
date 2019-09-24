@@ -48,7 +48,7 @@
 </head>
 <style type="text/css">
 .container img {
-	width: 65%;
+	width: 75%;
 	margin-bottom: 12px;
 }
 
@@ -67,19 +67,24 @@ p {
 	position: relative;
 }
 
+.corner img {
+	width: 80%;
+}
+
 .corner:after {
 	content: attr(data-num);
 	line-height: 25px;
 	text-align: center;
-	font-size: 17px;
 	width: 25px;
 	height: 25px;
+	font-size: 14px;
 	border-radius: 50%;
 	background-color: red;
 	position: absolute;
-	top: -10px;
-	right: -10px;
+	top: 0px;
+	right: 14px;
 }
+
 .btn {
 	border: none;
 	background-color: #f8f8f8;
@@ -175,56 +180,52 @@ p {
 		xhm.send();
 
 		place = xhm.responseText;
-/*
-		$
-				.get(
-						"/voucher/mobile/flow/getAccessCount.do",
-						{
 
-						},
-						function(text) {
+		$.get(
+				"/voucher/mobile/flow/getAccessCount.do",
+		{
 
-							var data = JSON.parse(text);
+		},
+		function(text) {
 
-							var taskCount = data.taskCount;
+			var data = JSON.parse(text);
 
-							var passCount = data.passCount;
+			var taskCount = data.taskCount;
 
-							if (taskCount > 0) {
+			var passCount = data.passCount;
 
-								if (taskCount > 100) {
-									taskCount = "•••";
-								}
+			if (taskCount > 0) {
 
-								var myTaskButton = document
-										.getElementById("myTask");
+				if (taskCount > 100) {
+					taskCount = "•••";
+				}
 
-								myTaskButton
-										.setAttribute("data-num", taskCount);
+				var myTaskButton = document
+						.getElementById("myTask");
 
-								myTaskButton
-										.setAttribute("class",
-												"button button-raised button-primary button-circle button-jumbo corner");
-							}
+				myTaskButton
+						.setAttribute("data-num", taskCount);
 
-							if (passCount > 0) {
+				myTaskButton
+						.setAttribute("class","col-xs-4 col-sm-4 fiv corner");
+			}
 
-								if (passCount > 100) {
-									passCount = "•••";
-								}
+			if (passCount > 0) {
 
-								var passButton = document
-										.getElementById("pass");
+				if (passCount > 100) {
+					passCount = "•••";
+				}
 
-								passButton.setAttribute("data-num", passCount);
+				var passButton = document
+						.getElementById("pass");
 
-								passButton
-										.setAttribute("class",
-												"button button-raised button-action button-circle button-jumbo corner");
-							}
+				passButton.setAttribute("data-num", passCount);
 
-						});
-						*/
+				passButton.setAttribute("class","col-xs-4 col-sm-4 fiv corner");
+			}
+
+		});
+				
 
 		$("#myTask").on("click", function() {
 			location.href = "myTask.html";

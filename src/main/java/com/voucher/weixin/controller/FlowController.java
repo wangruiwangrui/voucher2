@@ -272,6 +272,7 @@ public class FlowController {
 
 		try {
 			List list = flowDao.selectUserAccessTime(openId);
+			
 			user_AccessTime2 = (User_AccessTime) list.get(0);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -281,10 +282,12 @@ public class FlowController {
 			return map;
 		}
 		
-
 		taskDate = user_AccessTime2.getMy_task();
 		taskCount = server.findMyPersonalTaskCount(openId, taskDate);
 
+		System.out.println("================--------------");
+		MyTestUtil.print(taskDate);
+		
 		passDate = user_AccessTime2.getPass();
 		System.out.println("passDate="+passDate);
 		MyTestUtil.print(user_AccessTime2);

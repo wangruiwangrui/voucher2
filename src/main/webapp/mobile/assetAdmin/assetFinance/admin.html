@@ -50,7 +50,7 @@ p {
 }
 
 .corner img {
-	width: 21%;
+	width: 80%;
 }
 
 .corner:after {
@@ -179,35 +179,35 @@ p {
 	crossorigin="anonymous"></script>
 
 <script type="text/javascript">
-	/* $.get("../../asset/upUserAccessTime.do", {
+	$.get("../../asset/upUserAccessTime.do", {
 		parameter : "finance"
 	}, function(text) {
 
 	});
+	
+	$.get("/voucher/mobile/finance/findOverdueChartInfoClew.do",
+	{
+		days : 15
+	},
+	function(text) {
 
-	$.get("../../finance/findOverdueChartInfoClew.do",
-			{
-				days : 15
-			},
-			function(text) {
+		var overdueChartInfoButton = document
+				.getElementById("overdueChartInfo");
 
-				var overdueChartInfoButton = document
-						.getElementById("overdueChartInfo");
+		if (text > 0) {
 
-				if (text > 0) {
+			if (text > 100) {
+				text = "•••";
+			}
 
-					if (text > 100) {
-						text = "•••";
-					}
+			overdueChartInfoButton.setAttribute("data-num", text);
 
-					overdueChartInfoButton.setAttribute("data-num", text);
+			overdueChartInfoButton.setAttribute("class", "col-xs-4 col-sm-4 fiv corner");
+		}
 
-					overdueChartInfoButton.setAttribute("class", "fiv corner");
-				}
+	});
 
-			});
-
-	$.get("../../finance/findMatureHireClew.do", {
+	$.get("/voucher/mobile/finance/findMatureHireClew.do", {
 		days : 15
 	}, function(text) {
 		console.log(999999,text)
@@ -222,10 +222,10 @@ p {
 
 			matureChartInfoButton.setAttribute("data-num", text);
 
-			matureChartInfoButton.setAttribute("class", "fiv corner");
+			matureChartInfoButton.setAttribute("class", "col-xs-4 col-sm-4 fiv corner");
 		}
 
-	}); */
+	});
 
 	$("#generalChartInfo").click(function() {
 		location.href = "generalChartInfo.html";
