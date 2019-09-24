@@ -7,6 +7,15 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.voucher.manage.mapper.WeiXinMapper;
+import com.voucher.manage.model.WeiXin;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.mapper.WeiXinMapper;
 import com.voucher.manage.model.WeiXin;
@@ -20,12 +29,18 @@ public class WeiXinTest {
 	private static final String requestUrl = URL+"/mobile/WechatSendMessage/send.do";
 	
 	public static void main(String[] args) {
+
+
 		ClassPathXmlApplicationContext applicationContext=new ClassPathXmlApplicationContext("spring-mybatis2.xml");		
 		DefaultSqlSessionFactory defaultSqlSessionFactory= (DefaultSqlSessionFactory) applicationContext.getBean("sqlSessionFactory");				
 		SqlSession sqlSession=defaultSqlSessionFactory.openSession();
 		WeiXinMapper weiXinMapper=sqlSession.getMapper(WeiXinMapper.class);
 		
 		WeiXin weixin=weiXinMapper.getWeiXinByCampusId(1);
+		
+		System.out.println(weixin.getUrl());
+
+		//WeiXin weixin=weiXinMapper.getWeiXinByCampusId(1);
 		
 		System.out.println(weixin.getUrl());
 		
@@ -38,14 +53,14 @@ public class WeiXinTest {
 		String sd = "";
 		Date d = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		sd = sdf.format(new Date(date2)); // 时间戳转换日期
+		sd = sdf.format(new Date(date2)); // 鏃堕棿鎴宠浆鎹㈡棩鏈�
 		System.out.println("sd="+sd);
 		
 		
 		System.out.println(OrderNum.getOrderNum());
 		System.out.println(requestUrl);
 		
-		
+
 	}
 
 }

@@ -198,6 +198,7 @@
 
  	<div class="weui-cells weui-cells_form"> 
     </div>
+<<<<<<< HEAD
 
      
     <div class="weui-panel weui-panel_access">
@@ -216,7 +217,7 @@
 		<div id="img" class="weui-panel__bd">
 		</div>
 	</div>
-
+<!-- 
 	<div class="weui-panel weui-panel_access">
 		<div class="weui-uploader__input-box" id="showPicker">
 		</div>
@@ -304,8 +305,7 @@
     xhm.send();
     var obj=JSON.parse(xhm.responseText);
 
-
-    /* $("#img").children('div').remove();
+/* $("#img").children('div').remove();
  	if(imgs!=null){
     	var i = 0;
         for(; i < imgs.length; i++){
@@ -347,6 +347,7 @@
 		   
 	} 
 	*/
+
     if(obj.name!=null)
      $("#principal").val(obj.name);
     var username=document.createElement("span");
@@ -564,6 +565,7 @@
 			serverId: []
 		};
 
+
 	document.querySelector('#showPicker').onclick = function () {
 	    
 		 $.modal({
@@ -588,6 +590,7 @@
 						} else if (grade == 2) {
 							imagename = "维修后照片";
 						}
+
 						upImage(imagename);
 					}
 				},
@@ -702,6 +705,7 @@
 	        }
 	    });
   }	
+
 	 
 </script>
 

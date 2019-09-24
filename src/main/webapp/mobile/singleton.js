@@ -27,9 +27,9 @@ var DOMAIN = "http://nwx.wtsms.net";
 // 合江金宇
 // var DOMAIN="http://jinyu.lzgtzh.com";
 
-
 // 古蔺国资
 //var DOMAIN="http://www.gulinguozi.com";
+
 
 var APPID = "";
 

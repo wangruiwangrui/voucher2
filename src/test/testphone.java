@@ -19,7 +19,7 @@ public class testphone {
 	     }
 	 
 	 public static void main(String[] args) {
-		 
+ 
 		 String fileName = "C:\\Users\\admin\\Desktop\\newtest.txt";
 		 
 		 System.out.println(readFileContent(fileName));
@@ -50,5 +50,5 @@ public class testphone {
 		    }
 		    return sbf.toString();
 		}
-	 
+
 }

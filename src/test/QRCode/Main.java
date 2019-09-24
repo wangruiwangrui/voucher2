@@ -1,13 +1,13 @@
 package QRCode;
 
-import java.io.File;  
+import java.io.File;
 import java.util.Hashtable;
 
 import org.junit.Test;
 
-import com.google.zxing.BarcodeFormat;  
-import com.google.zxing.EncodeHintType;  
-import com.google.zxing.MultiFormatWriter;  
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;  
   
 public class Main {  

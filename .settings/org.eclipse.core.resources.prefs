@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/main/java=utf8
 encoding//src/main/java/com/voucher/manage/controller/CampusController.java=UTF-8
 encoding//src/main/java/com/voucher/manage/controller/SellerController.java=UTF-8
 encoding//src/main/java/com/voucher/manage/controller/UserController.java=UTF-8
@@ -10,4 +11,5 @@ encoding//src/main/java/com/voucher/manage/tools/verifycode/Randoms.java=UTF-8
 encoding//src/main/java/com/voucher/manage/tools/verifycode/SpecCaptcha.java=UTF-8
 encoding//src/main/webapp/WEB-INF/templates/homePageTemplet.ftl=UTF-8
 encoding//src/main/webapp/mobile/1/statistical/asseStat.html=UTF-8
+encoding//src/test/voucher/WeiXinTest.java=UTF-8
 encoding/<project>=UTF-8

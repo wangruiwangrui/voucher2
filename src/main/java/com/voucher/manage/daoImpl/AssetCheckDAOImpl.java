@@ -133,10 +133,13 @@ public class AssetCheckDAOImpl extends JdbcDaoSupport implements AssetCheckDAO{
 				if(search3!=null&&search3.equals("0")){
 					
 					Calendar cal = Calendar.getInstance();
+
 					int start=cal.get(Calendar.MONTH)+1;
+
 					int m=cal.get(Calendar.MONTH)%cycle;
 			        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
 			        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+
 			        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 					
 			        if(cycle!=1){
@@ -173,12 +176,14 @@ public class AssetCheckDAOImpl extends JdbcDaoSupport implements AssetCheckDAO{
 					sql0=sql0+sql02+") AND "+sql01;
 					
 				}else if(search3!=null&&search3.equals("1")){
-					
+
 					Calendar cal = Calendar.getInstance();
 					int start=cal.get(Calendar.MONTH)+1;
 					int m=cal.get(Calendar.MONTH)%cycle;
+
 			        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
 			        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+
 			        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 					
 			        if(cycle!=1){
