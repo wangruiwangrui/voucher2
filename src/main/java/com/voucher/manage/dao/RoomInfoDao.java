@@ -79,4 +79,5 @@ public interface RoomInfoDao {
 	public List getAllChartInfo();
 	
 	public RoomInfo findRoomInfoByChartGUID(String chartGUID);
+
 }

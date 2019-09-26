@@ -12,21 +12,21 @@ import redis.clients.jedis.JedisPoolConfig;
  
 public class RedisJava {
     public static void main(String[] args) {
-        //Á¬½Ó±¾µØµÄ Redis ·þÎñ
+        //ï¿½ï¿½ï¿½Ó±ï¿½ï¿½Øµï¿½ Redis ï¿½ï¿½ï¿½ï¿½
     	JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        JedisPool jedisPool = new JedisPool(jedisPoolConfig, "192.168.100.110", 6379, 10000, null,1);
+        JedisPool jedisPool = new JedisPool(jedisPoolConfig, "192.168.100.110", 6379, 10000, "redis",1);
 
         Jedis jedis;
         jedis= jedisPool.getResource();
         //jedis.auth("redis");
-        System.out.println("Á¬½Ó³É¹¦");
-        //²é¿´·þÎñÊÇ·ñÔËÐÐ
-        System.out.println("·þÎñÕýÔÚÔËÐÐ: "+jedis.ping());
+        System.out.println("ï¿½ï¿½ï¿½Ó³É¹ï¿½");
+        //ï¿½é¿´ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
+        System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: "+jedis.ping());
         
         Set<String> keys=jedis.keys("*");
         System.out.println("keys= "+keys);
-        String map=jedis.get("assetMap");
-        System.out.print(map);
+        //String map=jedis.get("assetMap");
+        //System.out.print(map);
         for(String key:keys){
         	Object value=jedis.get(key);
         	System.out.println(key+" = ");

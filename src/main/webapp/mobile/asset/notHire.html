@@ -8,12 +8,101 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <meta name="format-detection" content="telephone=no" />
 <meta charset="utf-8" />
-    <link rel="stylesheet" href="css/weui.css"/>
-    <link rel="stylesheet" href="css/example.css"/>
-    <link rel="stylesheet" href="css/jquery-weui.css">
-    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
-    <script type="text/javascript" src="js/accessStat.js"></script>
-    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<link rel="stylesheet" href="css/weui.css"/>
+<link rel="stylesheet" href="css/example.css"/>
+<link rel="stylesheet" href="css/jquery-weui.css">
+    
+<style>
+ul{
+    list-style:none;
+    border-bottom: 1px solid #e8e8e8;
+}
+li{
+    margin: 0px;
+    padding: 0px;
+    height: 123px;
+    padding: 0px;
+    border-bottom: 1px solid #ffffff;
+    background-color: white;
+    display: block;
+    zoom: 1;
+}
+.single-mode{
+    position: relative;
+    float: left;
+    background-color: #ffffff;
+}
+.img{
+    display: inline-block;
+    width: 130px;
+    height: 120px;
+    vertical-align: middle;
+    transition: all .5s ease-out .1s;
+}
+.img-left{
+    width: 130px;
+    height: auto;
+}
+.text-right{
+    height: 100%;
+    overflow: hidden;
+}
+.right_text{
+    padding:2px 0px 2px 15px;
+}
+.single-inner{
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+}
+.title{
+    font-size: 20px;
+    line-height: 1.3;
+    font-weight: 700;
+    max-height: 52px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding:2px 0px 2px 15px;
+}
+
+.arrow{
+        border: 9px solid transparent;
+        border-bottom-color: #3DA0DB;
+        width: 0px;
+        height: 0px;
+        top:0px;
+    }
+    .stick{
+        width: 8px;
+        height: 14px;
+        border-radius: 1px;
+        background-color: #3DA0DB;
+        top:15px;
+    }
+    #gotop div{
+        position: absolute;
+        margin: auto;
+        right: 0px;
+        left: 0px;
+    }
+    #gotop{
+        background-color: #dddddd;
+        height: 38px;
+        width: 38px;
+        border-radius: 3px;
+        display: block;
+        cursor: pointer;
+        position: fixed;
+        right: 30px;
+        bottom: 50px;
+        display: none;
+    }
+
+
+</style>
 </head>
 <body>
 
@@ -55,6 +144,9 @@
           
         <!--<input type="file" style="/* visibility: hidden */" capture="camera" accept="image/*,video/*" name="" value="" >-->
 </body>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
+<script type="text/javascript" src="js/accessStat.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script src="../../js/jquery-weui.js"></script>
 <script>
@@ -171,8 +263,9 @@
                dataType: "json",
                error: function (request){
             	   console.log(request);
+            	   $("#ul").text("");
                    $(".weui-loadmore").hide();         
-                   html += "网络连接故障";
+                   html = "网络连接故障";
                    $("#ul").append(html);
                },
                success: function (text) {              	   
@@ -203,6 +296,7 @@
                        }
                        offset=offset+i;
                        if(i<limit){
+                    	   $("#ul").text("");
                     	   html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
                            $("#ul").append(html);
                     	   loading = true;
@@ -343,95 +437,5 @@
 
           
     </script>
-<style>
-ul{
-    list-style:none;
-    border-bottom: 1px solid #e8e8e8;
-}
-li{
-    margin: 0px;
-    padding: 0px;
-    height: 123px;
-    padding: 0px;
-    border-bottom: 1px solid #ffffff;
-    background-color: white;
-    display: block;
-    zoom: 1;
-}
-.single-mode{
-    position: relative;
-    float: left;
-    background-color: #ffffff;
-}
-.img{
-    display: inline-block;
-    width: 130px;
-    height: 120px;
-    vertical-align: middle;
-    transition: all .5s ease-out .1s;
-}
-.img-left{
-    width: 130px;
-    height: auto;
-}
-.text-right{
-    height: 100%;
-    overflow: hidden;
-}
-.right_text{
-    padding:2px 0px 2px 15px;
-}
-.single-inner{
-    display: inline-block;
-    width: 100%;
-    vertical-align: middle;
-}
-.title{
-    font-size: 20px;
-    line-height: 1.3;
-    font-weight: 700;
-    max-height: 52px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding:2px 0px 2px 15px;
-}
 
-.arrow{
-        border: 9px solid transparent;
-        border-bottom-color: #3DA0DB;
-        width: 0px;
-        height: 0px;
-        top:0px;
-    }
-    .stick{
-        width: 8px;
-        height: 14px;
-        border-radius: 1px;
-        background-color: #3DA0DB;
-        top:15px;
-    }
-    #gotop div{
-        position: absolute;
-        margin: auto;
-        right: 0px;
-        left: 0px;
-    }
-    #gotop{
-        background-color: #dddddd;
-        height: 38px;
-        width: 38px;
-        border-radius: 3px;
-        display: block;
-        cursor: pointer;
-        position: fixed;
-        right: 30px;
-        bottom: 50px;
-        display: none;
-    }
-
-
-</style>
 </html>

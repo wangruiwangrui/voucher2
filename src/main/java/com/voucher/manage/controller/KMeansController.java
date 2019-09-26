@@ -9,20 +9,24 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.KMeansDao;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
+import com.voucher.manage.mapper.UsersMapper;
 import com.voucher.manage.redis.JedisUtil1;
 import com.voucher.manage.tools.MyTestUtil;
-import com.voucher.manage.tools.KMeans.BisectingKMeans;
 import com.voucher.manage.tools.KMeans.BisectingKMeans2;
 import com.voucher.sqlserver.context.Connect;
 
@@ -31,6 +35,9 @@ import com.voucher.sqlserver.context.Connect;
 @RequestMapping("/baiduMap/kMeans")
 public class KMeansController {
 
+	@Autowired
+	private UsersMapper usersMapper; 
+	
 	ApplicationContext applicationContext=new Connect().get();
 	
 	KMeansDao kMeansDao=(KMeansDao) applicationContext.getBean("kMeansDao");
@@ -45,12 +52,11 @@ public class KMeansController {
 		BisectingKMeans2 bisectingKMeans2=new BisectingKMeans2();
 		
 		Map<String, Object> map=new HashMap<String, Object>(); 
-		Map mm=new HashMap();
-		mm.put("aaa","aaa");
-		JedisUtil1.setMap("1", mm);
-		Map m=JedisUtil1.getMap("1");
-		MyTestUtil.print(m);
-		/*if(id==null||id.equals("")){
+		/*
+		 * Map mm=new HashMap(); mm.put("aaa","aaa"); JedisUtil1.setMap("1", mm); Map
+		 * m=JedisUtil1.getMap("1"); MyTestUtil.print(m);
+		 */
+		if(id==null||id.equals("")){
 			id = "assetMap";
 			if (JedisUtil1.exist(id)) {
 				map = JedisUtil1.getObject(id);
@@ -97,7 +103,7 @@ public class KMeansController {
 			}
 		}
 				
-		MyTestUtil.print(map);*/
+		MyTestUtil.print(map);
 		
 		return map;
 	}
@@ -113,13 +119,34 @@ public class KMeansController {
 		
 		Map resultMap=new HashMap<>();
 		
+		List<RoomInfo_Position> roomInfo_Positions=new ArrayList<>();
+		
+		CopyOnWriteArrayList<ArrayList<Double>> points=null;
+		
 		if(id!=null&&!id.equals("")&&JedisUtil1.exist(id)){
 			
 			map=JedisUtil1.getObject(id);
 			
-			CopyOnWriteArrayList<ArrayList<Double>> points=(CopyOnWriteArrayList<ArrayList<Double>>) map.get("points");
+			points=(CopyOnWriteArrayList<ArrayList<Double>>) map.get("points");
 						
-			resultMap=kMeansDao.findAssetByLngLat(points, page, searchMap);
+			resultMap=kMeansDao.findAssetByLngLat(points, page,null, searchMap);
+			MyTestUtil.print(resultMap);
+			List<Map> roominfos=null;
+			
+			if(resultMap!=null)
+				roominfos= (List) resultMap.get("rows");
+			else
+				return null;
+			
+			Iterator<Map> iterator=roominfos.iterator();
+			
+			while (iterator.hasNext()) {
+				RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+				Map map2=(Map) iterator.next();
+				String GUID=(String) map2.get("GUID");
+				roomInfo_Position.setGUID(GUID);
+				roomInfo_Positions.add(roomInfo_Position);
+			}
 			
 		}else{
 		
@@ -129,33 +156,79 @@ public class KMeansController {
 			
 			resultMap=assetsDAO.findAllRoomInfo_Position(limit, offset, "Num", "asc", "or", searchMap);
 		
+			roomInfo_Positions=(List) resultMap.get("rows");
+			
 		}
 
-		List<Map> roominfos=null;
+
+		Map<String, Object> fileBytes = mobileDao.roomInfo_PositionImageQuery(request, roomInfo_Positions);
 		
-		if(resultMap!=null)
-			roominfos= (List) resultMap.get("rows");
-		else
-			return null;
+		List rows=(List) resultMap.get("rows");
 		
-		Iterator iterator=roominfos.iterator();
+		for (Map.Entry<String, Object> entry : fileBytes.entrySet()) {
 		
-		List<RoomInfo_Position> roomInfo_Positions=new ArrayList<>();
-		
-		while (iterator.hasNext()) {
-			RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
-			Map map2=(Map) iterator.next();
-			String GUID=(String) map2.get("GUID");
-			roomInfo_Position.setGUID(GUID);
-			roomInfo_Positions.add(roomInfo_Position);
+			Iterator<Map> iterator=rows.iterator();
+			int i=0;
+			while(iterator.hasNext()) {
+				Map m=iterator.next();
+				String guid=(String) m.get("GUID");
+				if(guid.equals(entry.getKey())) {
+					m.put("url", entry.getValue());
+					rows.set(i, m);
+					continue;
+				}
+				i++;
+			}
+	
 		}
 		
-		Map fileBytes = mobileDao.roomInfo_PositionImageQuery(request, roomInfo_Positions);
-		
-		resultMap.put("fileBytes", fileBytes);
+		resultMap.put("rows",rows);
+		resultMap.put("points", points);
 		
 		return resultMap;
 	}
-
 	
+	//查询分类
+	@RequestMapping("/getHouseAndAssetTypes")
+	public @ResponseBody Map getHouseAndAssetTypes() {
+		
+		List AssetCheck = usersMapper.getWetchatAllUsers(1, 1, null, null, null, null);
+
+		Map houseTypes = kMeansDao.getHouseTypes();
+		
+		houseTypes.put("AssetCheck", AssetCheck);
+		
+		return houseTypes;
+	}
+	
+	//通过资产状况分类资产查询
+	@RequestMapping("/getAssetByCondition")
+	public @ResponseBody Map getAssetByCondition(@RequestBody JSONObject assetCondition){
+		
+		JSONArray roomPropertyArray = assetCondition.getJSONArray("RoomProperty");
+		
+		JSONArray structureArray = assetCondition.getJSONArray("Structure");
+		
+		JSONArray regionArray = assetCondition.getJSONArray("RegionArray");
+		
+		JSONArray dangerClassificationArray = assetCondition.getJSONArray("DangerClassificationArray");
+		
+		JSONArray floorArray = assetCondition.getJSONArray("floorArray");
+		
+		Map map = kMeansDao.getAssetByCondition(roomPropertyArray,structureArray,regionArray,dangerClassificationArray,floorArray);
+		
+		return null;
+	}
+	
+	//通过经营状况分类查询
+	@RequestMapping("/getAssetsByBusiness")
+	public @ResponseBody Map getAssetsByBusiness(@RequestBody JSONObject assetBusiness) {
+		return null;
+	}
+	
+	//通过产权/财产情况分类查询
+	@RequestMapping("/getAssetsByFinancial")
+	public @ResponseBody Map getAssetsByFinancial(@RequestBody JSONObject assetFinancial) {
+		return null;
+	}
 }

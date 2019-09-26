@@ -655,5 +655,5 @@ public class BaiduMapController {
 		return map;
 		
 	}
-	
+
 }

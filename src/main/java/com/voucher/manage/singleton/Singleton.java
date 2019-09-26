@@ -17,7 +17,7 @@ public class Singleton {
 	public static final String URL = "http://wx.lzgtzh.com";
 //	public static final String URL = "http://test.lzgtzh.com";
 	
-	public final static String ROOMDATABASE="[RoomManage]";
+	public final static String ROOMDATABASE="[TTT]";
 	
 	
 	//本地文件目录
