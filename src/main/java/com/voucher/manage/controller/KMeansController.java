@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.KMeansDao;
 import com.voucher.manage.dao.MobileDAO;
+import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.mapper.UsersMapper;
 import com.voucher.manage.redis.JedisUtil1;
@@ -45,6 +46,8 @@ public class KMeansController {
 	AssetsDAO assetsDAO = (AssetsDAO) applicationContext.getBean("assetsdao");
 	
 	MobileDAO mobileDao = (MobileDAO) applicationContext.getBean("mobileDao");
+	
+	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
 	
 	@RequestMapping("/getAll")
 	public @ResponseBody Map getAll(String id) {		
@@ -130,7 +133,7 @@ public class KMeansController {
 			points=(CopyOnWriteArrayList<ArrayList<Double>>) map.get("points");
 						
 			resultMap=kMeansDao.findAssetByLngLat(points, page,null, searchMap);
-			MyTestUtil.print(resultMap);
+
 			List<Map> roominfos=null;
 			
 			if(resultMap!=null)
@@ -148,44 +151,115 @@ public class KMeansController {
 				roomInfo_Positions.add(roomInfo_Position);
 			}
 			
+			Map<String, Object> fileBytes = mobileDao.roomInfo_PositionImageQuery(request, roomInfo_Positions);
+			
+			List rows=(List) resultMap.get("rows");
+			
+			for (Map.Entry<String, Object> entry : fileBytes.entrySet()) {
+			
+				Iterator<Map> iterator2=rows.iterator();
+				int i=0;
+				while(iterator2.hasNext()) {
+					Map m=iterator2.next();
+					String guid=(String) m.get("GUID");
+					if(guid.equals(entry.getKey())) {
+						m.put("url", entry.getValue());
+						rows.set(i, m);
+						continue;
+					}
+					i++;
+				}
+		
+			}
+			
+			resultMap.put("rows",rows);
+			
 		}else{
 		
 			int offset=(page-1)*10;
 			
-			int limit=page*10;
+			int limit=10;
 			
 			resultMap=assetsDAO.findAllRoomInfo_Position(limit, offset, "Num", "asc", "or", searchMap);
 		
 			roomInfo_Positions=(List) resultMap.get("rows");
 			
-		}
-
-
-		Map<String, Object> fileBytes = mobileDao.roomInfo_PositionImageQuery(request, roomInfo_Positions);
-		
-		List rows=(List) resultMap.get("rows");
-		
-		for (Map.Entry<String, Object> entry : fileBytes.entrySet()) {
-		
-			Iterator<Map> iterator=rows.iterator();
-			int i=0;
-			while(iterator.hasNext()) {
-				Map m=iterator.next();
-				String guid=(String) m.get("GUID");
-				if(guid.equals(entry.getKey())) {
-					m.put("url", entry.getValue());
-					rows.set(i, m);
-					continue;
+			Map<String, Object> fileBytes = mobileDao.roomInfo_PositionImageQuery(request, roomInfo_Positions);
+			
+			List rows=(List) resultMap.get("rows");
+			
+			List rows2=new ArrayList();
+			
+			for (Map.Entry<String, Object> entry : fileBytes.entrySet()) {
+			
+				Iterator<Map> iterator2=rows.iterator();
+				int i=0;
+				Map map2=new HashMap();
+				while(iterator2.hasNext()) {
+					RoomInfo_Position roomInfo_Position=(RoomInfo_Position) iterator2.next();
+					String guid=(String) roomInfo_Position.getGUID();
+					if(guid.equals(entry.getKey())) {
+						map2.put("GUID", guid);
+						map2.put("Address", roomInfo_Position.getAddress());
+						map2.put("Num", roomInfo_Position.getNum());
+						map2.put("Region", roomInfo_Position.getRegion());
+						map2.put("RoomProperty", roomInfo_Position.getRoomProperty());
+						map2.put("State", roomInfo_Position.getState());
+						map2.put("BuildArea", roomInfo_Position.getBuildArea());
+						map2.put("lng", roomInfo_Position.getLng());
+						map2.put("lat", roomInfo_Position.getLat());
+						map2.put("url", entry.getValue());
+						rows2.add(map2);
+						continue;
+					}
+					i++;
 				}
-				i++;
-			}
-	
-		}
 		
-		resultMap.put("rows",rows);
+			}
+			
+			resultMap.put("rows",rows2);
+		}
+
+		
 		resultMap.put("points", points);
 		
 		return resultMap;
+	}
+	
+	@RequestMapping("/getRoomByPoint")
+	public @ResponseBody Map<String, Object> getRoomByPoint(Double lng,Double lat,
+			HttpServletRequest request) {
+		Map searchMap=new HashMap<>();
+
+		String term="AND";
+		
+        searchMap.put("[Position].lng=", String.valueOf(lng));
+        searchMap.put("[Position].lat=", String.valueOf(lat));
+
+        Map map=roomInfoDao.findRoomInfoPositionByLatLng(lat, lng);
+        
+        List list=(List) map.get("rows"); 
+        
+        int total=(int) map.get("total");
+        
+        RoomInfo_Position roomInfo_Position=(RoomInfo_Position) list.get(0);
+        
+        Map fileBytes=mobileDao.roomInfo_PositionImageQuery(request, list);
+        
+        String url=(String) fileBytes.get(roomInfo_Position.getGUID());
+        
+        Map map2=new HashMap<>();
+        
+        map2.put("roomInfo", roomInfo_Position);
+        
+        map2.put("total", total);
+        
+        map2.put("list", list);
+        
+        map2.put("url", url);
+        
+        return map2;
+		
 	}
 	
 	//查询分类

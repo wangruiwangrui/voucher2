@@ -325,8 +325,8 @@ public class AutoSqlServer {
     
     public static void main(String[] args){
         String url="jdbc:jtds:sqlserver://127.0.0.1:1433/";
-    	String dataBase="TTT";
-    	String filePath="C:\\Users\\WangJing\\Desktop\\pasoft\\TTT\\";
+    	String dataBase="RoomManage";
+    	String filePath="C:\\Users\\admin\\Desktop\\新建文件夹 (3)\\";
     	List<String> tabNames = getTabNames(url,dataBase);  
         Iterator<String> iterator=tabNames.iterator();
         int i=0;

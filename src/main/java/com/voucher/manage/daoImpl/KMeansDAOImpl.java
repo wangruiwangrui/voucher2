@@ -76,7 +76,7 @@ public class KMeansDAOImpl extends JdbcDaoSupport implements KMeansDao{
 		
 		int max=points.size();
 		
-		if(max<(page-1)*limit)
+		if(max<page*limit)
 			return null;
 		
 		if(max<end)
@@ -99,6 +99,8 @@ public class KMeansDAOImpl extends JdbcDaoSupport implements KMeansDao{
 			sql0=sql0+lng+",";
 			sql1=sql1+lat+",";
 		}
+		System.out.println("start="+(page-1)*limit+"   end="+end+"   size="+points.size());
+		System.out.println("sql0="+sql0);
 		
 		sql0=sql0.substring(0,sql0.length()-1);
 		
@@ -143,7 +145,7 @@ public class KMeansDAOImpl extends JdbcDaoSupport implements KMeansDao{
 		
 		map.put("rows", list);
 		
-		map.put("total", total);
+		map.put("total", points.size());
 		
 		return map;
 	}
@@ -217,30 +219,9 @@ public class KMeansDAOImpl extends JdbcDaoSupport implements KMeansDao{
 		
 		List<String> list7 = this.getJdbcTemplate().query(sql7, new co());
 		
-		List<String> list8 = new ArrayList<String>();
-		list8.add("已抵押");
-		list8.add("未抵押");
+		String sql8 = "SELECT [BeFrom] as co FROM "+Singleton.ROOMDATABASE+" .[dbo].[RoomInfo] group by [BeFrom]";
 		
-		String sql9 = "SELECT [BeFrom] as co FROM "+Singleton.ROOMDATABASE+" .[dbo].[RoomInfo] group by [BeFrom]";
-		
-		List<String> list9 = this.getJdbcTemplate().query(sql9, new co());
-
-		List<String> list10 = new ArrayList<String>();
-		list10.add("未办证");
-		list10.add("单土地证");
-		list10.add("单房产证");
-		list10.add("双证齐全");
-		list10.add("不动产权证");
-		
-		List<String> list11 = new ArrayList<String>();
-		list11.add("全部");
-		list11.add("0-100");
-		list11.add("100-500");
-		list11.add("500-1000");
-		list11.add("1000-3000");
-		list11.add("3000-5000");
-		list11.add("5000-10000");
-		list11.add(">10000");
+		List<String> list8 = this.getJdbcTemplate().query(sql8, new co());
 
 		Map map = new HashMap();
 		
@@ -251,10 +232,8 @@ public class KMeansDAOImpl extends JdbcDaoSupport implements KMeansDao{
 		map.put("Floor", list5);
 		map.put("State", list6);
 		map.put("LeasedAssets", list7);
-		map.put("Ispawn", list8);
-		map.put("BeFrom", list9);
-		map.put("Certificate", list10);
-		map.put("Hire",list11);
+		map.put("BeFrom", list8);
+
 		return map;
 	}
 

@@ -192,7 +192,7 @@ public class AssetCheckController {
 				assets_Check_Date.setFileBelong("检查图片");
 				assets_Check_Date.setURI(imageData.getURI());
 				assets_Check_Date.setTYPE(imageData.getType());
-				assets_Check_Date.setFileIndex(n);
+				assets_Check_Date.setFileIndex(n+1);
 				assets_Check_Date.setDate(imageData.getDate());
 				Integer in = assetCheckDAO.insertAssets_Check_Date(assets_Check_Date);
 				MyTestUtil.print(in);

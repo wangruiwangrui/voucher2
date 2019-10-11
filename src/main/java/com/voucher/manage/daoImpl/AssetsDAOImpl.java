@@ -2472,5 +2472,30 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		return patrol_Cycle;
 	}
+
+	@Override
+	public Integer selectUserName(String name) {
+		// TODO Auto-generated method stub
+		
+		ChartInfo chartInfo = new ChartInfo();
+		chartInfo.setCharter(name);
+		String[] where={"Charter=",name};
+		chartInfo.setWhere(where);
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), chartInfo).get("");
+		return count;
+	}
+
+	@Override
+	public Integer selectUserPhone(String name, String telephone) {
+		// TODO Auto-generated method stub
+		
+		ChartInfo chartInfo = new ChartInfo();
+		chartInfo.setPhone(telephone);
+		chartInfo.setCharter(name);
+		String[] where = {"Charter=",name,"Phone=",telephone};
+		chartInfo.setWhere(where);
+		Integer count = (Integer) SelectExe.getCount(this.getJdbcTemplate(), chartInfo).get("");
+		return count;
+	}
 	
 }

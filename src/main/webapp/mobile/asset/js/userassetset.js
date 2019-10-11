@@ -164,8 +164,10 @@ $.get("/voucher/oauth/test.do", {
 		 $('#w2').attr("class","weui_cell");
 	 });
 	 $('.phone input').blur(function(){
+		 var name=$('.name input')[0].value;
 	     var reque=$('.phone input')[0].value;
 	   	$.post('/voucher/mobile/assetRegister/testPhone.do',{
+	   		name:name,
 	   		telephone:reque
 	   	   },function(text){ 
 	   		var obj=JSON.parse(text);

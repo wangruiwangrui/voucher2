@@ -385,7 +385,7 @@ public class BisectingKMeans2 {
 			map2.put("points", cl.getData());
 			//map2.put("clusterAssment", clusterAssment);
 			map2.put("sse", cl.getSE());
-			if(cl.getData().size()>20)
+			if(cl.getData().size()>160)
 				map2.put("isPlot", true);
 			else
 				map2.put("isPolt", false);

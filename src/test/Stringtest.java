@@ -5,12 +5,14 @@ import java.util.regex.Pattern;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.voucher.manage.singleton.Singleton;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/*.xml"})
 public class Stringtest {
-
 	
 	public static void main(String[] args){
+		
 		/*String str = "我的名字（测试）";
 		
 		final String REGEX1 = "我的名字2";

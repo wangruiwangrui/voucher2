@@ -127,4 +127,8 @@ public interface AssetsDAO {
 	public int updatePatrolCycle(Patrol_Cycle patrol_Cycle);
 	
 	public Patrol_Cycle selectPatrolCycle();
+
+	public Integer selectUserName(String name);
+
+	public Integer selectUserPhone(String name, String telephone);
 }

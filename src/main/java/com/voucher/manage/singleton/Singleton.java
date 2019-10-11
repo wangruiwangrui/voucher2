@@ -14,24 +14,19 @@ public class Singleton {
 	//合江金宇
 //	public static final String URL = "http://www.gulinguozi.com";
 	
-	public static final String URL = "http://wx.lzgtzh.com";
-//	public static final String URL = "http://test.lzgtzh.com";
+//	public static final String URL = "http://wx.lzgtzh.com";
+	public static final String URL = "http://test.lzgtzh.com";
 	
-	public final static String ROOMDATABASE="[TTT]";
-	
+	public final static String ROOMDATABASE="[RoomManage]";
 	
 	//本地文件目录
 	public final static String filePath="\\Desktop\\pasoft\\photo";
 	
 	//资产管理系统图片目录
-//	public static final String ROOMINFOIMGPATH	="D:\\SYSPICTURE\\";
-//		public static final String ROOMINFOIMGPATH	="D:\\GTJTSJ\\";
 	public static final String ROOMINFOIMGPATH	="D:\\PIC\\";
 	
 	//资产管理系统图片目录2
-//	public static final String ROOMINFOIMGPATH2	="D:\\SYSPICTURE\\pasoft";
-//		public static final String ROOMINFOIMGPATH2	="D:\\GTJTSJ\\pasoft";	
-		public static final String ROOMINFOIMGPATH2	="D:\\PIC\\pasoft";
+	public static final String ROOMINFOIMGPATH2	="D:\\PIC\\pasoft";
 	
 	
 	private LinkedHashMap<String,Map<String, Object>> registerMap;
@@ -65,11 +60,6 @@ public class Singleton {
 						return true;
 					}
 
-					/*
-					 * System.out.println("endDate=   "+endDate.getTime());
-					 * System.out.println("noeDate=   "+nowDate.getTime());
-					 * System.out.println("diff="+diff/1000);
-					 */
 					return diff / 1000 > 60;
 				}
 			};
@@ -100,11 +90,6 @@ public class Singleton {
 						return true;
 					}
 
-					/*
-					 * System.out.println("endDate=   "+endDate.getTime());
-					 * System.out.println("noeDate=   "+nowDate.getTime());
-					 * System.out.println("diff="+diff/1000);
-					 */
 					return diff / 1000 > 300;
 				}
 			};
@@ -135,11 +120,6 @@ public class Singleton {
 						return true;
 					}
 
-					/*
-					 * System.out.println("endDate=   "+endDate.getTime());
-					 * System.out.println("noeDate=   "+nowDate.getTime());
-					 * System.out.println("diff="+diff/1000);
-					 */
 					return diff / 1000 > 300;
 				}
 			};

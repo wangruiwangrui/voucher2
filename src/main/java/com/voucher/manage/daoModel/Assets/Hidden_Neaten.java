@@ -11,7 +11,7 @@ public class Hidden_Neaten implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
-    @SQLInteger(name="id")
+    @SQLInteger(name = "id")
 	private Integer id;
 
     @SQLString(name="GUID")
@@ -32,12 +32,12 @@ public class Hidden_Neaten implements Serializable{
     @SQLDateTime(name="happen_time")
 	private Date happen_time;
 
-    @SQLString(name="check_circs")
-	private String check_circs;
-    
     @SQLString(name="neaten_item")
 	private String neaten_item;
-    
+
+    @SQLString(name="check_circs")
+	private String check_circs;
+
     @SQLString(name="neaten_instance")
 	private String neaten_instance;
 
@@ -64,10 +64,10 @@ public class Hidden_Neaten implements Serializable{
 
     @SQLInteger(name="is_repair")
 	private Integer is_repair;
-    
+
     @SQLString(name="RoomGUID")
 	private String RoomGUID;
-    
+
     @SQLFloat(name="Area")
 	private Float Area;
 
@@ -91,7 +91,7 @@ public class Hidden_Neaten implements Serializable{
 
     @SQLString(name="processInstance_id")
 	private String processInstance_id;
-    
+
 	public void setId(Integer id){
 		this.id = id;
 	}
@@ -116,14 +116,6 @@ public class Hidden_Neaten implements Serializable{
 		return exist;
 	}
 
-	public void setIs_repair(Integer is_repair){
-		this.is_repair = is_repair;
-	}
-
-	public Integer getIs_repair(){
-		return is_repair;
-	}
-	
 	public void setNeaten_id(String neaten_id){
 		this.neaten_id = neaten_id;
 	}
@@ -156,14 +148,6 @@ public class Hidden_Neaten implements Serializable{
 		return happen_time;
 	}
 
-	public void setCheck_circs(String check_circs){
-		this.check_circs = check_circs;
-	}
-
-	public String getCheck_circs(){
-		return check_circs;
-	}
-	
 	public void setNeaten_item(String neaten_item){
 		this.neaten_item = neaten_item;
 	}
@@ -171,7 +155,15 @@ public class Hidden_Neaten implements Serializable{
 	public String getNeaten_item(){
 		return neaten_item;
 	}
-	
+
+	public void setCheck_circs(String check_circs){
+		this.check_circs = check_circs;
+	}
+
+	public String getCheck_circs(){
+		return check_circs;
+	}
+
 	public void setNeaten_instance(String neaten_instance){
 		this.neaten_instance = neaten_instance;
 	}
@@ -236,6 +228,14 @@ public class Hidden_Neaten implements Serializable{
 		return progress;
 	}
 
+	public void setIs_repair(Integer is_repair){
+		this.is_repair = is_repair;
+	}
+
+	public Integer getIs_repair(){
+		return is_repair;
+	}
+
 	public void setRoomGUID(String RoomGUID){
 		this.RoomGUID = RoomGUID;
 	}
@@ -243,7 +243,7 @@ public class Hidden_Neaten implements Serializable{
 	public String getRoomGUID(){
 		return RoomGUID;
 	}
-	
+
 	public void setArea(Float Area){
 		this.Area = Area;
 	}
@@ -300,7 +300,6 @@ public class Hidden_Neaten implements Serializable{
 		return AvailabeLength;
 	}
 
-
 	public void setProcessInstance_id(String processInstance_id){
 		this.processInstance_id = processInstance_id;
 	}
@@ -308,6 +307,9 @@ public class Hidden_Neaten implements Serializable{
 	public String getProcessInstance_id(){
 		return processInstance_id;
 	}
+
+
+
 
 /*
 *数据库查询参数

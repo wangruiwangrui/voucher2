@@ -29,6 +29,13 @@ body, html, #allmap {
 	margin: 0;
 	font-family: "微软雅黑";
 }
+.weui-cell__bd{
+	margin-left: 1em;
+}
+.instance{
+	margin-left: 0em;
+}
+
 </style>
 
 </head>
@@ -182,7 +189,7 @@ body, html, #allmap {
 	<div class="weui-cells__title">整改详情</div>
 	<div class="weui-cells weui-cells_form">
 		<div class="weui-cell">
-			<div class="weui-cell__bd">
+			<div class="weui-cell__bd instance">
 				<textarea id="neaten_instance" class="weui-textarea" rows="3"></textarea>
 			</div>
 		</div>
@@ -416,32 +423,31 @@ body, html, #allmap {
                  	   console.log(request);
                     },
                     success: function (text) {              	   
-                    	console.log(text);
-                  	   var obj=text.roomInfo;
-                  	   var imgs=text.fileBytes;
+                   		console.log(text);
+                  	   	var obj=text.roomInfo;
+                  	   	var imgs=text.fileBytes;
                
-                          	   var guid=obj.guid;
+                   	   	var guid=obj.guid;
                          	  
-                          	 var address=document.createElement("span");
-                            	  address.innerHTML=obj.address;
-                               $("#address").append(address);
-                              
-                              var num=document.createElement("span");
-                              num.innerHTML=obj.num;
-                              $("#num").append(num);
-                              
-                               var region=document.createElement("span");
-                               region.innerHTML=obj.region;
-                               $("#region").append(region);
-                               
-                               
-                               var fareItem=document.createElement("span");
-                               fareItem.innerHTML=obj.fareItem;
-                               $("#fareItem").append(fareItem);
+                   	 	var address=document.createElement("span");
+                        address.innerHTML=obj.address;
+                      	$("#address").append(address);
+                     
+                     	var num=document.createElement("span");
+                     	num.innerHTML=obj.num;
+                     	$("#num").append(num);
+                     
+                      	var region=document.createElement("span");
+                      	region.innerHTML=obj.region;
+                      	$("#region").append(region);
+                      
+                     	var fareItem=document.createElement("span");
+                      	fareItem.innerHTML=obj.fareItem;
+                      	$("#fareItem").append(fareItem);
 
-                    	}
-                });
-        }
+                   	}
+           		});
+        	}
     });
 
 		
@@ -455,10 +461,7 @@ body, html, #allmap {
   	    s = date.getSeconds(); 
   		return Y+M+D;
   	}
-	
 
-	
-        
   //happenTime设置为当前时间
 	var timestamp=actionTime(Date.parse(new Date()));
     console.log(timestamp);
@@ -479,81 +482,76 @@ body, html, #allmap {
         	var workUnit=$("#workUnit").val();
         	
 
-        		var error="";
-				if(area==null||area==""){
-        			error="面积不能为空!";
-        		}else if(amount==null||amount==""){
-        			error="送审金额不能为空!";
-        		}else if(amountTotal==null||amountTotal==""){
-        			error="审减金额不能为空!";
-        		}else if(auditingAmount==null||auditingAmount==""){
-        			error="审定金额不能为空!";
-        		}else if(availabeLength==null||availabeLength==""){
-        			error="质保期不能为空!";
-        		}else if(neaten_instance==null||neaten_instance==""){    				
-        			error="请填写整改详情说明!";
-    			}
-            	
-        		
-        		if(error!=""){
-        			
-        			$.alert(error);
-        			
-        			return false;
-        		}
-        		        		
+       		var error="";
+			if(area==null||area==""){
+       			error="面积不能为空!";
+       		}else if(amount==null||amount==""){
+       			error="送审金额不能为空!";
+       		}else if(amountTotal==null||amountTotal==""){
+       			error="审减金额不能为空!";
+       		}else if(auditingAmount==null||auditingAmount==""){
+       			error="审定金额不能为空!";
+       		}else if(availabeLength==null||availabeLength==""){
+       			error="质保期不能为空!";
+       		}else if(neaten_instance==null||neaten_instance==""){    				
+       			error="请填写整改详情说明!";
+   			}
+           	
+       		
+       		if(error!=""){
+       			
+       			$.alert(error);
+       			
+       			return false;
+       		}
+       	
+       	console.log(item);
         	
-        	console.log(item);
-        	
-        	var variableData = new Object();
-        	
-        	variableData.guid=guid;
-        	variableData.neatenitem=neatenitem;
-        	variableData.username=username;
-        	variableData.address=addressValue;
-        	variableData.happenTime=happenTime;
-        	variableData.principal=principal;
-        	variableData.remark=remark;
-        	variableData.neaten_instance=neaten_instance;
-        	variableData.type=type;
-        	variableData.area=area;
-        	variableData.amount=amount;
-        	variableData.amountTotal=amountTotal;
-        	variableData.auditingAmount=auditingAmount;
-        	variableData.availabeLength=availabeLength;
-        	variableData.workUnit=workUnit;
-        	
-        	var variable = JSON.stringify(variableData);
-        	
-        	console.log(variable);
-        	
-        	$.ajax({
-                type: "post",
-                async: false,
-                url: "../../mobile/hidden/insertHiddenRepair.do",
-                data: {
-                	
-                	"id":processInstanceId,
-                	progress:progress
-                	}
-
-                ,
-                success: function (data) {
-                	var data=JSON.parse(data);
-                	console.log(data);
-                    if (data.state == "failed") {
-                        alert("error");
-                        return false;
-                    } else {
-       
-                           alert("新建隐患整改记录成功");
-                           history.go(-1);
-                        	
-                    	}
-                }
-            });
-    	
-
+       	var variableData = new Object();
+       	
+       	variableData.guid=guid;
+       	variableData.neatenitem=neatenitem;
+       	variableData.username=username;
+       	variableData.address=addressValue;
+       	variableData.happenTime=happenTime;
+       	variableData.principal=principal;
+       	variableData.remark=remark;
+       	variableData.neaten_instance=neaten_instance;
+       	variableData.type=type;
+       	variableData.area=area;
+       	variableData.amount=amount;
+       	variableData.amountTotal=amountTotal;
+       	variableData.auditingAmount=auditingAmount;
+       	variableData.availabeLength=availabeLength;
+       	variableData.workUnit=workUnit;
+       	
+       	var variable = JSON.stringify(variableData);
+       	
+       	console.log(variable);
+       	
+       	$.ajax({
+               type: "post",
+               async: false,
+               url: "../../mobile/hidden/insertHiddenRepair.do",
+               data: {
+              		"id":processInstanceId,
+       				progress:progress,
+       				amountTotal:amountTotal,
+       				auditingAmount:auditingAmount
+               	},
+               success: function (data) {
+               	var data=JSON.parse(data);
+               	console.log(data);
+                   if (data.status == "failure") {
+                       alert("新建隐患整改记录失败");
+                       return false;
+                   } else {
+      
+                          alert("新建隐患整改记录成功");
+                          //history.go(-1);
+                   	}
+               }
+           });
     });
     
 </script>

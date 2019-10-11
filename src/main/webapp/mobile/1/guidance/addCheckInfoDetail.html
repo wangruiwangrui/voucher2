@@ -27,11 +27,10 @@ body, html, #allmap {
 .name1{
 	float: left;
 	width: 45%;
-    padding-left: 2%;
 }
 .name2{
 	float: right;
-	width: 48%;
+	width: 53%;
 }
 </style>
 
@@ -91,17 +90,41 @@ body, html, #allmap {
 						<div class="name1">
 							
 							<label class="weui-cell weui-check__label" for="s11"
-								onclick="checked('fire_extinguisher')">
+								onclick="checked('line_aging')">
 								<div class="weui-cell__hd">
-									<input name="checkbox1" class="weui-check" id="fire_extinguisher"
-										type="checkbox" value="fire_extinguisher" /><i
+									<input name="checkbox1" class="weui-check" id="line_aging"
+										type="checkbox" value="line_aging" /><i
 										class="weui-icon-checked"></i>
 								</div>
 								<div class="weui-cell__bd">
-									<p name="fire_extinguisher">灭火器</p>
+									<p name="line_aging">电线老化</p>
+								</div>
+							</label> 
+							
+							<label class="weui-cell weui-check__label" for="s12"
+								onclick="checked('wire_chaos')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="wire_chaos"
+										type="checkbox" value="wire_chaos" /><i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="wire_chaos">电线混乱</p>
 								</div>
 							</label> 
 							<label class="weui-cell weui-check__label" for="s13"
+								onclick="checked('valve_aging')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="valve_aging"
+										type="checkbox" value="valve_aging" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name='valve_aging'>气阀老化</p>
+								</div>
+							</label>
+							
+							<label class="weui-cell weui-check__label" for="s14"
 								onclick="checked('high_power')">
 								<div class="weui-cell__hd">
 									<input name="checkbox1" class="weui-check" id="high_power"
@@ -109,181 +132,387 @@ body, html, #allmap {
 										class="weui-icon-checked"></i>
 								</div>
 								<div class="weui-cell__bd">
-									<p name='high_power'>大功率用电器</p>
+									<p name='high_power'>使用大功率电器</p>
 								</div>
 							</label>
 						</div>
 						
 						<div class="name2">
-							<label class="weui-cell weui-check__label" for="s12"
-								onclick="checked('line_aging')">
+							<label class="weui-cell weui-check__label" for="s15"
+								onclick="checked('fire_extinguisher')">
 								<div class="weui-cell__hd">
-									<input name="checkbox1" class="weui-check" id="line_aging"
-										type="checkbox" value="line_aging" /> 
-									<i class="weui-icon-checked"></i>
+									<input name="checkbox1" class="weui-check" id="fire_extinguisher"
+										type="checkbox" value="fire_extinguisher" /><i
+										class="weui-icon-checked"></i>
 								</div>
 								<div class="weui-cell__bd">
-									<p name="line_aging">线路老化</p>
+									<p name="fire_extinguisher">灭火设备缺失</p>
 								</div>
 							</label> 
-							 
-							<label class="weui-cell weui-check__label" for="s14"
+							
+							<label class="weui-cell weui-check__label" for="s16"
+								onclick="checked('fire_aging')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="fire_aging"
+										type="checkbox" value="fire_aging" /><i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="fire_aging">灭火设备老化</p>
+								</div>
+							</label> 
+							
+							<label class="weui-cell weui-check__label" for="s17"
 								onclick="checked('blow')">
 								<div class="weui-cell__hd">
 									<input name="checkbox1" class="weui-check" id="blow"
-										type="checkbox" value="blow" /> 
-									<i class="weui-icon-checked"></i>
+										type="checkbox" value="blow" /><i
+										class="weui-icon-checked"></i>
 								</div>
 								<div class="weui-cell__bd">
-									<p name="blow">易燃易爆物品</p>
+									<p name="blow">存放易燃易爆物品</p>
+								</div>
+							</label> 
+							
+							<label class="weui-cell weui-check__label" for="s18"
+								onclick="checked('other_fire_hazards')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="other_fire_hazards"
+										type="checkbox" value="other_fire_hazards" /><i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="other_fire_hazards">其他火灾隐患</p>
+								</div>
+							</label>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="weui-cells weui-cells_radio">
+
+				<div class="weui-panel weui-panel_access">
+					<div class="weui-panel__hd">房屋结构隐患</div>
+					<div class="weui-cells weui-cells_checkbox">
+					
+						<div class="name1">
+							<label class="weui-cell weui-check__label" for="s19"
+								onclick="checked('incline')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="incline"
+										type="checkbox" value="incline" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="incline">倾斜</p>
+								</div>
+							</label> 
+							
+							<label class="weui-cell weui-check__label" for="s20"
+								onclick="checked('split')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="split"
+										type="checkbox" value="split" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="split">开裂</p>
+								</div>
+							</label> 
+							
+							<label class="weui-cell weui-check__label" for="s21"
+								onclick="checked('collapse')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="collapse"
+										type="checkbox" value="collapse" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="collapse">坍塌</p>
+								</div>
+							</label>
+							<label class="weui-cell weui-check__label" for="s22"
+								onclick="checked('flaw')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="flaw"
+										type="checkbox" value="flaw" /> <i 
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="flaw">漏水</p>
+								</div>
+							</label>
+							
+						</div>
+						
+						<div class="name2">
+							<label class="weui-cell weui-check__label" for="s23"
+								onclick="checked('invalidation')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="invalidation"
+										type="checkbox" value="invalidation" /> <i 
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="invalidation">承重失效</p>
+								</div>
+							</label>
+							<label class="weui-cell weui-check__label" for="s24"
+								onclick="checked('break_off')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="break_off"
+										type="checkbox" value="break_off" /> <i class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="break_off">屋面损坏(脱落)</p>
+								</div>
+							</label>
+							<label class="weui-cell weui-check__label" for="s25"
+								onclick="checked('destroy')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="destroy"
+										type="checkbox" value="destroy" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="destroy">其他房屋结构隐患</p>
+								</div>
+							</label>
+							 
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="weui-cells weui-cells_radio">
+
+				<div class="weui-panel weui-panel_access">
+					<div class="weui-panel__hd">配套设施隐患</div>
+					<div class="weui-cells weui-cells_checkbox">
+					
+						<div class="name1">
+							<label class="weui-cell weui-check__label" for="s26"
+								onclick="checked('wall_up')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="wall_up"
+										type="checkbox" value="wall_up" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="wall_up">管道堵塞</p>
+								</div>
+							</label>
+							
+							<label class="weui-cell weui-check__label" for="s27"
+								onclick="checked('cesspool')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="cesspool"
+										type="checkbox" value="cesspool" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="cesspool">化粪池问题</p>
+								</div>
+							</label>
+							
+							<label class="weui-cell weui-check__label" for="s28"
+								onclick="checked('warning_missing')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="warning_missing"
+										type="checkbox" value="warning_missing" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="warning_missing">警示牌缺失</p>
+								</div>
+							</label>
+						</div>
+						<div class="name2">
+						
+							<label class="weui-cell weui-check__label" for="s29"
+								onclick="checked('secure_channel')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="secure_channel"
+										type="checkbox" value="secure_channel" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="secure_channel">安全通道问题</p>
+								</div>
+							</label>
+							
+							<label class="weui-cell weui-check__label" for="s30"
+								onclick="checked('handrail_destroy')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="handrail_destroy"
+										type="checkbox" value="handrail_destroy" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="handrail_destroy">楼梯扶手损坏</p>
+								</div>
+							</label>
+							
+							<label class="weui-cell weui-check__label" for="s31"
+								onclick="checked('other_supporting')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="other_supporting"
+										type="checkbox" value="other_supporting" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="other_supporting">其他配套设施问题</p>
+								</div>
+							</label>
+						
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="weui-cells weui-cells_radio">
+
+				<div class="weui-panel weui-panel_access">
+					<div class="weui-panel__hd">自然灾害隐患</div>
+					<div class="weui-cells weui-cells_checkbox">
+						<div class="name1">
+							<label class="weui-cell weui-check__label" for="s32"
+								onclick="checked('flooding')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="flooding"
+										type="checkbox" value="flooding" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="flooding">水灾隐患</p>
+								</div>
+							</label>
+							
+							<label class="weui-cell weui-check__label" for="s33"
+								onclick="checked('coast')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="coast"
+										type="checkbox" value="coast" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="coast">山体滑坡</p>
+								</div>
+							</label>
+							
+							<label class="weui-cell weui-check__label" for="s34"
+								onclick="checked('earthquake')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="earthquake"
+										type="checkbox" value="earthquake" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="earthquake">地震风险</p>
+								</div>
+							</label>
+						
+						</div>
+						<div class="name2">
+						
+							<label class="weui-cell weui-check__label" for="s35"
+								onclick="checked('down')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="down"
+										type="checkbox" value="down" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="down">地基下沉</p>
+								</div>
+							</label>
+							
+							<label class="weui-cell weui-check__label" for="s36"
+								onclick="checked('snow')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="snow"
+										type="checkbox" value="snow" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="snow">雪灾隐患</p>
+								</div>
+							</label>
+							
+							<label class="weui-cell weui-check__label" for="s37"
+								onclick="checked('other_natural')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="other_natural"
+										type="checkbox" value="other_natural" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="other_natural">其他自然灾害隐患</p>
+								</div>
+							</label>
+						
+						</div>
+					</div>
+				</div>
+						
+						
+			<div class="weui-cells weui-cells_radio">
+				<div class="weui-panel weui-panel_access">
+					<div class="weui-panel__hd">违章搭建隐患</div>
+					<div class="weui-cells weui-cells_checkbox">
+					
+						<div class="name1">
+							<label class="weui-cell weui-check__label" for="s38"
+								onclick="checked('illegal_building')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="illegal_building"
+										type="checkbox" value="illegal_building" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="illegal_building">违章搭建</p>
+								</div>
+							</label>
+							
+							<label class="weui-cell weui-check__label" for="s40" 
+								onclick="checked('structural_failure')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="structural_failure"
+										type="checkbox" value="structural_failure" /> <i 
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="structural_failure">结构破坏</p>
+								</div>
+							</label>
+							
+						</div>
+						<div class="name2">
+							<label class="weui-cell weui-check__label" for="s39"
+								onclick="checked('other_illegal')">
+								<div class="weui-cell__hd">
+									<input name="checkbox1" class="weui-check" id="other_illegal"
+										type="checkbox" value="other_illegal" /> <i
+										class="weui-icon-checked"></i>
+								</div>
+								<div class="weui-cell__bd">
+									<p name="other_illegal">其他违章搭建隐患</p>
 								</div>
 							</label>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
 
-				<div class="weui-cells weui-cells_radio">
-
-					<div class="weui-panel weui-panel_access">
-						<div class="weui-panel__hd">房屋结构</div>
-						<div class="weui-cells weui-cells_checkbox">
-						
-							<div class="name1">
-								<label class="weui-cell weui-check__label" for="s15"
-									onclick="checked('incline')">
-									<div class="weui-cell__hd">
-										<input name="checkbox1" class="weui-check" id="incline"
-											type="checkbox" value="incline" /> <i
-											class="weui-icon-checked"></i>
-									</div>
-									<div class="weui-cell__bd">
-										<p name="incline">倾斜</p>
-									</div>
-								</label> 
-								<label class="weui-cell weui-check__label" for="s22"
-									onclick="checked('flaw')">
-									<div class="weui-cell__hd">
-										<input name="checkbox1" class="weui-check" id="flaw"
-											type="checkbox" value="flaw" /> <i class="weui-icon-checked"></i>
-									</div>
-									<div class="weui-cell__bd">
-										<p name="flaw">漏雨</p>
-									</div>
-								</label>
-								<label class="weui-cell weui-check__label" for="s18"
-									onclick="checked('break_off')">
-									<div class="weui-cell__hd">
-										<input name="checkbox1" class="weui-check" id="break_off"
-											type="checkbox" value="break_off" /> <i
-											class="weui-icon-checked"></i>
-									</div>
-									<div class="weui-cell__bd">
-										<p name="break_off">屋面脱落</p>
-									</div>
-								</label>
-								<label class="weui-cell weui-check__label" for="s21"
-									onclick="checked('invalidation')">
-									<div class="weui-cell__hd">
-										<input name="checkbox1" class="weui-check" id="invalidation"
-											type="checkbox" value="invalidation" /> <i
-											class="weui-icon-checked"></i>
-									</div>
-									<div class="weui-cell__bd">
-										<p name="invalidation">承重失效</p>
-									</div>
-								</label> 
-							</div>
-							
-							<div class="name2">
-								<label class="weui-cell weui-check__label" for="s16"
-									onclick="checked('split')">
-									<div class="weui-cell__hd">
-										<input name="checkbox1" class="weui-check" id="split"
-											type="checkbox" value="split" /> <i class="weui-icon-checked"></i>
-									</div>
-									<div class="weui-cell__bd">
-										<p name="split">开裂</p>
-									</div>
-								</label>
-								<label class="weui-cell weui-check__label" for="s17"
-									onclick="checked('down')">
-									<div class="weui-cell__hd">
-										<input name="checkbox1" class="weui-check" id="down"
-											type="checkbox" value="down" /> <i class="weui-icon-checked"></i>
-									</div>
-									<div class="weui-cell__bd">
-										<p name="down">地基下沉</p>
-									</div>
-								</label>
-								<label class="weui-cell weui-check__label" for="s19"
-									onclick="checked('destroy')">
-									<div class="weui-cell__hd">
-										<input name="checkbox1" class="weui-check" id="destroy"
-											type="checkbox" value="destroy" /> <i
-											class="weui-icon-checked"></i>
-									</div>
-									<div class="weui-cell__bd">
-										<p name="destroy">结构破坏</p>
-									</div>
-								</label>
-								 <label class="weui-cell weui-check__label" for="s23"
-									onclick="checked('wall_up')">
-									<div class="weui-cell__hd">
-										<input name="checkbox1" class="weui-check" id="wall_up"
-											type="checkbox" value="wall_up" /> <i
-											class="weui-icon-checked"></i>
-									</div>
-									<div class="weui-cell__bd">
-										<p name="wall_up">管道堵塞</p>
-									</div>
-								</label>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="weui-cells weui-cells_radio">
-					<div class="weui-panel weui-panel_access">
-						<div class="weui-panel__hd">其它</div>
-						<div class="weui-cells weui-cells_checkbox">
-						
-							<div class="name1">
-								<label class="weui-cell weui-check__label" for="s24"
-									onclick="checked('cesspool')">
-									<div class="weui-cell__hd">
-										<input name="checkbox1" class="weui-check" id="cesspool"
-											type="checkbox" value="cesspool" /> <i
-											class="weui-icon-checked"></i>
-									</div>
-									<div class="weui-cell__bd">
-										<p name="cesspool">化粪池问题</p>
-									</div>
-								</label>
-							</div>
-							<div class="name2">
-								<label class="weui-cell weui-check__label" for="s25" 
-									onclick="checked('coast')">
-									<div class="weui-cell__hd">
-										<input name="checkbox1" class="weui-check" id="coast"
-											type="checkbox" value="coast" /> <i class="weui-icon-checked"></i>
-									</div>
-									<div class="weui-cell__bd">
-										<p name="coast">山体滑坡</p>
-									</div>
-								</label>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-
+		
 
 			<div class="weui-cells weui-cells_form" id="other">
 				<div class="weui-cell weui-cell_access">
 					<div class="weui-cell__hd">
-						<label class="weui-label">其它问题</label>
+						<label class="weui-label">其它隐患</label>
 					</div>
 					<div class="weui-cell__bd"></div>
 					<div class="weui-cell__ft"></div>
@@ -388,640 +617,808 @@ body, html, #allmap {
 	</div>
 	<div id="allmap"></div>
 
-<div class="weui-panel weui-panel_access">
-	<div class="weui-panel__hd">维修照片</div>
-	<div id="img0" class="weui-panel__bd"></div>
-	<div id="img" class="weui-panel__bd"></div>
-</div>
-
-<div class="weui-panel weui-panel_access">
-	<div class="weui-uploader__input-box" id="showPicker"></div>
-</div>
- 
-<div class="weui-cells__title"></div> 
-<div class="weui-cells weui-cells_form">
-	<div class="weui-cell">
-        <div class="weui-cell__bd">
-        </div>
-    </div>
-</div>
-
-<a href="javascript:;" id="save" class="weui-btn weui-btn_plain-primary">保存本次安全巡查记录</a>   
-
-
-<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
-<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-<script type="text/javascript" src="../../../js/jquery-weui.js"></script>
-
-<script type="text/javascript">
-
-function getQueryString(name) {
-	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-	var r = window.location.search.substr(1).match(reg);
-	if (r != null) return unescape(r[2]); return null;
-}
-
-	var longitude=getQueryString("longitude");
-	var latitude=getQueryString("latitude");
-  
-	var id=Math.random().toString(36).substr(2);
-	var guid=getQueryString("guid");
-  
-	function setPcolor(value){
+	<div class="weui-panel weui-panel_access">
+		<div class="weui-panel__hd">维修照片</div>
+		<div id="img0" class="weui-panel__bd"></div>
+		<div id="img" class="weui-panel__bd"></div>
+	</div>
+	
+	<div class="weui-panel weui-panel_access">
+		<div class="weui-uploader__input-box" id="showPicker"></div>
+	</div>
 	 
-	}
-  
-$("#abnormity").hide();
-  
-$("#circs").hide();
-  
-$.ajax({
-	type: "POST",
-	url: "/voucher/mobile/asset/getRoomInfoByGUID.do",
-	data: { "guid":guid},
-	dataType: "json",
-	error: function (request){
-		console.log(request);
-	},success: function (text) {
-		console.log(text);
-		var obj=text.roomInfo;
-	 	var imgs=text.fileBytes;
-
-		var distance=null;
-         	 
-     	if(obj.lng!=""&&obj.lat!=""){  
-     		var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
-  			var pointB = new BMap.Point(obj.lng,obj.lat);  // 创建点坐标B--江北区
-  			var d=map.getDistance(pointA,pointB);
-      	  
-  			if(d>200){
-  				$.alert("新建安全巡查记录必须在资产附近的位置", "错误提示", function() {
-  			 	 //点击确认后的回调函数
-  					history.back();
-  				});
-  			}
-		}
- 			
-   	  	var address=document.createElement("span");
-   	  	address.innerHTML=obj.address;
-      	$("#address").append(address);
-	      
-      	var num=document.createElement("span");
-      	num.innerHTML=obj.num;
-      	$("#num").append(num);
-              
-        var buildArea=document.createElement("span");
-        buildArea.innerHTML=obj.buildArea+" m<sup>2</sup>";
-        $("#buildArea").append(buildArea);
-       
-        var fareItem=document.createElement("span");
-        fareItem.innerHTML=obj.fareItem;
-        $("#fareItem").append(fareItem);
-        
-        if(obj.dangerClassification!=null&&obj.dangerClassification!=""){
-         	var dangerClassification=document.createElement("a");
-         	dangerClassification.innerHTML=obj.dangerClassification;
-         	$("#dangerClassification").append(dangerClassification);
-        }else{
-      	  $("#dangerClassification_div").hide();
-        }
-        
-        if(obj.charter!=null&&obj.charter!=""){
-        	var charter=document.createElement("span");
-    	 	charter.innerHTML=obj.charter;
-         	$("#charter").append(charter);
-         	
-        }else{
-      	  $("#charter_div").hide();
-      	  $("#hire_div").hide();
-        }
-        
-        if(obj.phone!=null&&obj.phone!=""){
-			console.log("phone="+obj.phone);
-         	var phone=document.createElement("a");
-         	phone.setAttribute("href","tel:"+obj.phone);
-         	phone.innerHTML=obj.phone;
-         	$("#phone").append(phone);
-        }else{
-      	  $("#phone_div").hide();
-        }
-        
-        if(obj.lng!=""&&obj.lat!=""){
-      	  	$("#navigation").on("click",function(){
-				location.href="/voucher/mobile/1/navigation.html?latitude="+latitude+"&longitude="+longitude+"&latitude2="+obj.lat+"&longitude2="+obj.lng;
-      	  	});
-         }else{
-			$("#navigation").hide();
-		}
-	}
-});
-  
-$.ajax({
-	type: "POST",
-	url: "/voucher/mobile/hidden/getRoomInfoHiddenItemByGUID.do",
-	data: { "guid":guid},
-	dataType: "json",
-	error: function (request){
-	 console.log(request);
-	},success: function (text) {
-    	  
-		var fire_extinguisher=text.fire_extinguisher;
-		if(fire_extinguisher>0){
-		  	checked("fire_extinguisher");
-		}
-		var high_power=text.high_power;
-		if(high_power>0){
-			checked("high_power");
-		}
-		var blow=text.blow;
-		if(blow>0){
-			checked("blow");
-		}
-		var line_aging=text.line_aging;
-		if(line_aging>0){
-			checked("line_aging");
-		}
-		var incline=text.incline;
-		if(incline>0){
-			checked("incline");
-		}
-		var split=text.split;
-		if(split>0){
-			checked("split");
-		}
-		var down=text.down;
-		if(down>0){
-			checked("down");
-		}
-		var break_off=text.break_off;
-		if(break_off>0){
-			checked("break_off");
-		}
-		var destroy=text.destroy;
-		if(destroy>0){
-			checked("destroy");
-		}
-		var invalidation=text.invalidation;
-		if(invalidation>0){
-			checked("invalidation");
-		}
-		var flaw=text.flaw;
-		if(flaw>0){
-			checked("flaw");
-		}
-		var cesspool=text.cesspool;
-		if(cesspool>0){
-			checked("cesspool");
-		}
-		var coast=text.coast;
-		if(coast>0){
-			checked("coast");
-		}
-		var wall_up=text.wall_up;
-		if(wall_up>0){
-			checked("wall_up");
-		}
-   	   		
-   	    var other=text.other;
-   	    if(other!=null&&other!=""){
-   	    	console.log("other=="+other==null);
-   	    	var isChecked = $('#check_name').is(":checked");         
-   	     	if(!isChecked){
-   		    	var check_name=document.getElementById("check_name");
-   		    	check_name.checked = true;
-   		    	$("#abnormity").show();
-   	    		progress_img.setAttribute("class","weui-icon-warn");
-   	     	}
-   	    	$("#circs").show();
-   	    	$("#other").text(other);
-   	    }
-	}
-});
-  
-function checked(val){
-	  
-	var isChecked = $('#'+val).prop("checked");         
-   	console.log(isChecked);
-   	if(isChecked == false){
-   	var check_name=document.getElementById("check_name");
-   	check_name.checked = true;
-   	$("#abnormity").show();
-	progress_img.setAttribute("class","weui-icon-warn");
-    	
-   	var boxes = document.getElementById(val);
-   	
-   	document.getElementsByName(val)[0].style.color=' #CC0000';
-    boxes.checked = true; 
-    
-   	}else{
-   		var boxes = document.getElementById(val);
-      	
-      	document.getElementsByName(val)[0].style.color='#000000';
-  	    boxes.checked = false; 
-   	}
-}
-  
-//百度地图API功能
-var map = new BMap.Map("allmap");    // 创建Map实例
-  
-var point = new BMap.Point(longitude, latitude);
-  
-map.centerAndZoom(point, 12);
-var marker = new BMap.Marker(point); // 创建点
-map.addOverlay(marker);
-var str = "我的位置";
-var opts = {
-   	position : point,    // 指定文本标注所在的地理位置
-	offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
-}	
-var label = new BMap.Label(str, opts);  // 创建文本标注对象
-label.setStyle({
-	fontSize : "12px",
-	height : "20px",
-	lineHeight : "20px",
-	fontFamily:"微软雅黑"
-});
-map.addOverlay(label);   
-map.enableScrollWheelZoom(true);
-  
-var geoc = new BMap.Geocoder();
- 	
-function keyDown(e) {   		  
-	var keycode = e.which;   //取得对应的键值（数字）  	  
-　  	var realkey = String.fromCharCode(e.which); //取得代表改键的真正字符  
-   	var val = document.getElementById("input").value;
-　   	if(keycode==13){
-		local.search(val);
-　  	}
-}     
- 	
-function actionTime(value){
-    var date = new Date(value); 
-    Y = date.getFullYear() + '-';
-    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-  	D = date.getDate()<10?'0'+date.getDate():date.getDate();
-    h = date.getHours() + ':';
-    m = date.getMinutes() + ':';
-    s = date.getSeconds(); 
-	return Y+M+D;
-}
+	<div class="weui-cells__title"></div> 
+	<div class="weui-cells weui-cells_form">
+		<div class="weui-cell">
+	        <div class="weui-cell__bd">
+	        </div>
+	    </div>
+	</div>
 	
-    
-function getByteLen(val) {    //传入一个字符串
-    var len = 0;
-    for (var i = 0; i < val.length; i++) {
-        if (val[i].match(/[^\x00-\xff]/ig) != null) //全角 
-            len += 2; //如果是全角，占用两个字节  如果mysql中某字段是text, 如果设置编码为utf-8,那么一个中文是占3个字节, gbk是两个字节
-        else
-            len += 1; //半角占用一个字节
-    }
-    return len;
- }  
-    
-function getDistance(lng,lat){
-	var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
-	var pointB = new BMap.Point(lng,lat);  // 创建点坐标B--江北区
-	var d=map.getDistance(pointA,pointB)/1000;
-	return d.toFixed(2)+' KM';  //获取两点距离,保留小数点后两位
-}
-    
-   
-//happenTime设置为当前时间
-var timestamp=actionTime(Date.parse(new Date()));
-console.log(timestamp);
-$("#happenTime").val(timestamp); 
+	<a href="javascript:;" id="save" class="weui-btn weui-btn_plain-primary">保存本次安全巡查记录</a>   
 
-$("#context").hide();
 
-$("#detail").hide();
-    
-var progress_img=document.createElement("i");
-progress_img.setAttribute("class","weui-icon-success");
-$("#progress_img").append(progress_img);
-   
-    
-$("#check_name").on("click",function(){
-	var isChecked = $('#check_name').is(":checked");         
-    console.log(isChecked);
-    if(isChecked){
-    	progress_img.setAttribute("class","weui-icon-warn");
-    }else{
-    	progress_img.setAttribute("class","weui-icon-success");
-    }
-});
-    
-$("#showDetail").on("click",function(){
-	var isShow = $("#detail").is(":hidden");         
-    console.log(isShow);
-    if(isShow){
-    	$("#detail").show();
-    }else{
-    	$("#detail").hide();
-    }
-});
-    
-$("#check_name").on("click",function(){
-	var isChecked = $('#check_name').is(":checked");         
-    console.log(isChecked);
-    if(isChecked){
-    	$("#abnormity").show();
-    	progress_img.setAttribute("class","weui-icon-warn");
-    }else{
-    	$("#abnormity").hide();
-    	progress_img.setAttribute("class","weui-icon-success");
-    }
-});
-    
-$("#other").on("click",function(){
-	var isShow = $("#circs").is(":hidden");         
-    console.log(isShow);
-    if(isShow){
-    	$("#circs").show();
-    }else{
-    	$("#circs").hide();
-    }
-});
-    
-    
-//保存按钮
-$("#save").click(function(){
-
-	var name = document.getElementById("address").innerText;
+	<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+	<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	<script type="text/javascript" src="../../../js/jquery-weui.js"></script>
 	
-	var checkItem=new Object();
+	<script type="text/javascript">
 	
-	checkItem.fire_extinguisher = null;
-	checkItem.high_power = null;
-	checkItem.line_aging = null;
-	checkItem.incline = null;
-	checkItem.split = null;
-	checkItem.down = null;
-	checkItem.break_off = null;
-	checkItem.destroy = null;
-	checkItem.invalidation = null;
-	checkItem.flaw = null;
-	checkItem.cesspool = null;
-	checkItem.coast = null;
-	checkItem.wall_up = null;
-		
-	$("input[name='checkbox1']").each(function(i,dom){
-		// console.log('1111111',$(this).val());
-		//console.log($(this).prop('checked')); 
-	  
-		if($(this).prop('checked')){
-			console.log($(this).val());
-			var value = $(this).val();
-			
-			if("fire_extinguisher"== value){
-				checkItem.fire_extinguisher = 1;
-			}else if("high_power" == value){
-				checkItem.high_power = 1;
-			}else if("blow" == value){
-				checkItem.blow = 1;
-			}else if("line_aging" == value){
-				checkItem.line_aging = 1;
-			}else if("incline" == value){
-				checkItem.incline = 1;
-			}else if("split" == value){
-				checkItem.split = 1;
-			}else if("down" == value){
-				checkItem.down = 1;
-			}else if("break_off" == value){
-				checkItem.break_off = 1;
-			}else if("destroy" == value){
-				checkItem.destroy = 1;
-			}else if("invalidation" == value){
-				checkItem.invalidation = 1;
-			}else if("flaw" == value){
-				checkItem.flaw = 1;
-			}else if("cesspool" == value){
-				checkItem.cesspool = 1;
-			}else if("coast" == value){
-				checkItem.coast = 1;
-			}else if("wall_up" == value){
-				checkItem.wall_up = 1;
+			function getQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if (r != null) return unescape(r[2]); return null;
 			}
-				
-		}
 			
-	})
-	console.log(00000000000000)
-	console.log(checkItem)
-		
-	var other = $("#check_circs").val();
-	
-	if(other != null && other != ""){
-		checkItem.other = other;
-	}
-		
-	var checkItemDate=JSON.stringify(checkItem);
-		
-   	geoc.getLocation(point, function(rs){
- 	    var addComp;
- 	  	addComp = rs.addressComponents;
- 	  	var addComp1=JSON.stringify(addComp);    	  	
- 	  	
- 	  	var happenTime=$("#happenTime").val();
- 		
- 		var check_name;
-     	var isChecked = $('#check_name').is(":checked");
-     	if(isChecked){
-     		check_name="异常";
-     	}else{
-     		check_name="正常";
-     	}
- 		
-     	var check_circs = $("#check_circs").val();
-     	
-     	var remark=$("#remark").val();
-    	
-		$.post("/voucher/mobile/hidden/insertHiddenCheck.do",{
-			guid:guid,
-			name:name,
-			checkItemDate:checkItemDate,
-	    	happenTime:happenTime,
-	    	check_name:check_name,
-	    	check_circs:check_circs,
-	    	remark:remark,
-	    	addComp:addComp1,
-	    	lng:longitude,
-	    	lat:latitude,
-	    	id:id
-	    }, function(data){
-			var obj = $.parseJSON(data);
-        	
-        	document.getElementById("save").disabled=false; 
-        	
-	    	if (obj.status == 0) {
-	        	alert("新建"+name+"安全巡查记录失败!");
-	        	console.log(obj.status);
-	        } else if (obj.status == 1) {
-	            //存储到服务器成功后的处理
-	            var check_id=obj.check_id;
-	            alert("新建"+name+"安全巡查记录成功!");
-	            location.href="addCheckInfoList.html"
-		        	
-	        }else if(obj.status == 2){
-		        	
-	        	$.alert("新建安全巡查记录失败,请选择至少一条检查项目!");
-		        
-	        }else{
-		        	
-	        	$.alert("新建安全巡查记录失败!");
-		        	
-      		}
-  		})
-	})
-})
-   
-url=document.location.toString();
-$.ajax({
-    url : "../../../wechat/sign.do",
-    data : {
-   	campusId:1,
-   	url:url
-    },
-    async: false,
-    type : "GET",
-    success : function(data) {
-   	var ticket=JSON.parse(data);
-    /*
-	   * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
-    */  
-       	          
-	wx.config({
-	debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-			appId: ticket.appId,
-			timestamp: ticket.timestamp,
-			nonceStr: ticket.nonceStr,
-			signature: ticket.signature,
-			jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
-	                      'onMenuShareAppMessage', 'onMenuShareQQ',
-	                      'onMenuShareWeibo', 'hideMenuItems',
-	                      'showMenuItems', 'hideAllNonBaseMenuItem',
-	                      'showAllNonBaseMenuItem', 'translateVoice',
-	                      'startRecord', 'stopRecord', 'onRecordEnd',
-	                      'playVoice', 'pauseVoice', 'stopVoice',
-	                      'uploadVoice', 'downloadVoice', 'chooseImage',
-	                      'previewImage', 'uploadImage', 'downloadImage',
-	                      'getNetworkType', 'openLocation', 'getLocation',
-	                      'hideOptionMenu', 'showOptionMenu', 'closeWindow',
-	                      'scanQRCode', 'chooseWXPay',
-	                      'openProductSpecificView', 'addCard', 'chooseCard',
-	                      'openCard' ]
-      	});
-       	    
-	}
-});
-	 
-var images = {
-	localId: [],
-	serverId: []
-};
-	
-var imagename = '安全巡查照片';
-document.querySelector('#showPicker').onclick = function () {
-	upImage(imagename);
-}
-
-function upImage(imagename) {
-	wx.chooseImage({
-		success: function (res) {
-			images.localId = res.localIds;
-			console.log('已选择 ' + res.localIds.length + ' 张图片');
-			var i = 0, length = images.localId.length;
-			images.serverId = [];
-			function upload(imagename) {
-				wx.uploadImage({
-					localId: images.localId[i].toString(),
-					isShowProgressTips: images.localId[i].toString(),
-					success: function (res) {
-						i++;
-						console.log('已上传：' + i + '/' + length);
-						//返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
-						wxImgCallback(imagename, res.serverId);
-						if (i < length) {
-							upload(imagename);
-						}
-					},fail: function (res) {
-						console.log(res);
+			var longitude=getQueryString("longitude");
+			var latitude=getQueryString("latitude");
+		  
+			var id=Math.random().toString(36).substr(2);
+			var guid=getQueryString("guid");
+		  
+			function setPcolor(value){
+			 
+			}
+			  
+			$("#abnormity").hide();
+			  
+			$("#circs").hide();
+			  
+			$.ajax({
+				type: "POST",
+				url: "/voucher/mobile/asset/getRoomInfoByGUID.do",
+				data: { "guid":guid},
+				dataType: "json",
+				error: function (request){
+					console.log(request);
+				},success: function (text) {
+					console.log(text);
+					var obj=text.roomInfo;
+				 	var imgs=text.fileBytes;
+			
+					var distance=null;
+			         	 
+			     	if(obj.lng!=""&&obj.lat!=""){  
+			     		var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
+			  			var pointB = new BMap.Point(obj.lng,obj.lat);  // 创建点坐标B--江北区
+			  			var d=map.getDistance(pointA,pointB);
+			      	  
+			  			if(d>200){
+			  				$.alert("新建安全巡查记录必须在资产附近的位置", "错误提示", function() {
+			  			 	 //点击确认后的回调函数
+			  					history.back();
+			  				});
+			  			}
 					}
-				});
-			}
-			upload(imagename);
-		}
-	});
-}
-
-function wxImgCallback(imagename,serverId) {
-	//将serverId传给wx_upload.php的upload方法
-	var url = "../../file/upload.do";
-    $.get(url,{
-    	campusId:1,
-    	imagename:imagename,
-    	serverId:serverId,
-    	id:id,
-    	classType:"imageData"
-    }, function(data){
-		console.log(data);
-        if (data == 0) {
-        	alert("上传图片失败!");
-        	console.log(data.msg);
-        } else if (data == 1) {
-            //存储到服务器成功后的处理
-			$.get("../../flow/findimagedata.do",{
- 		    	id:id
- 		    }, function(text){
- 		    	console.log("text="+text);
- 		    	var imgs=JSON.parse(text);
- 		    	console.log("imgs="+imgs.length);
- 		    	$("#img").children('div').remove();
- 		    	if(imgs!=null){
-						var i = 0;
-                        for(; i < imgs.length; i++){
-                      	   
-						var data=imgs[i];
-						var name=data.name;
-						var uri=data.uri;
-						var date=actionTime(data.date);
-						var panel=document.createElement("div");
-						panel.setAttribute("class","weui-panel__bd");
-						var a=document.createElement("a");
-						a.setAttribute("class","weui_grid");
-						var a=document.createElement("a");
-						a.setAttribute("href","javascript:void(0);");
-						a.setAttribute("class","weui-media-box weui-media-box_appmsg");
-						var div=document.createElement("div");
-						div.setAttribute("class","weui-media-box__hd");
-  
-						src="/voucher/"+uri;
-						var img=document.createElement("img");
-						img.setAttribute("class","weui-media-box__thumb");
-						img.setAttribute("src",src);
-  
-						div.appendChild(img);
- 	   		
-						div2=document.createElement("div");
-						div2.setAttribute("class","weui-media-box__bd");
-						h4=document.createElement("h4");
-						h4.setAttribute("class","weui-media-box__title");
-						h4.innerHTML=name;
-						p=document.createElement("p");
-						p.setAttribute("class","weui-media-box__desc");
-						p.innerHTML=date;
-						div2.appendChild(h4);
-						div2.appendChild(p);
-						a.appendChild(div);
-						a.appendChild(div2);
-						panel.appendChild(a);
-						$("#img").append(panel);
+			 			
+			   	  	var address=document.createElement("span");
+			   	  	address.innerHTML=obj.address;
+			      	$("#address").append(address);
+				      
+			      	var num=document.createElement("span");
+			      	num.innerHTML=obj.num;
+			      	$("#num").append(num);
+			              
+			        var buildArea=document.createElement("span");
+			        buildArea.innerHTML=obj.buildArea+" m<sup>2</sup>";
+			        $("#buildArea").append(buildArea);
+			       
+			        var fareItem=document.createElement("span");
+			        fareItem.innerHTML=obj.fareItem;
+			        $("#fareItem").append(fareItem);
+			        
+			        if(obj.dangerClassification!=null&&obj.dangerClassification!=""){
+			         	var dangerClassification=document.createElement("a");
+			         	dangerClassification.innerHTML=obj.dangerClassification;
+			         	$("#dangerClassification").append(dangerClassification);
+			        }else{
+			      	  $("#dangerClassification_div").hide();
+			        }
+			        
+			        if(obj.charter!=null&&obj.charter!=""){
+			        	var charter=document.createElement("span");
+			    	 	charter.innerHTML=obj.charter;
+			         	$("#charter").append(charter);
+			         	
+			        }else{
+			      	  $("#charter_div").hide();
+			      	  $("#hire_div").hide();
+			        }
+			        
+			        if(obj.phone!=null&&obj.phone!=""){
+						console.log("phone="+obj.phone);
+			         	var phone=document.createElement("a");
+			         	phone.setAttribute("href","tel:"+obj.phone);
+			         	phone.innerHTML=obj.phone;
+			         	$("#phone").append(phone);
+			        }else{
+			      	  $("#phone_div").hide();
+			        }
+			        
+			        if(obj.lng!=""&&obj.lat!=""){
+			      	  	$("#navigation").on("click",function(){
+							location.href="/voucher/mobile/1/navigation.html?latitude="+latitude+"&longitude="+longitude+"&latitude2="+obj.lat+"&longitude2="+obj.lng;
+			      	  	});
+			         }else{
+						$("#navigation").hide();
 					}
 				}
 			});
-		}
-	});
-}	
-   
-</script>
-</body>
+			  
+			$.ajax({
+				type: "POST",
+				url: "/voucher/mobile/hidden/getRoomInfoHiddenItemByGUID.do",
+				data: { "guid":guid},
+				dataType: "json",
+				error: function (request){
+				 console.log(request);
+				},success: function (text) {
+			    	  
+					var fire_extinguisher = text.fire_extinguisher;
+					if(fire_extinguisher>0){
+					  	checked("fire_extinguisher");
+					}
+					
+					var fire_aging = text.fire_aging;
+					if(fire_aging>0){
+						checked("fire_aging");
+					}
+					
+					var blow = text.blow;
+					if(blow>0){
+						checked("blow");
+					}
+					
+					var line_aging = text.line_aging;
+					if(line_aging>0){
+						checked("line_aging");
+					}
+					
+					var high_power = text.high_power;
+					if(high_power>0){
+						checked("high_power");
+					}
+					
+					var wire_chaos = text.wire_chaos;
+					if(wire_chaos>0){
+						checked("wire_chaos");
+					}
+					
+					var valve_aging = text.valve_aging;
+					if(valve_aging>0){
+						checked("valve_aging");
+					}
+					
+					var other_fire_hazards = text.other_fire_hazards;
+					if(other_fire_hazards>0){
+						checked("other_fire_hazards");
+					}
+					
+					var incline = text.incline;
+					if(incline>0){
+						checked("incline");
+					}
+					
+					var split = text.split;
+					if(split>0){
+						checked("split");
+					}
+					
+					var break_off = text.break_off;
+					if(break_off>0){
+						checked("break_off");
+					}
+					
+					var collapse = text.collapse;
+					if(collapse>0){
+						checked("collapse");
+					}
+					
+					var flaw = text.flaw;
+					if(flaw>0){
+						checked("flaw");
+					}
+					
+					var invalidation = text.invalidation;
+					if(invalidation>0){
+						checked("invalidation");
+					}
+					
+					var destroy = text.destroy;
+					if(destroy>0){
+						checked("destroy");
+					}
+					
+					var wall_up = text.wall_up;
+					if(wall_up>0){
+						checked("wall_up");
+					}
+					
+					var cesspool = text.cesspool;
+					if(cesspool>0){
+						checked("cesspool");
+					}
+					
+					var secure_channel = text.secure_channel;
+					if(secure_channel>0){
+						checked("secure_channel");
+					}
+					
+					var warning_missing = text.warning_missing;
+					if(warning_missing>0){
+						checked("warning_missing");
+					}
+					
+					var handrail_destroy = text.handrail_destroy;
+					if(handrail_destroy>0){
+						checked("handrail_destroy");
+					}
+					
+					var other_supporting = text.other_supporting;
+					if(other_supporting>0){
+						checked("other_supporting");
+					}
+					
+					var flooding = text.flooding;
+					if(flooding>0){
+						checked("flooding");
+					}
+					
+					var coast = text.coast;
+					if(coast>0){
+						checked("coast");
+					}
+					
+					var earthquake = text.earthquake;
+					if(earthquake>0){
+						checked("earthquake");
+					}
+					
+					var down = text.down;
+					if(down>0){
+						checked("down");
+					}
+					
+					var snow = text.snow;
+					if(snow>0){
+						checked("snow");
+					}
+					
+					var other_natural = text.other_natural;
+					if(other_natural>0){
+						checked("other_natural");
+					}
+					
+					var illegal_building = text.illegal_building;
+					if(illegal_building>0){
+						checked("illegal_building");
+					}
+					
+					var structural_failure = text.structural_failure;
+					if(structural_failure>0){
+						checked("structural_failure");
+					}
+					
+					var other_illegal = text.other_illegal;
+					if(other_illegal>0){
+						checked("other_illegal");
+					}
+			   	   		
+			   	    var other=text.other;
+			   	    if(other!=null&&other!=""){
+			   	    	console.log("other=="+other==null);
+			   	    	var isChecked = $('#check_name').is(":checked");         
+			   	     	if(!isChecked){
+			   		    	var check_name=document.getElementById("check_name");
+			   		    	check_name.checked = true;
+			   		    	$("#abnormity").show();
+			   	    		progress_img.setAttribute("class","weui-icon-warn");
+			   	     	}
+			   	    	$("#circs").show();
+			   	    	$("#other").text(other);
+			   	    }
+				}
+			});
+			  
+			function checked(val){
+				  
+				var isChecked = $('#'+val).prop("checked");         
+			   	console.log(isChecked);
+			   	if(isChecked == false){
+			   	var check_name=document.getElementById("check_name");
+			   	check_name.checked = true;
+			   	$("#abnormity").show();
+				progress_img.setAttribute("class","weui-icon-warn");
+			    	
+			   	var boxes = document.getElementById(val);
+			   	
+			   	document.getElementsByName(val)[0].style.color=' #CC0000';
+			    boxes.checked = true; 
+			    
+			   	}else{
+			   		var boxes = document.getElementById(val);
+			      	
+			      	document.getElementsByName(val)[0].style.color='#000000';
+			  	    boxes.checked = false; 
+			   	}
+			}
+			  
+			//百度地图API功能
+			var map = new BMap.Map("allmap");    // 创建Map实例
+			  
+			var point = new BMap.Point(longitude, latitude);
+			  
+			map.centerAndZoom(point, 12);
+			var marker = new BMap.Marker(point); // 创建点
+			map.addOverlay(marker);
+			var str = "我的位置";
+			var opts = {
+			   	position : point,    // 指定文本标注所在的地理位置
+				offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
+			}	
+			var label = new BMap.Label(str, opts);  // 创建文本标注对象
+			label.setStyle({
+				fontSize : "12px",
+				height : "20px",
+				lineHeight : "20px",
+				fontFamily:"微软雅黑"
+			});
+			map.addOverlay(label);   
+			map.enableScrollWheelZoom(true);
+			  
+			var geoc = new BMap.Geocoder();
+			 	
+			function keyDown(e) {   		  
+				var keycode = e.which;   //取得对应的键值（数字）  	  
+			　  	var realkey = String.fromCharCode(e.which); //取得代表改键的真正字符  
+			   	var val = document.getElementById("input").value;
+			　   	if(keycode==13){
+					local.search(val);
+			　  	}
+			}     
+			 	
+			function actionTime(value){
+			    var date = new Date(value); 
+			    Y = date.getFullYear() + '-';
+			    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+			  	D = date.getDate()<10?'0'+date.getDate():date.getDate();
+			    h = date.getHours() + ':';
+			    m = date.getMinutes() + ':';
+			    s = date.getSeconds(); 
+				return Y+M+D;
+			}
+				
+			    
+			function getByteLen(val) {    //传入一个字符串
+			    var len = 0;
+			    for (var i = 0; i < val.length; i++) {
+			        if (val[i].match(/[^\x00-\xff]/ig) != null) //全角 
+			            len += 2; //如果是全角，占用两个字节  如果mysql中某字段是text, 如果设置编码为utf-8,那么一个中文是占3个字节, gbk是两个字节
+			        else
+			            len += 1; //半角占用一个字节
+			    }
+			    return len;
+			 }  
+			    
+			function getDistance(lng,lat){
+				var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
+				var pointB = new BMap.Point(lng,lat);  // 创建点坐标B--江北区
+				var d=map.getDistance(pointA,pointB)/1000;
+				return d.toFixed(2)+' KM';  //获取两点距离,保留小数点后两位
+			}
+			    
+			   
+			//happenTime设置为当前时间
+			var timestamp=actionTime(Date.parse(new Date()));
+			console.log(timestamp);
+			$("#happenTime").val(timestamp); 
+			
+			$("#context").hide();
+			
+			$("#detail").hide();
+			    
+			var progress_img=document.createElement("i");
+			progress_img.setAttribute("class","weui-icon-success");
+			$("#progress_img").append(progress_img);
+			   
+			    
+			$("#check_name").on("click",function(){
+				var isChecked = $('#check_name').is(":checked");         
+			    console.log(isChecked);
+			    if(isChecked){
+			    	progress_img.setAttribute("class","weui-icon-warn");
+			    }else{
+			    	progress_img.setAttribute("class","weui-icon-success");
+			    }
+			});
+			    
+			$("#showDetail").on("click",function(){
+				var isShow = $("#detail").is(":hidden");         
+			    console.log(isShow);
+			    if(isShow){
+			    	$("#detail").show();
+			    }else{
+			    	$("#detail").hide();
+			    }
+			});
+			    
+			$("#check_name").on("click",function(){
+				var isChecked = $('#check_name').is(":checked");         
+			    console.log(isChecked);
+			    if(isChecked){
+			    	$("#abnormity").show();
+			    	progress_img.setAttribute("class","weui-icon-warn");
+			    }else{
+			    	$("#abnormity").hide();
+			    	progress_img.setAttribute("class","weui-icon-success");
+			    }
+			});
+			    
+			$("#other").on("click",function(){
+				var isShow = $("#circs").is(":hidden");         
+			    console.log(isShow);
+			    if(isShow){
+			    	$("#circs").show();
+			    }else{
+			    	$("#circs").hide();
+			    }
+			});
+			    
+			    
+			//保存按钮
+			$("#save").click(function(){
+			
+				var name = document.getElementById("address").innerText;
+				
+				var checkItem=new Object();
+				
+				checkItem.fire_extinguisher = null;
+				checkItem.fire_aging = null;
+				checkItem.high_power = null;
+				checkItem.blow = null;
+				checkItem.line_aging = null;
+				checkItem.wire_chaos = null;
+				checkItem.valve_aging = null;
+				checkItem.other_fire_hazards = null;
+				checkItem.incline = null;
+				checkItem.split = null;
+				checkItem.break_off = null;
+				checkItem.destroy = null;
+				checkItem.invalidation = null;
+				checkItem.flaw = null;
+				checkItem.collapse = null;
+				checkItem.wall_up = null;
+				checkItem.cesspool = null;
+				checkItem.secure_channel = null;
+				checkItem.warning_missing = null;
+				checkItem.handrail_destroy = null;
+				checkItem.other_supporting = null;
+				checkItem.flooding = null;
+				checkItem.coast = null;
+				checkItem.earthquake = null;
+				checkItem.snow = null;
+				checkItem.down = null;
+				checkItem.other_natural = null;
+				checkItem.illegal_building = null;
+				checkItem.structural_failure = null;
+				checkItem.other_illegal = null;
+					
+				$("input[name='checkbox1']").each(function(i,dom){
+					// console.log('1111111',$(this).val());
+					//console.log($(this).prop('checked')); 
+				  
+					if($(this).prop('checked')){
+						
+						var value = $(this).val();
+						
+						if("fire_extinguisher"== value){
+							checkItem.fire_extinguisher = 1;
+						}
+						else if("fire_aging" == value){
+							checkItem.fire_aging = 1;
+						}
+						else if("high_power" == value){
+							checkItem.high_power = 1;
+						}
+						else if("blow" == value){
+							checkItem.blow = 1;
+						}
+						else if("line_aging" == value){
+							checkItem.line_aging = 1;
+						}
+						else if("wire_chaos" == value){
+							checkItem.wire_chaos = 1;
+						}
+						else if("valve_aging" == value){
+							checkItem.valve_aging = 1;
+						}
+						else if("other_fire_hazards" == value){
+							checkItem.other_fire_hazards = 1;
+						}
+						else if("incline" == value){
+							checkItem.incline = 1;
+						}
+						else if("split" == value){
+							checkItem.split = 1;
+						}
+						else if("break_off" == value){
+							checkItem.break_off = 1;
+						}
+						else if("destroy" == value){
+							checkItem.destroy = 1;
+						}
+						else if("invalidation" == value){
+							checkItem.invalidation = 1;
+						}
+						else if("flaw" == value){
+							checkItem.flaw = 1;
+						}
+						else if("collapse" == value){
+							checkItem.collapse = 1;
+						}
+						else if("wall_up" == value){
+							checkItem.wall_up = 1;
+						}
+						else if("cesspool" == value){
+							checkItem.cesspool = 1;
+						}
+						else if("secure_channel" == value){
+							checkItem.secure_channel = 1;
+						}
+						else if("warning_missing" == value){
+							checkItem.warning_missing = 1;
+						}
+						else if("handrail_destroy" == value){
+							checkItem.handrail_destroy = 1;
+						}
+						else if("other_supporting" == value){
+							checkItem.other_supporting = 1;
+						}
+						else if("flooding" == value){
+							checkItem.flooding = 1;
+						}
+						else if("coast" == value){
+							checkItem.coast = 1;
+						}
+						else if("earthquake" == value){
+							checkItem.earthquake = 1;
+						}
+						else if("snow" == value){
+							checkItem.snow = 1;
+						}
+						else if("down" == value){
+							checkItem.down = 1;
+						}
+						else if("other_natural" == value){
+							checkItem.other_natural = 1;
+						}
+						else if("illegal_building" == value){
+							checkItem.illegal_building = 1;
+						}
+						else if("structural_failure" == value){
+							checkItem.structural_failure = 1;
+						}
+						else if("other_illegal" == value){
+							checkItem.other_illegal = 1;
+						}
+					}
+				})
+				console.log("00000000000000",checkItem)
+					
+				var other = $("#check_circs").val();
+				
+				if(other != null && other != ""){
+					checkItem.other = other;
+				}
+					
+				var checkItemDate=JSON.stringify(checkItem);
+					
+			   	geoc.getLocation(point, function(rs){
+			 	    var addComp;
+			 	  	addComp = rs.addressComponents;
+			 	  	var addComp1=JSON.stringify(addComp);    	  	
+			 	  	
+			 	  	var happenTime=$("#happenTime").val();
+			 		
+			 		var check_name;
+			     	var isChecked = $('#check_name').is(":checked");
+			     	if(isChecked){
+			     		check_name="异常";
+			     	}else{
+			     		check_name="正常";
+			     	}
+			 		
+			     	var check_circs = $("#check_circs").val();
+			     	
+			     	var remark=$("#remark").val();
+			    	
+					$.post("/voucher/mobile/hidden/insertHiddenCheck.do",{
+						guid:guid,
+						name:name,
+						checkItemDate:checkItemDate,
+				    	happenTime:happenTime,
+				    	check_name:check_name,
+				    	check_circs:check_circs,
+				    	remark:remark,
+				    	addComp:addComp1,
+				    	lng:longitude,
+				    	lat:latitude,
+				    	id:id
+				    }, function(data){
+						var obj = $.parseJSON(data);
+			        	
+			        	document.getElementById("save").disabled=false; 
+			        	
+				    	if (obj.status == 0) {
+				        	alert("新建"+name+"安全巡查记录失败!");
+				        	console.log(obj.status);
+				        } else if (obj.status == 1) {
+				            //存储到服务器成功后的处理
+				            var check_id=obj.check_id;
+				            alert("新建"+name+"安全巡查记录成功!");
+				            location.href="addCheckInfoList.html"
+					        	
+				        }else if(obj.status == 2){
+					        	
+				        	$.alert("新建安全巡查记录失败,请选择至少一条检查项目!");
+					        
+				        }else{
+					        	
+				        	$.alert("新建安全巡查记录失败!");
+					        	
+			      		}
+			  		})
+				})
+			})
+			   
+			url=document.location.toString();
+			$.ajax({
+			    url : "../../../wechat/sign.do",
+			    data : {
+			   	campusId:1,
+			   	url:url
+			    },
+			    async: false,
+			    type : "GET",
+			    success : function(data) {
+			   	var ticket=JSON.parse(data);
+			    /*
+				   * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
+			    */  
+			       	          
+				wx.config({
+				debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+						appId: ticket.appId,
+						timestamp: ticket.timestamp,
+						nonceStr: ticket.nonceStr,
+						signature: ticket.signature,
+						jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+				                      'onMenuShareAppMessage', 'onMenuShareQQ',
+				                      'onMenuShareWeibo', 'hideMenuItems',
+				                      'showMenuItems', 'hideAllNonBaseMenuItem',
+				                      'showAllNonBaseMenuItem', 'translateVoice',
+				                      'startRecord', 'stopRecord', 'onRecordEnd',
+				                      'playVoice', 'pauseVoice', 'stopVoice',
+				                      'uploadVoice', 'downloadVoice', 'chooseImage',
+				                      'previewImage', 'uploadImage', 'downloadImage',
+				                      'getNetworkType', 'openLocation', 'getLocation',
+				                      'hideOptionMenu', 'showOptionMenu', 'closeWindow',
+				                      'scanQRCode', 'chooseWXPay',
+				                      'openProductSpecificView', 'addCard', 'chooseCard',
+				                      'openCard' ]
+			      	});
+			       	    
+				}
+			});
+				 
+			var images = {
+				localId: [],
+				serverId: []
+			};
+				
+			var imagename = '安全巡查照片';
+			document.querySelector('#showPicker').onclick = function () {
+				upImage(imagename);
+			}
+			
+			function upImage(imagename) {
+				wx.chooseImage({
+					success: function (res) {
+						images.localId = res.localIds;
+						console.log('已选择 ' + res.localIds.length + ' 张图片');
+						var i = 0, length = images.localId.length;
+						images.serverId = [];
+						function upload(imagename) {
+							wx.uploadImage({
+								localId: images.localId[i].toString(),
+								isShowProgressTips: images.localId[i].toString(),
+								success: function (res) {
+									i++;
+									console.log('已上传：' + i + '/' + length);
+									//返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
+									wxImgCallback(imagename, res.serverId);
+									if (i < length) {
+										upload(imagename);
+									}
+								},fail: function (res) {
+									console.log(res);
+								}
+							});
+						}
+						upload(imagename);
+					}
+				});
+			}
+			
+			function wxImgCallback(imagename,serverId) {
+				//将serverId传给wx_upload.php的upload方法
+				var url = "../../file/upload.do";
+			    $.get(url,{
+			    	campusId:1,
+			    	imagename:imagename,
+			    	serverId:serverId,
+			    	id:id,
+			    	classType:"imageData"
+			    }, function(data){
+					console.log(data);
+			        if (data == 0) {
+			        	alert("上传图片失败!");
+			        	console.log(data.msg);
+			        } else if (data == 1) {
+			            //存储到服务器成功后的处理
+						$.get("../../flow/findimagedata.do",{
+			 		    	id:id
+			 		    }, function(text){
+			 		    	console.log("text="+text);
+			 		    	var imgs=JSON.parse(text);
+			 		    	console.log("imgs="+imgs.length);
+			 		    	$("#img").children('div').remove();
+			 		    	if(imgs!=null){
+									var i = 0;
+			                        for(; i < imgs.length; i++){
+			                      	   
+									var data=imgs[i];
+									var name=data.name;
+									var uri=data.uri;
+									var date=actionTime(data.date);
+									var panel=document.createElement("div");
+									panel.setAttribute("class","weui-panel__bd");
+									var a=document.createElement("a");
+									a.setAttribute("class","weui_grid");
+									var a=document.createElement("a");
+									a.setAttribute("href","javascript:void(0);");
+									a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+									var div=document.createElement("div");
+									div.setAttribute("class","weui-media-box__hd");
+			  
+									src="/voucher/"+uri;
+									var img=document.createElement("img");
+									img.setAttribute("class","weui-media-box__thumb");
+									img.setAttribute("src",src);
+			  
+									div.appendChild(img);
+			 	   		
+									div2=document.createElement("div");
+									div2.setAttribute("class","weui-media-box__bd");
+									h4=document.createElement("h4");
+									h4.setAttribute("class","weui-media-box__title");
+									h4.innerHTML=name;
+									p=document.createElement("p");
+									p.setAttribute("class","weui-media-box__desc");
+									p.innerHTML=date;
+									div2.appendChild(h4);
+									div2.appendChild(p);
+									a.appendChild(div);
+									a.appendChild(div2);
+									panel.appendChild(a);
+									$("#img").append(panel);
+								}
+							}
+						});
+					}
+				});
+			}	
+	   
+		</script>
+	</body>
 </html>

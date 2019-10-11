@@ -693,19 +693,35 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 					RoomInfo_Hidden_Item roomInfo_Hidden_Item2=(RoomInfo_Hidden_Item)selectRoomInfo_Hidden_Item(1, 0, "", "", search).get(0);
 					
 					int isHidden=getInt(roomInfo_Hidden_Item2.getFire_extinguisher())+
-								getInt(roomInfo_Hidden_Item2.getHigh_power())+
+								getInt(roomInfo_Hidden_Item2.getFire_aging())+
 								getInt(roomInfo_Hidden_Item2.getBlow())+
 								getInt(roomInfo_Hidden_Item2.getLine_aging())+
+								getInt(roomInfo_Hidden_Item2.getHigh_power())+
+								getInt(roomInfo_Hidden_Item2.getWire_chaos())+
+								getInt(roomInfo_Hidden_Item2.getValve_aging())+
+								getInt(roomInfo_Hidden_Item2.getOther_fire_hazards())+
 								getInt(roomInfo_Hidden_Item2.getIncline())+
 								getInt(roomInfo_Hidden_Item2.getSplit())+
-								getInt(roomInfo_Hidden_Item2.getDown())+
 								getInt(roomInfo_Hidden_Item2.getBreak_off())+
-								getInt(roomInfo_Hidden_Item2.getDestroy())+
-								getInt(roomInfo_Hidden_Item2.getInvalidation())+
+								getInt(roomInfo_Hidden_Item2.getCollapse())+
 								getInt(roomInfo_Hidden_Item2.getFlaw())+
-								getInt(roomInfo_Hidden_Item2.getCesspool())+
-								getInt(roomInfo_Hidden_Item2.getCoast())+
+								getInt(roomInfo_Hidden_Item2.getInvalidation())+
+								getInt(roomInfo_Hidden_Item2.getDestroy())+
 								getInt(roomInfo_Hidden_Item2.getWall_up())+
+								getInt(roomInfo_Hidden_Item2.getCesspool())+
+								getInt(roomInfo_Hidden_Item2.getSecure_channel())+
+								getInt(roomInfo_Hidden_Item2.getWarning_missing())+
+								getInt(roomInfo_Hidden_Item2.getHandrail_destroy())+
+								getInt(roomInfo_Hidden_Item2.getOther_supporting())+
+								getInt(roomInfo_Hidden_Item2.getFlooding())+
+								getInt(roomInfo_Hidden_Item2.getCoast())+
+								getInt(roomInfo_Hidden_Item2.getEarthquake())+
+								getInt(roomInfo_Hidden_Item2.getDown())+
+								getInt(roomInfo_Hidden_Item2.getSnow())+
+								getInt(roomInfo_Hidden_Item2.getOther_natural())+
+								getInt(roomInfo_Hidden_Item2.getIllegal_building())+
+								getInt(roomInfo_Hidden_Item2.getStructural_failure())+
+								getInt(roomInfo_Hidden_Item2.getOther_illegal())+
 								getInt(roomInfo_Hidden_Item2.getIs_other());
 					
 					System.out.println("isHidden="+isHidden);
@@ -824,6 +840,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 			Hidden_Check_Item hidden_Check_Item,Integer item){
 		// TODO Auto-generated method stub
 		// 写入整改记录
+		System.out.println("888888");
+		MyTestUtil.print(hidden_Neaten);
 		int i = InsertExe.get(this.getJdbcTemplate(), hidden_Neaten);
 
 		String guid=hidden_Neaten.getGUID();
@@ -911,14 +929,37 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 				
 				MyTestUtil.print(hidden_Check_Item);
 				
-				int isNeate = getInt(hidden_Check_Item5.getFire_extinguisher())
-						+ getInt(hidden_Check_Item5.getHigh_power()) + getInt(hidden_Check_Item5.getBlow())
-						+ getInt(hidden_Check_Item5.getLine_aging()) + getInt(hidden_Check_Item5.getIncline())
-						+ getInt(hidden_Check_Item5.getSplit()) + getInt(hidden_Check_Item5.getDown())
-						+ getInt(hidden_Check_Item5.getBreak_off()) + getInt(hidden_Check_Item5.getDestroy())
-						+ getInt(hidden_Check_Item5.getInvalidation()) + getInt(hidden_Check_Item5.getFlaw())
-						+ getInt(hidden_Check_Item5.getCesspool()) + getInt(hidden_Check_Item5.getCoast())
-						+ getInt(hidden_Check_Item5.getWall_up())+getInt(hidden_Check_Item5.getIs_other());
+				int isNeate = getInt(hidden_Check_Item5.getFire_extinguisher())+
+						getInt(hidden_Check_Item5.getFire_aging())+
+						getInt(hidden_Check_Item5.getBlow())+
+						getInt(hidden_Check_Item5.getLine_aging())+
+						getInt(hidden_Check_Item5.getHigh_power())+
+						getInt(hidden_Check_Item5.getWire_chaos())+
+						getInt(hidden_Check_Item5.getValve_aging())+
+						getInt(hidden_Check_Item5.getOther_fire_hazards())+
+						getInt(hidden_Check_Item5.getIncline())+
+						getInt(hidden_Check_Item5.getSplit())+
+						getInt(hidden_Check_Item5.getBreak_off())+
+						getInt(hidden_Check_Item5.getCollapse())+
+						getInt(hidden_Check_Item5.getFlaw())+
+						getInt(hidden_Check_Item5.getInvalidation())+
+						getInt(hidden_Check_Item5.getDestroy())+
+						getInt(hidden_Check_Item5.getWall_up())+
+						getInt(hidden_Check_Item5.getCesspool())+
+						getInt(hidden_Check_Item5.getSecure_channel())+
+						getInt(hidden_Check_Item5.getWarning_missing())+
+						getInt(hidden_Check_Item5.getHandrail_destroy())+
+						getInt(hidden_Check_Item5.getOther_supporting())+
+						getInt(hidden_Check_Item5.getFlooding())+
+						getInt(hidden_Check_Item5.getCoast())+
+						getInt(hidden_Check_Item5.getEarthquake())+
+						getInt(hidden_Check_Item5.getDown())+
+						getInt(hidden_Check_Item5.getSnow())+
+						getInt(hidden_Check_Item5.getOther_natural())+
+						getInt(hidden_Check_Item5.getIllegal_building())+
+						getInt(hidden_Check_Item5.getStructural_failure())+
+						getInt(hidden_Check_Item5.getOther_illegal())+
+						getInt(hidden_Check_Item5.getIs_other());
 				
 				System.out.println("isNeate ="+isNeate);
 				

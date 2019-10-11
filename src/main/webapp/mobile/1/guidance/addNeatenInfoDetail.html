@@ -480,48 +480,126 @@
 	for(var i=0;i<item.length;i++){		
 		console.log(item[i]);
 		if(item[i]=="fire_extinguisher"){
-	  		text=text+"灭火器,";
+	  		text=text+"灭火设备缺失,";
 	  		checkItem.fire_extinguisher=1;
-	  	}else if(item[i]=="high_power"){
-  			text=text+"大功率用电器,";
-  			checkItem.high_power=1;
-  		}else if(item[i]=="blow"){
-  			text=text+"易燃易爆物品,";
+	  	}
+		else if(item[i]=="fire_aging"){
+  			text=text+"灭火设备老化,";
+  			checkItem.fire_aging=1;
+  		}
+		else if(item[i]=="blow"){
+  			text=text+"存放易燃易爆物品,";
   			checkItem.blow=1;
-  		}else if(item[i]=="line_aging"){
-  			text=text+"线路老化,";
+  		}
+		else if(item[i]=="line_aging"){
+  			text=text+"电线老化,";
   			checkItem.line_aging=1;
-  		}else if(item[i]=="incline"){
+  		}
+		else if(item[i]=="high_power"){
+  			text=text+"使用大功率电器,";
+  			checkItem.high_power=1;
+  		}
+		else if(item[i]=="wire_chaos"){
+  			text=text+"电线混乱,";
+  			 checkItem.wire_chaos=1;
+  		}
+		else if(item[i]=="valve_aging"){
+  			text=text+"气阀老化,";
+  			checkItem.valve_aging=1;
+  		}
+		else if(item[i]=="other_fire_hazards"){
+  			text=text+"其他火灾隐患,";
+  			checkItem.other_fire_hazards=1;
+  		}
+		else if(item[i]=="incline"){
   			text=text+"倾斜,";
   			checkItem.incline=1;
-  		}else if(item[i]=="split"){
+  		}
+  		else if(item[i]=="split"){
   			text=text+"开裂,";
-  			 checkItem.split=1;
-  		}else if(item[i]=="down"){
-  			text=text+"地基下沉,";
-  			checkItem.down=1;
-  		}else if(item[i]=="break_off"){
-  			text=text+"屋面脱落,";
+  			checkItem.split=1;
+  		}
+  		else if(item[i]=="break_off"){
+  			text=text+"屋面损坏(脱落),";
   			checkItem.break_off=1;
-  		}else if(item[i]=="destroy"){
-  			text=text+"结构破坏,";
-  			checkItem.destroy=1;
-  		}else if(item[i]=="invalidation"){
+  		}
+  		else if(item[i]=="collapse"){
+  			text=text+"坍塌,";
+  			checkItem.collapse=1;
+  		}
+  		else if(item[i]=="flaw"){
+  			text=text+"漏水,";
+  			checkItem.flaw=1;
+  		}
+  		else if(item[i]=="invalidation"){
   			text=text+"承重失效,";
   			checkItem.invalidation=1;
-  		}else if(item[i]=="flaw"){
-  			text=text+"漏雨,";
-  			checkItem.flaw=1;
-  		}else if(item[i]=="cesspool"){
-  			text=text+"化粪池问题,";
-  			checkItem.cesspool=1;
-  		}else if(item[i]=="coast"){
-  			text=text+"山体滑坡,";
-  			checkItem.coast=1;
-  		}else if(item[i]=="wall_up"){
+  		}
+  		else if(item[i]=="destroy"){
+  			text=text+"其他房屋结构隐患,";
+  			checkItem.destroy=1;
+  		}
+  		else if(item[i]=="wall_up"){
   			text=text+"管道堵塞,";
   			checkItem.wall_up=1;
-  		}else if(item[i]!=""){
+  		}
+  		else if(item[i]=="cesspool"){
+  			text=text+"化粪池问题,";
+  			checkItem.cesspool=1;
+  		}
+  		else if(item[i]=="secure_channel"){
+  			text=text+"安全通道问题,";
+  			checkItem.secure_channel=1;
+  		}
+  		else if(item[i]=="warning_missing"){
+  			text=text+"警示牌缺失,";
+  			checkItem.warning_missing=1;
+  		}
+  		else if(item[i]=="handrail_destroy"){
+  			text=text+"楼梯扶手损坏,";
+  			checkItem.handrail_destroy=1;
+  		}
+  		else if(item[i]=="other_supporting"){
+  			text=text+"其他配套设施问题,";
+  			checkItem.other_supporting=1;
+  		}
+  		else if(item[i]=="flooding"){
+  			text=text+"水灾隐患,";
+  			checkItem.flooding=1;
+  		}
+  		else if(item[i]=="coast"){
+  			text=text+"山体滑坡,";
+  			checkItem.coast=1;
+  		}
+  		else if(item[i]=="earthquake"){
+  			text=text+"地震风险,";
+  			checkItem.earthquake=1;
+  		}
+  		else if(item[i]=="down"){
+  			text=text+"地基下沉,";
+  			checkItem.down=1;
+  		}
+  		else if(item[i]=="snow"){
+  			text=text+"雪灾隐患,";
+  			checkItem.snow=1;
+  		}
+  		else if(item[i]=="other_natural"){
+  			text=text+"其他自然灾害隐患,";
+  			checkItem.other_natural=1;
+  		}
+  		else if(item[i]=="illegal_building"){
+  			text=text+"违章搭建,";
+  			checkItem.illegal_building=1;
+  		}
+  		else if(item[i]=="structural_failure"){
+  			text=text+"结构破坏,";
+  			checkItem.structural_failure=1;
+  		}
+  		else if(item[i]=="other_illegal"){
+  			text=text+"其他违章搭建隐患,";
+  			checkItem.other_illegal=1;
+  		}
+  		else if(item[i]!=""){
   			var gid=encodeURI(guid);
   			var xhm=new XMLHttpRequest();
    	    	xhm.open("GET","/voucher/mobile/hidden/getRoomInfoHiddenItemByGUID.do?guid="+gid,false);

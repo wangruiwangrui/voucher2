@@ -28,7 +28,7 @@ public class RedisJava {
         //String map=jedis.get("assetMap");
         //System.out.print(map);
         for(String key:keys){
-        	Object value=jedis.get(key);
+        	//Object value=jedis.get(key);
         	System.out.println(key+" = ");
         	/*if(key.equals("[item_room]_columnName")){
         		jedis.del(key);

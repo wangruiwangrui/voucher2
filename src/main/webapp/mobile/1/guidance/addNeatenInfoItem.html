@@ -8,321 +8,419 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <meta name="format-detection" content="telephone=no" />
 <meta charset="utf-8" />
-    <link rel="stylesheet" href="../css/weui.css"/>
-    <link rel="stylesheet" href="../css/example.css"/>
-    <link rel="stylesheet" href="../css/jquery-weui.css">
-    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <script src="../../../js/jquery-weui.js"></script>
+<link rel="stylesheet" href="../css/weui.css"/>
+<link rel="stylesheet" href="../css/example.css"/>
+<link rel="stylesheet" href="../css/jquery-weui.css">
+
 </head>
+<style type="text/css">
+.container{
+	position: relative;
+} 
+.weui-cells_checkbox{
+	margin-bottom: 3em;
+}
+#bs {
+	width:100%;
+	position:fixed;
+	bottom: 1px;
+	margin-bottom: -1px;
+	z-index: 3;
+}
+</style>
 <body>
 
 	<div class="container" id="container">
 		
-		<div class="cell">
+		<div class="cell" >
 			<div class="weui-cells__title">当前的隐患</div>
 			<div class="weui-cells weui-cells_checkbox" id="main"></div>
 		</div>
-			
-	</div>
-	
-	<div id="bs">
+		
+		<div id="bs">
 		<div class="weui-flex">
 			<div class="weui-flex__item">
-				<a href="javascript:;" id="save0" class="weui-btn weui-btn_plain-primary">不需维修</a>
+				<a href="javascript:;" id="save0" class="weui-btn weui-btn_default">不需维修</a>
 			</div>
 			<div class="weui-flex__item">
 				<a href="javascript:;" id="save" class="weui-btn weui-btn_primary">需要维修</a>
 			</div>
 		</div>
 	</div>
-	
+	</div>
 
-</body>
-
-<style type="text/css">
-	#bs {
-		width:100%;
-		position:fixed;
-		bottom: 1px;
-	}
-</style>
-
-<script>
-  function getQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null) return unescape(r[2]); return null;
-   }
-
-  var guid=getQueryString("guid");
-  
-  sign_URL=document.location.toString();
-  
-  $.ajax({
-	     url : "../../../wechat/sign.do",
-	     data : {
-	    	 campusId:1,
-	    	 url:sign_URL
-	     },
-	     async: false,
-	     type : "GET",
-	     success : function(data) {
-	    	 var ticket=JSON.parse(data);
-    	     /*
-  	      * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
-  	      */  
-    	          
-	    	 
-	    	 wx.config({
-	    		debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	      		appId: ticket.appId,
-	      		timestamp: ticket.timestamp,
-	      		nonceStr: ticket.nonceStr,
-	      		signature: ticket.signature,
-	      		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
-	                            'onMenuShareAppMessage', 'onMenuShareQQ',
-	                            'onMenuShareWeibo', 'hideMenuItems',
-	                            'showMenuItems', 'hideAllNonBaseMenuItem',
-	                            'showAllNonBaseMenuItem', 'translateVoice',
-	                            'startRecord', 'stopRecord', 'onRecordEnd',
-	                            'playVoice', 'pauseVoice', 'stopVoice',
-	                            'uploadVoice', 'downloadVoice', 'chooseImage',
-	                            'previewImage', 'uploadImage', 'downloadImage',
-	                            'getNetworkType', 'openLocation', 'getLocation',
-	                            'hideOptionMenu', 'showOptionMenu', 'closeWindow',
-	                            'scanQRCode', 'chooseWXPay',
-	                            'openProductSpecificView', 'addCard', 'chooseCard',
-	                            'openCard' ]
-	      	});
-
-	      }
-	 });
-	
-
-
-  function addDiv(item,text){
-	  var label=document.createElement("label");
-	  label.setAttribute("class","weui-cell weui-check__label");
-	  label.setAttribute("for",item);
-	  var div_1=document.createElement("div");
-	  div_1.setAttribute("class","weui-cell__hd");
-	  var input=document.createElement("input");
-	  input.setAttribute("type","checkbox");
-	  input.setAttribute("class","weui-check");
-	  input.setAttribute("name","checkbox1");
-	  input.setAttribute("id",item);
-	  var i=document.createElement("i");
-	  i.setAttribute("class","weui-icon-checked");
-	  div_1.appendChild(input);
-	  div_1.appendChild(i);
-	  var div_2=document.createElement("div");
-	  div_2.setAttribute("class","weui_cell_bd weui_cell_primary");
-	  var p=document.createElement("p");
-	  p.setAttribute("class","weui-cell__bd");
-	  p.innerHTML=text;
-	  div_2.appendChild(p);
-	  label.appendChild(div_1);
-	  label.appendChild(div_2);
-	  
-	  $("#main").append(label);
-  }
-
-  $.ajax({
-      type: "POST",
-      url: "/voucher/mobile/hidden/getRoomInfoHiddenItemByGUID.do",
-      data: { "guid":guid},
-      dataType: "json",
-      error: function (request){
-   	   console.log(request);
-      },
-      success: function (text) {
-    	    console.log(text);
-    	  	var fire_extinguisher=text.fire_extinguisher;
-    	  	if(fire_extinguisher>0){
-    	  		addDiv("fire_extinguisher","灭火器");
-    	  	}
-   	  	 	var high_power=text.high_power;
-	  		if(high_power>0){
-	  			addDiv("high_power","大功率用电器");
-	  		}
-   	   		var blow=text.blow;
-	  		if(blow>0){
-	  			addDiv("blow","易燃易爆物品");
-	  		}
-   	   		var line_aging=text.line_aging;
-	  		if(line_aging>0){
-	  			addDiv("line_aging","线路老化");
-	  		}
-   	   		var incline=text.incline;
-	  		if(incline>0){
-	  			addDiv("incline","倾斜");
-	  		}
-   	   		var split=text.split;
-	  		if(split>0){
-	  			addDiv("split","开裂");
-	  		}
-   	   		var down=text.down;
-	  		if(down>0){
-	  			addDiv("down","地基下沉");
-	  		}
-   	   		var break_off=text.break_off;
-	  		if(break_off>0){
-	  			addDiv("break_off","屋面脱落");
-	  		}
-   	   		var destroy=text.destroy;
-	  		if(destroy>0){
-	  			addDiv("destroy","结构破坏");
-	  		}
-   	   		var invalidation=text.invalidation;
-	  		if(invalidation>0){
-	  			addDiv("invalidation","承重失效");
-	  		}
-   	   		var flaw=text.flaw;
-	  		if(flaw>0){
-	  			addDiv("flaw","漏雨");
-	  		}
-   	   		var cesspool=text.cesspool;
-	  		if(cesspool>0){
-	  			addDiv("cesspool","化粪池问题");
-	  		}
-   	   		var coast=text.coast;
-	  		if(coast>0){
-	  			addDiv("coast","山体滑坡");
-	  		}
-   	   		var wall_up=text.wall_up;
-	  		if(wall_up>0){
-	  			addDiv("wall_up","管道堵塞");
-	  		}
-   	   		
-    	    var other=text.other;
-    	    if(other!=null&&other!=""){
-				addDiv("other",other);
-    	    }
-      }
-   });
-
-  $.ajax({
-      type: "POST",
-      url: "/voucher/mobile/flow/selectByGuid.do",
-      data: { "guid":guid},
-      dataType: "json",
-      error: function (request){
-   	   console.log(request);
-      },
-      success: function (text) {
-    	  
-    	  var total=text.total;
-    	  
-    	  if(total>0){
-    		  
-    		  $.alert("正在申请维修的资产不能新建整改记录", "错误提示", function() {
-	    			  //点击确认后的回调函数
-	    				history.back();
-	    			});
-
-    		}
-    	  
-      	}
-  	});
-  
-  $("#save0").on("click", function() {
-		obj = document.getElementsByName("checkbox1");
-		check_val = [];
-		for (k in obj) {
-			if (obj[k].checked)
-				check_val.push(obj[k].id);
-		}
-		var item=JSON.stringify(check_val);
-		guid=encodeURI(guid);
-		item=encodeURI(item);
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../../../js/jquery-weui.js"></script>
+		<script>
+		  function getQueryString(name) {
+		    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		    var r = window.location.search.substr(1).match(reg);
+		    if (r != null) return unescape(r[2]); return null;
+		   }
 		
-		console.log(check_val);
+		  var guid=getQueryString("guid");
+		  
+		  sign_URL=document.location.toString();
+		  
+		  $.ajax({
+			     url : "../../../wechat/sign.do",
+			     data : {
+			    	 campusId:1,
+			    	 url:sign_URL
+			     },
+			     async: false,
+			     type : "GET",
+			     success : function(data) {
+			    	 var ticket=JSON.parse(data);
+		    	     /*
+		  	      * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
+		  	      */  
+		    	          
+			    	 
+			    	 wx.config({
+			    		debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			      		appId: ticket.appId,
+			      		timestamp: ticket.timestamp,
+			      		nonceStr: ticket.nonceStr,
+			      		signature: ticket.signature,
+			      		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+			                            'onMenuShareAppMessage', 'onMenuShareQQ',
+			                            'onMenuShareWeibo', 'hideMenuItems',
+			                            'showMenuItems', 'hideAllNonBaseMenuItem',
+			                            'showAllNonBaseMenuItem', 'translateVoice',
+			                            'startRecord', 'stopRecord', 'onRecordEnd',
+			                            'playVoice', 'pauseVoice', 'stopVoice',
+			                            'uploadVoice', 'downloadVoice', 'chooseImage',
+			                            'previewImage', 'uploadImage', 'downloadImage',
+			                            'getNetworkType', 'openLocation', 'getLocation',
+			                            'hideOptionMenu', 'showOptionMenu', 'closeWindow',
+			                            'scanQRCode', 'chooseWXPay',
+			                            'openProductSpecificView', 'addCard', 'chooseCard',
+			                            'openCard' ]
+			      	});
 		
-		if(check_val==null||check_val==""){
+			      }
+			 });
 			
-			$.alert("至少选择一条维修项目", "提示", function() {
-	  			  //点击确认后的回调函数
-	  			});
-			
-		}else{
-			wx.getLocation({		
-		      success : function(res) {
-		           // alert(JSON.stringify(res));
-		           var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-		           // $("#latitude").val(latitude);
-		           var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-		           // $("#longitude").val(longitude);
-		           var speed = res.speed; // 速度，以米/每秒计
-		           // $("#speed").val(speed);
-		           var accuracy = res.accuracy; // 位置精度
-		           // $("#accuracy").val(accuracy);
-		           $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
-		               	 longitude:longitude,
-		               	 latitude:latitude               	 
-		                },function(text){
-		               	 var obj = $.parseJSON(text);
-		               	 var result=obj.result;
-		               	 var lat=result[0].y;
-		               	 var lng=result[0].x;
-		              
-		               	 location.href="addNeatenInfoDetail0.html?guid="+guid+"&latitude="+lat+"&longitude="+lng+"&item="+item;
-		               	 
-		            });                  
+		
+		
+		  function addDiv(item,text){
+			  var label=document.createElement("label");
+			  label.setAttribute("class","weui-cell weui-check__label");
+			  label.setAttribute("for",item);
+			  var div_1=document.createElement("div");
+			  div_1.setAttribute("class","weui-cell__hd");
+			  var input=document.createElement("input");
+			  input.setAttribute("type","checkbox");
+			  input.setAttribute("class","weui-check");
+			  input.setAttribute("name","checkbox1");
+			  input.setAttribute("id",item);
+			  var i=document.createElement("i");
+			  i.setAttribute("class","weui-icon-checked");
+			  div_1.appendChild(input);
+			  div_1.appendChild(i);
+			  var div_2=document.createElement("div");
+			  div_2.setAttribute("class","weui_cell_bd weui_cell_primary");
+			  var p=document.createElement("p");
+			  p.setAttribute("class","weui-cell__bd");
+			  p.innerHTML=text;
+			  div_2.appendChild(p);
+			  label.appendChild(div_1);
+			  label.appendChild(div_2);
+			  
+			  $("#main").append(label);
+		  }
+		
+		  $.ajax({
+		      type: "POST",
+		      url: "/voucher/mobile/hidden/getRoomInfoHiddenItemByGUID.do",
+		      data: { "guid":guid},
+		      dataType: "json",
+		      error: function (request){
+		   	   console.log(request);
+		      },
+		      success: function (text) {
+		    	    console.log(text);
+		    	    
+		    	    var fire_extinguisher = text.fire_extinguisher;
+					if(fire_extinguisher>0){
+						addDiv("fire_extinguisher","灭火设备缺失");
+					}
+					
+					var fire_aging = text.fire_aging;
+					if(fire_aging>0){
+						addDiv("fire_aging","灭火设备老化");
+					}
+					
+					var blow = text.blow;
+					if(blow>0){
+						addDiv("blow","存放易燃易爆物品");
+					}
+					
+					var line_aging = text.line_aging;
+					if(line_aging>0){
+						addDiv("line_aging","电线老化");
+					}
+					
+					var high_power = text.high_power;
+					if(high_power>0){
+						addDiv("high_power","使用大功率电器");
+					}
+					
+					var wire_chaos = text.wire_chaos;
+					if(wire_chaos>0){
+						addDiv("wire_chaos","电线混乱");
+					}
+					
+					var valve_aging = text.valve_aging;
+					if(valve_aging>0){
+						addDiv("valve_aging","气阀老化");
+					}
+					
+					var other_fire_hazards = text.other_fire_hazards;
+					if(other_fire_hazards>0){
+						addDiv("other_fire_hazards","其他火灾隐患");
+					}
+					
+					var incline = text.incline;
+					if(incline>0){
+						addDiv("incline","倾斜");
+					}
+					
+					var split = text.split;
+					if(split>0){
+						addDiv("split","开裂");
+					}
+					
+					var break_off = text.break_off;
+					if(break_off>0){
+						addDiv("break_off","屋面损坏(脱落)");
+					}
+					
+					var collapse = text.collapse;
+					if(collapse>0){
+						addDiv("collapse","坍塌");
+					}
+					
+					var flaw = text.flaw;
+					if(flaw>0){
+						addDiv("flaw","漏雨");
+					}
+					
+					var invalidation = text.invalidation;
+					if(invalidation>0){
+						addDiv("invalidation","承重失效");
+					}
+					
+					var destroy = text.destroy;
+					if(destroy>0){
+						addDiv("destroy","其他房屋结构隐患");
+					}
+					
+					var wall_up = text.wall_up;
+					if(wall_up>0){
+						addDiv("wall_up","管道堵塞");
+					}
+					
+					var cesspool = text.cesspool;
+					if(cesspool>0){
+						addDiv("cesspool","化粪池问题");
+					}
+					
+					var secure_channel = text.secure_channel;
+					if(secure_channel>0){
+						addDiv("secure_channel","安全通道问题");
+					}
+					
+					var warning_missing = text.warning_missing;
+					if(warning_missing>0){
+						addDiv("warning_missing","警示牌缺失");
+					}
+					
+					var handrail_destroy = text.handrail_destroy;
+					if(handrail_destroy>0){
+						addDiv("handrail_destroy","楼梯扶手损坏");
+					}
+					
+					var other_supporting = text.other_supporting;
+					if(other_supporting>0){
+						addDiv("other_supporting","其他配套设施问题");
+					}
+					
+					var flooding = text.flooding;
+					if(flooding>0){
+						addDiv("flooding","水灾隐患");
+					}
+					
+					var coast = text.coast;
+					if(coast>0){
+						addDiv("coast","山体滑坡");
+					}
+					
+					var earthquake = text.earthquake;
+					if(earthquake>0){
+						addDiv("earthquake","地震风险");
+					}
+					
+					var down = text.down;
+					if(down>0){
+						addDiv("down","地基下沉");
+					}
+					
+					var snow = text.snow;
+					if(snow>0){
+						addDiv("snow","雪灾隐患");
+					}
+					
+					var other_natural = text.other_natural;
+					if(other_natural>0){
+						addDiv("other_natural","其他自然灾害隐患");
+					}
+					
+					var illegal_building = text.illegal_building;
+					if(illegal_building>0){
+						addDiv("illegal_building","违章搭建");
+					}
+					
+					var structural_failure = text.structural_failure;
+					if(structural_failure>0){
+						addDiv("structural_failure","结构破坏");
+					}
+					
+					var other_illegal = text.other_illegal;
+					if(other_illegal>0){
+						addDiv("other_illegal","其他违章搭建隐患");
+					}
+		    	   
+		    	    var other=text.other;
+		    	    if(other!=null&&other!=""){
+						addDiv("other",other);
+		    	    }
 		      }
 		   });
-		}
-	});
-	
-  
-	$("#save").on("click", function() {
-		obj = document.getElementsByName("checkbox1");
-		check_val = [];
-		for (k in obj) {
-			if (obj[k].checked)
-				check_val.push(obj[k].id);
-		}
-		var item=JSON.stringify(check_val);
-		guid=encodeURI(guid);
-		item=encodeURI(item);
 		
-		console.log(check_val);
+		  $.ajax({
+		      type: "POST",
+		      url: "/voucher/mobile/flow/selectByGuid.do",
+		      data: { "guid":guid},
+		      dataType: "json",
+		      error: function (request){
+		   	   console.log(request);
+		      },
+		      success: function (text) {
+		    	  
+		    	  var total=text.total;
+		    	  
+		    	  if(total>0){
+		    		  
+		    		  $.alert("正在申请维修的资产不能新建整改记录", "错误提示", function() {
+			    			  //点击确认后的回调函数
+			    				history.back();
+			    			});
 		
-		if(check_val==null||check_val==""){
+		    		}
+		    	  
+		      	}
+		  	});
+		  
+		  $("#save0").on("click", function() {
+				obj = document.getElementsByName("checkbox1");
+				check_val = [];
+				for (k in obj) {
+					if (obj[k].checked)
+						check_val.push(obj[k].id);
+				}
+				var item=JSON.stringify(check_val);
+				guid=encodeURI(guid);
+				item=encodeURI(item);
+				
+				console.log(check_val);
+				
+				if(check_val==null||check_val==""){
+					
+					$.alert("至少选择一条维修项目", "提示", function() {
+			  			  //点击确认后的回调函数
+			  			});
+					
+				}else{
+					wx.getLocation({		
+				      success : function(res) {
+				           // alert(JSON.stringify(res));
+				           var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+				           // $("#latitude").val(latitude);
+				           var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+				           // $("#longitude").val(longitude);
+				           var speed = res.speed; // 速度，以米/每秒计
+				           // $("#speed").val(speed);
+				           var accuracy = res.accuracy; // 位置精度
+				           // $("#accuracy").val(accuracy);
+				           $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+				               	 longitude:longitude,
+				               	 latitude:latitude               	 
+				                },function(text){
+				               	 var obj = $.parseJSON(text);
+				               	 var result=obj.result;
+				               	 var lat=result[0].y;
+				               	 var lng=result[0].x;
+				              
+				               	 location.href="addNeatenInfoDetail0.html?guid="+guid+"&latitude="+lat+"&longitude="+lng+"&item="+item;
+				               	 
+				            });                  
+				      }
+				   });
+				}
+			});
 			
-			$.alert("至少选择一条维修项目", "提示", function() {
-	  			  //点击确认后的回调函数
-	  			});
+		  
+			$("#save").on("click", function() {
+				obj = document.getElementsByName("checkbox1");
+				check_val = [];
+				for (k in obj) {
+					if (obj[k].checked)
+						check_val.push(obj[k].id);
+				}
+				var item=JSON.stringify(check_val);
+				guid=encodeURI(guid);
+				item=encodeURI(item);
+				
+				console.log(check_val);
+				
+				if(check_val==null||check_val==""){
+					
+					$.alert("至少选择一条维修项目", "提示", function() {
+			  			  //点击确认后的回调函数
+			  			});
+					
+				}else{		
+				  wx.getLocation({
+				      success : function(res) {
+				           // alert(JSON.stringify(res));
+				           var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+				           // $("#latitude").val(latitude);
+				           var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+				           // $("#longitude").val(longitude);
+				           var speed = res.speed; // 速度，以米/每秒计
+				           // $("#speed").val(speed);
+				           var accuracy = res.accuracy; // 位置精度
+				           // $("#accuracy").val(accuracy);
+				           $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+				               	 longitude:longitude,
+				               	 latitude:latitude               	 
+				                },function(text){
+				               	 var obj = $.parseJSON(text);
+				               	 var result=obj.result;
+				               	 var lat=result[0].y;
+				               	 var lng=result[0].x;
+				              
+				               	 location.href="../../flow/start.html?guid="+guid+"&latitude="+lat+"&longitude="+lng+"&item="+item;
+				               	 
+				            });                  
+				      }
+				   });
+				}
+			});
 			
-		}else{		
-		  wx.getLocation({
-		      success : function(res) {
-		           // alert(JSON.stringify(res));
-		           var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-		           // $("#latitude").val(latitude);
-		           var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-		           // $("#longitude").val(longitude);
-		           var speed = res.speed; // 速度，以米/每秒计
-		           // $("#speed").val(speed);
-		           var accuracy = res.accuracy; // 位置精度
-		           // $("#accuracy").val(accuracy);
-		           $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
-		               	 longitude:longitude,
-		               	 latitude:latitude               	 
-		                },function(text){
-		               	 var obj = $.parseJSON(text);
-		               	 var result=obj.result;
-		               	 var lat=result[0].y;
-		               	 var lng=result[0].x;
-		              
-		               	 location.href="../../flow/start.html?guid="+guid+"&latitude="+lat+"&longitude="+lng+"&item="+item;
-		               	 
-		            });                  
-		      }
-		   });
-		}
-	});
-	
-</script>
-
+		</script>
+	</body>
 </html>

@@ -66,56 +66,56 @@
     	  setTimeout(function () {
     		  loadlist();
     		  loading = false;
-          }, 1500);   //模拟延迟
+          }, 1000);   //模拟延迟
     	  
       });
 	
    
 	function loadlist() {
 		$.ajax({
-					type : "post",
-					async : false,
-					url : "../../mobile/flow/findMyAllHistory.do",
-					data : {
-						"limit" : limit, 
-	                     "offset" : offset
-					},
-					success : function(text) {
-						var obj = JSON.parse(text);
-						var data=obj.rows;
-		            	var count=obj.total;
-		            	
-						var span = document.createElement("span");
-						span.innerHTML = " " + count + "条记录";
-						var count = document.getElementById('count');
-						$("#count").children().remove();
-						count.appendChild(span);
+			type : "post",
+			async : false,
+			url : "../../mobile/flow/findMyAllHistory.do",
+			data : {
+				"limit" : limit, 
+                "offset" : offset
+			},
+			success : function(text) {
+				var obj = JSON.parse(text);
+				var data=obj.rows;
+            	var count=obj.total;
+            	
+				var span = document.createElement("span");
+				span.innerHTML = " " + count + "条记录";
+				var count = document.getElementById('count');
+				$("#count").children().remove();
+				count.appendChild(span);
 
-						console.log(data);
-						if (data.length > 0) {
-							var i = 0;
-							for (; i < data.length; i++) {
-								var obj = data[i];
-								console.log(obj);
-								var taskId = obj.id;
-								var li_1 = addDiv(obj.name,
-										"审批结果:"+getResult(obj.result), "流程编号:"+obj.id, 
-										"申请时间:"+actionTime(obj.endTime),
-										"申请人:"+obj.startUserId);
-								li_1.setAttribute("taskId", taskId);
-								li_1.setAttribute("onclick", "clickEvent('"
-										+ obj.id + "');");
-								$("#ul").append(li_1);
-							}
-							offset=offset+i;
-						} else {
-							//location.reload();
-							html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
-							$("#ul").append(html);
-							loading = true;
-						}
+				console.log(data);
+				if (data.length > 0) {
+					var i = 0;
+					for (; i < data.length; i++) {
+						var obj = data[i];
+						console.log(obj);
+						var taskId = obj.id;
+						var li_1 = addDiv(obj.name,
+								"审批结果:"+getResult(obj.result), "流程编号:"+obj.id, 
+								"申请时间:"+actionTime(obj.endTime),
+								"申请人:"+obj.startUserId);
+						li_1.setAttribute("taskId", taskId);
+						li_1.setAttribute("onclick", "clickEvent('"
+								+ obj.id + "');");
+						$("#ul").append(li_1);
 					}
-				})
+					offset=offset+i;
+				} else {
+					//location.reload();
+					html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
+					$("#ul").append(html);
+					loading = true;
+				}
+			}
+		})
 	}
 
 	function getResult(result){
@@ -194,7 +194,7 @@
 
 	function clickEvent(processDefinitionId) {
 
-				location.href = "historicFlowDetail.html?processDefinitionId=" + processDefinitionId;
+		location.href = "historicFlowDetail.html?processDefinitionId=" + processDefinitionId;
 
 	}
 	
