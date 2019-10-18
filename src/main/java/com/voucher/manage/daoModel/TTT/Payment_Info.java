@@ -24,8 +24,8 @@ public class Payment_Info {
 	@SQLString(name="out_trade_no")
 	private String out_trade_no;
 	
-	@SQLFloat(name="total_fee")
-	private Float total_fee;
+	@SQLInteger(name="total_fee")
+	private Integer total_fee;
 	
 	@SQLDateTime(name="CreateTime")
 	private Date CreateTime;
@@ -35,9 +35,6 @@ public class Payment_Info {
 	
 	@SQLString(name="name")
 	private String name;
-	
-	@SQLString(name="ChartGUID")
-	private String ChartGUID;
 	
 	@SQLString(name="open_id")
 	private String openid;
@@ -70,11 +67,11 @@ public class Payment_Info {
 		this.out_trade_no = out_trade_no;
 	}
 
-	public Float getTotal_fee() {
+	public Integer getTotal_fee() {
 		return total_fee;
 	}
 
-	public void setTotal_fee(Float total_fee) {
+	public void setTotal_fee(Integer total_fee) {
 		this.total_fee = total_fee;
 	}
 
@@ -100,14 +97,6 @@ public class Payment_Info {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getChartGUID() {
-		return ChartGUID;
-	}
-
-	public void setChartGUID(String chartGUID) {
-		ChartGUID = chartGUID;
 	}
 	
 	public String getOpenid() {

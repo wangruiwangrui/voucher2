@@ -8,10 +8,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import java.util.Map;
 import com.voucher.manage.dao.BillDAO;
+import com.voucher.manage.daoModel.TTT.Payment_Info;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.WeiXinService;
+import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 import com.voucher.weixin.util.BillAccessTokenUtil;
 
@@ -27,14 +29,19 @@ public class BillController {
 	@Autowired
 	private BillAccessTokenUtil billAcc;
 	
+	/**
+	 * 获取授权页链接
+	 * @return
+	 */
 	@RequestMapping("/getTicket")
 	@ResponseBody
-	public String getTicket(HttpServletRequest request, HttpServletResponse response) {
-		WeiXin weixin = weixinService.getWeiXinByCampusId(1);
-		String accessToken = weixin.getAccessToken();
-		billAcc.getS_pappid();
-		billAcc.getTicket();
-		return "1111111";
+	public Map<String, String> getTicket(String out_trade_no,HttpServletRequest request, HttpServletResponse response) {
+		Map<String, String> map = billAcc.setContact();
+		if(map.get("errmsg").equals("ok")) {
+			Map<String, String> map2 = billAcc.getAuthorizationLink(out_trade_no);
+			return map2;
+		}
+		return map;
 	}
 	
 	@RequestMapping("/invoice")
@@ -44,6 +51,8 @@ public class BillController {
 		billAcc.getAccessToken();
 		return "111111122222";
 	}
+	
+	
 	/*
 	public BillController(CarDatabaseContext context, IHostingEnvironment hostingEnvironment)
     {

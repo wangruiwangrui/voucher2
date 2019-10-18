@@ -22,7 +22,8 @@
 			$.post("../../voucher/seller/toLogin.do",
 				{campusAdmin:phone,password:password},
 				function(text){
-					var json=eval('('+text+')');
+					console.log("111111",text);
+					var json=JSON.parse(text);
 					if (json.status=="success") {
 								//将用户名和密码存到cookie
 									document.cookie = "campusAdmin="+phone;

@@ -195,51 +195,18 @@ li {
 
 <script>
 
-	var longitude = "";
-	var latitude = "";
-	function getLocation(){
-		wx.getLocation({
-			success : function(res) {
-				// alert(JSON.stringify(res));
-				latitude = res.latitude; // 纬度，浮点数，范围为90
-				// $("#latitude").val(latitude);
-				longitude = res.longitude; // 经度，浮点数，范围为180
-				// $("#longitude").val(longitude);
-				var speed = res.speed; // 速度，以米/每秒计
-				// $("#speed").val(speed);
-				var accuracy = res.accuracy; // 位置精度
-				// $("#accuracy").val(accuracy);
-				$.get("/voucher/mobile/map/baiduSwitch.do",
-					{ // 微信地理位置坐标转换成百度地图坐标
-						longitude : longitude,
-						latitude : latitude
-					},
-					function(text) {
-						var obj = $.parseJSON(text);
-						var result = obj.result;
-						latitude = result[0].y;
-						longitude = result[0].x;
-						loadlist(); 
-					});
+function getQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null)
+		return unescape(r[2]);
+	return null;
+}
 
-			},cancel : function(res) {
-				
-				alert('用户拒绝授权获取地理位置');
-			}
-		});
-	}
+var longitude = getQueryString("longitude");
+var latitude = getQueryString("latitude");
+var map = new BMap.Map("allmap");
 	
-	function getQueryString(name) {
-		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-		var r = window.location.search.substr(1).match(reg);
-		if (r != null)
-			return unescape(r[2]);
-		return null;
-	}
-
-	
-	var map = new BMap.Map("allmap");
-
 	var url = "/voucher/baiduMap/getAssetsByDistanceImg.do";
 
 	var limit = 10;

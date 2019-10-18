@@ -41,6 +41,21 @@ public class HirePay implements Serializable{
     @SQLString(name="open_id")
 	private String open_id;
 
+    @SQLString(name="out_trade_no")
+    private String out_trade_no;
+    
+	public String getOut_trade_no() {
+		return out_trade_no;
+	}
+
+	public void setOut_trade_no(String out_trade_no) {
+		this.out_trade_no = out_trade_no;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public void setGUID(String GUID){
 		this.GUID = GUID;
 	}

@@ -1,6 +1,7 @@
 package com.voucher.manage.dao;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -17,5 +18,7 @@ public interface KMeansDao {
 
 	public Map getHouseTypes();
 
-	public Map getAssetByCondition(JSONArray roomPropertyArray, JSONArray structureArray, JSONArray regionArray, JSONArray dangerClassificationArray, JSONArray floorArray);
+	public Map getAssetByCondition(List list);
+
+	public Map queryAssetByHidden(List list);
 }

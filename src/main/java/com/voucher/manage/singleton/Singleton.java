@@ -11,11 +11,8 @@ import com.voucher.manage.tools.MyTestUtil;
 
 public class Singleton {
 	private static Singleton instance = new Singleton();
-	//合江金宇
-//	public static final String URL = "http://www.gulinguozi.com";
 	
-//	public static final String URL = "http://wx.lzgtzh.com";
-	public static final String URL = "http://test.lzgtzh.com";
+	public static final String URL = "http://www.gulinguozi.com/";
 	
 	public final static String ROOMDATABASE="[RoomManage]";
 	

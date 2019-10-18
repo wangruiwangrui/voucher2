@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -50,8 +52,15 @@ public class KMeansController {
 	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
 	
 	@RequestMapping("/getAll")
-	public @ResponseBody Map getAll(String id) {		
+	public @ResponseBody Map getAll(String id,HttpServletResponse resp) {		
 
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		
 		BisectingKMeans2 bisectingKMeans2=new BisectingKMeans2();
 		
 		Map<String, Object> map=new HashMap<String, Object>(); 
@@ -111,10 +120,10 @@ public class KMeansController {
 		return map;
 	}
 	
-	
+	@CrossOrigin
 	@RequestMapping("/getAllRoom")
 	public @ResponseBody Map<String, Object> getAllRoom(@RequestParam Integer page,String id,
-			HttpServletRequest request) {
+			HttpServletRequest request,HttpServletResponse resp) {
 		
 		Map<String, Object> map=new HashMap<String, Object>();
 		
@@ -181,10 +190,15 @@ public class KMeansController {
 			int limit=10;
 			
 			resultMap=assetsDAO.findAllRoomInfo_Position(limit, offset, "Num", "asc", "or", searchMap);
-		
+			System.out.print("resultMap==========================================");
+			MyTestUtil.print(resultMap);
+			
 			roomInfo_Positions=(List) resultMap.get("rows");
 			
 			Map<String, Object> fileBytes = mobileDao.roomInfo_PositionImageQuery(request, roomInfo_Positions);
+			
+			System.out.print("fileBytes==========================================");
+			MyTestUtil.print(fileBytes);
 			
 			List rows=(List) resultMap.get("rows");
 			
@@ -223,12 +237,19 @@ public class KMeansController {
 		
 		resultMap.put("points", points);
 		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		
 		return resultMap;
 	}
 	
 	@RequestMapping("/getRoomByPoint")
 	public @ResponseBody Map<String, Object> getRoomByPoint(Double lng,Double lat,
-			HttpServletRequest request) {
+			HttpServletRequest request,HttpServletResponse resp) {
 		Map searchMap=new HashMap<>();
 
 		String term="AND";
@@ -258,13 +279,20 @@ public class KMeansController {
         
         map2.put("url", url);
         
+        resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        
         return map2;
 		
 	}
 	
 	//查询分类
 	@RequestMapping("/getHouseAndAssetTypes")
-	public @ResponseBody Map getHouseAndAssetTypes() {
+	public @ResponseBody Map getHouseAndAssetTypes(HttpServletResponse resp) {
 		
 		List AssetCheck = usersMapper.getWetchatAllUsers(1, 1, null, null, null, null);
 
@@ -272,37 +300,62 @@ public class KMeansController {
 		
 		houseTypes.put("AssetCheck", AssetCheck);
 		
+		resp.setContentType("text/json; charset=utf-8;application/json");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		
 		return houseTypes;
 	}
 	
-	//通过资产状况分类资产查询
-	@RequestMapping("/getAssetByCondition")
-	public @ResponseBody Map getAssetByCondition(@RequestBody JSONObject assetCondition){
+	//通过分类资产查询
+	@CrossOrigin("*")
+	@RequestMapping(value="/getAssetByCondition",method = RequestMethod.POST)
+	public @ResponseBody Map getAssetByCondition(@RequestBody Map<String, Object> jMap,HttpServletResponse resp){
+
+		Map map = new HashMap();
+		List list = new ArrayList();
 		
-		JSONArray roomPropertyArray = assetCondition.getJSONArray("RoomProperty");
+		for(String key : jMap.keySet()){
+			   String value = (String) jMap.get(key);
+			   String where = key + " = " +value;
+			   map.put(key, value);
+			   
+			   list.add(where);
+		}
 		
-		JSONArray structureArray = assetCondition.getJSONArray("Structure");
+		Map reMap = kMeansDao.getAssetByCondition(list);
 		
-		JSONArray regionArray = assetCondition.getJSONArray("RegionArray");
-		
-		JSONArray dangerClassificationArray = assetCondition.getJSONArray("DangerClassificationArray");
-		
-		JSONArray floorArray = assetCondition.getJSONArray("floorArray");
-		
-		Map map = kMeansDao.getAssetByCondition(roomPropertyArray,structureArray,regionArray,dangerClassificationArray,floorArray);
-		
-		return null;
+		return reMap;
 	}
 	
-	//通过经营状况分类查询
-	@RequestMapping("/getAssetsByBusiness")
-	public @ResponseBody Map getAssetsByBusiness(@RequestBody JSONObject assetBusiness) {
-		return null;
+	//通过隐患资产查询
+	@CrossOrigin("*")
+	@RequestMapping(value="/queryAssetByHidden",method = RequestMethod.POST)
+	public @ResponseBody Map queryAssetByHidden(@RequestBody Map<String, Object> jMap,HttpServletResponse resp){
+
+		Map map = new HashMap();
+		List list = new ArrayList();
+		
+		System.out.println("===============");
+		System.out.println(jMap);
+		//{hiddenType=房屋结构隐患}
+		for(String key : jMap.keySet()){
+		   String value = (String) jMap.get(key);
+		   if (value.equals("火灾隐患")) {
+			   String hidden[] = {"line_aging","wire_chaos","valve_aging","high_power","fire_extinguisher","fire_aging","blow","other_fire_hazards"};
+			   list.add(hidden);
+			}
+		   if (value.equals("房屋结构隐患")) {
+			   String hidden[] = {};
+		   }
+		}
+		
+		Map reMap = kMeansDao.queryAssetByHidden(list);
+		
+		return reMap;
 	}
-	
-	//通过产权/财产情况分类查询
-	@RequestMapping("/getAssetsByFinancial")
-	public @ResponseBody Map getAssetsByFinancial(@RequestBody JSONObject assetFinancial) {
-		return null;
-	}
+
 }

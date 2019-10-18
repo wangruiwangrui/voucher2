@@ -45,26 +45,26 @@ public class TempletController{
 	}
 
 	/*
-	 * Éú³ÉÓÃ»§¸öÈËÒ³Ãæ
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½
 	 */
 	@RequestMapping("/getHomePageTemplet")	
 	public @ResponseBody Map<String, Object>
 	getHomePageTemplet(HttpServletRequest request, HttpServletResponse response,
     		@RequestParam Integer campusId) throws IOException, ServletException{
-	   String redirectUrl="https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+		String redirectUrl="https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
 		String directory;
 		Map<String, Object> map = new HashMap<String, Object>();
 	    String appId, appSecret;
 	    String campusName;
 	    WeiXin weiXin;
 		
-		//ÉèÖÃ±àÂë¸ñÊ½ÓëMIMEÀàÐÍ
+		//ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½MIMEï¿½ï¿½ï¿½ï¿½
         response.setContentType("text/html; charset=UTF-8");
         
-      //ÎÄ¼þ¼ÐÁÐ±íÂ·¾¶
+      //ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ð±ï¿½Â·ï¿½ï¿½
       	directory=request.getSession().getServletContext().getRealPath("/mobile/home");
         
-        //·þÎñÆ÷¶ËµÄÏà¶ÔµØÖ·
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½Ôµï¿½Ö·
         String homeUrl=request.getHeader("Host")+request.getContextPath()+
         		       "/mobile/home/"+campusId+".html";
         
@@ -72,33 +72,33 @@ public class TempletController{
 		
 		File folder=new File(directory);
 		
-		//Èç¹ûÎÄ¼þ¼Ð²»´æÔÚÔò´´½¨
+		//ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò´´½ï¿½
 		if(!folder.exists()&&!folder.isDirectory()){
 			folder.mkdir();
 			System.out.println("folder not exists");
 		}
 		
         
-        //Ê×Ò³ÐÂÎÅÁÐ±íÂ·¾¶
+        //ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½Â·ï¿½ï¿½
         String indexPath=request.getSession().getServletContext().getRealPath("/mobile/home/"+campusId+".html");
         
-        //ÎÄ¼þÊÇ·ñ´æÔÚ
+        //ï¿½Ä¼ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
         File file=new File(indexPath);
 		
         String templatePath=request.getSession().getServletContext().getRealPath("/")
         		+"WEB-INF/templates";
-        //ÉèÖÃÄ£°åÄ¿Â¼
+        //ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½Ä¿Â¼
         
-        //´´½¨Ò»¸öfreemarker.template.ConfigurationÊµÀý£¬ËüÊÇ´æ´¢ FreeMarker Ó¦ÓÃ¼¶ÉèÖÃµÄºËÐÄ²¿·Ö
-        //Ö¸¶¨°æ±¾ºÅ
+        //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½freemarker.template.ConfigurationÊµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç´æ´¢ FreeMarker Ó¦ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ÃµÄºï¿½ï¿½Ä²ï¿½ï¿½ï¿½
+        //Ö¸ï¿½ï¿½ï¿½æ±¾ï¿½ï¿½
         Configuration cfg=new Configuration(Configuration.VERSION_2_3_22);
-        //»ñµÃÄ£°åÎÄ¼þÂ·¾¶
+        //ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½Ä¼ï¿½Â·ï¿½ï¿½
         cfg.setEncoding(Locale.CHINA, "UTF-8");
-      //ÉèÖÃÄ¬ÈÏ±àÂë¸ñÊ½
+      //ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½Ï±ï¿½ï¿½ï¿½ï¿½Ê½
         
         cfg.setDirectoryForTemplateLoading(new File(templatePath));
         
-        //Êý¾Ý
+        //ï¿½ï¿½ï¿½ï¿½
         Map<String, Object> HomePageData = new HashMap<>();
         
         weiXin=weixinService.getCampusById(campusId);		        
@@ -110,7 +110,7 @@ public class TempletController{
            }catch (Exception e) {
 				// TODO: handle exception
            	map.put(Constants.STATUS, Constants.FAILURE);
-				map.put(Constants.MESSAGE, "¸üÐÂÊ§°Ü,Î´ÉèÖÃAPPID");
+				map.put(Constants.MESSAGE, "ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½,Î´ï¿½ï¿½ï¿½ï¿½APPID");
 				
 				return map;
 			}
@@ -127,12 +127,12 @@ public class TempletController{
          HomePageData.put("homePages", homePage);
 
 
-         //´ÓÉèÖÃµÄÄ¿Â¼ÖÐ»ñµÃÄ£°å
+         //ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Ä¿Â¼ï¿½Ð»ï¿½ï¿½Ä£ï¿½ï¿½
          Template template = cfg.getTemplate("homePageTemplet.ftl");
          
-         //ºÏ²¢Ä£°åºÍÊý¾ÝÄ£ÐÍ
+         //ï¿½Ï²ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
          try {
-             //½«Êý¾ÝÓëÄ£°åäÖÈ¾µÄ½á¹ûÐ´ÈëÎÄ¼þÖÐ
+             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½È¾ï¿½Ä½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
              Writer writer=new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
              template.process(HomePageData, writer);
              writer.flush();
@@ -153,7 +153,7 @@ public class TempletController{
      weixinService.updateHomePageByCampusId(paramMap);
      
      map.put(Constants.STATUS, Constants.SUCCESS);
-	 map.put(Constants.MESSAGE, "¸üÐÂ³É¹¦");
+	 map.put(Constants.MESSAGE, "ï¿½ï¿½ï¿½Â³É¹ï¿½");
 		
 	 return map;
            

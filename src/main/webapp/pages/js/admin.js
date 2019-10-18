@@ -68,6 +68,11 @@ $('#patrol').click(function(){
 	   $('#content').load('pages/patrol.html');
 	   $('#content').attr('src','pages/patrol.html');
 	 });
+$('#WXbill').click(function(){
+	   $('#content').load('pages/WXbill.html');
+	   $('#content').attr('src','pages/WXbill.html');
+	 });
+
 
 if(getCookie("type")==0)
  $('#brand').text("用户 : "+getCookie("campusAdmin")+" (管理员)");

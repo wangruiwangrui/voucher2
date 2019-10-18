@@ -10,7 +10,7 @@ function getQueryString(name) {
 var code=getQueryString("code");
 var state=getQueryString("state");
 
-var VERSION='V10.0.004Beta';
+var VERSION='V10.01.009.191011.beta';
 
 //进入index2.html初始化当前版本号
 /*$.post('/voucher/mobile/flow/getVersion.do', {

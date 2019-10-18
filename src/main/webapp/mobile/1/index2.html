@@ -70,6 +70,30 @@ p {
 	display: block;
 	color: #777777;
 }
+
+.corner {
+	color: #fff;
+	position: relative;
+}
+
+.corner img {
+	width: 75%;
+}
+
+.corner:after {
+	content: attr(data-num);
+	line-height: 25px;
+	text-align: center;
+	width: 25px;
+	height: 25px;
+	font-size: 14px;
+	border-radius: 50%;
+	background-color: red;
+	position: absolute;
+	top: 0px;
+	right: 14px;
+}
+
 </style>
 
 <body>
@@ -294,6 +318,32 @@ p {
 
 		place = xhm.responseText;
 
+		$.get("../../mobile/flow/getAccessCount.do", {
+			
+		}, function(text) {
+
+			var flowButton = document.getElementById("flow");
+
+			var data=JSON.parse(text);
+			
+			var taskCount=data.taskCount;
+			
+			var passCount=data.passCount;
+			
+			var count=taskCount+passCount;
+			
+			if(count>0){
+				
+				if(count>100){
+					count="•••";
+				}
+				
+				flowButton.setAttribute("data-num",count);
+
+				flowButton.setAttribute("class","col-xs-4 col-sm-4 fiv corner");
+			}
+			
+		});
 	</script>
 
 </body>

@@ -750,8 +750,15 @@ public class AssetController {
 
 	@RequestMapping("/getAssetByHidden")
 	public @ResponseBody Map getAssetByHidden(@RequestParam Integer limit, @RequestParam Integer offset, String sort,
-			String order, @RequestParam String hiddenGuid, HttpServletRequest request) {
+			String order, @RequestParam String hiddenGuid, HttpServletRequest request,HttpServletResponse resp) {
 
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		
 		Map searchMap = new HashMap<>();
 
 		searchMap.put("[RoomInfo].GUID=", hiddenGuid);
@@ -813,7 +820,13 @@ public class AssetController {
 	}
 
 	@RequestMapping("/getWetchatAllUsers")
-	public @ResponseBody List getWetchatAllUsers() {
+	public @ResponseBody List getWetchatAllUsers(HttpServletResponse resp) {
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		return userService.getWetchatAllUsers(1, 1, null, null, null, null);
 	}
 

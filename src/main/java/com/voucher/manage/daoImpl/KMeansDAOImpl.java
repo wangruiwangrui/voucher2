@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -189,40 +191,66 @@ public class KMeansDAOImpl extends JdbcDaoSupport implements KMeansDao{
 	@Override
 	public Map getHouseTypes() {
 		
-		String[] str = {"RoomProperty","Structure","Region","DangerClassification","Floor","State"};
-		
 		String sql1 = "SELECT [RoomProperty] as co  FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] group by [RoomProperty]";
 		
 		List<String> list1 = this.getJdbcTemplate().query(sql1, new co());
+		list1.removeAll(Collections.singleton(null));
+		list1.removeAll(Collections.singleton(""));
 		
 		String sql2 = "SELECT [Structure] as co FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] group by [Structure]";
 		
 		List<String> list2 = this.getJdbcTemplate().query(sql2, new co());
+		list2.removeAll(Collections.singleton(null));
+		list2.removeAll(Collections.singleton(""));
 		
 		String sql3 = "SELECT [Region] as co FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] group by [Region]";
 		
 		List<String> list3 = this.getJdbcTemplate().query(sql3, new co());
+		list3.removeAll(Collections.singleton(null));
+		list3.removeAll(Collections.singleton(""));
 		
 		String sql4 = "SELECT [DangerClassification] as co FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] group by [DangerClassification]";
 		
-		List<String> list4 = this.getJdbcTemplate().query(sql4, new co());	
+		List<String> list4 = this.getJdbcTemplate().query(sql4, new co());
+		list4.removeAll(Collections.singleton(null));
+		list4.removeAll(Collections.singleton(""));
 		
 		String sql5 = "SELECT [Floor] as co FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] group by [Floor]";
 		
 		List<String> list5 = this.getJdbcTemplate().query(sql5, new co());	
+		list5.removeAll(Collections.singleton(null));
+		list5.removeAll(Collections.singleton(""));
 
 		String sql6 = "SELECT [State] as co FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] group by [State]";
 		
 		List<String> list6 = this.getJdbcTemplate().query(sql6, new co());
+		list6.removeAll(Collections.singleton(null));
+		list6.removeAll(Collections.singleton(""));
 		
 		String sql7 = "SELECT [Useful] as co FROM "+Singleton.ROOMDATABASE+" .[dbo].[RoomInfo] WHERE State='已出租' group by [Useful]";
 		
 		List<String> list7 = this.getJdbcTemplate().query(sql7, new co());
+		list7.removeAll(Collections.singleton(null));
+		list7.removeAll(Collections.singleton(""));
 		
 		String sql8 = "SELECT [BeFrom] as co FROM "+Singleton.ROOMDATABASE+" .[dbo].[RoomInfo] group by [BeFrom]";
 		
 		List<String> list8 = this.getJdbcTemplate().query(sql8, new co());
+		list8.removeAll(Collections.singleton(null));
+		list8.removeAll(Collections.singleton(""));
 
+		String sql9 = "SELECT [FareItem] as co FROM "+Singleton.ROOMDATABASE+" .[dbo].[ChartInfo] group by [FareItem]";
+		
+		List<String> list9 = this.getJdbcTemplate().query(sql9, new co());
+		list9.removeAll(Collections.singleton(null));
+		list9.removeAll(Collections.singleton(""));
+		
+		String sql10 = "SELECT [SecurityRegion] as co FROM "+Singleton.ROOMDATABASE+" .[dbo].[RoomInfo] group by [SecurityRegion]";
+		
+		List<String> list10 = this.getJdbcTemplate().query(sql10, new co());
+		list10.removeAll(Collections.singleton(null));
+		list10.removeAll(Collections.singleton(""));
+		
 		Map map = new HashMap();
 		
 		map.put("RoomProperty",list1);
@@ -233,44 +261,22 @@ public class KMeansDAOImpl extends JdbcDaoSupport implements KMeansDao{
 		map.put("State", list6);
 		map.put("LeasedAssets", list7);
 		map.put("BeFrom", list8);
-
+		map.put("FareItem", list9);
+		map.put("SecurityRegion", list10);
 		return map;
 	}
 
 	@Override
-	public Map getAssetByCondition(JSONArray roomPropertyArray, JSONArray structureArray, JSONArray regionArray, JSONArray dangerClassificationArray, JSONArray floorArray) {
+	public Map getAssetByCondition(List list) {
 		
-		String where = "";
 		
-		String strRoomProperty = "[RoomInfo].roomProperty= ";
-		String strStructure = "[RoomInfo].Structure= ";
 		
-		if(roomPropertyArray!=null) {
-			for (int i = 0; i < roomPropertyArray.size(); i++) {
-				
-				if (i == (roomPropertyArray.size() - 1)) {
-					where = where + strRoomProperty+roomPropertyArray.get(i) + " and";
-				} else {
-					where = where + strRoomProperty+roomPropertyArray.get(i)+" or";
-				}
-				
-			}
-		}else {
-			
-		}
-		
-		if(structureArray!=null) {
-			for (int i = 0; i < structureArray.size(); i++) {
-				
-				if (i == (structureArray.size() - 1)) {
-					where = where + strStructure+structureArray.get(i);
-				} else {
-					where = where + strStructure+structureArray.get(i)+" or";
-				}
-				
-			}
-		}
-		
+		return null;
+	}
+
+	@Override
+	public Map queryAssetByHidden(List list) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

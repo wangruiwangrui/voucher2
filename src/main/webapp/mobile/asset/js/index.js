@@ -152,7 +152,7 @@ var state=getQueryString("state");
 		 }
 		
 		document.querySelector('#hire').onclick =function(){
-			location.href="hire/chart2.html";
+			location.href="hire/chart.html";
 		 }
 		
 		document.querySelector('#userSetting').onclick =function(){

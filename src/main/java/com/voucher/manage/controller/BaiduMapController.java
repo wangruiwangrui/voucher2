@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -77,7 +78,14 @@ public class BaiduMapController {
 	}
 	
 	@RequestMapping("/get")
-	public @ResponseBody List test(String manageRegion) {		
+	public @ResponseBody List test(String manageRegion,HttpServletResponse resp) {		
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		
 		Map map;
 		if(manageRegion!=null){
@@ -94,7 +102,15 @@ public class BaiduMapController {
 	}
 	
 	@RequestMapping("/getPosition")
-	public @ResponseBody JSONObject getPosition() {
+	public @ResponseBody JSONObject getPosition(HttpServletResponse resp) {
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		
 		JSONObject jsonObject=new JSONObject();
 		Position position=new Position();
 		position.setLimit(10);
@@ -117,7 +133,14 @@ public class BaiduMapController {
 	}
 	
 	@RequestMapping("/location")
-	public @ResponseBody JSONObject baiduSwitch(HttpServletRequest request){
+	public @ResponseBody JSONObject baiduSwitch(HttpServletRequest request,HttpServletResponse resp){
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		JSONObject jsonObject=null;
 		String requestUrl = "http://api.map.baidu.com/location/ip?ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD&coor=bd09ll";
 		
@@ -146,7 +169,13 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getByDistance")
 	public @ResponseBody List getByDistance(Integer limit,Integer offset,Double lng,Double lat,
-			Double distance,HttpServletRequest request){
+			Double distance,HttpServletRequest request,HttpServletResponse resp){
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		
 		Map map=assetsDAO.findHiddenByDistance(limit, offset, lng, lat, "");
 		
@@ -159,7 +188,14 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getByPoint")
 	public @ResponseBody List getByPoint(@RequestParam Integer limit,@RequestParam Integer offset,Double lng,Double lat,
-			Double distance,HttpServletRequest request){
+			Double distance,HttpServletRequest request,HttpServletResponse resp){
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		
 		Map map=hiddenDAO.selectAllHidden_Point(limit, offset, null, null, null);
 		
@@ -173,8 +209,15 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getAssetsByDistance")
 	public @ResponseBody Map getAssetsByDistance(Integer limit,Integer offset,Double lng,Double lat,
-			Double distance,HttpServletRequest request){
+			Double distance,HttpServletRequest request,HttpServletResponse resp){
 
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		
 		Map map=assetsDAO.findAssetByDistance(limit, offset, lng, lat,"");
 	
 		List list=(List) map.get("row");
@@ -188,8 +231,15 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getAssetsByPoint")
 	public @ResponseBody Map getAssetsByPoint(Integer limit,Integer offset,Double lng,Double lat,
-			Double distance,HttpServletRequest request){
+			Double distance,HttpServletRequest request,HttpServletResponse resp){
 
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		
 		Map map=assetsDAO.findAssetByPoint(limit,offset,lng, lat, distance, "");
 	
 		List list=(List) map.get("rows");
@@ -203,8 +253,14 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getAssetsByDistanceImg")
 	public @ResponseBody Map getAssetsByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
-			Double distance,String search,String search2,HttpServletRequest request){
-		System.out.println("search="+search);
+			Double distance,String search,String search2,HttpServletRequest request,HttpServletResponse resp){
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 
 		Map map;
 		
@@ -254,8 +310,13 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getHiddenAssetsByDistanceImg")
 	public @ResponseBody Map getHiddenAssetsByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
-			Double distance,String search,HttpServletRequest request){
-		System.out.println("search="+search);
+			Double distance,String search,HttpServletRequest request,HttpServletResponse resp){
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 
 		Map map;
 		
@@ -282,7 +343,15 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getAssetsHiddenByDistanceImg")
 	public @ResponseBody Map getAssetsHiddenByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
-			Double distance,String search,HttpServletRequest request){
+			Double distance,String search,HttpServletRequest request,HttpServletResponse resp){
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		
 		Map map;
 		
 		map=assetsDAO.findAssetHiddenByDistance(limit, offset, lng, lat, search);
@@ -304,7 +373,15 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getAssetsHiddenByDistanceImgNotFlow")
 	public @ResponseBody Map getAssetsHiddenByDistanceImgNotFlow(Integer limit,Integer offset,Double lng,Double lat,
-			Double distance,String search,HttpServletRequest request){
+			Double distance,String search,HttpServletRequest request,HttpServletResponse resp){
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		
 		Map map;
 		
 		map=assetsDAO.findAssetHiddenByDistanceNotFlow(limit, offset, lng, lat, search);
@@ -325,28 +402,56 @@ public class BaiduMapController {
 	}
 	
 	@RequestMapping("getManageRegion")
-	public @ResponseBody List getManageRegion(){
+	public @ResponseBody List getManageRegion(HttpServletResponse resp){
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		
 		return assetsDAO.selectManageRegion();
 		
 	}
 	
 	@RequestMapping("getRoomProperty")
-	public @ResponseBody List getRoomProperty(){
+	public @ResponseBody List getRoomProperty(HttpServletResponse resp){
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		
 		return assetsDAO.selectRoomProperty();
 		
 	}
 	
 	@RequestMapping("getFareItem")
-	public @ResponseBody List getFareItem(){
+	public @ResponseBody List getFareItem(HttpServletResponse resp){
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		
 		return assetsDAO.selectFareItem();
 		
 	}
 	
 	@RequestMapping("getDangerClassification")
-	public @ResponseBody List getDangerClassification(){
+	public @ResponseBody List getDangerClassification(HttpServletResponse resp){
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		
 		return assetsDAO.selectDangerClassification();
 		
@@ -354,8 +459,15 @@ public class BaiduMapController {
 	
 	@RequestMapping("getGUIDByPosition")
 	public @ResponseBody Map getGUIDByPosition(@RequestParam Double lng,
-			@RequestParam Double lat){
+			@RequestParam Double lat,HttpServletResponse resp){
 		  
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		
 		Map searchMap=new HashMap<>();
         
 		System.out.println("lng="+lng+"   lat="+lat);
@@ -381,8 +493,15 @@ public class BaiduMapController {
 	
 	@RequestMapping("getAssetGUIDByPosition")
 	public @ResponseBody Map getAssetGUIDByPosition(@RequestParam Double lng,
-			@RequestParam Double lat ,HttpServletRequest request){
+			@RequestParam Double lat ,HttpServletRequest request,HttpServletResponse resp){
 		  
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		
 		Map searchMap=new HashMap<>();
 
 		String term="AND";
@@ -418,7 +537,14 @@ public class BaiduMapController {
 	
 	@RequestMapping("getCheckByPosition")
 	public @ResponseBody Hidden_Check_Join getCheckByPosition(@RequestParam Double lng,
-			@RequestParam Double lat ,@RequestParam String openId,HttpServletRequest request){
+			@RequestParam Double lat ,@RequestParam String openId,HttpServletRequest request,HttpServletResponse resp){
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		
 		Map searchMap=new HashMap<>();
         
@@ -454,9 +580,15 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getAllAsset")
 	public @ResponseBody Map getAllAsset(String manageRegion,String roomProperty,
-			String state,Integer hire,String dangerClassification,
-			String fareItem){
+			String state,Integer hire,String dangerClassification,String fareItem,HttpServletResponse resp){
 	
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		
 		Map where = new HashMap<>();
 		
 		String term="AND";
@@ -540,14 +672,21 @@ public class BaiduMapController {
 	
 	
 	@RequestMapping("/getAllHiddenAsset")
-	public @ResponseBody Map getAllHiddenAsset(){
+	public @ResponseBody Map getAllHiddenAsset(HttpServletResponse resp){
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		
 		return roomInfoDao.getAllHiddenAsset();
 		
 	}
 	
 	@RequestMapping("/getAllAssetPosition")
-	public @ResponseBody Map getAllAssetPosition(){
+	public @ResponseBody Map getAllAssetPosition(HttpServletResponse resp){
 		
 		Map map=roomInfoDao.getAllRoomInfoPosition();
 		
@@ -557,7 +696,14 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getAllCheckByOpenId")
 	public @ResponseBody Map getAllCheckByOpenId(@RequestParam String openId,
-			String datepicker, String datepicker2){
+			String datepicker, String datepicker2,HttpServletResponse resp){
+		
+		resp.setContentType("text/json; charset=utf-8");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+		resp.setHeader("Access-Control-Max-Age", "3600");
+		resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 				
 		Calendar calendar; 
 		

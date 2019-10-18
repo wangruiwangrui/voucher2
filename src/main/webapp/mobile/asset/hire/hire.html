@@ -22,14 +22,13 @@
 <script src="../../../assets/bootstrap-table/bootstrap-table.js"></script>
 <script src="../../../assets/bootstrap-table/bootstrap-table-export.js"></script>
 <script src="../../../assets/bootstrap-table/tableExport.js"></script>
-<script type="text/javascript"
-	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" 
+	src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 <script
 	src="../../../assets/bootstrap-table/bootstrap-table-editable.js"></script>
 <script src="../../../assets/bootstrap-table/bootstrap-editable.js"></script>
 <script src="../../../js/bootstrap-table-zh-CN.min.js"></script>
 
-<script src="../../../js/bootstrap-table-zh-CN.min.js"></script>
 <script type="text/javascript"
 	src="../../../bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 
@@ -49,6 +48,10 @@
 .blue{
 	text-align: left;
 	margin-top: 10%;
+}
+.row{
+	margin-left: 0px;
+	margin-right: 0px;
 }
 .btn1{
 	margin-bottom: 5%;
@@ -108,7 +111,7 @@
 	<!--  -->
 	<div class="modal fade" id="alertdialog" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog" style="width: 97%">
 			<div class="modal-content">
 				<div class="modal-header blue">
 					<div>
@@ -118,12 +121,15 @@
 						<strong class="str1" id="alertchar2" style="font-size: 30px"></strong></br></br>
 					</div>
 					<div>
+						<strong class="str1" id="alertchar3" style="font-size: 30px">out</strong></br></br>
+					</div>
+					<div>
 						<strong id="alertchar" style="font-size: 30px">是否需要开据发票</strong>
 					</div>
 					<div class="did">
-						<button type="button" id="commitFoodDataButton" style="width: 90%;letter-spacing: 10px;font-size:20px;"
+						<button type="button" id="commitFoodDataButton" style="width: 100%;letter-spacing: 10px;font-size:20px;"
 							class="btn btn-primary btn1">开发票</button>
-						<button type="button" class="btn btn-default" style="width: 90%;letter-spacing: 10px;font-size:20px;"
+						<button type="button" class="btn btn-default" style="width: 100%;letter-spacing: 10px;font-size:20px;"
 						data-dismiss="modal">取消</button>
 					</div>
 				</div>
@@ -131,9 +137,9 @@
 		</div>
 	</div>
 
-	<!-- <button type="button" data-toggle="modal" data-target="#alertdialog">Launch modal</button> 
-	<button id="iiii">iiiiiiii</button>-->
-
+	<!-- <button type="button" data-toggle="modal" data-target="#alertdialog">Launch modal</button>  -->
+	<!-- <button id="iiii">iiiiiiii</button> -->
+	<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 	<script type="text/javascript">
 	
 		$("#iiii").click(function() {
@@ -233,10 +239,7 @@
 				})
 			}
 		})
-			
-		
-		
-		
+
 		function repayment(value) {
 			value.campusId = campusId;
 			 console.log(value)
@@ -249,8 +252,6 @@
                dataType: "json",
                error: function (request){
             	   console.log(request);
-                       
-                  
                },
                success: function (result) {      
 			  				     
@@ -266,8 +267,10 @@
 			 				var signType = payMap.signType;
 			 				var paySign = payMap.paySign;
 			 				var total_fee = payMap.total_fee;
+			 				var guids = payMap.guids;
+			 				var out_trade_no = payMap.out_trade_no;
 			 				
-			 				onBridgeReady(appId,timeStamp,nonceStr,package,signType,paySign,total_fee);
+			 				onBridgeReady(appId,timeStamp,nonceStr,package,signType,paySign,total_fee,guids,out_trade_no);
 						
 					     }else if(mes == "ERR"){
 						 
@@ -291,46 +294,26 @@
 					 		    
 					 		});
 					 	}
-			 				
 		 			}
-			 			
 			});
 			
 		}
 		
-		$("#commitFoodDataButton").click(function() {
-			
-			$.ajax({
-	               type: "POST",
-	               url: "/voucher/mobile/bill/getTicket.do",
-	               data: { 
-	                       },
-	               dataType: "json",
-	               error: function (request){
-	            	   console.log(request);
-	                       
-	                  
-	               },
-	               success: function (result) {
-	            	   console.log("result==========",result)
-            	}
-			}) 
-		})
-		
-		function onBridgeReady(appId,timeStamp,nonceStr,package,signType,paySign,total_fee){
+		function onBridgeReady(appId,timeStamp,nonceStr,package,signType,paySign,total_fee,guids,out_trade_no){
 			var tt = "";
 			   WeixinJSBridge.invoke( 'getBrandWCPayRequest', {
 				  "appId":appId,     //公众号名称,由商户传入     
-		          "timeStamp":timeStamp,         //时间戳,自1970年以来的秒数     
+		          "timeStamp":timeStamp,//时间戳,自1970年以来的秒数     
 		          "nonceStr":nonceStr, //随机串     
 		          "package":package,     
-		          "signType":signType,         //微信签名方式：     
+		          "signType":signType,//微信签名方式：     
 		          "paySign":paySign //微信签名 
 		         }, 
 		         function(res){      
 		      	   if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 		      		 tt = "支付金额："+total_fee+"元";
 		      		/* $("#alertchar2").html(tt); */
+		      			$("#alertchar2").html(out_trade_no);
 		      		   $('#alertdialog').modal('show');
 		      		   window.location.reload();
 		               console.log('支付成功');
@@ -345,6 +328,82 @@
 		             } //使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok,但并不保证它绝对可靠。
 		   });   
 		}
+		
+		url=document.location.toString();
+		$.ajax({
+		    url : "../../../wechat/sign.do",
+		    data : {
+		   	campusId:1,
+		   	url:url
+		    },
+		    async: false,
+		    type : "GET",
+		    success : function(data) {
+		   	var ticket=JSON.parse(data);
+		    /*
+			   * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
+		    */  
+		       	          
+			wx.config({
+			debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+					appId: ticket.appId,
+					timestamp: ticket.timestamp,
+					nonceStr: ticket.nonceStr,
+					signature: ticket.signature,
+					jsApiList : [ "navigateToMiniProgram" ]
+		      	});
+		       	    
+			}
+		});
+		
+		function invoice(guids) {
+			$.ajax({
+	               type: "POST",
+	               url: "/voucher/mobile/bill/getTicket.do",
+	               data: { 
+	                       },
+	               dataType: "json",
+	               error: function (request){
+	            	   console.log(request);
+	               },
+	               success: function (result) {
+	            	   console.log("result==========",result)
+         	}
+			}) 
+		}
+		
+		$("#iiii").click(function() {
+			$("#commitFoodDataButton").click(function() {
+				var out_trade_no = $("#alertchar3").text();
+				$.ajax({
+		               type: "POST",
+		               url: "/voucher/mobile/bill/getTicket.do",
+		               data: { 
+		            	   out_trade_no:"20191015164611997"
+		                       },
+		               dataType: "json",
+		               success: function (result) {
+		            	   console.log("result====",result)
+		            	   if(result.errmsg=="ok"){
+		            		   var auth_url = result.auth_url;
+		            		   location.href=auth_url;
+		            		   /* wx.navigateToMiniProgram({
+			            		    path: auth_url,
+			            		    success(res) {
+			            		        console.log('navigateToMiniProgram success:', res)
+			            		    },
+			            		    fail(error){
+			            		        console.log('navigateToMiniProgram fail:', error)
+			            		    },
+			            		    complete(res){
+			            		        console.log('navigateToMiniProgram complete:', res)
+			            		    }
+			            		}) */
+		            	   }
+            		}
+				}) 
+			})
+		})
 			   
 		function checkFormatter(value, row, index) {
 

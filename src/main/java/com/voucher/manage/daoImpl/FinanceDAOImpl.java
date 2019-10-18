@@ -684,7 +684,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 
 
 	@Override
-	public Integer updateHireSetHireListWinXinPay(Map<String,String> map,List files) {
+	public Integer updateHireSetHireListWinXinPay(Map map,List files) {
 		// TODO Auto-generated method stub
 		Date date = new Date();
 				
@@ -756,7 +756,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
                     	i++;
                 }
 
-
+        		
                 HirePay hirePay=new HirePay();
                 
                 hirePay.setGUID(payGUID);
@@ -767,6 +767,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
                 hirePay.setHireGUID(hireGUID);
                 hirePay.setOptDate(date);
                 hirePay.setPrintCount((float) 0);
+                hirePay.setOut_trade_no((String) map.get("out_trade_no"));
                 
                 u=InsertExe.get(this.getJdbcTemplate(), hirePay);
                 
@@ -777,16 +778,16 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
                 
 				//支付成功生成支付记录
 				Payment_Info payment = new Payment_Info();
-				payment.setOpenid(map.get("openId"));
-				payment.setOut_trade_no(map.get("out_trade_no"));
-				payment.setTotal_fee(Float.valueOf(map.get("total_fee")));
+				payment.setOpenid((String) map.get("openId"));
+				payment.setOut_trade_no((String) map.get("out_trade_no"));
+				payment.setTotal_fee((Integer) map.get("total_fee"));
 				payment.setCreateTime(date);
-				payment.setUnit("元");
-				payment.setName(map.get("name"));
-				payment.setNonceStr(map.get("nonce_str"));
-				payment.setSign(map.get("sign"));
-				payment.setPrepay_id(map.get("prepay_id"));
-				payment.setTrade_type(map.get("trade_type"));
+				payment.setUnit("分");
+				payment.setName((String) map.get("name"));
+				payment.setNonceStr((String) map.get("nonce_str"));
+				payment.setSign((String) map.get("sign"));
+				payment.setPrepay_id((String) map.get("prepay_id"));
+				payment.setTrade_type((String) map.get("trade_type"));
 				
 				Integer payResult = InsertExe.get(this.getJdbcTemplate(), payment);
 				logger.info("+++++++++++++===============payResult", payResult);

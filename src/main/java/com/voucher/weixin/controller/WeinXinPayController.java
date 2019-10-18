@@ -88,7 +88,7 @@ public class WeinXinPayController {
 		WeiXin weixin = weixinService.getCampusById(campusId);
 		
 		String notify_url = weixin.getUrl()+WXConstant.notify_url;
-		logger.info("+++++++++????????????????????++++++++++++++++++++++++++++++++++++++++++notify_url:{}", notify_url);
+		
 		String text = json.getString("text");
 		String guids = json.getString("guid");
 		int hire = (int) (json.getFloat("hire")* 100);
@@ -127,15 +127,9 @@ public class WeinXinPayController {
 		
 		String sign = WXPayUtil.generateSignature(map, weixin.getApi());
 
-		logger.info("+++++++++++++++++++++++++++++++++++++++++++++++++++sign:{}", sign);
-		System.out.println(sign);
-
 		map.put("sign", sign);
 
-
 		String xml = WXPayUtil.mapToXml(map);
-
-		logger.info("+++++++++++++++++++++++++++++++++++++++++++++++++++xml:{}", xml);
 
 		HttpUtils httpUtils=new HttpUtils();
 		
@@ -148,8 +142,6 @@ public class WeinXinPayController {
 		Map<String, String> returnMap = new HashMap<String, String>();
 
 		returnMap = WXPayUtil.xmlToMap(xmlStr);
-		
-		logger.info("+++++++++++++++++++++++++++++++++++++++++++++++++++returnMap:{}", returnMap);
 
 		String return_code = returnMap.get("return_code");
 
@@ -169,6 +161,8 @@ public class WeinXinPayController {
 				
 				payMap.put("signType", "MD5");
 
+				map.put("prepay_id", prepay_id);
+				
 				prepay_id = returnMap.get("prepay_id");
 
 				payMap.put("package", "prepay_id=" + prepay_id);
@@ -179,9 +173,11 @@ public class WeinXinPayController {
 				
 				payMap.put("total_fee", String.valueOf(total_fee));
 				
-				MyTestUtil.print(payMap);
+				payMap.put("guids", guids);
 				
-				String xmlpay=WXPayUtil.mapToXml(payMap);
+				payMap.put("out_trade_no", out_trade_no);
+				
+				MyTestUtil.print(payMap);
 				
 				result.add("SUCCESS");
 				
@@ -197,7 +193,7 @@ public class WeinXinPayController {
 				
 				tradeMap.put("map", map);
 				
-				registerMap.put(out_trade_no, tradeMap);
+				registerMap.put("tradeMap", tradeMap);
 								
 				return result;
 				
@@ -264,10 +260,7 @@ public class WeinXinPayController {
 		String xmlString = null;
 		try {
 			reader = request.getReader();
-
 		String line = "";
-
-		
 
 		StringBuffer inputString = new StringBuffer();
 
@@ -281,25 +274,24 @@ public class WeinXinPayController {
 			request.getReader().close();
 		}
 
-		Map<String, String> map = new HashMap<String, String>();
+		Map map = new HashMap();
 
 		String result_code = "";
 
 		map = WXPayUtil.xmlToMap(xmlString);
 
-		result_code = map.get("result_code");
+		result_code = (String) map.get("result_code");
 
 		if (result_code.equals("SUCCESS")) {
 
 			LinkedHashMap<String,Map<String, Object>> registerMap=Singleton.getInstance().getRegisterMapLong();
 			
-			String out_trade_no=map.get("out_trade_no");
+			String out_trade_no = (String) map.get("out_trade_no");
 			
-			Map tradeMap=registerMap.get(out_trade_no);
+			Map tradeMap=registerMap.get("tradeMap");
 			
 			if(tradeMap.get("guids")==null)
 				return WXConstant.FAIL;
-			
 			
 			if(tradeMap.get("guids")!=null&&!tradeMap.get("guids").equals("")){
 				
@@ -328,11 +320,11 @@ public class WeinXinPayController {
 				
 				String name=users.getName();
 				
-				float total_fee=Float.valueOf(map.get("total_fee"))/100;
+				int total_fee = (int) map.get("total_fee");
 				logger.info("+++++++++++++++++++++++++++++++++++=========================", list);
 				
 				map.put("openId",openId);
-				map.put("total_fee",String.valueOf(total_fee));
+				map.put("total_fee",total_fee);
 				map.put("name", name);
 				int i=financeDAO.updateHireSetHireListWinXinPay(map,list);
 				
@@ -364,7 +356,6 @@ public class WeinXinPayController {
 		}
 
 		return WXConstant.FAIL;
-
 	}
 
 }

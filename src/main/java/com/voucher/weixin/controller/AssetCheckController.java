@@ -362,7 +362,7 @@ public class AssetCheckController {
 		
 		if(search2!=null&&!search2.equals("")){
 			
-int cycle=1;
+			int cycle=1;
 			
 			Patrol_Cycle patrol_Cycle=assetsDAO.selectPatrolCycle();
 			

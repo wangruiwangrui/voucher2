@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.voucher.manage.mapper.NoticeMapper;
 import com.voucher.manage.model.Notice;
@@ -102,8 +103,7 @@ public class NoticeController {
 	 * @return
 	 */
 	@RequestMapping("/mobile/getWeiXin")
-	public @ResponseBody 
-	WeiXin getWeiXin(HttpServletRequest request,@RequestParam Integer campusId){
+	public @ResponseBody WeiXin getWeiXin(HttpServletRequest request,@RequestParam Integer campusId){
 
 		WeiXin weiXin=weixinService.getCampusById(campusId);
 		
