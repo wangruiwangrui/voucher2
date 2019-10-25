@@ -14,10 +14,11 @@
     <script src="../../../js/swiper.js"></script>
 <style type="text/css">
     body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
+  	.weui-swiped-btn {
+		padding: 30px 1em;
+	}
 </style>
-<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
-<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-<script src="../../../js/jquery-weui.js"></script>
+
 </head>
 <body>
  <form action="" novalidate>
@@ -145,8 +146,7 @@
  
  <div class="weui-panel weui-panel_access">
 	<div class="weui-panel__hd">巡查照片</div>
-	<div id="img0" class="weui-panel__bd"></div>
-	<div id="img" class="weui-panel__bd"></div>
+	<div id="img2" class="weui-panel__bd"></div>
 </div>
 
 <div class="weui-panel weui-panel_access">
@@ -164,6 +164,12 @@
     <a href="javascript:;" id="save" class="weui-btn weui-btn_plain-primary">保存本次巡查记录</a>   
 
 </body>
+
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+<script type="text/javascript" src="../../../js/jquery-weui.js"></script>
 
 <script type="text/javascript">
   function getQueryString(name) {
@@ -413,7 +419,7 @@
 		            //
 		            var check_id=obj.check_id;
 		        	//alert("新建"+name+"资产巡查记录成功!");
-		        	location.href="addCheckInfoList.html";
+		        	location.href="addCheckInfoList.html?latitude="+latitude+"&longitude="+longitude;
 		        	//location.href="CheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
 		        	
 		        /* 	$.confirm("是否上传资产巡查记录"+name+"的照片", function() {
@@ -561,7 +567,7 @@
 			    	console.log("imgs="+imgs.length);
 			    	$("#img").children('div').remove();
 			    	if(imgs!=null){
-	               	   var i = 0;
+	               	   /* var i = 0;
 	                      for(; i < imgs.length; i++){
 	                   	   
 	                   	  var data=imgs[i];
@@ -601,7 +607,44 @@
 	           	      	  $("#img").append(panel);
 	                  }
 	       		   
-	       	   	}
+	       	   	} */
+			    		 var i = 0;
+						for (; i < imgs.length; i++) {
+						var text = imgs[i];
+						var name = text.name;
+						var uri = text.compressUri;
+						src = "/voucher/" + uri;
+						var html = '<div class="weui-cell weui-cell_swiped">' +
+							'<div class="weui-cell__bd">' +
+							'<div class="weui-cell">' +
+							'<div class="weui-cell__hd"><img src="' + src + '" alt="" style="width:60px;height:60px;margin-right:5px;display:block"></div>' +
+							'<div class="weui-cell__bd"><p></p></div>' +
+							'<div class="weui-cell__ft">向左滑动删除</div>' +
+							'</div>' +
+							'</div>' +
+							'<div class="weui-cell__ft">' +
+							'<a id="' + uri + '" class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" href="javascript:">删除图片</a>' +
+							'</div>' +
+							'</div>'
+						$("#img2").append(html);
+						$('.weui-cell_swiped').swipeout();
+					}
+					$('.delete-swipeout').click(function () {
+						var uri = this.id;
+						console.log("url===========",uri.split("\\")[5])
+					
+							$.get("/voucher/mobile/assetCheck/deleteImgById.do", {
+								imgName: uri.split("\\")[5]
+							}, function (data) {
+								if (data) {
+									$("#img2").empty();
+								} else {
+									alert("删除失败");
+								}
+							});
+					})
+		   		   
+		   	   		} 
 			    });
 	     }
 </script>

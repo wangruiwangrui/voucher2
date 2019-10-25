@@ -1222,7 +1222,6 @@ public class AssetController {
         			r=r-cycle;
         			i++;
         		}
-        		System.out.println("start===="+start+"  r="+r+"  cycle="+cycle+"  i="+i);
         		if(cycle==12) {
         			map.put("start", 1);
             		map.put("end",  cycle);

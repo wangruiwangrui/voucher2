@@ -1,7 +1,6 @@
 package com.voucher.manage.singleton;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,7 @@ import com.voucher.manage.tools.MyTestUtil;
 public class Singleton {
 	private static Singleton instance = new Singleton();
 	
-	public static final String URL = "http://www.gulinguozi.com/";
+//	public static final String URL = "http://www.gulinguozi.com/";
 	
 	public final static String ROOMDATABASE="[RoomManage]";
 	

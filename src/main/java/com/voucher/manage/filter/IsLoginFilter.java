@@ -32,7 +32,8 @@ public class IsLoginFilter implements Filter{
 
 	    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 	        HttpServletRequest hrequest = (HttpServletRequest)request;
-	        HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper((HttpServletResponse) response);
+	        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+	        HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper(httpServletResponse);
 	        
 	        String loginStrings = config.getInitParameter("loginStrings");        
 	        String includeStrings = config.getInitParameter("includeStrings");    
@@ -42,7 +43,19 @@ public class IsLoginFilter implements Filter{
 
 	        String[] loginList = loginStrings.split(";");
 	        String[] includeList = includeStrings.split(";");
-	        
+	        if (hrequest.getMethod().equals("OPTIONS")) {
+	        	httpServletResponse.setContentType("application/json;charset=utf-8");
+	            httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+
+	            //httpServletResponse.setHeader("Access-Control-Allow-Headers", "Content-Type,content-type,Content-Length, Authorization, Accept,X-Requested-With,X-Token");
+	            httpServletResponse.setHeader("Access-Control-Allow-Headers", "*");
+	            //
+	            httpServletResponse.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+
+	            httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
+	        	httpServletResponse.setStatus(200);
+	            return;
+	        }
 	        if (!IsLoginFilter.isContains(hrequest.getRequestURI(), includeList)) {
 	            chain.doFilter(request, response);
 	            return;

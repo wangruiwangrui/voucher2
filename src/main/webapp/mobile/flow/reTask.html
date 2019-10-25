@@ -202,9 +202,9 @@ body, html, #allmap {
 		<div id="img" class="weui-panel__bd"></div>
 	</div>
 
-	<div class="weui-panel weui-panel_access">
+<!-- 	<div class="weui-panel weui-panel_access">
 		<div class="weui-uploader__input-box" id="showPicker"></div>
-	</div>
+	</div> -->
 
 	<a href="javascript:;" id="save"
 		class="weui-btn weui-btn_plain-primary">提交申请</a>
@@ -427,7 +427,7 @@ body, html, #allmap {
 	                         	     div2.appendChild(h4);
 	                         	     div2.appendChild(p);
 	                         	   a.appendChild(div);
-	                         	   a.appendChild(div2);
+	                         	   //a.appendChild(div2);
 	                         	   panel.appendChild(a);
 	                  	      	  $("#img0").append(panel);
 	                         }
@@ -468,6 +468,48 @@ body, html, #allmap {
                                fareItem.innerHTML=obj.fareItem;
                                $("#fareItem").append(fareItem);
 
+                               if(imgs!=null){
+        	                  	   var i = 0;
+        	                         for(; i < imgs.length; i++){
+        	                      	   
+        	                      	  var data=imgs[i];
+        	                      	  var name=data.name;
+        	                      	  var uri=data.compressUri;
+        	                      	  var date=data.date;
+        	                      	  var panel=document.createElement("div");
+        	                      	  panel.setAttribute("class","weui-panel__bd");
+        	                        	   var a=document.createElement("a");
+        	                       	   a.setAttribute("class","weui_grid");
+        	                       	   var a=document.createElement("a");
+        	                       	  a.setAttribute("href","javascript:void(0);");
+        	                       	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+        	                       	   var div=document.createElement("div");
+        	                       	  	div.setAttribute("class","weui-media-box__hd");
+        	                       	  
+        	                  	   	 	 src="/voucher/"+uri;
+        	                  	  	  	var img=document.createElement("img");
+        	                  	  	  	img.setAttribute("class","weui-media-box__thumb");
+        	                            	img.setAttribute("src",src);
+        	                          
+        	                         	  	div.appendChild(img);
+        	                         	   		
+        	                         	  	div2=document.createElement("div");
+        	                         	  		div2.setAttribute("class","weui-media-box__bd");
+        	                         	 		h4=document.createElement("h4");
+        	                         	 		h4.setAttribute("class","weui-media-box__title");
+        	                         	 	 	h4.innerHTML=name;
+        	                         	  	 	p=document.createElement("p");
+        	                         	  	 	p.setAttribute("class","weui-media-box__desc");
+        	                         	  	 	p.innerHTML=date;
+        	                         	     //div2.appendChild(h4);
+        	                         	     //div2.appendChild(p);
+        	                         	   a.appendChild(div);
+        	                         	   //a.appendChild(div2);
+        	                         	   panel.appendChild(a);
+        	                  	      	  $("#img").append(panel);
+        	                         }
+        	          		   
+        	          	   		}
                     	}
                 });
         }

@@ -39,4 +39,5 @@ xmlns:task="http://www.springframework.org/schema/task"
 	<bean id="billAccessTokenUtil" class ="com.voucher.weixin.util.BillAccessTokenUtil"></bean>
 	
 	<import resource="spring-redis.xml"/>
+	<import resource="spring-mvc.xml"/>
 </beans>

@@ -4,10 +4,10 @@ var campusId = "1";
 var progress = "/voucher";
 
 // 本地测试
-//var DOMAIN = "http://nwx.wtsms.net";
+var DOMAIN = "http://nwx.wtsms.net";
 
 //测试服务器
-var DOMAIN = "http://www.gulinguozi.com/";
+//var DOMAIN = "http://www.gulinguozi.com/";
 
 
 

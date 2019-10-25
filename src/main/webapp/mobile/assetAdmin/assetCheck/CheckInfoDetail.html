@@ -8,15 +8,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <meta name="format-detection" content="telephone=no" />
 <meta charset="utf-8" />
- <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="../css/weui.css"/>
-    <link rel="stylesheet" href="../css/example.css"/>
+
+<link rel="stylesheet" href="../css/weui.css"/>
+<link rel="stylesheet" href="../css/example.css"/>
+<link rel="stylesheet" href="../css/jquery-weui.css">
 <style type="text/css">
     body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
 </style>
-<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
-<script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
-<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
 </head>
 <body>
 <form action="" novalidate>
@@ -95,18 +94,28 @@
 
  <div class="weui-cells__title">检查位置</div>
  <div id="allmap"></div>   
-    
-    <div class="weui-panel weui-panel_access">
+  
+<div class="weui-panel weui-panel_access">
+	<div class="weui-panel__hd">安全检查图片</div>
+	<div id="img" class="weui-panel__bd">
+	</div>
+</div>
+ <!--    <div class="weui-panel weui-panel_access">
      <div class="weui-panel__hd">安全检查图片</div>  
        <div id="img" class="weui-panel__bd">
        </div>  
        <div class="weui-uploader__input-box" id="showPicker">
-       	</div>  
+       	</div>
    </div>  
 
-   <a href="javascript:;" id="save" class="weui-btn weui-btn_plain-primary">保存本次巡查记录</a>
+<a href="javascript:;" id="save" class="weui-btn weui-btn_plain-primary">保存本次巡查记录</a> -->
 
 </body>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="../../../js/jquery-weui.js"></script>
 
 <script type="text/javascript">
   function getQueryString(name) {
@@ -166,134 +175,176 @@
      	   var obj=text.assets_Check;
      	   var imgs=text.fileBytes;
   
-             	   var check_id=obj.check_id;
-  
-             	   var distance=null;
-             	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
-             	   if(obj.lng!=""&&obj.lat!=""){
-             	   	  distance=getDistance(obj.lng,obj.lat);
-             	   	var point = new BMap.Point(obj.lng,obj.lat);
-             	   	var pointEnd=point;
-             	    map.centerAndZoom(point, 12);
-             	    var marker = new BMap.Marker(point); // 创建点
-             		map.addOverlay(marker);    //增加点
-             	   }
-             	 
-             	  navigation(pointStart, pointEnd);
-             	   
-             	  var terminal=obj.terminal;
-             	  if(terminal!=null&&terminal!=""){
-             		  if(terminal=="PC"){
-             			 var username=document.createElement("span");
-             			 username.innerHTML=obj.user_name;
-                         $("#username").append(username);
-             		  }else if(terminal=="Wechat"){
-             			  $.get("/voucher/mobile/hidden/selectNameBycampusAdmin.do",{
-             				 	campusAdmin:obj.campusAdmin
-             			  		},function(text){
-             			  			var name = $.parseJSON(text);
-             			  			var username=document.createElement("span");
-                        			 username.innerHTML=name.name;
-                                    $("#username").append(username);
-             			  		});	
-             		  }
-             	  }
-             	   
-             	  var address=document.createElement("span");
-               	  address.innerHTML=obj.address;
-                  $("#address").append(address);
-                  
-                  $("#address").on("click",function(){
-                	  clickEvent(obj.guid);
-                  });
-                  
-                  /*
-                  var manageRegion=document.createElement("span");
-                  manageRegion.innerHTML=obj.manageRegion;
-                  $("#manageRegion").append(manageRegion);
-             	  */
+      	   var check_id=obj.check_id;
+
+      	   var distance=null;
+      	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+      	   if(obj.lng!=""&&obj.lat!=""){
+      	   	  distance=getDistance(obj.lng,obj.lat);
+      	   	var point = new BMap.Point(obj.lng,obj.lat);
+      	   	var pointEnd=point;
+      	    map.centerAndZoom(point, 12);
+      	    var marker = new BMap.Marker(point); // 创建点
+      		map.addOverlay(marker);    //增加点
+      	   }
+      	 
+      	  navigation(pointStart, pointEnd);
+      	   
+      	  var terminal=obj.terminal;
+      	  if(terminal!=null&&terminal!=""){
+      		  if(terminal=="PC"){
+      			 var username=document.createElement("span");
+      			 username.innerHTML=obj.user_name;
+                  $("#username").append(username);
+      		  }else if(terminal=="Wechat"){
+      			  $.get("/voucher/mobile/hidden/selectNameBycampusAdmin.do",{
+      				 	campusAdmin:obj.campusAdmin
+      			  		},function(text){
+      			  			var name = $.parseJSON(text);
+      			  			var username=document.createElement("span");
+                 			 username.innerHTML=name.name;
+                             $("#username").append(username);
+      			  		});	
+      		  }
+      	  }
+      	   
+      	  var address=document.createElement("span");
+        	  address.innerHTML=obj.address;
+           $("#address").append(address);
+           
+           $("#address").on("click",function(){
+         	  clickEvent(obj.guid);
+           });
+           
+           /*
+           var manageRegion=document.createElement("span");
+           manageRegion.innerHTML=obj.manageRegion;
+           $("#manageRegion").append(manageRegion);
+      	  */
+      	  
+      	  //var check_name=document.createElement("span");
+      	 //check_name.innerHTML=obj.check_name;
+           //$("#check_name").append(check_name);
+           
+           $("#check_name").val(obj.check_name);
+           $("#name").val(obj.name);
+           $("#principal").val(obj.principal);
+           
+          // var time=actionTime(obj.date);
+          // var date=document.createElement("span");
+          // date.innerHTML=time;
+          // $("#date").append(date);
+           
+          var time=actionTime(obj.happen_time);
+           console.log(time);
+           $("#happenTime").val(time);
+          
+           var time=actionTime(obj.date);
+           var insertTime=document.createElement("span");
+           insertTime.innerHTML=time;
+           $("#insertTime").append(insertTime);
+          
+          // var remark=document.createElement("span");
+          // remark.innerHTML=obj.remark;
+          // $("#remark").append(remark);
+           
+           
+          
+           $("#remark").val(obj.remark);
+          
+           
+          // var check_circs=document.createElement("textarea");
+          // check_circs.setAttribute("class","weui-textarea");
+          // check_circs.innerHTML=obj.check_circs;
+          // $("#check_circs").append(check_circs);
+           
+          $("#check_circs").val(obj.check_circs);
+          
+           console.log("imgs="+imgs);
+           if(imgs!=null){
+        	   var i = 0;
+               for(; i < imgs.length; i++){
+            	   
+            	  var data=imgs[i];
+            	  var name=data.name;
+            	  var uri=data.compressUri;
+            	  var date=data.date;
+            	  var panel=document.createElement("div");
+            	  panel.setAttribute("class","weui-panel__bd");
+              	   var a=document.createElement("a");
+             	   a.setAttribute("class","weui_grid");
+             	   var a=document.createElement("a");
+             	  a.setAttribute("href","javascript:void(0);");
+             	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+             	   var div=document.createElement("div");
+             	  	div.setAttribute("class","weui-media-box__hd");
              	  
-             	  //var check_name=document.createElement("span");
-             	 //check_name.innerHTML=obj.check_name;
-                  //$("#check_name").append(check_name);
-                  
-                  $("#check_name").val(obj.check_name);
-                  $("#name").val(obj.name);
-                  $("#principal").val(obj.principal);
-                  
-                 // var time=actionTime(obj.date);
-                 // var date=document.createElement("span");
-                 // date.innerHTML=time;
-                 // $("#date").append(date);
-                  
-                 var time=actionTime(obj.happen_time);
-                  console.log(time);
-                  $("#happenTime").val(time);
-                 
-                  var time=actionTime(obj.date);
-                  var insertTime=document.createElement("span");
-                  insertTime.innerHTML=time;
-                  $("#insertTime").append(insertTime);
-                 
-                 // var remark=document.createElement("span");
-                 // remark.innerHTML=obj.remark;
-                 // $("#remark").append(remark);
-                  
-                  
-                 
-                  $("#remark").val(obj.remark);
-                 
-                  
-                 // var check_circs=document.createElement("textarea");
-                 // check_circs.setAttribute("class","weui-textarea");
-                 // check_circs.innerHTML=obj.check_circs;
-                 // $("#check_circs").append(check_circs);
-                  
-                 $("#check_circs").val(obj.check_circs);
-                 
-                  console.log("imgs="+imgs);
-                  if(imgs!=null){
-                  	   var i = 0;
-                         for(; i < imgs.length; i++){
-                      	   
-                      	  var data=imgs[i];
-                      	  var name=data.name;
-                      	  var uri=data.compressUri;
-                      	  var date=data.data;
-                      	  var panel=document.createElement("div");
-                      	  panel.setAttribute("class","weui-panel__bd");
-                        	   var a=document.createElement("a");
-                       	   a.setAttribute("class","weui_grid");
-                       	   var a=document.createElement("a");
-                       	  a.setAttribute("href","javascript:void(0);");
-                       	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
-                       	   var div=document.createElement("div");
-                       	  	div.setAttribute("class","weui-media-box__hd");
-                       	  
-                  	   	 	 src="/voucher/"+uri;
-                  	  	  	var img=document.createElement("img");
-                  	  	  	img.setAttribute("class","weui-media-box__thumb");
-                            	img.setAttribute("src",src);
-                          
-                         	  	div.appendChild(img);
-                         	   		
-                         	  	div2=document.createElement("div");
-                         	  		div2.setAttribute("class","weui-media-box__bd");
-                         	 		h4=document.createElement("h4");
-                         	 		h4.setAttribute("class","weui-media-box__title");
-                         	 	 	h4.innerHTML=name;
-                         	  	 	p=document.createElement("p");
-                         	  	 	p.setAttribute("class","weui-media-box__desc");
-                         	  	 	p.innerHTML=date;
-                         	     div2.appendChild(h4);
-                         	     div2.appendChild(p);
-                         	   a.appendChild(div);
-                         	   a.appendChild(div2);
-                         	   panel.appendChild(a);
-                  	      	  $("#img").append(panel);
-                         }
-          		   
-          	   		}
+        	   	 	 src="/voucher/"+uri;
+        	  	  	var img=document.createElement("img");
+        	  	  	img.setAttribute("class","weui-media-box__thumb");
+                  	img.setAttribute("src",src);
+                
+               	  	div.appendChild(img);
+               	   		
+               	  	div2=document.createElement("div");
+               	  		div2.setAttribute("class","weui-media-box__bd");
+               	 		h4=document.createElement("h4");
+               	 		h4.setAttribute("class","weui-media-box__title");
+               	 	 	h4.innerHTML=name;
+               	  	 	p=document.createElement("p");
+               	  	 	p.setAttribute("class","weui-media-box__desc");
+               	  	 	p.innerHTML=date;
+               	     div2.appendChild(h4);
+               	     div2.appendChild(p);
+               	   a.appendChild(div);
+               	   a.appendChild(div2);
+               	   panel.appendChild(a);
+        	      	  $("#img").append(panel);
+               }
+		   
+	   		}
+           	   	/* var i = 0;
+				for (; i < imgs.length; i++) {
+				var text = imgs[i];
+				var name = text.name;
+				var uri = text.compressUri;
+				src = "/voucher/" + uri;
+				var html = '<div class="weui-cell weui-cell_swiped">' +
+					'<div class="weui-cell__bd">' +
+					'<div class="weui-cell">' +
+					'<div class="weui-cell__hd"><img src="' + src + '" alt="" style="width:60px;height:60px;margin-right:5px;display:block"></div>' +
+					'<div class="weui-cell__bd"><p></p></div>' +
+					'<div class="weui-cell__ft">向左滑动删除</div>' +
+					'</div>' +
+					'</div>' +
+					'<div class="weui-cell__ft">' +
+					'<a id="' + uri + '" class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" href="javascript:">删除图片</a>' +
+					'</div>' +
+					'</div>'
+				$("#img2").append(html);
+				$('.weui-cell_swiped').swipeout();
+			}else{
+				
+			}
+			$('.delete-swipeout').click(function () {
+				var uri = this.id;
+				console.log("url===========",uri.split("\\")[5])
+				$.confirm("确认删除当前照片吗?", function () {
+					$.get("/voucher/mobile/assetCheck/deleteImgById.do", {
+						imgName: uri.split("\\")[5]
+					}, function (data) {
+						if (data == 1) {
+							location.reload();
+						} else {
+							alert("删除失败");
+						}
+					});
+				}, function () {
+					//点击取消后的回调函数
+				});
+			})
+   		   
+   	   		} */
         }
     });
     
@@ -494,10 +545,10 @@
 
 	 var imagename = '资产巡查照片';
 	 
-	 document.querySelector('#showPicker').onclick = function () {
+/* 	 document.querySelector('#showPicker').onclick = function () {
 		 
 		 upImage(imagename);
-	 }
+	 } */
 		
 	 function upImage(imagename) {
 			wx.chooseImage({

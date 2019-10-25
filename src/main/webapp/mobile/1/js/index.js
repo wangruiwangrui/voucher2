@@ -519,7 +519,7 @@ wx
 
 			try {
 				document.querySelector('#asseStat').onclick = function() {
-					location.href = "statistical/asseStat.html";
+					location.href = "echarts/echarts.html";
 				}
 			} catch (ex) {
 

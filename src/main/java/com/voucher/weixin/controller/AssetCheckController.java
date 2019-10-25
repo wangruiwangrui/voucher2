@@ -1,5 +1,6 @@
 package com.voucher.weixin.controller;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -456,4 +457,17 @@ public class AssetCheckController {
 		return place;
 	}
 	
+	//删除资产巡查记录图片
+	@RequestMapping("/deleteImgById")
+	public @ResponseBody Boolean deleteImgById(@RequestParam String imgName) {
+		String pathRoot = System.getProperty("user.home");
+		String pString = pathRoot + Singleton.filePath+"\\"+imgName;
+		System.out.println("----------------");
+		System.out.println(pString);
+		Boolean result = false;
+		if (imgName != null) {
+			result = new File(pString).delete();
+		}
+		return result;
+	}
 }

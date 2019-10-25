@@ -11,19 +11,27 @@ body{
 	padding: 5%;
 }
 table{
-width:100%; 
-border:0; 
-align:center; 
-cellpadding:3;
-		cellspacing:0;
+	width:100%; 
+	border:0; 
+	align:center; 
+	cellpadding:3;
+	cellspacing:0;
 }
 #button1{
 	margin-top: 1em;
+}
+.weui-article{
+	padding: 0px;
 }
 </style>
 </head>
 <body>
 <div name="myform">
+<div class="page__bd">
+        <article class="weui-article">
+            <h1 style="font-size: 20px;font-weight: bolder;">短信群发</h1>
+                </article>
+                </div>
 	<table>
 		<tbody>
 			<tr>
@@ -31,10 +39,10 @@ cellpadding:3;
 			</tr>
 			<tr>
 				<td align="left"><textarea name="Contents" cols="50"
-						id="Contents" class="textarea" rows="3" onchange="checkLen()"
+						id="Contents" class="textarea" rows="16" onchange="checkLen()"
 						onkeypress="checkLen()" onkeyup="checkLen()" style=""></textarea></td>
 			</tr>
-			<tr>
+			<!-- <tr>
 				<td align="left"><span id="styelFont">普通短信</span>限<span
 					id="termFont">70</span>个字，还可输入<span id="termLen" style="color: red">53</span>字。
 					签名：【 <input name="QM" type="text" id="QM"
@@ -67,7 +75,7 @@ cellpadding:3;
 			</tr>
 			<tr>
 				<td align="left"><p>多个号码请用回车分开，即一行算一个号码，一次最多发送10000个号码</p></td>
-			</tr>
+			</tr> 
 			<tr>
 				<td align="left">您一共输入了<input name="MobMuns" value="0"
 					id="MobMuns"
@@ -75,15 +83,16 @@ cellpadding:3;
 					readonly="readonly">个号码 ，自动过滤重复号码。
 				</td>
 			</tr>
+			-->
 			<tr>
 				<td align="left"><span id="SMS"><span></td>
 			</tr>
-			<tr style="display:;" id="sms_On">
+			<!-- <tr style="display:;" id="sms_On">
 				<td align="left">
 					<button onclick="checkSMSUser1()" id="button1"
 						class="weui-btn weui-btn_plain-primary">立刻发送短信</button>
 				</td>
-			</tr>
+			</tr> -->
 			<tr style="display:;">
 				<td align="left">
 					<button></button>
@@ -133,8 +142,8 @@ cellpadding:3;
 
 	var number = JSON.parse(xhm.responseText);
 
-	 var smsNum=document.getElementById("User_SmsNum");
-	 smsNum.setAttribute("value",number);
+	/*  var smsNum=document.getElementById("User_SmsNum");
+	 smsNum.setAttribute("value",number); */
 	
 	 var SMS=document.getElementById("SMS");
 	  SMS.innerHTML="剩余（"+number+"）条短信，发送<span id='SMS_Out'>0</span>条短信<span id='SMS_Out1'></span>";

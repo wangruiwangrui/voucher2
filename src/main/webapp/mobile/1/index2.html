@@ -38,6 +38,7 @@
 <link rel="stylesheet" href="../../layui/layui/css/layui.css">
 </head>
 <style type="text/css">
+
 .container img {
 	width: 100%;
 	margin-bottom: 12px;
@@ -53,10 +54,6 @@ p {
 .col-xs-3 {
 
 	padding-top: 15px;
-}
-
-.col-xs-4 {
-	padding: 10px
 }
 
 .corner {
@@ -77,9 +74,13 @@ p {
 }
 
 .corner img {
-	width: 75%;
+	width: 100%;
 }
 
+
+.corner span {
+	color: #333;
+}
 .corner:after {
 	content: attr(data-num);
 	line-height: 25px;
@@ -90,8 +91,8 @@ p {
 	border-radius: 50%;
 	background-color: red;
 	position: absolute;
-	top: 0px;
-	right: 14px;
+	top: 13px;
+	right: 3px;
 }
 
 </style>
@@ -228,14 +229,13 @@ p {
 					<span>隐患资产</span>
 				</div>
 			</div>
-			<div class='col-xs-3 col-sm-4' style='text-align: center;'
+			<!-- <div class='col-xs-3 col-sm-4' style='text-align: center;'
 				id='hiddenStat'>
 				<img alt='' src='../../img/gtimgs/imgs3/12@2x.png'>
 				<div>
 					<span>隐患统计</span>
 				</div>
-			</div>
-
+			</div> -->
 
 
 			<!-- 隐患整改 -->
@@ -340,7 +340,7 @@ p {
 				
 				flowButton.setAttribute("data-num",count);
 
-				flowButton.setAttribute("class","col-xs-4 col-sm-4 fiv corner");
+				flowButton.setAttribute("class","col-xs-3 col-sm-4 fiv corner");
 			}
 			
 		});

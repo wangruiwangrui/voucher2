@@ -2036,13 +2036,15 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID = "
 						+Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID "+
 						"WHERE "+
-						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
+						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+						" AND  ([Position].lng is not null AND [Position].lat is not null)";
 						
 			    String sql01="AND "+
 						Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 						"WHERE "+ 
-						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
+						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+						" AND  ([Position].lng is not null AND [Position].lat is not null)";
 			
 				String sql1="ORDER BY  "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num ";
 			
@@ -2055,7 +2057,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID = "+
 						Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID "+
 						"WHERE "+
-						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
+						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+						" AND  ([Position].lng is not null AND [Position].lat is not null)";
 				
 				System.out.println("search="+search);
 				

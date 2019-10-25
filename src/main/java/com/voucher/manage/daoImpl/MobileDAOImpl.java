@@ -276,7 +276,8 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
 		
 		String check_id=hidden_Check_Join.getCheck_id();
-		
+		System.out.println("11111111111111111111111");
+		System.out.println(check_id);
 		String sql="SELECT "+    
 				"[Assets_Check_Date].check_id, "+
 			    "[Assets_Check_Date].URI, "+
@@ -290,6 +291,8 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 		
 		List hidden_Data_Joins=this.getJdbcTemplate().query(sql,new checkImageQueryRowMapper());
 		
+		System.out.println("90909090909090===================");
+		MyTestUtil.print(hidden_Data_Joins);
 		List fileBytes=new ArrayList<>();
 		
 		Iterator<Hidden_Check_Date> iterator=hidden_Data_Joins.iterator();
@@ -311,6 +314,8 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				map.put("date", hidden_Check_Date.getDate().toString());
 				
 				fileBytes.add(map);
+				System.out.println("90909090909090===================");
+				System.out.println(fileBytes);
 			}catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();

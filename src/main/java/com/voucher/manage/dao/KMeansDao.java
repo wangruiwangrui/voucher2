@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.alibaba.fastjson.JSONArray;
+import com.voucher.manage.daoModel.Assets.Hidden_Check;
 
 
 public interface KMeansDao {
@@ -20,5 +21,13 @@ public interface KMeansDao {
 
 	public Map getAssetByCondition(List list);
 
-	public Map queryAssetByHidden(List list);
+	public Map queryAssetByHidden(Map search,String term);
+
+	public Map getAccessOperatingConditions(List list);
+
+	public Map getAccessByBeFrom(List list);
+
+	public Map queryAssetByHiddenGuid(Map where, String term);
+
+	public Hidden_Check selectHiddenStateByGuid(String guid);
 }
