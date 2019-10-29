@@ -461,7 +461,7 @@ public class AssetCheckController {
 	@RequestMapping("/deleteImgById")
 	public @ResponseBody Boolean deleteImgById(@RequestParam String imgName) {
 		String pathRoot = System.getProperty("user.home");
-		String pString = pathRoot + Singleton.filePath+"\\"+imgName;
+		String pString = pathRoot + Singleton.filePath+File.separator+imgName;
 		System.out.println("----------------");
 		System.out.println(pString);
 		Boolean result = false;

@@ -620,7 +620,7 @@ body, html, #allmap {
 	<div id="allmap"></div>
 
 	<div class="weui-panel weui-panel_access">
-		<div class="weui-panel__hd">维修照片</div>
+		<div class="weui-panel__hd">安全巡查照片</div>
 		<div id="img0" class="weui-panel__bd"></div>
 		<div id="img" class="weui-panel__bd"></div>
 	</div>
@@ -680,7 +680,7 @@ body, html, #allmap {
 					console.log(text);
 					var obj=text.roomInfo;
 				 	var imgs=text.fileBytes;
-				 	console.log("imgs+++++++++++",imgs);
+			
 					var distance=null;
 			         	 
 			     	if(obj.lng!=""&&obj.lat!=""){  
@@ -747,7 +747,7 @@ body, html, #allmap {
 			         }else{
 						$("#navigation").hide();
 					}
-			        console.log("imgs+++++++++++",imgs);
+			       /*  console.log("imgs+++++++++++",imgs);
 	                  if(imgs!=null){
 	                  	   var i = 0;
 	                         for(; i < imgs.length; i++){
@@ -789,7 +789,7 @@ body, html, #allmap {
 	                  	      	  $("#img").append(panel);
 	                         }
 	          		   
-	          	   		}
+	          	   		} */
 				}
 			});
 			  
@@ -1304,7 +1304,7 @@ body, html, #allmap {
 				            //存储到服务器成功后的处理
 				            var check_id=obj.check_id;
 				            alert("新建"+name+"安全巡查记录成功!");
-				            location.href="addCheckInfoList.html"
+				            location.href="addCheckInfoList.html?latitude="+latitude+"&longitude="+longitude;
 					        	
 				        }else if(obj.status == 2){
 					        	
@@ -1428,7 +1428,7 @@ body, html, #allmap {
 									var name = text.name;
 									var uri = text.compressUri;
 									src = "/voucher/" + uri;
-									var html = '<div class="weui-cell weui-cell_swiped">' +
+									var html = '<div class="weui-cell weui-cell_swiped" id="chilePhoto">' +
 										'<div class="weui-cell__bd">' +
 										'<div class="weui-cell">' +
 										'<div class="weui-cell__hd"><img src="' + src + '" alt="" style="width:60px;height:60px;margin-right:5px;display:block"></div>' +
@@ -1440,7 +1440,7 @@ body, html, #allmap {
 										'<a id="' + uri + '" class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" href="javascript:">删除图片</a>' +
 										'</div>' +
 										'</div>'
-									$("#img0").append(html);
+									$("#img").append(html);
 									$('.weui-cell_swiped').swipeout();
 								}
 								$('.delete-swipeout').click(function () {
@@ -1448,6 +1448,7 @@ body, html, #allmap {
 									console.log("url===========",uri.split("\\")[5])
 									$.confirm("确认删除当前照片吗?", function () {
 										$.get("/voucher/mobile/assetCheck/deleteImgById.do", {
+											id:id,
 											imgName: uri.split("\\")[5]
 										}, function (data) {
 											if (data) {

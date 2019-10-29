@@ -836,7 +836,7 @@ body, html, #allmap {
 		    								imgName: uri.split("\\")[5]
 		    							}, function (data) {
 		    								if (data) {
-		    									$("#img").empty();
+		    									location.reload();
 		    								} else {
 		    									alert("删除失败");
 		    								}

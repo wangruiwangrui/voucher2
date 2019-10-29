@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +38,14 @@ import com.voucher.sqlserver.context.ConnectRMI;
 @Controller
 @RequestMapping("/mobile/flow")
 public class FlowController {
+
+	@Value("${Version}")
+	public String version;
+	
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 
 	ApplicationContext applicationContext=new Connect().get();
 	
@@ -380,24 +390,12 @@ public class FlowController {
 	//查询版本号
 	@RequestMapping("/getVersion")
 	@ResponseBody
-	public Map<String,String> getVersion(@RequestParam Integer limit, @RequestParam Integer offset, String sort,
-			String order,@RequestParam String item, HttpServletRequest request) {
-		
-		if (sort == "" || sort.equals("")) {
-			sort = "HireDate";
-		}
-
-		if (order == "" || order.equals("")) {
-			order = "asc";
-		}
-		
-		List<DataDictionary> list = flowDao.getVersion(limit, offset, sort, order, item);
-		
-		String content = list.get(0).getContent();
+	public Map<String,String> getVersion() {
 		
 		Map<String,String> map = new HashMap<String, String>();
 		
-		map.put("content",content);
+		map.put("version",version);
+		
 		return map;
 	}
 

@@ -1,24 +1,20 @@
 package voucher;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.util.Properties;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
-import com.voucher.manage.mapper.WeiXinMapper;
-import com.voucher.manage.tools.TransMapToString;
+
 
 public class maptest {
 
-	public static void  main(String[] args) {
-		Map<String, String> map=new HashMap<>();
-		map.put("aaa ", "b");
 
-		String[] a=TransMapToString.get(map);
-		for(String b :a){
-			System.out.println(b);
-		}
-		
-	}
+    public static void main(String[] args) throws IOException {
+    	Properties properties2 = PropertiesLoaderUtils.loadAllProperties("test.properties");
+    	String test = properties2.getProperty("Version");
+    	System.out.println("properties.test:"+test);
+
+    }
 	
 }

@@ -10,22 +10,18 @@ function getQueryString(name) {
 var code=getQueryString("code");
 var state=getQueryString("state");
 
-var VERSION='V10.01.009.191011.beta';
+var VERSION='';
+$.post('/voucher/mobile/flow/getVersion.do', {
 
-//进入index2.html初始化当前版本号
-/*$.post('/voucher/mobile/flow/getVersion.do', {
-	item : 'Version',
-	limit : 1,
-	offset : 0,
-	sort : "",
-	order : ""
 }, function(data) {
+	console.log("data",data)
 	data = JSON.parse(data);
-	VERSION = data.content;
-});*/
+	VERSION = data.version;
+	
+})
 
 
-//yayui弹出界面显示版本号
+//layui弹出界面显示版本号
 layui.use(['layer','form'],function() { //独立版的layer无需执行这一句
 	var $ = layui.jquery, layer = layui.layer,form = layui.form; //独立版的layer无需执行这一句
 	form.on("submit(zhushou)",function(data){
@@ -42,7 +38,6 @@ layui.use(['layer','form'],function() { //独立版的layer无需执行这一句
 				moveType : 1, //拖拽模式，0或者1
 				content : "<div style='padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;'>你知道吗？亲！<br><br>资产管理助手当前版本："+VERSION+"<br><br><br>",
 				success : function(layero) {
-					
 					
 				}
 		});

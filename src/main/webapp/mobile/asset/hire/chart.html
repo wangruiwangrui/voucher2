@@ -3,7 +3,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta charset="utf-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta content="" name="description"/>
     <meta content="webthemez" name="author"/>
@@ -25,8 +29,17 @@
 	<script src="../../../js/bootstrap-table-zh-CN.min.js"></script>
     <script src="../../../js/bootstrap-table-zh-CN.min.js"></script>
     <script type="text/javascript" src="../../../bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-
-	
+<style type="text/css">
+.adress .th-inner {
+	width: 150px;
+}
+.contractNo>div{
+	width: 100px;
+}
+.table>tbody>tr>td{
+    vertical-align: middle;
+}
+</style>
 </head>
 
 <body>
@@ -55,8 +68,8 @@
                                         <th data-align="left" data-field="totalHire" data-sortable="true">金额</th>
                                         <th data-align="left" data-field="chartBeginDate" data-formatter="actionTime" data-sortable="true">开始日期</th>     
                                         <th data-align="left" data-field="chartEndDate" data-formatter="actionTime" data-sortable="true">结束日期</th>                            
-                                        <th data-align="left" data-field="roomAddress" >地址</th>
-                                        <th data-align="left" data-field="contractNo" >合同编号</th>
+                                        <th data-align="left" data-field="roomAddress" class="adress">地址</th>
+                                        <th data-align="left" data-field="contractNo" class="contractNo">合同编号</th>
                                         <th data-align="left" data-field="guid" data-visible="false">合同ID</th>
                                     </tr>
                                     </thead>
@@ -70,7 +83,6 @@
 
 
 
-</div>
 <!-- 警告对话框 -->
 <div class="modal fade" id="alertdialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
