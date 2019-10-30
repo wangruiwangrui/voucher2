@@ -8,17 +8,6 @@
 <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
-<script type="text/javascript" src="/voucher/mobile/singleton.js"></script>
-
-<script type="text/javascript">
-	var campusId = 1;
-	var redirectUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-			+ APPID
-			+ "&redirect_uri="
-			+ DOMAIN
-			+ "/voucher/mobile/asset/userassetset.html&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
-</script>
-
 <link rel="stylesheet" href="../../weixinUI/style/weui.css" />
 <link rel="stylesheet" href="../../weixinUI/example.css" />
 
@@ -116,7 +105,8 @@
 	</div>
 
 	<div class="footer">
-		<div class="swiper-container swiper-container-horizontal swiper-container-android">
+		<div
+			class="swiper-container swiper-container-horizontal swiper-container-android">
 			<div class="swiper-wrapper"
 				style="transform: translate3d(-1800px, 0px, 0px); transition-duration: 0ms;">
 				<div class="swiper-slide swiper-slide-duplicate swiper-slide-next"
@@ -134,8 +124,23 @@
 			</div>
 		</div>
 	</div>
-		
+
+	<script>
+		function getQueryString(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null)
+				return unescape(r[2]);
+			return null;
+		}
+
+		var campusId = getQueryString("campusId");
+		var code = getQueryString("code");
+		var state = getQueryString("state");
+	</script>
+	<script type="text/javascript" src="/voucher/mobile/singleton.js"></script>
 	<script type="text/javascript" src="js/userassetset.js"></script>
+	
 	<script type='text/javascript' src='js/fastclick.js' charset='utf-8'></script>
 	<script type='text/javascript' src='js/swiper.js' charset='utf-8'></script>
 	<script type="text/javascript" src="js/accessStat.js"></script>

@@ -27,7 +27,9 @@ import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.mapper.UsersMapper;
+import com.voucher.manage.mapper.WeiXinMapper;
 import com.voucher.manage.model.Users;
+import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
@@ -39,6 +41,7 @@ public class MobileAssetIsLoginFilter implements Filter{
 	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
 	
 	private UsersMapper usersMapper;
+	private WeiXinMapper weiXin;
 		
 	 public FilterConfig configAsset=null;
 	    @Override  
@@ -110,6 +113,29 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        			List list=(List) map.get("rows");
 		        			
 		        			ChartInfo chartInfo=(ChartInfo) list.get(0);
+		        			
+		        			/**
+		        			 * 通过所关注微信公众号判断是否是当前合同公司对应公众号
+		        			 */
+		        			Integer campusId = users.getCampusId();
+		        			WeiXin campus = weiXin.getWeiXinByCampusId(campusId);
+		        			String campusName = campus.getCampusName();
+		        			String manageItem = "";
+		        			String manageRegion = chartInfo.getManageRegion();
+		        			if(manageRegion.equals("工投委托")) {
+		        				manageItem = "泸州市工业投资集团有限公司";
+		        			}else if (manageRegion.equals("国资委托")||manageRegion.equals("火炬资产")||manageRegion.equals("国资财委")) {
+								manageItem = "泸州国有资产经营有限公司";
+							}else if (manageRegion.equals("国华自有")||manageRegion.equals("国华代管")||manageRegion.equals("医院")) {
+								manageItem = "泸州市国华资产经营有限公司";
+							}
+		        			if(!campusName.equals(manageItem)) {
+		        				wrapper.sendRedirect(redirectPath);
+		        				return;
+		        			}
+		        			/**
+		        			 * 
+		        			 */
 			        		
 		        			final String REGEX = Charter.trim();
 

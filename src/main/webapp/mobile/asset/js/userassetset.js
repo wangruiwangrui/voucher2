@@ -1,13 +1,8 @@
-function getQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null) return unescape(r[2]); return null;
-   }
-
-
-var code=getQueryString("code");
-var state=getQueryString("state");
-
+var redirectUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+	+ APPID
+	+ "&redirect_uri="
+	+ DOMAIN
+	+ "/voucher/mobile/asset/userassetset.html&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
 
 var valid1,valid2,valid3;
 valid1=valid2=valid3=true;
@@ -84,7 +79,7 @@ $.get("/voucher/oauth/test.do", {
     	$.get("/voucher/oauth/getUserInfoByOpenId.do",{
  		   campusId:campusId
  	   },function(text) {
-       	  var obj = $.parseJSON(text);
+       	  var obj = JSON.parse(text);
 
        	 $("#brand").html(obj.campusName);
        	 $(".headimgUrl").attr("src",obj.headimgUrl);
@@ -209,7 +204,7 @@ $.get("/voucher/oauth/test.do", {
 	 $.post('/voucher/mobile/assetRegister/userAssetByopenId.do', {
 			campusId:campusId
 	       },function(data){
-	    	   var obj = $.parseJSON(data);
+	    	   var obj = JSON.parse(data);
 	    	   console.log(obj.charter);
 	    	   if(obj.charter!=null)
 	    	   $("#name").attr("placeholder",obj.charter);

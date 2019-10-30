@@ -1,5 +1,3 @@
-var campusId = "1";
-
 /*定义项目名*/
 var progress = "/voucher";
 
@@ -7,18 +5,17 @@ var progress = "/voucher";
 var DOMAIN = "http://nwx.wtsms.net";
 
 //测试服务器
-var DOMAIN = "http://wx.lzgtzh.com/";
-
-
+//var DOMAIN = "http://wx.lzgtzh.com/";
 
 var APPID = "";
 
 $.ajax({
 	data : "get",
-	url : progress+"/noticeset/mobile/getWeiXin.do?campusId=" + campusId,
+	url : progress + "/noticeset/mobile/getWeiXin.do?campusId="
+			+ campusId,
 	async : false,
 	success : function(data) {
-		console.log("data",data);
+		console.log("data", data);
 		data = JSON.parse(data);
 		APPID = data.appId;
 	}

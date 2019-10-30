@@ -2,7 +2,6 @@
  * 
  */
 
-var campusId = 1;
 function pageName() {
 
 	var a = location.href;
