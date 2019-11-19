@@ -83,9 +83,6 @@ public class ChartInfo implements Serializable{
     @SQLString(name="AddType")
 	private String AddType;
 
-    @SQLString(name="AddFashion")
-	private String AddFashion;
-
     @SQLString(name="BeginAddDate")
 	private String BeginAddDate;
 
@@ -167,6 +164,22 @@ public class ChartInfo implements Serializable{
     @SQLString(name="KHH")
 	private String KHH;
 
+    @SQLString(name="AddFashion")
+	private String AddFashion;
+
+    @SQLFloat(name="PlacementFees")
+	private Float PlacementFees;
+
+    @SQLFloat(name="GasInstallationFees")
+	private Float GasInstallationFees;
+
+    @SQLString(name="Ein")
+	private String Ein;
+    
+    @SQLString(name = "company")
+    private String company;
+    
+    
 	public void setGUID(String GUID){
 		this.GUID = GUID;
 	}
@@ -357,14 +370,6 @@ public class ChartInfo implements Serializable{
 
 	public String getAddType(){
 		return AddType;
-	}
-
-	public void setAddFashion(String AddFashion){
-		this.AddFashion = AddFashion;
-	}
-
-	public String getAddFashion(){
-		return AddFashion;
 	}
 
 	public void setBeginAddDate(String BeginAddDate){
@@ -583,7 +588,45 @@ public class ChartInfo implements Serializable{
 		return KHH;
 	}
 
+	public void setAddFashion(String AddFashion){
+		this.AddFashion = AddFashion;
+	}
 
+	public String getAddFashion(){
+		return AddFashion;
+	}
+
+	public void setPlacementFees(Float PlacementFees){
+		this.PlacementFees = PlacementFees;
+	}
+
+	public Float getPlacementFees(){
+		return PlacementFees;
+	}
+
+	public void setGasInstallationFees(Float GasInstallationFees){
+		this.GasInstallationFees = GasInstallationFees;
+	}
+
+	public Float getGasInstallationFees(){
+		return GasInstallationFees;
+	}
+
+	public void setEin(String Ein){
+		this.Ein = Ein;
+	}
+
+	public String getEin(){
+		return Ein;
+	}
+
+	public String getCompany() {
+		return company;
+	}
+
+	public void setCompany(String company) {
+		this.company = company;
+	}
 
 
 /*

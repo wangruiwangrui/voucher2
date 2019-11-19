@@ -4,6 +4,8 @@ public class Notice {
 
 	private Integer id;
 	
+	private Integer campusId;
+	
 	private String title;
 	
 	private String templateId;
@@ -14,6 +16,14 @@ public class Notice {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getCampusId() {
+		return campusId;
+	}
+
+	public void setCampusId(Integer campusId) {
+		this.campusId = campusId;
 	}
 
 	public String getTitle() {

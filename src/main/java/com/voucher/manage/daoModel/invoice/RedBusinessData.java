@@ -7,44 +7,31 @@ public class RedBusinessData implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	//固定参数"API"(必填)
-    
-    public String data_resources ;
+	private String data_resources ;
     
     //销售方纳税人识别号(必填)
-    
-    public String nsrsbh ;
+	private String nsrsbh ;
     
     //业务单据号；必须是唯一的(必填)
+	private String order_num ;
     
-    public String order_num ;
+    //发票代码 
+	private String yfp_dm ;
     
-    //税收编码版本号，参数“13.0”，具体值请询问提供商(必填)
+    //发票号码 
+	private String yfp_hm ;
     
-    public String yfp_dm ;
+    //发票备注 
+	private String bz ;
     
-    //征税方式 0：普通征税 1: 减按计增 2：差额征税(必填)
+    //开票人
+	private String kpr ;
     
-    public String yfp_hm ;
+    //收款人
+	private String skr ;
     
-    //特殊票种标识:“00”=正常票种,“01”=农产品销售,“02”=农产品收购(非必填)
-    
-    public String bz ;
-    
-    //销售方纳税人识别号(必填)
-    
-    public String kpr ;
-    
-    //销售方纳税人识别号(必填)
-    
-    public String skr ;
-    
-    //销售方纳税人识别号(必填)
-    
-    public String fhr ;
-    
-    //销售方纳税人识别号(必填)
-    
-    public String kpzdbs ;
+    //复核人 
+	private String fhr ;
 
 	public String getData_resources() {
 		return data_resources;
@@ -116,14 +103,6 @@ public class RedBusinessData implements Serializable{
 
 	public void setFhr(String fhr) {
 		this.fhr = fhr;
-	}
-
-	public String getKpzdbs() {
-		return kpzdbs;
-	}
-
-	public void setKpzdbs(String kpzdbs) {
-		this.kpzdbs = kpzdbs;
 	}
     
 }

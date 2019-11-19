@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.PreMessage;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 
@@ -79,5 +80,17 @@ public interface RoomInfoDao {
 	public List getAllChartInfo();
 	
 	public RoomInfo findRoomInfoByChartGUID(String chartGUID);
+
+	public ChartInfo queryEin(String guid);
+
+	public Integer updateEinByGUID(ChartInfo chartInfo);
+
+	public List getAllBill(Integer limit, String order, String sort, Map where);
+
+	public int getAllBillTotal(Integer limit, String order, String sort, Map where);
+
+	public List getAllRedBill(Integer limit, String order, String sort, Map where,Integer campusId);
+
+	public int getAllRedBillTotal(Integer limit, String order, String sort, Map where,Integer campusId);
 
 }

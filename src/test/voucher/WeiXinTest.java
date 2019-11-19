@@ -7,7 +7,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.voucher.manage.mapper.NoticeMapper;
 import com.voucher.manage.mapper.WeiXinMapper;
+import com.voucher.manage.model.Notice;
 import com.voucher.manage.model.WeiXin;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,22 +28,32 @@ import com.voucher.weixin.util.OrderNum;
 public class WeiXinTest {
 
 	public static final String URL = "http://test.lzgtzh.com/voucher";
-	private static final String requestUrl = URL+"/mobile/WechatSendMessage/send.do";
+	private static final String requestUrl = "http://127.0.0.1/voucher/mobile/WechatSendMessage/send.do";
 	
 	public static void main(String[] args) {
 
 
-		ClassPathXmlApplicationContext applicationContext=new ClassPathXmlApplicationContext("spring-mybatis2.xml");		
-		DefaultSqlSessionFactory defaultSqlSessionFactory= (DefaultSqlSessionFactory) applicationContext.getBean("sqlSessionFactory");				
-		SqlSession sqlSession=defaultSqlSessionFactory.openSession();
-		WeiXinMapper weiXinMapper=sqlSession.getMapper(WeiXinMapper.class);
+		/*
+		 * ClassPathXmlApplicationContext applicationContext=new
+		 * ClassPathXmlApplicationContext("spring-mybatis2.xml");
+		 * DefaultSqlSessionFactory defaultSqlSessionFactory= (DefaultSqlSessionFactory)
+		 * applicationContext.getBean("sqlSessionFactory"); SqlSession
+		 * sqlSession=defaultSqlSessionFactory.openSession(); WeiXinMapper
+		 * weiXinMapper=sqlSession.getMapper(WeiXinMapper.class);
+		 * 
+		 * WeiXin weixin=weiXinMapper.getWeiXinByCampusId(1);
+		 * 
+		 * NoticeMapper noticeMapper = sqlSession.getMapper(NoticeMapper.class);
+		 * 
+		 * Notice notice = new Notice(); notice.setCampusId(1); notice.setTitle("隐患通知");
+		 * notice = noticeMapper.selectTemplate(notice);
+		 */
 		
-		WeiXin weixin=weiXinMapper.getWeiXinByCampusId(1);
 		
-		System.out.println(weixin.getUrl());
+		//System.out.println(weixin.getUrl());
 
 		//WeiXin weixin=weiXinMapper.getWeiXinByCampusId(1);
-		
+		/*
 		System.out.println(weixin.getUrl());
 		
 		Date date = new Date();
@@ -59,8 +71,13 @@ public class WeiXinTest {
 		
 		System.out.println(OrderNum.getOrderNum());
 		System.out.println(requestUrl);
-		
+		*/
 
+		int i = 1;
+		String ii = String.valueOf(i);
+		Float f = Float.parseFloat(ii);
+		System.out.println(f/100);
+		
 	}
 
 }

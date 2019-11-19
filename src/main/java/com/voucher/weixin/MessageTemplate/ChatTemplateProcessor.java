@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.voucher.manage.mapper.WeiXinMapper;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.WeiXinService;
+import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.weixin.base.AdvancedUtil;
 import com.voucher.weixin.base.CommonUtil;
 
@@ -34,6 +35,8 @@ public class ChatTemplateProcessor {
 		System.out.println("templatemessage="+jsonString);
 		String requestUrl = SEND_TEMPLAYE_MESSAGE_URL.replace("ACCESS_TOKEN", accessToken);	
 		JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "POST", jsonString);
+		System.out.println("=====================");
+		MyTestUtil.print(jsonObject);
 		System.out.println("jsonObject="+jsonObject);	
 		if (null != jsonObject) {
 			int errorCode = jsonObject.getInteger("errcode");		
@@ -48,9 +51,9 @@ public class ChatTemplateProcessor {
 		        appId=weiXin.getAppId();
 		        appSecret=weiXin.getAppSecret();
 		        
-       		      accessToken=AdvancedUtil.getAccessToken(appId, appSecret);
-       		     Map<String, Object> paramMap=new HashMap<>();  
-       		     paramMap.put("accessToken", accessToken);
+       		    accessToken=AdvancedUtil.getAccessToken(appId, appSecret);
+       		    Map<String, Object> paramMap=new HashMap<>();  
+       		    paramMap.put("accessToken", accessToken);
       		    paramMap.put("campusId", campusId);
       		    paramMap.put("campusId", campusId);
       		    Date date=new Date();

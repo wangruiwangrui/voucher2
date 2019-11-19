@@ -90,6 +90,8 @@ public class BillServerInfo implements Serializable{
 	@SQLString(name="s_pappid")
 	private String s_pappid;
 	
+	@SQLInteger(name = "campusId")
+	private Integer campusId;
 
 	public Integer getID() {
 		return ID;
@@ -257,6 +259,14 @@ public class BillServerInfo implements Serializable{
 
 	public void setS_pappid(String s_pappid) {
 		this.s_pappid = s_pappid;
+	}
+	
+	public Integer getCampusId() {
+		return campusId;
+	}
+
+	public void setCampusId(Integer campusId) {
+		this.campusId = campusId;
 	}
 
 

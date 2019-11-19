@@ -2,7 +2,7 @@
 var progress = "/voucher";
 
 // 本地测试
-var DOMAIN = "http://nwx.wtsms.net";
+var DOMAIN = "";
 
 //测试服务器
 //var DOMAIN = "http://wx.lzgtzh.com/";
@@ -18,5 +18,6 @@ $.ajax({
 		console.log("data", data);
 		data = JSON.parse(data);
 		APPID = data.appId;
+		DOMAIN =data.DOMAIN;
 	}
 })

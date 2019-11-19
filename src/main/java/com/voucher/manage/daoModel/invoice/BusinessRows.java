@@ -14,136 +14,103 @@ public class BusinessRows implements Serializable{
 	
 
     // 复核人				
-    
-    public String fhr ;
+	private String fhr ;
     
     // 销售方名称
-    
-    public String xsf_mc ;
+    private String xsf_mc ;
     
     // 原发票号码
-    
-    public String yfp_hm ;
+    private String yfp_hm ;
     
     // 备注
-    
-    public String bz ;
+    private String bz ;
     
     // 销售方银行账号
-    
-    public String xsf_yhzh ;
+    private String xsf_yhzh ;
     
     // 购买方名称	
-    
-    public String gmf_mc ;
+    private String gmf_mc ;
     
     // 合计税额
-    
-    public String hjse ;
+    private String hjse ;
     
     // 发票代码
-    
-    public String fp_dm ;
+    private String fp_dm ;
     
     // 扣税额
-    
-    public String kce ;
+    private String kce ;
     
     // 原发票代码
-    
-    public String yfp_dm ;
+    private String yfp_dm ;
     
     // 发票号码
-    
-    public String fp_hm ;
+    private String fp_hm ;
     
     // 购买方纳税人识别号
-    
-    public String gmf_nsrsbh ;
+    private String gmf_nsrsbh ;
     
     // 发票类型（026=电票，004=专票，007=普票，025=卷票）
-    
-    public String itype ;
+    private String itype ;
     
     // 校验码
-    
-    public String jym ;
+    private String jym ;
     
     // 开票类型
-    
-    public String kplx ;
+    private String kplx ;
     
     // 发票清单PDF文件KEY
-    
-    public String pdf_item_key ;
+    private String pdf_item_key ;
     
     // 业务单据号
-    
-    public String order_num ;
+    private String order_num ;
     
     // 征税方式（0：普通征税   2：差额征税）
-    
-    public String zsfs ;
+    private String zsfs ;
     
     // 销售方地址、电话
-    
-    public String xsf_dzdh ;
+    private String xsf_dzdh ;
     
     // 税控设备机器编号
-    
-    public String jqbh ;
+    private String jqbh ;
     
     // 合计金额（不含税）
-    
-    public String hjje ;
+    private String hjje ;
     
     // 购买方地址、电话
-    
-    public String gmf_dzdh ;
+    private String gmf_dzdh ;
     
     // 发票请求流水号
-    
-    public String fpqqlsh ;
+    private String fpqqlsh ;
     
     // 收款人
-    
-    public String skr ;
+    private String skr ;
     
     // 购买方银行账号
-    
-    public String gmf_yhzh ;
+    private String gmf_yhzh ;
     
     // 开票人
-    
-    public String kpr ;
+    private String kpr ;
     
     // 销售方纳税人识别号
-    
-    public String xsf_nsrsbh ;
+    private String xsf_nsrsbh ;
     
     // 发票密文
-    
-    public String fp_mw ;
+    private String fp_mw ;
     
     // 价税合计
-    
-    public String jshj ;
+    private String jshj ;
     
     // 发票PDF文件获取KEY
-    
-    public String pdf_key ;
+    private String pdf_key ;
     
     // 开票日期（20161107145525  格式yyyymmddhhmiss)
-    
-    public String kprq ;
+    private String kprq ;
     
     // 提取码
-    
-    public String EXT_CODE ;
+    private String EXT_CODE ;
     
     // 商品明细
-    
-    public List<Common_Fpkj_Xmxx> common_fpkj_xmxx;
+    private List<Common_Fpkj_Xmxx> common_fpkj_xmxx;
 
 	public String getFhr() {
 		return fhr;

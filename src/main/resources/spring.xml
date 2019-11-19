@@ -7,7 +7,7 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd
  http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd"
 xmlns:task="http://www.springframework.org/schema/task"  
 >
-
+	
 	<!-- 引入属性文件  注意两个都要加上ignore-unresolvable="true"，一个加另一个不加也是不行的-->
 	<context:property-placeholder location="classpath:config.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"  />
@@ -27,7 +27,7 @@ xmlns:task="http://www.springframework.org/schema/task"
 	
 	<!-- <bean id="keyMapper" class="com.voucher.manage.mapper.KeyMapper">
 	</bean> -->
-	
+	<bean id="springUtil" class="com.voucher.weixin.util.SpringUtil"></bean>
     <!--spring扫描注解的配置   -->  
     <context:component-scan base-package="com.voucher.manage.mytask" /> 
 	

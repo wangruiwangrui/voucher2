@@ -503,7 +503,7 @@ wx
 			
 			try {
 				document.querySelector('#finance').onclick = function() {
-					location.href = "../assetAdmin/assetFinance/admin.html";
+					location.href = "../assetAdmin/assetFinance/admin.html?campusId="+campusId;
 				}
 			} catch (ex) {
 
@@ -519,7 +519,7 @@ wx
 
 			try {
 				document.querySelector('#asseStat').onclick = function() {
-					location.href = "echarts/echarts.html";
+					location.href = "echarts/echarts.html?campusId="+campusId;
 				}
 			} catch (ex) {
 
@@ -535,7 +535,7 @@ wx
 
 			try {
 				document.querySelector('#flow').onclick = function() {
-					location.href = "../flow/index.html";
+					location.href = "../flow/index.html?campusId="+campusId;
 				}
 			} catch (ex) {
 

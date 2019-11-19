@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>demo</title>
+<title>资产管理助手</title>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
 <meta content="yes" name="apple-mobile-web-app-capable" />
 <meta content="black" name="apple-mobile-web-app-status-bar-style" />
@@ -9,20 +9,16 @@
     <link rel="stylesheet" href="../css/weui.css"/>
     <link rel="stylesheet" href="../css/example.css"/>
     
-<script type="text/javascript" src="/voucher/mobile/singleton.js"></script>
-
- <script type="text/javascript">
- var redirectUrl="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+APPID+"&redirect_uri="+DOMAIN+"/voucher/mobile/1/safety/voice.html&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
-</script>
+<script type="text/javascript" src="/voucher/mobile/singleton2.js"></script>
 
 <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 <body>
 <div class="wxapi_container">
     <div class="lbox_close wxapi_form">
-      <button class="btn btn_primary" id="startRecord">寮�濮�</button>
-      <button class="btn btn_primary" id="deleteVoice">鍒犻櫎</button>
-      <button class="btn btn_primary" id="uploadVoice">纭</button>
+      <button class="btn btn_primary" id="startRecord">瀵拷婵拷</button>
+      <button class="btn btn_primary" id="deleteVoice">閸掔娀娅�</button>
+      <button class="btn btn_primary" id="uploadVoice">绾喛顓�</button>
     </div>
 </div>
 
@@ -63,12 +59,12 @@ var state=getQueryString("state");
  			     success : function(data) {
  			    	 var ticket=JSON.parse(data);
  		       	     /*
- 		     	      * 姝ゅ闇�瑕佷袱娆℃墽琛岀浉鍚岀殑鍑芥暟锛屽惁鍒欒繑鍥瀟ure鏃朵笉鑳芥墽琛屼互涓嬪嚱鏁�
+ 		     	      * 濮濄倕顦╅棁锟界憰浣疯⒈濞嗏剝澧界悰宀�娴夐崥宀�娈戦崙鑺ユ殶閿涘苯鎯侀崚娆掔箲閸ョ�焨re閺冩湹绗夐懗鑺ュ⒔鐞涘奔浜掓稉瀣毐閺侊拷
  		     	      */  
  		       	          
  			    	 
  			    	 wx.config({
- 			    		debug: true, // 寮�鍚皟璇曟ā寮�,璋冪敤鐨勬墍鏈塧pi鐨勮繑鍥炲�间細鍦ㄥ鎴风alert鍑烘潵锛岃嫢瑕佹煡鐪嬩紶鍏ョ殑鍙傛暟锛屽彲浠ュ湪pc绔墦寮�锛屽弬鏁颁俊鎭細閫氳繃log鎵撳嚭锛屼粎鍦╬c绔椂鎵嶄細鎵撳嵃銆�
+ 			    		debug: true, // 瀵拷閸氼垵鐨熺拠鏇熌佸锟�,鐠嬪啰鏁ら惃鍕閺堝¨pi閻ㄥ嫯绻戦崶鐐诧拷闂寸窗閸︺劌顓归幋椋庮伂alert閸戠儤娼甸敍宀冨鐟曚焦鐓￠惇瀣╃炊閸忋儳娈戦崣鍌涙殶閿涘苯褰叉禒銉ユ躬pc缁旑垱澧﹀锟介敍灞藉棘閺侀淇婇幁顖欑窗闁俺绻僱og閹垫挸鍤敍灞肩矌閸︹暚c缁旑垱妞傞幍宥勭窗閹垫挸宓冮妴锟�
  			      		appId: ticket.appId,
  			      		timestamp: ticket.timestamp,
  			      		nonceStr: ticket.nonceStr,
@@ -90,7 +86,7 @@ var state=getQueryString("state");
  			      	});
  			    	 
  			    	/*
-		      	      * 姝ゅ闇�瑕佷袱娆℃墽琛岀浉鍚岀殑鍑芥暟锛屽惁鍒欏洖璋冨悗涓嶈兘鎵ц浠ヤ笅鍑芥暟
+		      	      * 濮濄倕顦╅棁锟界憰浣疯⒈濞嗏剝澧界悰宀�娴夐崥宀�娈戦崙鑺ユ殶閿涘苯鎯侀崚娆忔礀鐠嬪啫鎮楁稉宥堝厴閹笛嗩攽娴犮儰绗呴崙鑺ユ殶
 		      	      */ 
  			    	 wx.ready(function () {
  			  
@@ -101,17 +97,17 @@ var state=getQueryString("state");
  			            var startRecord = document.querySelector('#startRecord');
  			            var stopClearTimeout;
  			            startRecord.onclick = function () {
- 			            //寮�濮嬪綍闊�
- 			            if(startRecord.innerHTML == '寮�濮�'){
+ 			            //瀵拷婵缍嶉棅锟�
+ 			            if(startRecord.innerHTML == '瀵拷婵拷'){
  			                wx.startRecord({
  			                    success: function(){
- 			                        startRecord.innerHTML = '鍋滄';
- 			                        //30绉掑悗鑷姩鍋滄;
+ 			                        startRecord.innerHTML = '閸嬫粍顒�';
+ 			                        //30缁夋帒鎮楅懛顏勫З閸嬫粍顒�;
  			                        stopClearTimeout = setTimeout(function(){
  			                            wx.stopRecord({
  			                                success: function (res) {
  			                                    voice.localId = res.localId;
- 			                                    startRecord.innerHTML = '璇曞惉';
+ 			                                    startRecord.innerHTML = '鐠囨洖鎯�';
  			                                }
  			                            });
  			                        },30000);
@@ -119,12 +115,12 @@ var state=getQueryString("state");
  			                });
  			            }
  			            
- 			                //缁撴潫褰曢煶
- 			            if(startRecord.innerHTML =='鍋滄'){
+ 			                //缂佹挻娼ぐ鏇㈢叾
+ 			            if(startRecord.innerHTML =='閸嬫粍顒�'){
  			                wx.stopRecord({
  			                    success: function (res) {
  			                        clearTimeout(stopClearTimeout);
- 			                        startRecord.innerHTML = '璇曞惉';
+ 			                        startRecord.innerHTML = '鐠囨洖鎯�';
  			                        voice.localId = res.localId;
  			                    },
  			                    fail: function (res) {
@@ -133,10 +129,10 @@ var state=getQueryString("state");
  			                });
  			            }
  			    
- 			            //璇曞惉闊抽
- 			            if(startRecord.innerHTML =='璇曞惉'){
+ 			            //鐠囨洖鎯夐棅鎶筋暥
+ 			            if(startRecord.innerHTML =='鐠囨洖鎯�'){
  			                if (voice.localId == '') {
- 			                    alert('璇峰厛褰曞埗涓�娈靛０闊�');
+ 			                    alert('鐠囧嘲鍘涜ぐ鏇炲煑娑擄拷濞堥潧锛愰棅锟�');
  			                    return;
  			                }
  			                wx.playVoice({
@@ -146,30 +142,30 @@ var state=getQueryString("state");
  			    
  			            };
  			            
- 			                //鍒犻櫎璇煶,閲嶆柊褰曢煶;
+ 			                //閸掔娀娅庣拠顓㈢叾,闁插秵鏌婅ぐ鏇㈢叾;
  			            document.querySelector('#deleteVoice').onclick = function(){
  			                voice.localId = '';
- 			                startRecord.innerHTML = '寮�濮�';
+ 			                startRecord.innerHTML = '瀵拷婵拷';
  			            }
  			            
- 			                    //纭涓婁紶璇煶
+ 			                    //绾喛顓绘稉濠佺炊鐠囶參鐓�
  			            document.querySelector('#uploadVoice').onclick = function () {
  			                if (voice.localId == '') {
- 			                  alert('璇峰厛褰曞埗涓�娈靛０闊�');
+ 			                  alert('鐠囧嘲鍘涜ぐ鏇炲煑娑擄拷濞堥潧锛愰棅锟�');
  			                  return;
  			                }
  			                wx.uploadVoice({
  			                  localId: voice.localId,
  			                    success: function (res) {
  			                        voice.serverId = res.serverId;
- 			                        //鎶婂井淇℃湇鍔″櫒涓婄殑serverId浼犵粰鍚庡彴,鍚庡彴鍐嶉�氳繃serverId鍒板井淇℃湇鍔″櫒涓婃妸璇煶淇濆瓨鍒拌嚜宸辨湇鍔″櫒涓�
+ 			                        //閹跺﹤浜曟穱鈩冩箛閸斺�虫珤娑撳﹦娈憇erverId娴肩姷绮伴崥搴″酱,閸氬骸褰撮崘宥夛拷姘崇箖serverId閸掓澘浜曟穱鈩冩箛閸斺�虫珤娑撳﹥濡哥拠顓㈢叾娣囨繂鐡ㄩ崚鎷屽殰瀹歌鲸婀囬崝鈥虫珤娑擄拷
  			                        $.ajax({
- 			                            url: '',//鍚庡彴鎺ユ敹鏁版嵁鍦板潃
+ 			                            url: '',//閸氬骸褰撮幒銉︽暪閺佺増宓侀崷鏉挎絻
  			                            dataType: "json",
  			                            type: 'get',
  			                            data: {'id': voice.serverId},
  			                            success: function (msg) {
- 			                                alert('涓婁紶鎴愬姛!');
+ 			                                alert('娑撳﹣绱堕幋鎰!');
  			                            },
  			                        });
  			                    }

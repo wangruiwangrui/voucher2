@@ -11,7 +11,7 @@ public class TransMapToString {
 	 * 返回值:String[]
 	*/  
 	public static String[] get(Map<String,String> map){  
-		Set  set=map.entrySet();   
+		Set set=map.entrySet();   
 		int size=map.size();
 	//	System.out.print(size);
 		String[] value=new String[size*2];

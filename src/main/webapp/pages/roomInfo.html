@@ -63,7 +63,7 @@
 						<th data-field="address" data-sortable="true">Address</th>
 						<th data-field="buildArea" data-sortable="true">BuildArea</th>
 						<th data-field="originalAddress">OriginalAddress</th>
-						<th data-field="inDate" data-sortable="true">InDate</th>
+						<th data-field="inDate" data-sortable="true" data-formatter="actionTime">InDate</th>
 					</tr>
 				</thead>
 			</table>
@@ -71,4 +71,16 @@
 	</div>
 
 </body>
+<script type="text/javascript">
+function actionTime(value, row, index){
+    var date = new Date(value);
+    Y = date.getFullYear() + '-';
+    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+    D = date.getDate() + ' ';
+    h = date.getHours() + ':';
+    m = date.getMinutes() + ':';
+    s = date.getSeconds();
+    return Y+M+D+h+m+s;
+}
+</script>
 </html>

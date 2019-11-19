@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<head>
+<meta charset="utf-8">
+<title>用户管理</title>
+
+<link rel="stylesheet" href="assets/bootstrap-table/bootstrap-table.css">
+<link rel="stylesheet" href="assets/bootstrap-table/bootstrap-editable.css">
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet">
+<style>
+#operate-success {
+	font-size: 16px;
+	background-color: #8AC007;
+	color: #FBFBFB;
+	visibility: hidden
+}
+ 
+.choose{
+    margin-top: 3%;
+}
+
+</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="page-header">
+			<h1>蓝字发票&nbsp;&nbsp;</h1>
+		</div>
+		<div style="text-align: center;">
+			<span id="operate-success">设置成功</span>
+		</div>
+
+		<div class="choose dropup" id="maintable">
+			<button class="btn btn-default dropdown-toggle " type="button"
+				data-toggle="dropdown">
+				选择日期<span class="caret"></span>
+				<ul class="dropdown-menu ul" role="menu"
+					aria-labelledby="dropdownMenu1">
+					<li role="presentation"><a role="menuitem" id="today"
+						tabindex="-1" href="#">今天</a></li>
+					<li role="presentation"><a role="menuitem" id="week"
+						tabindex="-1" href="#">一周内</a></li>
+					<li role="presentation"><a role="menuitem" id="month"
+						tabindex="-1" href="#">一月内</a></li>
+				</ul>
+			</button>
+			
+
+
+			<button id="query" type="button" class="btn btn-default">查询</button>
+		</div>
+		
+		<div style="float: left;line-height: 30px;color: red;">活动开始时间：</div>
+			<div class="input-append date form_datetime" style="float: left; padding-right:20px">
+				<input id = "startTime" name="startTime" size="16"type="text" value="${obj.startTimeStr}" readonly>
+				<span class="add-on"><i class="icon-remove"></i></span>
+				<span class="add-on"><i class="icon-th"></i></span>
+			</div>
+		<div>
+			<table id="table" data-toggle="table" data-show-export="false"
+				data-toolbar="#toolbar" data-search="true"
+				data-show-refresh="true" data-show-toggle="true"
+				data-side-pagination="server" data-pagination="true"
+				data-show-columns="true" data-sort-order="desc">
+				<thead>
+					<tr>
+						<th data-field="state" data-checkbox="true"></th>
+						<th class="ID" data-align="left" data-field="billId" data-visible="false">ID</th>
+						<th data-align="center" data-field="gmf_mc">购买方名称</th>
+						<th data-align="center" data-field="gmf_nsrsbh">购买方纳税人识别号</th>
+						<th data-align="center" data-field="hjje">合计金额</th>
+						<th data-align="center" data-field="hjse">合计税额</th>
+						<th data-align="center" data-field="order_num">支付编号</th>
+						<th data-align="center" data-field="kpr">开票人</th>
+
+						<th data-align="center" data-field="xsf_mc">销售方名称</th>
+						<th data-align="left" data-field="xsf_yhzh">销售方银行账号</th>
+						<th data-align="left" data-field="xsf_dzdh">销售方地址电话</th>
+
+						<th data-align="center" data-formatter="actionTime"
+							data-field="kprq" data-sortable="true">开票日期</th>
+						<th data-align="center" data-field="action" 
+							data-formatter="actionReport">开红票</th>
+						<th data-align="center" data-field="action" 
+							data-formatter="actionhelp">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		
+<!-- 		<table data-toggle="table" id="list">
+			<thead>
+			</thead>
+		</table> -->
+	</div>
+	
+<script src="assets/bootstrap-table/jquery.min.js"></script>
+<script src="assets/bootstrap-table/bootstrap.min.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table-export.js"></script>
+<script src="assets/bootstrap-table/tableExport.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="assets/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/bootstrap-table-zh-CN.min.js"></script>
+
+	<script type="text/javascript">
+	
+		var campusId = campusId;
+
+		var url = "roominfo/getBlueBill.do?campusId=" + campusId + "&State="
+				+ 1;
+		$("#table").bootstrapTable({
+			url : url
+		});
+
+		function actionReport(value, row, index) {
+			var id = index;
+			var result = "";
+			result += "<button type='button' title='开发票' onclick='redBill(this);' class='btn btn-danger'>发票冲红</button>";
+			return result;
+
+		}
+		
+		function actionhelp(value, row, index) {
+			var id = index;
+			var result = "";
+			result += "<button type='button' title='发票下载' onclick='downBill(this);' class='btn btn-danger'>发票下载</button>";
+			return result;
+
+		}
+
+		$("#redBill").click(function() {
+			var row = $("#table").bootstrapTable('getSelections');
+			console.log(row)
+		})
+
+		function redBill(temp) {
+			var hang = $(temp.parentNode).parent().prevAll().length + 1;
+			var out_trade_no = document.getElementById("table").rows[hang].cells[5].innerHTML;
+			$.post("../../voucher/mobile/bill/getRedTicket.do", {
+				out_trade_no : out_trade_no
+			}, function(data) {
+				data = JSON.parse(data);
+				if(data.result=="SUCCESS"){
+					setSuccess("发票冲红成功。");
+					$('#table').bootstrapTable('refresh');
+				}else{
+					setSuccess("发票冲红失败。");
+					$('#table').bootstrapTable('refresh');
+				}
+			});
+		}
+		
+		function printBill(temp) {
+			var hang = $(temp.parentNode).parent().prevAll().length + 1;
+			var out_trade_no = document.getElementById("table").rows[hang].cells[5].innerHTML;
+			
+			$.post("../../voucher/mobile/bill/getBillPDFPrint.do", {
+				out_trade_no : out_trade_no
+			}, function(data) {
+				data = JSON.parse(data);
+				if(data=="false"){
+	        		$("#ptBill").html("发票pdf加载失败！");
+	        	}else{
+	        		var url = "/voucher/img/"+data.result;
+					window.open(url);
+	        	}
+				
+			});
+		}
+		
+		function downBill(temp) {
+			var hang = $(temp.parentNode).parent().prevAll().length + 1;
+			var out_trade_no = document.getElementById("table").rows[hang].cells[5].innerHTML;
+			
+			$.post("../../voucher/mobile/bill/getBillOriginalPDF.do", {
+				out_trade_no : out_trade_no
+			}, function(data) {
+				
+				data = JSON.parse(data);
+				if(data.result=="false"){
+					setSuccess("发票下载失败");
+					$('#table').bootstrapTable('refresh');
+				}else{
+					
+					/* var url = "/voucher/img/"+data.result; */
+					var url = "/voucher/"+data.result;
+					window.open(url);
+					$('#table').bootstrapTable('refresh');
+				}
+			});
+		}
+
+		function actionTime(value, row, index) {
+		    var date = new Date(value);
+		    Y = date.getFullYear() + '-';
+		    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+		    D = date.getDate() + ' ';
+		    h = date.getHours() + ':';
+		    m = date.getMinutes() + ':';
+		    s = date.getSeconds();
+		    return Y+M+D+h+m+s;
+		}
+		$("#query").click(function() {
+			$('.dropdown-toggle').dropdown();
+		})
+		
+		$(document).ready(function () {
+ 
+	        $(".form_datetime").datetimepicker({
+	        format: "yyyy-mm-dd hh:ii:ss",
+	        linkField: "mirror_field",
+	        linkFormat: "yyyy-mm-dd hh:ii"
+	        });
+ 
+		});
+ 
+	</script>
+
+</body>
+</html>

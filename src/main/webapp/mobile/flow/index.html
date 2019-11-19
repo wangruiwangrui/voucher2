@@ -5,33 +5,16 @@
 <head>
 <meta charset="utf-8">
 
-<script src="/voucher/js/jquery.min.js"></script>
-
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="/voucher/bootstrap/3.3.7/bootstrap.min.css"
 	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
 	crossorigin="anonymous">
 
-<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="/voucher/bootstrap/3.3.7/bootstrap.min.js"
-	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-	crossorigin="anonymous"></script>
-
 <link
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
 	rel="stylesheet">
 
-<script type="text/javascript" src="/voucher/mobile/singleton.js"></script>
 
-<script type="text/javascript">
-	var redirectUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-			+ APPID
-			+ "&redirect_uri="
-			+ DOMAIN
-			+ "/voucher/mobile/1/index.html&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
-</script>
-
-<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
 <link rel="stylesheet" href="../../weixinUI/style/weui.css" />
 
@@ -62,8 +45,8 @@ p {
 	padding: 10px
 }
 
-span{
-	color: #333; 
+span {
+	color: #333;
 }
 
 .corner {
@@ -101,16 +84,16 @@ span{
 	<nav class="navbar navbar-default" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
+				<!-- <button type="button" class="navbar-toggle" data-toggle="collapse"
 					data-target="#example-navbar-collapse">
 					<span class="sr-only"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span> <span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#">
-					<img src="../../img/gtimgs/3.png" style="margin-top: -10px"></a>
-				 <a class="navbar-brand" href="#">审批流程</a>
+				</button> -->
+				<a class="navbar-brand" href="#"> <img
+					src="../../img/gtimgs/3.png" style="margin-top: -10px"></a> <a
+					class="navbar-brand" href="#">审批流程</a>
 			</div>
-			<div class="collapse navbar-collapse" id="example-navbar-collapse">
+			<!-- <div class="collapse navbar-collapse" id="example-navbar-collapse">
 				<ul class="nav navbar-nav">
 					<li><a href="../1/userSetting.html">用户设置</a></li>
 					<div class="layui-form">
@@ -118,7 +101,7 @@ span{
 								data-method="notice">关于管理助手</button></li>
 					</div>
 				</ul>
-			</div>
+			</div> -->
 		</div>
 	</nav>
 
@@ -143,7 +126,7 @@ span{
 							<span>已通过验收审核</span>
 						</div>
 					</div>
-				
+
 					<div class='col-xs-4 col-sm-4' style='text-align: center;'
 						id='process'>
 						<img alt='' src='../../img/gtimgs/imgs6/23.png'>
@@ -172,10 +155,23 @@ span{
 		</div>
 
 	</div>
-	<script type="text/javascript" src="/voucher/mobile/singleton.js"></script>
+	<script type="text/javascript">
+		function getQueryString(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null)
+				return unescape(r[2]);
+			return null;
+		}
+		var campusId = getQueryString("campusId");
+	</script>
+	<script src="/voucher/js/jquery.min.js"></script>
 	<script type="text/javascript" src="../../layui/layui/layui.js"></script>
-	<script type="text/javascript" src="../1/js/assistant.js"></script>
-
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="/voucher/bootstrap/3.3.7/bootstrap.min.js"
+		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+		crossorigin="anonymous"></script>
+	<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 	<script type="text/javascript">
 		var xhm = new XMLHttpRequest();
 		xhm.open("GET", "/voucher/mobile/assetCheck/selectPlace.do", false);
@@ -185,12 +181,9 @@ span{
 
 		place = xhm.responseText;
 
-		$.get(
-				"/voucher/mobile/flow/getAccessCount.do",
-		{
+		$.get("/voucher/mobile/flow/getAccessCount.do", {
 
-		},
-		function(text) {
+		}, function(text) {
 
 			var data = JSON.parse(text);
 
@@ -204,14 +197,12 @@ span{
 					taskCount = "•••";
 				}
 
-				var myTaskButton = document
-						.getElementById("myTask");
+				var myTaskButton = document.getElementById("myTask");
 
-				myTaskButton
-						.setAttribute("data-num", taskCount);
+				myTaskButton.setAttribute("data-num", taskCount);
 
-				myTaskButton
-						.setAttribute("class","col-xs-4 col-sm-4 fiv corner");
+				myTaskButton.setAttribute("class",
+						"col-xs-4 col-sm-4 fiv corner");
 			}
 
 			if (passCount > 0) {
@@ -220,16 +211,15 @@ span{
 					passCount = "•••";
 				}
 
-				var passButton = document
-						.getElementById("pass");
+				var passButton = document.getElementById("pass");
 
 				passButton.setAttribute("data-num", passCount);
 
-				passButton.setAttribute("class","col-xs-4 col-sm-4 fiv corner");
+				passButton
+						.setAttribute("class", "col-xs-4 col-sm-4 fiv corner");
 			}
 
 		});
-				
 
 		$("#myTask").on("click", function() {
 			location.href = "myTask.html";

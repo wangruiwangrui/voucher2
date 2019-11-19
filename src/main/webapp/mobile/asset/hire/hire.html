@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta content="" name="description" />
 <meta content="webthemez" name="author" />
-<title>房屋出租合同</title>
+<title>资产管理助手</title>
 <link rel='stylesheet' type='text/css'
 	href='../../../css/bootstrap2.min.css'>
 <link rel="stylesheet"
@@ -22,7 +22,7 @@
 <script src="../../../assets/bootstrap-table/bootstrap-table.js"></script>
 <script src="../../../assets/bootstrap-table/bootstrap-table-export.js"></script>
 <script src="../../../assets/bootstrap-table/tableExport.js"></script>
-<script type="text/javascript" 
+<script type="text/javascript"
 	src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 <script
 	src="../../../assets/bootstrap-table/bootstrap-table-editable.js"></script>
@@ -40,24 +40,48 @@
 .guid {
 	display: none;
 }
-.did{
+
+.did {
 	height: 50%;
-    padding-top: 10%;
-    padding-bottom: 5%;
+	padding-top: 10%;
+	padding-bottom: 5%;
 }
-.blue{
+
+.blue {
 	text-align: left;
 	margin-top: 10%;
 }
-.row{
+
+.row {
 	margin-left: 0px;
 	margin-right: 0px;
 }
-.btn1{
+
+.btn1 {
 	margin-bottom: 5%;
 }
-.str1{
+
+.str1 {
 	margin-bottom: 5%;
+}
+
+.span1 {
+	margin-left: 30px;
+	margin-right: 10px;
+}
+
+.dropdown-menu {
+	margin-left: 154px;
+	min-width: 100px;
+	text-align: center;
+}
+
+.modal1 {
+	margin-bottom: 15px;
+}
+
+.modal-dialog {
+	margin-top: 120px;
 }
 </style>
 
@@ -66,11 +90,13 @@
 		<h1 class="page-header">合同详情</h1>
 	</div>
 
-
 	<div id="toolbar" class="btn-group">
 		<button id="plus" type="button" class="btn btn-default" title="交租金">
 			<i class="glyphicon glyphicon-plus"></i><span>&nbsp;&nbsp;交租金</span>
 		</button>
+		<span class="span1">发票类型:</span> <select id="sel" name="">
+
+		</select>
 	</div>
 
 	<div id="page-inner">
@@ -115,47 +141,122 @@
 			<div class="modal-content">
 				<div class="modal-header blue">
 					<div>
-						<strong class="str1" id="alertchar" style="font-size: 30px">支付成功</strong></br></br>
+						<strong class="str1" id="alertchar" style="font-size: 30px">支付成功</strong></br>
+						</br>
 					</div>
 					<div>
-						<strong class="str1" id="alertchar2" style="font-size: 30px"></strong></br></br>
+						<strong class="str1" id="alertchar2" style="font-size: 30px">发票开具成功</strong></br>
+						</br>
 					</div>
 					<div>
-						<strong class="str1" id="alertchar3" style="font-size: 30px">out</strong></br></br>
-					</div>
-					<div>
-						<strong id="alertchar" style="font-size: 30px">是否需要开据发票</strong>
+						<strong class="str1" id="alertchar3" style="font-size: 30px">out</strong></br>
+						</br>
 					</div>
 					<div class="did">
-						<button type="button" id="commitFoodDataButton" style="width: 100%;letter-spacing: 10px;font-size:20px;"
-							class="btn btn-primary btn1">开发票</button>
-						<button type="button" class="btn btn-default" style="width: 100%;letter-spacing: 10px;font-size:20px;"
-						data-dismiss="modal">取消</button>
+						<button type="button" id="commitFoodDataButton"
+							style="width: 100%; letter-spacing: 10px; font-size: 20px;"
+							class="btn btn-primary btn1">查看发票</button>
+						<button type="button" id="commitFoodDataButton"
+							style="width: 100%; letter-spacing: 10px; font-size: 20px;"
+							class="btn btn-primary btn1">发票冲红</button>
+						<button type="button" class="btn btn-default"
+							style="width: 100%; letter-spacing: 10px; font-size: 20px;"
+							data-dismiss="modal">取消</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<!-- <button type="button" data-toggle="modal" data-target="#alertdialog">Launch modal</button>  -->
-	<button id="iiii">iiiiiiii</button> 
-	<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	<div class="modal" id="mymodal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<!--右上角的关闭按钮-->
+					<button class="close" data-dismiss="modal" type="button">&times;</button>
+					<!--模态弹出框的title-->
+					<div class="modal-title">请设置公司名及税号</div>
+				</div>
+				<div class="modal-body">
+					<!--模态弹出窗主体内容-->
+					<div class="input-group input-group-lg modal1">
+						<span class="input-group-addon" id="sizing-addon1">公司</span> 
+						<input id="campany" type="text" class="form-control"
+							aria-describedby="sizing-addon1">
+					</div>
+					<div class="input-group input-group-lg">
+						<span class="input-group-addon" id="sizing-addon1">税号</span> 
+						<input id="ein" type="text" class="form-control"
+							aria-describedby="sizing-addon1">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<!--modal的尾部-->
+					<button class="btn btn-default" data-dismiss="modal" type="button">关闭</button>
+					<button id="einSave" class="btn btn-primary" type="button">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- <button type="button" data-toggle="modal" data-target="#alertdialog">Launch modal</button>  
+	<button id="iiii">iiiiiiii</button>-->
+	<script type="text/javascript"
+		src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 	<script type="text/javascript">
 	
-		$("#iiii").click(function() {
-			$('#alertdialog').modal('show')
-		})
-		
-	
-		var campusId = 1;
-		
 		function getQueryString(key) {
 			var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
 			var result = window.location.search.substr(1).match(reg);
 			return result ? decodeURIComponent(result[2]) : null;
 		}
-
+		var campusId = getQueryString("campusId");
+		var chartGuid = encodeURI(getQueryString("guid"));
 		var hireGUID = encodeURI(getQueryString("hireGUID"));
+
+		var charter="";
+		var company="";
+		var ein="";
+		getEin();
+		function getEin() {
+			$.ajax({
+	             type: "POST",
+	             url: "/voucher/mobile/asset/getEin.do?guid="+chartGuid,
+	             dataType: "json",
+	             success: function (data){
+	          	   console.log(data);
+	          	   ein = data.ein;
+	          	   charter = data.charter;
+	          	   company = data.company;
+	          	   if(ein == null){
+	       	   		$("#sel").append("<option value=1>个人</option><option value=2>公司</option>");
+	          	   }else{
+	          		$("#sel").append("<option value=3>公司</option><option value=1>个人 </option>");
+	          	   }
+	             }
+			})
+		}
+		
+		$("#iiii").click(function() {
+			var out_trade_no="11111111111111111";
+			 /*购买方 */
+   			var purchaser ='' ;
+   			var sele = $("#sel").val();
+   			if(sele==1){
+   				purchaser = charter;
+   				ein="";
+   			}else{
+   				if(company==null){
+   					purchaser = charter;
+   				}else{
+   					purchaser = company;
+   				}
+   			}
+      		 //支付成功后跳转的页面
+      		 location.href="seccess.html?out_trade_no="+out_trade_no+"&guid="+chartGuid+"&purchaser="+purchaser+"&ein="+ein;
+		})
+		
 
 		$("#table")
 				.bootstrapTable(
@@ -186,14 +287,48 @@
 			var text = document.getElementById("table").rows[hang].cells[3].innerHTML;
 			var guid = document.getElementById("table").rows[hang].cells[5].innerHTML;
 			var value=new Object();
-			var map = new Map();
 			value.guid=guid;
 	        value.text=text;
 	        value.hire=hire;
-			$.confirm("是否确定要支付"+text+"月的租金"+hire+"元? ",
-					function(){
-				repayment(value);
-			})
+	        
+	        var sel = $("#sel").val();
+	        console.log("sel====",sel);
+	        if(sel==2){
+	        	$("#mymodal").modal();
+	        	
+	        	$("#einSave").click(function(){
+		        	var company = $("#campany").val();
+		        	var ein = $("#ein").val();
+		        	var chart =new Object();
+		        	chart.chartGuid=chartGuid;
+		        	chart.company=company;
+		        	chart.ein = ein;
+	        		$.ajax({
+	             		type: "POST",
+	             		url: "/voucher/mobile/asset/updateEin.do?guid="+chartGuid,
+	             		data:{
+            	 			"chart":JSON.stringify(chart)
+	             		},
+	             		dataType: "json",
+	             		success: function (data){
+	          	   			if(data > 0){
+	          	   				$('#mymodal').modal('hide');
+	          	   				location.reload();
+	          	   				
+	          	   			}else{
+	          	   				alert("填写失败");
+	          	   			}
+	   
+	             		}
+					})
+	        	})
+	        	
+	        } else{
+	        	$.confirm("是否确定要支付"+text+"月的租金"+hire+"元? ",
+   				function(){
+   					repayment(value);
+    			})
+	        }
 		}
 		
 		$('#plus').on('click', function() {
@@ -231,16 +366,51 @@
 				value.guid=guid;
 		        value.text=text;
 		        value.hire=hire;
+		        
+		        var sel = $("#sel").val();
+		        console.log("sel====",sel);
+		        if(sel==2){
+		        	$("#mymodal").modal();
+		        	
+		        	$("#einSave").click(function(){
+			        	var company = $("#campany").val();
+			        	var ein = $("#ein").val();
+			        	var chart =new Object();
+			        	chart.chartGuid=chartGuid;
+			        	chart.company=company;
+			        	chart.ein = ein;
+		        		$.ajax({
+		             		type: "POST",
+		             		url: "/voucher/mobile/asset/updateEin.do?guid="+chartGuid,
+		             		data:{
+	            	 			"chart":JSON.stringify(chart)
+		             		},
+		             		dataType: "json",
+		             		success: function (data){
+		          	   			if(data > 0){
+		          	   				$('#mymodal').modal('hide');
+		          	   				location.reload();
+		          	   				
+		          	   			}else{
+		          	   				alert("填写失败");
+		          	   			}
+		   
+		             		}
+						})
+		        	})
+		        }else{
+	        		$.confirm('是否确定要支付 ' + text + '共' + count + '个月租金 合计'+hire+'元?',
+							function(){
+						
+						repayment(value);
+					})
+        		}
 				
-				$.confirm('是否确定要支付 ' + text + '共' + count + '个月租金 合计'+hire+'元?',
-						function(){
-					
-					repayment(value);
-				})
 			}
 		})
 
 		function repayment(value) {
+
 			value.campusId = campusId;
 			 console.log(value)
 			 $.ajax({
@@ -274,8 +444,6 @@
 						
 					     }else if(mes == "ERR"){
 						 
-						 	console.log(payMap);
-						 	
 						 	var err_code = payMap.err_code;
 						 	
 						 	var err_code_des = payMap.err_code_des;
@@ -300,7 +468,7 @@
 		}
 		
 		function onBridgeReady(appId,timeStamp,nonceStr,package,signType,paySign,total_fee,guids,out_trade_no){
-			var tt = "";
+			
 			   WeixinJSBridge.invoke( 'getBrandWCPayRequest', {
 				  "appId":appId,     //公众号名称,由商户传入     
 		          "timeStamp":timeStamp,//时间戳,自1970年以来的秒数     
@@ -311,13 +479,22 @@
 		         }, 
 		         function(res){      
 		      	   if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-		      		 tt = "支付金额："+total_fee+"元";
-		      		/* $("#alertchar2").html(tt); */
-		      			$("#alertchar2").html(out_trade_no);
-		      		   $('#alertdialog').modal('show');
-		      		   window.location.reload();
-		               console.log('支付成功');
+		      		 /*购买方 */
+		   			var purchaser ='' ;
+		   			var sele = $("#sel").val();
+		   			if(sele==1){
+		   				purchaser = charter;
+		   				ein="";
+		   			}else{
+		   				if(company==null){
+		   					purchaser = charter;
+		   				}else{
+		   					purchaser = company;
+		   				}
+		   			}
 		      		 //支付成功后跳转的页面
+		      		 location.href="seccess.html?out_trade_no="+out_trade_no+"&purchaser="+purchaser+"&ein="+ein+"&campusId="+campusId+"&hireGUID="+hireGUID+"&guid="+chartGuid;
+		      		//$('#table').bootstrapTable('refresh');
 		             }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
 		            	 alert("支付取消")
 		          	   console.log('支付取消');
@@ -333,7 +510,7 @@
 		$.ajax({
 		    url : "../../../wechat/sign.do",
 		    data : {
-		   	campusId:1,
+		   	campusId:campusId,
 		   	url:url
 		    },
 		    async: false,

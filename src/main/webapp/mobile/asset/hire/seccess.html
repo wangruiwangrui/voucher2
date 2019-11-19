@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>资产管理助手</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../css/weui.css" />
+<style type="text/css">
+
+img {
+	width: 380px;	
+}
+</style>
+</head>
+
+<body>
+	<div class="page">
+		<div class="weui-msg">
+			<!-- <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div> -->
+		
+			<div class="weui-msg__text-area">
+				<h2 class="weui-msg__title">支付成功</h2>
+				<p id="pt" class="weui-msg__desc">
+					<a href="javascript:void(0);"></a>
+				</p>
+				<p id="ptBill" class="weui-msg__desc">
+					<a href="javascript:void(0);"></a>
+				</p>
+			</div>
+			<div id="img"></div>
+			<div class="col-xs-6 col-md-6">
+				<a href="#" class="thumbnail"> 
+				</a>
+			</div>
+			
+			<div class="weui-msg__opr-area">
+				<p class="weui-btn-area">
+					<a href="" id="retu" class="weui-btn weui-btn_primary">确定</a>
+				</p>
+			</div>
+			<div class="weui-msg__tips-area">
+				<p class="weui-msg__tips">
+					<a href="javascript:void(0);"></a>
+				</p>
+			</div>
+			<div class="weui-msg__extra-area">
+				<div class="weui-footer">
+					<p class="weui-footer__links">
+						<a href="javascript:void(0);" class="weui-footer__link"></a>
+					</p>
+					<p class="weui-footer__text"></p>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+<!-- 	﻿<div id="ShowImage_Form" class="modal hide">         
+         <div class="modal-header">
+             <button data-dismiss="modal" class="close" type="button"></button>
+         </div>
+           <div class="modal-body">
+            <div id="img_show">
+            </div>
+        </div>
+    </div> -->
+
+</body>
+<script src="../../../assets/bootstrap-table/jquery.min.js"></script>
+<script type="text/javascript">
+	function getQueryString(key) {
+		var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+		var result = window.location.search.substr(1).match(reg);
+		return result ? decodeURIComponent(result[2]) : null;
+	}
+	var guid =  encodeURI(getQueryString("guid"));
+	var out_trade_no = getQueryString("out_trade_no");
+	var purchaser = getQueryString("purchaser");
+	var ein = getQueryString("ein");
+	var campusId = getQueryString("campusId");
+	var hireGUID = encodeURI(getQueryString("hireGUID"));
+	
+	$("#pt").html("订单编号：" + out_trade_no);
+	getBill();
+	/* 开发票 */
+	function getBill() {
+		$.ajax({
+	        type: "POST",
+	        url: "/voucher/mobile/bill/getBill.do?out_trade_no="+out_trade_no+"&purchaser="+purchaser+"&ein="+ein,
+
+	        dataType: "json",
+	        success: function (data){
+	        	
+				if(data.result=="SUCCESS"){
+					getImage();
+				}else{
+					$("#ptBill").html("发票开取失败！");
+				}
+	        }
+		})
+	}
+
+	/*获取发票pdf  */
+	function getImage() {
+		$.ajax({
+	        type: "POST",
+	        url: "/voucher/mobile/bill/getBillPDF.do?out_trade_no="+out_trade_no,
+	        dataType: "json",
+	        success: function (data){
+	        	if(data.result=="false"){
+	        		$("#ptBill").html("发票打印失败！");
+	        	}else{
+	        		var img = new Image();
+		        	img.src = "/voucher/"+data.result;
+		        	var im=	document.getElementById("img");
+		        	im.appendChild(img);
+					//$("#img").append(img);
+	        	}
+	        	
+	        }
+		})
+	}
+	
+	$("#retu").click(function() {
+		window.location.href = "hire.html?campusId="+campusId+"&hireGUID="+hireGUID+"&guid="+guid;
+	})
+/*    function showimage(source)
+     {
+         $("#ShowImage_Form").find("#img_show").html("<image src='"+img.jpg+"' class='carousel-inner img-responsive img-rounded' />");
+         $("#ShowImage_Form").modal();
+     } */
+	
+</script>
+</html>

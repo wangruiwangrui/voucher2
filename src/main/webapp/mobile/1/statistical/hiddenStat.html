@@ -5,7 +5,7 @@
   <!-- Numeric JS -->
   <script src="numeric.min.js"></script>
   <link rel="stylesheet" href="../css/weui.css"/>
-  <title>隐患数据统计</title>
+<title>资产管理助手</title>
 </head>
 
 <body>
@@ -16,7 +16,7 @@
   
   <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">选择日期</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">閫夋嫨鏃ユ湡</label></div>
                 <div id="level" class="weui-cell__bd">
                 </div>              
         </div>
@@ -41,28 +41,28 @@
     		
     		var data = [{
     	  		values: [obj.notHidden, obj.successHidden ,  obj.inHidden],
-    	  		labels: ['未整改'+obj.notHidden+"处","已完成"+obj.successHidden+"处"
-    	  		         , '整改中'+obj.inHidden+"处"],
+    	  		labels: ['鏈暣鏀�'+obj.notHidden+"澶�","宸插畬鎴�"+obj.successHidden+"澶�"
+    	  		         , '鏁存敼涓�'+obj.inHidden+"澶�"],
     	  		hoverinfo: 'label+percent',
     	  		type: 'pie'
     			}];
     
    			 var layout = {
-   					title: '全部隐患数量'
+   					title: '鍏ㄩ儴闅愭偅鏁伴噺'
     			};
 
     		Plotly.newPlot('myDiv', data ,layout);
     	
     		var data2 = [{
     	  		values: [(obj.allAsset-obj.allAssetsHidden), obj.allAssetsHidden],
-    	  		labels: ['正常资产'+(obj.allAsset-obj.allAssetsHidden)+"处","隐患资产"+obj.allAssetsHidden+"处"],
+    	  		labels: ['姝ｅ父璧勪骇'+(obj.allAsset-obj.allAssetsHidden)+"澶�","闅愭偅璧勪骇"+obj.allAssetsHidden+"澶�"],
     	  		hoverinfo: 'label+percent',
     	  		hole: .4,
       		  	type: 'pie'
     			}];
     
    			 var layout2 = {
-   					title: '隐患资产数量'
+   					title: '闅愭偅璧勪骇鏁伴噺'
     			};
 
     		Plotly.newPlot('myDiv2', data2 ,layout2);
@@ -83,7 +83,7 @@
 		for(var i=0;i<hiddenYears.length;i++){
 			console.log(hiddenYears[i]);
 	  			var option = document.createElement("option");
-	  			option.innerHTML=hiddenYears[i]+"年";
+	  			option.innerHTML=hiddenYears[i]+"骞�";
 	  			option.setAttribute("value",hiddenYears[i]);
 	  			select.appendChild(option);
 			 }
@@ -111,7 +111,7 @@
     		var x=[];
     		var y=[];
     		for(var i=0;i<hiddenMonth.length;i++){   			
-    			x[i]=hiddenMonth[i].year+" 隐患:"+hiddenMonth[i].amount+"处";
+    			x[i]=hiddenMonth[i].year+" 闅愭偅:"+hiddenMonth[i].amount+"澶�";
     			y[i]=hiddenMonth[i].amount;
     		}
     		var data3 = [
@@ -126,7 +126,7 @@
     		console.log(y);
     		
     		var layout3 = {
-   					title: year+'年每月新增隐患数量'
+   					title: year+'骞存瘡鏈堟柊澧為殣鎮ｆ暟閲�'
     			};
 
      		Plotly.newPlot('myDiv3', data3,layout3);

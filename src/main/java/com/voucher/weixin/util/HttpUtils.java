@@ -1,6 +1,9 @@
 package com.voucher.weixin.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.List;
 
@@ -22,11 +25,14 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+
+import com.alibaba.fastjson.JSONObject;
 
 import common.HttpClientManager;
 
@@ -118,8 +124,8 @@ public class HttpUtils {
         HttpClient httpClient = new DefaultHttpClient();
 
         // 设置超时时间
-        httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 2000);
-        httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 2000);
+        httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 5000);
+        httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 5000);
         HttpPost httpPost=new HttpPost(url);
         httpPost.addHeader("Content-Type", "application/json");
         httpPost.addHeader("User-Agent", "wxpay sdk java v1.0 ");
@@ -165,4 +171,38 @@ public class HttpUtils {
         return retSrc;
 
     }
+    
+    public static String post(JSONObject json, String url){
+		String result = "";
+		HttpPost post = new HttpPost(url);
+		try{
+			CloseableHttpClient httpClient = HttpClients.createDefault();
+        
+			post.setHeader("Content-Type","application/json;charset=utf-8");
+			post.addHeader("Authorization", "Basic YWRtaW46");
+			StringEntity postingString = new StringEntity(json.toString(),"utf-8");
+			post.setEntity(postingString);
+			HttpResponse response = httpClient.execute(post);
+			
+			InputStream in = response.getEntity().getContent();
+			BufferedReader br = new BufferedReader(new InputStreamReader(in, "utf-8"));
+			StringBuilder strber= new StringBuilder();
+			String line = null;
+			while((line = br.readLine())!=null){
+				strber.append(line+'\n');
+			}
+			br.close();
+			in.close();
+			result = strber.toString();
+			if(response.getStatusLine().getStatusCode()!=HttpStatus.SC_OK){
+				result = "服务器异常";
+			}
+		} catch (Exception e){
+			System.out.println("请求异常");
+			throw new RuntimeException(e);
+		} finally{
+			post.abort();
+		}
+		return result;
+	}
 }

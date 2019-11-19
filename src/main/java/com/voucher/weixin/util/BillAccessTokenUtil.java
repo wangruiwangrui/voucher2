@@ -1,16 +1,28 @@
 package com.voucher.weixin.util;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.BillDAO;
 import com.voucher.manage.daoModel.TTT.BillServerInfo;
+import com.voucher.manage.daoModel.TTT.CompanyMsg;
 import com.voucher.manage.daoModel.TTT.Payment_Info;
+import com.voucher.manage.daoModel.invoice.BusinessData;
+import com.voucher.manage.daoModel.invoice.BusinessResult;
+import com.voucher.manage.daoModel.invoice.Common_Fpkj_Xmxx;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.WeiXinService;
 import com.voucher.manage.tools.MyTestUtil;
@@ -31,18 +43,18 @@ public class BillAccessTokenUtil {
 	HttpUtils ut = new HttpUtils();
 	
 	//此方法用于获取发票基础access_token
-	public String getAccessToken(){
+	public String getAccessToken(String out_trade_no){
 		
 		String TokenStr; 
 		Date currenTime;
 		long timeDifference;
-		BillServerInfo billServerinfo = billDAO.getBillServerInfo();
+		BillServerInfo billServerinfo = billDAO.getBillInfo(out_trade_no);
 
 		currenTime=new Date();
   
 		timeDifference=currenTime.getTime()-billServerinfo.getTokenCreateDate().getTime();
 	   
-		 if(timeDifference<7100*1000){
+		 if(timeDifference<5100*1000){
 	    	   return billServerinfo.getTokenStr();
 	       }else{
 	    	   	String url = billServerinfo.getAPI_TOKEN_URL();
@@ -67,8 +79,8 @@ public class BillAccessTokenUtil {
 	
 	
 	//此方法用于获取发票临时票据ticket
-	public String getTicket(){
-		BillServerInfo billServerInfo = billDAO.getBillServerInfo();
+	public String getTicket(String out_trade_no){
+		BillServerInfo billServerInfo = billDAO.getBillInfo(out_trade_no);
 		Date currenTime=new Date();
 		  
 		Long timeDifference=currenTime.getTime()-billServerInfo.getTicket_Time().getTime();
@@ -102,8 +114,8 @@ public class BillAccessTokenUtil {
 	
 	//此方法用于获取s_pappid
 	//提前获取开票平台标识s_pappid，因为同一个开票平台的s_pappid都相同，所以获取s_pappid的操作只需要进行一次。
-	public String getS_pappid() {
-		BillServerInfo billServerInfo = billDAO.getBillServerInfo();
+	public String getS_pappid(String out_trade_no) {
+		BillServerInfo billServerInfo = billDAO.getBillInfo(out_trade_no);
 		String s_pappid = billServerInfo.getS_pappid();
 		if(s_pappid==""||s_pappid==null) {
 			String access_token = AutoAccessToken.get(weixinService, 1);
@@ -179,9 +191,9 @@ public class BillAccessTokenUtil {
 		String order_id = out_trade_no;
 		
 		//开票平台在微信的标识号，商户需要找开票平台提供
-		String s_pappid = getS_pappid();
+		String s_pappid = getS_pappid(out_trade_no);
 		
-		String ticket = getTicket();
+		String ticket = getTicket(out_trade_no);
 		
 		Payment_Info pInfo = billDAO.selectPayment_Info(out_trade_no);
 		
@@ -225,6 +237,76 @@ public class BillAccessTokenUtil {
 		}
 		map.put("errmsg", errmsg);
 		return map;
+	}
+	
+	
+	/**
+	 * 开蓝字发票链接
+	 * @return
+	 */
+	public BusinessResult getBillTicket(String out_trade_no,String purchaser,String ein) {
+		
+		//out_trade_no = "20191015164611992";
+		Payment_Info pInfo = billDAO.selectPayment_Info(out_trade_no);    // 通过交易单号查询交易详情
+		BillServerInfo billServerinfo = billDAO.getBillInfo(out_trade_no);
+		CompanyMsg cMsg = billDAO.queryCompanyMsg(out_trade_no);    //获取销售方纳税人信息
+		
+		Common_Fpkj_Xmxx common_fpkj_xmxx = new Common_Fpkj_Xmxx();
+		common_fpkj_xmxx.setFphxz(billServerinfo.getFphxz());
+		common_fpkj_xmxx.setSpbm(billServerinfo.getSpbm());
+		common_fpkj_xmxx.setXmmc(billServerinfo.getXmmc());
+		common_fpkj_xmxx.setXmdj(pInfo.getTotal_fee().toString());
+		common_fpkj_xmxx.setXmsl("1.000000");
+		common_fpkj_xmxx.setXmje(pInfo.getTotal_fee().toString());
+		common_fpkj_xmxx.setSl(billServerinfo.getSl().toString());
+
+		// 不含税单价=含税单价/1+税率; 税额=不含税单价* 数量 * 税率
+		Float dj = (float) Float.parseFloat(common_fpkj_xmxx.getXmdj()) / (1 + Float.parseFloat(common_fpkj_xmxx.getSl()));
+		Float se = dj * 1 * Float.parseFloat(common_fpkj_xmxx.getSl());
+		
+		BusinessData bData = new BusinessData();
+		bData.setData_resources(billServerinfo.getData_Resources());
+		bData.setNsrsbh(cMsg.getNsrsbh()); 
+		bData.setOrder_num(pInfo.getOut_trade_no());
+		bData.setBmb_bbh(billServerinfo.getBmb_BBH());
+		bData.setZsfs(billServerinfo.getZsfs());
+		bData.setXsf_nsrsbh(cMsg.getNsrsbh());
+		bData.setXsf_mc(cMsg.getCompanyName());
+		bData.setXsf_dzdh(cMsg.getDzdh());
+		bData.setXsf_yhzh(cMsg.getYhzh());
+		bData.setGmf_mc(pInfo.getName());
+		bData.setKpr(cMsg.getOperator());
+		
+		DecimalFormat   fnum   =   new   DecimalFormat("##0.00");  
+		
+		bData.setHjje(fnum.format(dj));
+		bData.setHjse(fnum.format(se));
+		bData.setJshj(fnum.format(dj+se));
+				
+		String dd=fnum.format(se);
+		common_fpkj_xmxx.setSe(dd.toString());
+		
+		List common_fpkj_xmxx1 = new ArrayList();
+		common_fpkj_xmxx1.add(common_fpkj_xmxx);
+		bData.setCommon_fpkj_xmxx(common_fpkj_xmxx1);
+		
+		JSONObject param = new  JSONObject();
+		param.put("access_token", billServerinfo.getTokenStr());
+		param.put("serviceKey", "ebi_InvoiceHandle_newBlueInvoice");
+		param.put("data", bData);
+
+		String url = billServerinfo.getAPI_BUSS_URL();
+		String returnString = ut.doPost2(url, param.toString());
+		
+		JSONObject jsonObject = JSONObject.parseObject(returnString);
+		BusinessResult result = JSON.toJavaObject(jsonObject, BusinessResult.class);
+		
+		if (result.getResult().equals("SUCCESS")) {
+			
+			Integer re = billDAO.InsertBill(result, null, null);
+		}
+		
+		return result;
 	}
 	
 }

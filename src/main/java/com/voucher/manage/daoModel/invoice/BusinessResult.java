@@ -9,14 +9,35 @@ public class BusinessResult implements Serializable{
 	
     
     /// 返回信息
-    
-    public String msg ;
+    private String msg ;
     
     /// 返回状态
-    
-    public String result ;
+    private String result ;
     
     /// 
-    
-    public List<BusinessRows> rows ;
+    private List<BusinessRows> rows ;
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	public List<BusinessRows> getRows() {
+		return rows;
+	}
+
+	public void setRows(List<BusinessRows> rows) {
+		this.rows = rows;
+	}
 }

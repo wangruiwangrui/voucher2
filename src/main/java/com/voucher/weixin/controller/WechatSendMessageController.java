@@ -10,14 +10,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -42,7 +40,6 @@ import com.voucher.manage.model.Notice;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.singleton.Singleton;
-import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 import com.voucher.weixin.MessageTemplate.ChatTemplateProcessor;
 import com.voucher.weixin.MessageTemplate.TemplateData;
@@ -114,7 +111,10 @@ public class WechatSendMessageController {
 			templateData.setUrl(url);
 			templateData.setTouser(openId);
 			templateData.setTopcolor("#000000");
-			Notice notice = noticeMapper.selectTemplate(title);
+			Notice notice = new Notice();
+			notice.setTitle(title);
+			notice.setCampusId(campusId);
+			notice = noticeMapper.selectTemplate(notice);
 			templateData.setTemplate_id(notice.getTemplateId());
 			Map<String, TemplateData> m = new HashMap<String, TemplateData>();
 			TemplateData first = new TemplateData();
@@ -268,7 +268,12 @@ public class WechatSendMessageController {
 					templateData.setTouser(openId);
 					templateData.setTopcolor("#000000");
 					
-					Notice notice = noticeMapper.selectTemplate("隐患通知");
+					Notice notice = new Notice();
+					
+					notice.setCampusId(campusId);
+					notice.setTitle("隐患通知");
+					
+					notice = noticeMapper.selectTemplate(notice);
 					
 					templateData.setTemplate_id(notice.getTemplateId());
 					
@@ -376,7 +381,13 @@ public class WechatSendMessageController {
 	    	templateData.setTouser(openId);
 	    	templateData.setTopcolor("#000000");
 	    	
-	    	Notice notice = noticeMapper.selectTemplate(title);
+			Notice notice = new Notice();
+			
+			notice.setCampusId(campusId);
+			notice.setTitle(title);
+			
+			notice = noticeMapper.selectTemplate(notice);
+	    	
 	    	
 	    	templateData.setTemplate_id(notice.getTemplateId());
 	    	Map<String,TemplateData> m = new HashMap<String,TemplateData>();
@@ -502,7 +513,12 @@ public class WechatSendMessageController {
 	    	templateData.setTouser(openId);
 	    	templateData.setTopcolor("#000000");
 	    	
-	    	Notice notice = noticeMapper.selectTemplate(title);
+			Notice notice = new Notice();
+			
+			notice.setCampusId(campusId);
+			notice.setTitle(title);
+			
+			notice = noticeMapper.selectTemplate(notice);
 	    	
 	    	templateData.setTemplate_id(notice.getTemplateId());
 	    	Map<String,TemplateData> m = new HashMap<String,TemplateData>();

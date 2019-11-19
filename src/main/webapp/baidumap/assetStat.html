@@ -5,7 +5,7 @@
   <!-- Numeric JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
   <link rel="stylesheet" href="../css/weui.css"/>
-  <title>资产数据统计</title>
+  <title>资产管理助手</title>
 </head>
 
 <body>
@@ -16,7 +16,7 @@
   
   <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">选择日期</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">閫夋嫨鏃ユ湡</label></div>
                 <div id="chartYear" class="weui-cell__bd">
                 </div>              
         </div>
@@ -26,7 +26,7 @@
   
    <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">选择日期</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">閫夋嫨鏃ユ湡</label></div>
                 <div id="hireYear" class="weui-cell__bd">
                 </div>              
         </div>
@@ -46,13 +46,13 @@
     	var obj = $.parseJSON(text);
     	var data = [{
   			values: [obj.allAsset, obj.allAssetsHidden],
-  			labels: ['正常资产'+obj.allAsset+"处","隐患资产"+obj.allAssetsHidden+"处"],
+  			labels: ['姝ｅ父璧勪骇'+obj.allAsset+"澶�","闅愭偅璧勪骇"+obj.allAssetsHidden+"澶�"],
   			hoverinfo: 'label+percent',
 		  	type: 'pie'
 			}];
 
 		 var layout = {
-				title: '全部资产数量'
+				title: '鍏ㄩ儴璧勪骇鏁伴噺'
 			};
 
 		Plotly.newPlot('myDiv', data ,layout);
@@ -67,15 +67,15 @@
     	
     	var data2 = [{
 	  		values: [obj.totalHire, obj.alreadyHire,obj.notHire],
-	  		labels: ['合同金额'+obj.totalHire+"万元","已交金额"+obj.alreadyHire+"万元",
-	  		       		'未交金额'+obj.notHire+"万元"],
+	  		labels: ['鍚堝悓閲戦'+obj.totalHire+"涓囧厓","宸蹭氦閲戦"+obj.alreadyHire+"涓囧厓",
+	  		       		'鏈氦閲戦'+obj.notHire+"涓囧厓"],
 	  		hoverinfo: 'label+percent',
 	  		hole: .4,
   		  	type: 'pie'
 			}];
 
 			 var layout2 = {
-					title: '租金总额统计'
+					title: '绉熼噾鎬婚缁熻'
 			};
 
 		Plotly.newPlot('myDiv2', data2 ,layout2);
@@ -93,7 +93,7 @@
 		for(var i=0;i<chartInfoYears.length;i++){
 			console.log(chartInfoYears[i]);
 	  			var option = document.createElement("option");
-	  			option.innerHTML=chartInfoYears[i]+"年";
+	  			option.innerHTML=chartInfoYears[i]+"骞�";
 	  			option.setAttribute("value",chartInfoYears[i]);
 	  			select.appendChild(option);
 			 }
@@ -122,7 +122,7 @@
     		var x=[];
     		var y=[];
     		for(var i=0;i<chartMonth.length;i++){   			
-    			x[i]=chartMonth[i].month+"月  "+chartMonth[i].monthHire+"万元";
+    			x[i]=chartMonth[i].month+"鏈�  "+chartMonth[i].monthHire+"涓囧厓";
     			y[i]=chartMonth[i].monthHire;
     		}
     		var data3 = [
@@ -137,7 +137,7 @@
     	//	console.log(y);
     		
     		var layout3 = {
-   					title: year+'年每月新增合同金额'
+   					title: year+'骞存瘡鏈堟柊澧炲悎鍚岄噾棰�'
     			};
 
      		Plotly.newPlot('myDiv3', data3,layout3);
@@ -155,7 +155,7 @@
 		for(var i=0;i<hireListByYears.length;i++){
 			//console.log(hireListByYears[i]);
 	  			var option = document.createElement("option");
-	  			option.innerHTML=hireListByYears[i]+"年";
+	  			option.innerHTML=hireListByYears[i]+"骞�";
 	  			option.setAttribute("value",hireListByYears[i]);
 	  			select.appendChild(option);
 			 }
@@ -185,29 +185,29 @@
     		var z=[];
     		console.log(hireMonth);
     		for(var i=0;i<hireMonth.length;i++){   			
-    			x[i]=hireMonth[i].month+"月  "+(parseFloat(hireMonth[i].nothireMonth)+
-    					parseFloat(hireMonth[i].alreadyhireMonth))+"万元";
+    			x[i]=hireMonth[i].month+"鏈�  "+(parseFloat(hireMonth[i].nothireMonth)+
+    					parseFloat(hireMonth[i].alreadyhireMonth))+"涓囧厓";
     			y[i]=hireMonth[i].nothireMonth;
     			z[i]=hireMonth[i].alreadyhireMonth;
     		}
 			var trace1 = {
 				  x: x,
 				  y: z,
-				  name: '(万)已交金额',
+				  name: '(涓�)宸蹭氦閲戦',
 				  type: 'bar'
 				};
 
 			var trace2 = {
 				  x: x,
 				  y: y,
-				  name: '(万)未交金额',
+				  name: '(涓�)鏈氦閲戦',
 				  type: 'bar'
 				};
 
 			var data4 = [trace1, trace2];
 
 			var layout4 = {
-					 title: year+'年每月交租金情况',
+					 title: year+'骞存瘡鏈堜氦绉熼噾鎯呭喌',
 					 barmode: 'stack'
 					};
 

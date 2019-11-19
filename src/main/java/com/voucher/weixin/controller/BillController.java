@@ -48,7 +48,7 @@ public class BillController {
 	@ResponseBody
 	public String invoice(HttpServletRequest request, HttpServletResponse response) {
 		
-		billAcc.getAccessToken();
+		billAcc.getAccessToken("");
 		return "111111122222";
 	}
 	

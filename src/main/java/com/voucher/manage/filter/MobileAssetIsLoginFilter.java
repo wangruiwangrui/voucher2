@@ -1,7 +1,9 @@
 package com.voucher.manage.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -31,8 +33,10 @@ import com.voucher.manage.mapper.WeiXinMapper;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.UserService;
+import com.voucher.manage.service.WeiXinService;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
+import com.voucher.weixin.util.SpringUtil;
 
 public class MobileAssetIsLoginFilter implements Filter{
 	
@@ -41,8 +45,8 @@ public class MobileAssetIsLoginFilter implements Filter{
 	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
 	
 	private UsersMapper usersMapper;
-	private WeiXinMapper weiXin;
-		
+	private WeiXinService weixinService = (WeiXinService)SpringUtil.getBean("weixinService");
+	
 	 public FilterConfig configAsset=null;
 	    @Override  
 	    public void destroy() {   
@@ -98,8 +102,10 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        	String Charter=users.getCharter();
 		        	String phone=users.getHirePhone();
 		        	
+		        	Integer campusId = users.getCampusId();
+		        	
 		        	if(phone==null||phone.equals("")||Charter.equals("")) {
-		        		wrapper.sendRedirect(settingPath);
+		        		wrapper.sendRedirect(settingPath+"?campusId="+campusId);
 			            return;
 		        	}else {
 		        		
@@ -108,7 +114,7 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        			searchMap.put("ChartInfo.Phone = ", phone.trim());
 		        			searchMap.put("ChartInfo.Charter like ","%"+Charter.trim()+"%");
 		        			
-		        			Map map=assetsDAO.getAllChartInfo(1, 0, null, null, searchMap);
+		        			Map map=assetsDAO.getAllChartInfo(5, 0, null, null, searchMap);
 		        			
 		        			List list=(List) map.get("rows");
 		        			
@@ -116,20 +122,61 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        			
 		        			/**
 		        			 * 通过所关注微信公众号判断是否是当前合同公司对应公众号
-		        			 */
-		        			Integer campusId = users.getCampusId();
-		        			WeiXin campus = weiXin.getWeiXinByCampusId(campusId);
+		        			 		       			
+		        			WeiXin campus = weixinService.getWeiXinByCampusId(campusId);
 		        			String campusName = campus.getCampusName();
 		        			String manageItem = "";
-		        			String manageRegion = chartInfo.getManageRegion();
-		        			if(manageRegion.equals("工投委托")) {
-		        				manageItem = "泸州市工业投资集团有限公司";
-		        			}else if (manageRegion.equals("国资委托")||manageRegion.equals("火炬资产")||manageRegion.equals("国资财委")) {
-								manageItem = "泸州国有资产经营有限公司";
-							}else if (manageRegion.equals("国华自有")||manageRegion.equals("国华代管")||manageRegion.equals("医院")) {
-								manageItem = "泸州市国华资产经营有限公司";
+		        			Iterator<ChartInfo> iterator=list.iterator();
+		        			boolean ischar=false;
+		        			while (iterator.hasNext()) {
+		        				chartInfo=iterator.next();
+			        			String manageRegion = chartInfo.getManageRegion();
+			        			if(campusName.equals("泸州市工业投资集团有限公司")) {
+			        				searchMap.put("ChartInfo.ManageRegion like ", "%工投委托%");
+			        				map=assetsDAO.getAllChartInfo(1, 0, null, null, searchMap);
+			        				if(map!=null) {
+			        					ischar=true;
+			        					break;
+			        				}
+			        			}else if(campusName.equals("泸州国有资产经营有限公司")) {
+			        				searchMap.put("ChartInfo.ManageRegion like ", "%国资委托%");
+			        				map=assetsDAO.getAllChartInfo(1, 0, null, null, searchMap);
+			        				if(map!=null) {
+			        					ischar=true;
+			        					break;
+			        				}
+			        				searchMap.put("ChartInfo.ManageRegion like ", "%火炬资产%");
+			        				map=assetsDAO.getAllChartInfo(1, 0, null, null, searchMap);
+			        				if(map!=null) {
+			        					ischar=true;
+			        					break;
+			        				}
+			        				searchMap.put("ChartInfo.ManageRegion like ", "%国资财委%");
+			        				map=assetsDAO.getAllChartInfo(1, 0, null, null, searchMap);
+			        				if(map!=null) {
+			        					ischar=true;
+			        					break;
+			        				}
+		
+			        			}else if (campusName.equals("泸州市国华资产经营有限公司")) {
+			        				searchMap.put("ChartInfo.ManageRegion like ", "%国华自有%");
+			        				map=assetsDAO.getAllChartInfo(1, 0, null, null, searchMap);
+			        				if(map!=null) {
+			        					ischar=true;
+			        					break;
+			        				}
+			        			}								
 							}
-		        			if(!campusName.equals(manageItem)) {
+		        			if(!ischar) {
+		        				if(campusId==1) {
+		        					
+		        				}else if(campusId==2){
+		        					redirectPath=hrequest.getContextPath()+"/mobile/asset/restrict_user2.html?campusId="+campusId;
+		        					
+								}else if(campusId==3){
+		        					redirectPath=hrequest.getContextPath()+"/mobile/asset/restrict_user3.html?campusId="+campusId;
+		        					
+								}
 		        				wrapper.sendRedirect(redirectPath);
 		        				return;
 		        			}

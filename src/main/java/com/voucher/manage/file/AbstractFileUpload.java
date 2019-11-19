@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.rmi.server.entity.ImageData;
 import com.voucher.manage.dao.AssetCheckDAO;
+import com.voucher.manage.dao.BillDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoImpl.MobileDAOImpl;
@@ -22,6 +23,7 @@ import com.voucher.manage.daoModel.Assets.Assets_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
 import com.voucher.manage.daoModel.TTT.FileSelfBelong;
+import com.voucher.manage.daoModel.invoice.BillImg;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.CopyFile;
 import com.voucher.manage.tools.FileTypeTest;
@@ -38,6 +40,8 @@ public abstract class AbstractFileUpload {
 	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
 	
 	AssetCheckDAO assetCheckDAO=(AssetCheckDAO) applicationContext.getBean("assetCheckdao");
+	
+	BillDAO billDAO = (BillDAO) applicationContext.getBean("billDAO");
 	
 	public AbstractFileUpload() {
 		// TODO Auto-generated constructor stub
@@ -144,7 +148,10 @@ public abstract class AbstractFileUpload {
             	imageDataList.add(imageData);
             	imageDataMap.put(ID, imageDataList);
                 CopyFile.set(Singleton.ROOMINFOIMGPATH2, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);            	
-             }
+             }else if(object==BillImg.class){
+            	 billDAO.insertBillImage(ID,uri);
+                 CopyFile.set(Singleton.ROOMINFOIMGPATH2, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);
+               }
             
             i++;
           }  

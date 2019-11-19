@@ -16,7 +16,7 @@
 <script src="assets/bootstrap-table/bootstrap-editable.js"></script>
 <script src="js/bootstrap-table-zh-CN.min.js"></script>
 <script type="text/javascript"
-	src="./bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	src="bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 
 <link rel="stylesheet" type="text/css" href="date/css/pikaday.css" />
 <script type="text/javascript" src="date/js/pikaday.min.js"></script>
@@ -40,7 +40,7 @@
 	visibility: hidden
 }
 
-.ID{
+.ID {
 	display: none;
 }
 </style>
@@ -78,9 +78,11 @@
 					<tr>
 						<th data-field="state" data-checkbox="true"></th>
 						<th class="ID" data-align="left" data-field="id">ID</th>
+						<th data-align="center" data-field="campusId">当前公司标识</th>
 						<th data-align="left" data-field="title">标题</th>
 						<th data-align="left" data-field="templateId">模板ID</th>
-						<th data-align="left" data-field="action" data-sortable="true" data-formatter="actionReport">操作</th>
+						<th data-align="left" data-field="action" data-sortable="true"
+							data-formatter="actionReport">操作</th>
 					</tr>
 				</thead>
 			</table>
@@ -149,116 +151,57 @@
 							onclick="commitFoodDataButton();">提交更改</button>
 					</div>
 				</form>
-				<script type="text/javascript">
-					function commitFoodDataButton() {
-						//对表单的数据进行验证
-						var id = $("#id2").val();
-						var title = $("#title2").val();
-						var templateId = $("#templateId2").val();
 
-						if (title == null || title == "") {
-							alert("模板标题不能为空!");
-							return;
-						}
-
-						if (templateId == null || templateId == "") {
-							customService = "-";
-						}
-						console.log("11111", id, title, templateId);
-						console.log($("#myModalLabel").html());
-
-						if ($("#myModalLabel").html() === "编辑模板消息") {
-							$.ajax({
-								type : 'POST',
-								url : "noticeset/updateNotice.do",
-								data : {
-									id : id,
-									title : title,
-									templateId : templateId
-								},
-								success : function(text) {
-									console.log(text)
-									if (text > 0) {
-										$("#myModal").modal('hide');
-										setSuccess("成功。");
-										var url = "noticeset/getNoticeList.do";
-
-										$(" #table").bootstrapTable('refresh',
-												{
-													url : url
-												});
-									} else {
-										alert("修改消息失败")
-									}
-
-								}
-							});
-						} else {
-							$.ajax({
-								type : 'POST',
-								url : "noticeset/insertNotice.do",
-								data : {
-
-									title : title,
-									templateId : templateId
-								},
-								success : function(text) {
-									console.log(text)
-									if (text > 0) {
-										$("#myModal").modal('hide');
-										setSuccess("成功。");
-										var url = "noticeset/getNoticeList.do";
-
-										$(" #table").bootstrapTable('refresh',
-												{
-													url : url
-												});
-									} else {
-										alert("添加消息失败")
-									}
-								}
-							});
-						}
-					}
-				</script>
 			</div>
 		</div>
 	</div>
 
 
 	<script type="text/javascript">
+		function getQueryString(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null)
+				return unescape(r[2]);
+			return null;
+		}
+		var campusId = campusId;
+		
 		/*查询消息列表*/
 		$("#table").bootstrapTable({
+			queryParams : "campusId=" + campusId,
 			url : "noticeset/getNoticeList.do"
 		});
 		function actionReport(value, row, index) {
-			return ['<button type="button" title="删除" onclick="deleteAction(this);" class="btn btn-danger">删除</button>' ]
-			.join('');
+			return [ '<button type="button" title="删除" onclick="deleteAction(this);" class="btn btn-danger">删除</button>' ]
+					.join('');
 		}
-		function deleteAction(temp){
+		function deleteAction(temp) {
 			var hang = $(temp.parentNode).parent().prevAll().length + 1;
 			var id = document.getElementById("table").rows[hang].cells[1].innerHTML;
 			$.ajax({
 				type : 'POST',
 				url : "noticeset/deleteNotice.do",
 				data : {
-					id:id
-				},success : function(text) {
+					campusId : campusId,
+					id : id
+				},
+				success : function(text) {
 					console.log(text)
 					if (text > 0) {
 						$("#myModal").modal('hide');
 						setSuccess("成功。");
 						var url = "noticeset/getNoticeList.do";
 
-						$(" #table").bootstrapTable('refresh',
-								{
-									url : url
-								});
+						$(" #table").bootstrapTable('refresh', {
+							queryParams : "campusId=" + campusId,
+							url : url
+						});
 					} else {
-						alert("添加消息失败")
+						alert("删除消息失败")
 					}
 				}
-				
+
 			})
 		}
 
@@ -334,3 +277,73 @@
 			}
 		});
 	</script>
+	<script type="text/javascript">
+		function commitFoodDataButton() {
+			//对表单的数据进行验证
+			var id = $("#id2").val();
+			var title = $("#title2").val();
+			var templateId = $("#templateId2").val();
+
+			if (title == null || title == "") {
+				alert("模板标题不能为空!");
+				return;
+			}
+
+			if (templateId == null || templateId == "") {
+				customService = "-";
+			}
+			if ($("#myModalLabel").html() === "编辑模板消息") {
+				$.ajax({
+					type : 'POST',
+					url : "noticeset/updateNotice.do",
+					data : {
+						id : id,
+						campusId : campusId,
+						title : title,
+						templateId : templateId
+					},
+					success : function(text) {
+						console.log(text)
+						if (text > 0) {
+							$("#myModal").modal('hide');
+							setSuccess("成功。");
+							var url = "noticeset/getNoticeList.do";
+
+							$(" #table").bootstrapTable('refresh', {
+								url : url
+							});
+						} else {
+							alert("修改消息失败")
+						}
+
+					}
+				});
+			} else {
+				$.ajax({
+					type : 'POST',
+					url : "noticeset/insertNotice.do",
+					data : {
+						campusId : campusId,
+						title : title,
+						templateId : templateId
+					},
+					success : function(text) {
+						console.log(text)
+						if (text > 0) {
+							$("#myModal").modal('hide');
+							setSuccess("成功。");
+							var url = "noticeset/getNoticeList.do";
+
+							$(" #table").bootstrapTable('refresh', {
+								url : url
+							});
+						} else {
+							alert("添加消息失败")
+						}
+					}
+				});
+			}
+		}
+	</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>房屋维修申请</title>
+<title>资产管理助手</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport"
 	content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
@@ -208,7 +208,7 @@ body, html, #allmap {
 		<div class="weui-uploader__input-box" id="showPicker"></div>
 	</div>
 
-	<a href="javascript:;" id="save"
+	<a href ="javascript:return false;" id="save" 
 		class="weui-btn weui-btn_plain-primary">提交申请</a>
 
 </body>
@@ -216,7 +216,7 @@ body, html, #allmap {
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
 <script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<script type="text/javascript" src="/voucher/mobile/singleton.js"></script>
+<script type="text/javascript" src="/voucher/mobile/singleton2.js"></script>
 <script type="text/javascript" src="../../js/swiper.js"></script>
 <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript" src="../../js/jquery-weui.js"></script>
@@ -523,9 +523,11 @@ body, html, #allmap {
     $("#happenTime").val(timestamp); 
   
     var id=Math.random().toString(36).substr(2);
-    
+    //用于控制按钮状态
+    var flag = 1;
     $("#save").on("click",function(){
-    	
+    	console.log("flag",flag);
+    	flag = 0;
     	$.showLoading();
 	
     	geoc.getLocation(point, function(rs){
@@ -545,39 +547,39 @@ body, html, #allmap {
         	var availabeLength=$("#availabeLength").val();
         	var workUnit=$("#workUnit").val();
         	
-
-        		var error="";
-				if(area==null||area==""){
-        			error="面积不能为空!";
-        		}else if(amount==null||amount==""){
-        			error="送审金额不能为空!";
-        		}else if(availabeLength==null||availabeLength==""){
-        			error="质保期不能为空!";
-        		}
-        		/*
-        		else if(amountTotal==null||amountTotal==""){
-        			error="审减金额不能为空!";
-        		}else if(auditingAmount==null||auditingAmount==""){
-        			error="审定金额不能为空!";
-        		}	*/
-        		
-        		else if(neaten_instance==null||neaten_instance==""){    				
-        			error="请填写整改详情说明!";
-    			}
-            	
-        		
-        		if(error!=""){
-        			
-        			$.alert(error);
-        			$.hideLoading();
-        			return false;
-        		}
+       		var error="";
+			if(area==null||area==""){
+				flag = 1;
+       			error="面积不能为空!";
+       		}else if(amount==null||amount==""){
+       			flag = 1;
+       			error="送审金额不能为空!";
+       		}else if(availabeLength==null||availabeLength==""){
+       			flag = 1;
+       			error="质保期不能为空!";
+       		}
+       		/*
+       		else if(amountTotal==null||amountTotal==""){
+       			error="审减金额不能为空!";
+       		}else if(auditingAmount==null||auditingAmount==""){
+       			error="审定金额不能为空!";
+       		}	*/
+       		
+       		else if(neaten_instance==null||neaten_instance==""){    	
+       			flag = 1;
+       			error="请填写整改详情说明!";
+   			}
+       		
+       		if(error!=""){
+       			flag = 1;
+       			$.alert(error);
+       			$.hideLoading();
+       			return false;
+       		}
         		        		
-        	
         	console.log(item);
         	
         	var variableData = new Object();
-        	
         	variableData.guid=guid;
         	variableData.neatenitem=neatenitem;
         	variableData.username=username;
@@ -618,10 +620,12 @@ body, html, #allmap {
                  	var data=JSON.parse(data);
                  	console.log(data);
                      if (data.state == "succeed") {
+                    	 flag = 1;
                     	 $.hideLoading();
                     	 $.toast("提交成功");
                     	 history.go(-2);
                      } else {
+                    	 flag = 1;
                     	 $.hideLoading();
                     	 $.toast("提交错误", "forbidden");
                           return false;
@@ -629,9 +633,10 @@ body, html, #allmap {
                      	}
                  },
                  error:function (XMLHttpRequest, textStatus, errorThrown) { 
+                	 flag = 1;
                 	 $.hideLoading();
                 	 $.toast("提交错误", "forbidden");
-                       return false;
+                     return false;
                  }
              });
         	 

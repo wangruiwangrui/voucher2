@@ -10,14 +10,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.druid.sql.ast.statement.SQLIfStatement.Else;
 import com.alibaba.fastjson.JSONObject;
 import com.rmi.server.entity.ImageData;
 import com.voucher.manage.dao.AssetsDAO;
@@ -35,11 +31,9 @@ import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Patrol_Cycle;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
-import com.voucher.manage.daoModel.TTT.PreMessage;
 import com.voucher.manage.daoModel.TTT.User_AccessTime;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.model.Access;
-import com.voucher.manage.model.Campus;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.CampusService;
@@ -51,7 +45,6 @@ import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 import com.voucher.weixin.insweptcontroller.FileUploadController;
 
-import common.HttpClient;
 
 @Controller
 @RequestMapping("/mobile/asset")
@@ -529,10 +522,70 @@ public class AssetController {
 
 		searchMap.put("ChartInfo.Phone = ", phone.trim());
 		searchMap.put("ChartInfo.Charter like ", "%" + Charter.trim() + "%");
+		
+		/**
+		 * 通过所关注微信公众号判断是否是当前合同公司对应公众号
+		 *
+		
+		Map map=assetsDAO.getAllChartInfo(1, 0, null, null, searchMap);
+		
+		List list=(List) map.get("rows");
+		
+		ChartInfo chartInfo=(ChartInfo) list.get(0);
+		
+		Integer campusId = users.getCampusId();
+		WeiXin campus = weixinService.getWeiXinByCampusId(campusId);
+		String campusName = campus.getCampusName();
+		String manageItem = "";
+		String manageRegion = chartInfo.getManageRegion();
+		
+		if(campusName.equals("泸州市工业投资集团有限公司")) {
+			searchMap.put("ChartInfo.ManageRegion like ", "%工投委托%");
+			return roomInfoDao.getChartInfoByGUID(limit, offset, sort, order, searchMap);
+		}else if(campusName.equals("泸州国有资产经营有限公司")) {
+			searchMap.put("ChartInfo.ManageRegion like ", "%国资委托%");
+			Map map3=roomInfoDao.getChartInfoByGUID(limit, offset, sort, order, searchMap);
+			List list4=new ArrayList();
+			if(map3!=null) {
+				List list5=(List) map3.get("rows");
+				list4.addAll(list5);
+			}
+			searchMap.put("ChartInfo.ManageRegion like ", "%火炬资产%");
+			map3=roomInfoDao.getChartInfoByGUID(limit, offset, sort, order, searchMap);
+			if (map3 != null) {
+				List list5=(List) map3.get("rows");
+				list4.addAll(list5);
+			}
+			searchMap.put("ChartInfo.ManageRegion like ", "%国资财委%");
+			map3=roomInfoDao.getChartInfoByGUID(limit, offset, sort, order, searchMap);
+			if (map3 != null) {
+				List list5=(List) map3.get("rows");
+				list4.addAll(list5);
+			}
+			map3.put("rows", list4);
+			return map3;
+		}else if (campusName.equals("泸州市国华资产经营有限公司")) {
+			searchMap.put("ChartInfo.ManageRegion like ", "%国华自有%");
+			Map map3=roomInfoDao.getChartInfoByGUID(limit, offset, sort, order, searchMap);
+			if(map3==null) {
+				searchMap.put("ChartInfo.ManageRegion like ", "%国华代管%");
+				map3=roomInfoDao.getChartInfoByGUID(limit, offset, sort, order, searchMap);
+			}
+			if (map3 == null) {
+				searchMap.put("ChartInfo.ManageRegion like ", "%医院%");
+				map3=roomInfoDao.getChartInfoByGUID(limit, offset, sort, order, searchMap);
+			}
+				
+			return map3;
+		}
+		
+		/**
+		 * 
+		 */
+		
+		Map map2 = roomInfoDao.getChartInfoByGUID(limit, offset, sort, order, searchMap);
 
-		Map map = roomInfoDao.getChartInfoByGUID(limit, offset, sort, order, searchMap);
-
-		return map;
+		return map2;
 
 	}
 	
@@ -1253,7 +1306,44 @@ public class AssetController {
 		}
     	
     	return mobileDao.flowImageData(request, imageDataList);
-
 	}
 	
+	/**
+	 * 查询税号
+	 * @param hireGUID
+	 * @return
+	 */
+	@RequestMapping(value = "/getEin")
+	@ResponseBody
+	public ChartInfo getEin(@RequestParam String guid) {
+		
+		ChartInfo list = roomInfoDao.queryEin(guid);
+		return list;
+	}
+	
+	/**
+	 * 填写合同税号
+	 * @param company
+	 * @param ein
+	 * @return
+	 */
+	@RequestMapping("/updateEin")
+	@ResponseBody
+	public Integer updateEin(@RequestParam String guid,String chart) {
+		
+		JSONObject jsonObject = JSONObject.parseObject(chart);
+		String GUID = guid;
+		String company = jsonObject.getString("company");
+		String ein = jsonObject.getString("ein");
+		
+		ChartInfo chartInfo = new ChartInfo();
+		chartInfo.setGUID(GUID);
+		chartInfo.setCompany(company);
+		chartInfo.setEin(ein);
+		
+		Integer result = roomInfoDao.updateEinByGUID(chartInfo); 
+		
+		return result;
+	}
+
 }

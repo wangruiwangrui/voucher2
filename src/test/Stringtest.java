@@ -15,11 +15,9 @@ import com.voucher.weixin.util.OrderNum;
 public class Stringtest {
 	
 	public static void main(String[] args){
-		Map map = new HashMap();
-		map.put("a", 1);
-		map.put("b", 1);
-		
-		System.out.println(map.get("a"));
+		int i = (int)(Math.random()*900 + 100);
+		String myStr = Integer.toString(i);
+		System.out.println(myStr);
 	}
 	
 }

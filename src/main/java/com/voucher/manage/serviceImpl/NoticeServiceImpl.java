@@ -18,11 +18,11 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public Notice getTemplateIdByTitle(String title) {
+	public Notice getTemplateIdByTitle(Notice notice) {
 
-		Notice notice = noticeMapper.selectTemplate(title);
+		Notice notice1 = noticeMapper.selectTemplate(notice);
 		
-		return notice;
+		return notice1;
 	}
 
 }

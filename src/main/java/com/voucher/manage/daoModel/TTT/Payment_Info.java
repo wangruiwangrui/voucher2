@@ -1,5 +1,6 @@
 package com.voucher.manage.daoModel.TTT;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.voucher.manage.daoSQL.annotations.DBTable;
@@ -24,8 +25,8 @@ public class Payment_Info {
 	@SQLString(name="out_trade_no")
 	private String out_trade_no;
 	
-	@SQLInteger(name="total_fee")
-	private Integer total_fee;
+	@SQLFloat(name="total_fee")
+	private Float total_fee;
 	
 	@SQLDateTime(name="CreateTime")
 	private Date CreateTime;
@@ -50,6 +51,9 @@ public class Payment_Info {
 	
 	@SQLString(name="prepay_id")
 	private String prepay_id;
+	
+	@SQLInteger(name = "campusId")
+	private Integer campusId;
 
 	public Integer getPaymentId() {
 		return PaymentId;
@@ -67,11 +71,11 @@ public class Payment_Info {
 		this.out_trade_no = out_trade_no;
 	}
 
-	public Integer getTotal_fee() {
+	public Float getTotal_fee() {
 		return total_fee;
 	}
 
-	public void setTotal_fee(Integer total_fee) {
+	public void setTotal_fee(Float total_fee) {
 		this.total_fee = total_fee;
 	}
 
@@ -139,6 +143,13 @@ public class Payment_Info {
 		this.prepay_id = prepay_id;
 	}
 
+	public Integer getCampusId() {
+		return campusId;
+	}
+
+	public void setCampusId(Integer campusId) {
+		this.campusId = campusId;
+	}
 	
 /*
 *数据库查询参数

@@ -12,7 +12,7 @@ var state=getQueryString("state");
 
 var valid1,valid2,valid3;
 valid1=valid2=valid3=true;
-
+var campusId=1;
 $.get("/voucher/oauth/test.do", { 
 	 campusId:campusId
   }, function(data) {

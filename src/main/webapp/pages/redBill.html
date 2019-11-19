@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>用户管理</title>
+
+<link rel="stylesheet" href="assets/bootstrap-table/bootstrap-table.css">
+<link rel="stylesheet"
+	href="assets/bootstrap-table/bootstrap-editable.css">
+<script src="assets/bootstrap-table/jquery.min.js"></script>
+<script src="assets/bootstrap-table/bootstrap.min.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table-export.js"></script>
+<script src="assets/bootstrap-table/tableExport.js"></script>
+<script src="assets/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="assets/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/bootstrap-table-zh-CN.min.js"></script>
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet">
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js"></script>
+<![endif]-->
+<style>
+.ml10 {
+	margin-left: 10px;
+}
+
+#operate-success {
+	font-size: 16px;
+	background-color: #8AC007;
+	color: #FBFBFB;
+	visibility: hidden
+}
+</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="page-header">
+			<h1>红字发票&nbsp;&nbsp;</h1>
+		</div>
+		<div style="text-align: center;">
+			<span id="operate-success">设置成功</span>
+		</div>
+
+		<div>
+
+			<div id="maintable">
+<!-- 				<button class="btn btn-default dropdown-toggle " type="button"
+					data-toggle="dropdown">
+					选择日期<span class="caret"></span>
+					<ul class="dropdown-menu " role="menu"
+						aria-labelledby="dropdownMenu1">
+						<li role="presentation"><a role="menuitem" id="today"
+							tabindex="-1" href="#">今天</a></li>
+						<li role="presentation"><a role="menuitem" id="week"
+							tabindex="-1" href="#">一周内</a></li>
+						<li role="presentation"><a role="menuitem" id="month"
+							tabindex="-1" href="#">一月内</a></li>
+					</ul>
+				</button> 
+				<button type="button" class="btn btn-default ">
+					<input type="text" id="datepicker"
+						style="width: 90px; padding: 0 5px 0 5px" placeholder="开始日期">
+					<i id="removestart" class="glyphicon glyphicon-remove"></i>
+				</button>
+				<button type="button" class="btn btn-default">
+					<input type="text" id="datepicker2"
+						style="width: 90px; padding: 0 5px 0 5px" placeholder="结束日期">
+					<i id="revoveend" class="glyphicon glyphicon-remove"></i>
+				</button>
+				<button id="query" type="button" class="btn btn-default">
+					查询</button>
+			</div>-->
+			<table id="table" data-id-field="foodId" data-striped="true"
+				data-toolbar="#toolbar" data-search="true" data-show-refresh="true"
+				data-show-toggle="true" data-pagination="true"
+				data-show-columns="true" data-height="80%" date-singleSelect="true"
+				data-click-to-select="true" data-toggle="table"
+				data-show-export="false" data-side-pagination="server"
+				data-sort-order="asc">
+				<thead>
+					<tr>
+						<th data-field="state" data-checkbox="true"></th>
+						<th class="ID" data-align="left" data-field="billId" data-visible="false">ID</th>
+						<th data-align="center" data-field="gmf_mc">购买方名称</th>
+						<th data-align="center" data-field="gmf_nsrsbh">购买方纳税人识别号</th>
+						<th data-align="center" data-field="hjje">合计金额</th>
+						<th data-align="center" data-field="hjse">合计税额</th>
+						<th data-align="center" data-field="order_num">支付编号</th>
+						<th data-align="center" data-field="kpr">开票人</th>
+
+						<th data-align="center" data-field="xsf_mc">销售方名称</th>
+						<th data-align="left" data-field="xsf_yhzh">销售方银行账号</th>
+						<th data-align="left" data-field="xsf_dzdh">销售方地址电话</th>
+
+						<th data-align="center" data-formatter="actionTime"
+							data-field="kprq" data-sortable="true">开票日期</th>
+						<th data-align="left" data-field="action" data-sortable="true"
+							data-formatter="actionReport">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		<hr>
+<!-- 		<table data-toggle="table" id="list">
+			<thead>
+			</thead>
+		</table> -->
+	</div>
+	</div>
+
+		<!-- 添加商品Modal start -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content" style="margin-top: 10em;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h3 class="modal-title" id="myModalLabel">重开发票</h3>
+				</div>
+				<form id="dataCommit" class="form-horizontal" method="post"
+					enctype="multipart/form-data" action="service/updateFoods.do">
+					<div class="modal-body">
+						<div class="form-group none">
+							<label for="campus_id_add_count" class="control-label col-md-4">ID</label>
+							<div class="col-md-8">
+								<input type="text" class="form-control" id="id2" name="id"
+									readonly>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4" for="title">购买方名称：</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="gmf_mc" name="title"
+									placeholder="必填">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4" for="templateId2">购买方纳税人识别号：</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="gmf_nsrsbh"
+									name="customService" placeholder="">
+							</div>
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary"
+							onclick="commitFoodDataButton();">提交更改</button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		var campusId = campusId;
+
+		var url = "roominfo/getRedBill.do?campusId=" + campusId+"&state="+1;
+		$("#table").bootstrapTable({
+			url : url
+		});
+
+		function actionReport(value, row, index) {
+			var id = index;
+			var result = "";
+			result += "<button type='button' title='开发票' onclick='edit(this);' class='btn btn-success'>重开发票</button>";
+			return result;
+
+		}
+
+		$("#redBill").click(function() {
+			var row = $("#table").bootstrapTable('getSelections');
+			console.log(row)
+		})
+		
+		var out_trade_no="";
+		function edit(temp) {
+			var hang = $(temp.parentNode).parent().prevAll().length + 1;
+			$("#myModal").modal('show');
+			out_trade_no = document.getElementById("table").rows[hang].cells[5].innerHTML;
+		}
+			
+		function commitFoodDataButton(temp) {
+			
+			var gmf_mc = $("#gmf_mc").val();
+			var gmf_nsrsbh = $("#gmf_nsrsbh").val();
+			if(gmf_mc == ""|| gmf_mc==null){
+				alert("请填写购买方名称");
+			}else{
+				
+				$.post("../../voucher/mobile/bill/getNewBill.do", {
+					out_trade_noRed : out_trade_no,
+					purchaser :gmf_mc,
+					ein : gmf_nsrsbh
+				}, function(data) {
+					data = JSON.parse(data);
+					if(data.result=="SUCCESS"){
+						setSuccess("发票开取成功！");
+						$('#table').bootstrapTable('refresh');
+					}else{
+						setSuccess("发票开取失败！");
+					}
+				}); 
+			}
+			
+			/* var row=$("#table").bootstrapTable('getSelections');
+			console.log(row) */
+
+			/* var hang = $(temp.parentNode).parent().prevAll().length + 1;
+			var out_trade_no = document.getElementById("table").rows[hang].cells[6].innerHTML;
+
+			$.post("../../voucher/mobile/bill/getBill.do", {
+				out_trade_no : out_trade_no
+			}, function(text) {
+				console.log(text)
+			}); */
+		}
+
+		function actionTime(value, row, index) {
+		    var date = new Date(value);
+		    Y = date.getFullYear() + '-';
+		    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+		    D = date.getDate() + ' ';
+		    h = date.getHours() + ':';
+		    m = date.getMinutes() + ':';
+		    s = date.getSeconds();
+		    return Y+M+D+h+m+s;
+		}
+	</script>
+
+</body>
+</html>

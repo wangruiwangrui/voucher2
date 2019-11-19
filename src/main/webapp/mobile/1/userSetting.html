@@ -125,19 +125,8 @@
 
 	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 	<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-	<script type="text/javascript" src="../../mobile/singleton.js"></script>
 	<script type="text/javascript" src="js/userSetting.js"></script>
 
-	<script type="text/javascript">
-		var redirectUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-				+ APPID
-				+ "&redirect_uri="
-				+ DOMAIN
-				+ progress
-				+ "/mobile/1/userSetting.html&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
-	</script>
-	
-	
 	<script type="text/javascript">
 		function refreshValidatecode() {
 			var img = document.getElementById('re_img1');

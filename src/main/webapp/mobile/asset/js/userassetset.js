@@ -235,7 +235,16 @@ $.get("/voucher/oauth/test.do", {
               if(data==1){
            		$("#dialog2").attr("style","display:block"); 
    	 			$(".weui_dialog_title").html("操作成功");
-   	 			top.location.href="index.html";
+   	 			
+   	 			/*用户验证完成返回界面*/
+   	 			if(campusId == 1){
+   	 				top.location.href="index.html";
+   	 			}else if(campusId == 2){
+   	 				top.location.href="index2.html";
+   	 			}
+   	 			
+   	 			
+   	 			
               }else if(data==2){
            	   $("#dialog2").attr("style","display:block"); 
   	 			  $(".weui_dialog_title").html("验证码错误");

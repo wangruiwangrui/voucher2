@@ -64,7 +64,7 @@
 		<div>
 			<table id="table" data-toggle="table" data-show-export="false"
 				data-toolbar="#toolbar"
-				data-url="mobile/asset/selectAllAccess.do" data-search="true"
+				data-search="true"
 				data-show-refresh="true" data-show-toggle="true"
 				data-side-pagination="server" data-pagination="true"
 				data-show-columns="true" data-sort-order="desc">
@@ -91,7 +91,20 @@
 		</div>
 	</div>
 	<script>
-	var campusId=1;
+	function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null)
+			return unescape(r[2]);
+		return null;
+	}
+	var campusId = campusId;
+	
+	var url="mobile/asset/selectAllAccess.do?campusId=" + campusId;
+	
+	$("#table").bootstrapTable({
+		url : url
+	});
 	
 	function statusSex(value, row, index) {
 		if (value == "0")
@@ -132,11 +145,9 @@
 		 }
 	 }
 	 
-	 var url="mobile/asset/selectAllAccess.do"
-	 
 	$("#index").on("click",function(){
 
-		    	var url2=url+"?page=index"
+		    	var url2=url+"&page=index"
 		    	$(" #table").bootstrapTable('refresh',{
 		    		campusId : campusId,
 					url : url2
@@ -146,7 +157,7 @@
 	 
 	 $("#notHire").on("click",function(){
 
-	    	var url2=url+"?page=notHire"
+	    	var url2=url+"&page=notHire"
 	    	$(" #table").bootstrapTable('refresh',{
 				url : url2
 			});
@@ -155,7 +166,7 @@
 	 
 	 $("#assetDetail").on("click",function(){
 
-	    	var url2=url+"?page=assetDetail"
+	    	var url2=url+"&page=assetDetail"
 	    	$(" #table").bootstrapTable('refresh',{
 				url : url2
 			});
@@ -164,7 +175,7 @@
 	 
 	 $("#chart").on("click",function(){
 
-	    	var url2=url+"?page=chart"
+	    	var url2=url+"&page=chart"
 	    	$(" #table").bootstrapTable('refresh',{
 				url : url2
 			});
@@ -173,7 +184,7 @@
 	 
 	 $("#hire").on("click",function(){
 
-	    	var url2=url+"?page=hire"
+	    	var url2=url+"&page=hire"
 	    	$(" #table").bootstrapTable('refresh',{
 				url : url2
 			});
@@ -182,7 +193,7 @@
 	 
 	 $("#userassetset").on("click",function(){
 
-	    	var url2=url+"?page=userassetset"
+	    	var url2=url+"&page=userassetset"
 	    	$(" #table").bootstrapTable('refresh',{
 				url : url2
 			});

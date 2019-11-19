@@ -4,7 +4,6 @@ public class WXConstant {
 	
 	public static final String body = "租金";
 	public static final String notify_url = "/voucher/mobile/weinXinPay/callback.do";
-	public static final String spbill_create_ip = "39.100.229.32";
 	public static final String trade_type = "JSAPI";
 	
 	//统一下单地址

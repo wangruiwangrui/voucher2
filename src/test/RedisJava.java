@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.voucher.manage.redis.JedisUtil1;
 import com.voucher.manage.tools.MyTestUtil;
 
 import redis.clients.jedis.Jedis;
@@ -33,8 +34,8 @@ public class RedisJava {
         	/*if(key.equals("[item_room]_columnName")){
         		jedis.del(key);
         	}*/
-        	jedis.del(key);
-        	//MyTestUtil.print(value);
+        	//jedis.del(key);
+        	System.out.print(JedisUtil1.getObject(key).toString());
         }
 
     }

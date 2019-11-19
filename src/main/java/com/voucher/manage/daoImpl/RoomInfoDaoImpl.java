@@ -22,11 +22,14 @@ import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.RoomInfoRowMapper;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModel.TTT.Bill;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.FileSelfBelong;
 import com.voucher.manage.daoModel.TTT.HireList;
+import com.voucher.manage.daoModel.TTT.Payment_Info;
 import com.voucher.manage.daoModel.TTT.PreMessage;
 import com.voucher.manage.daoModel.TTT.RoomRepairLog;
+import com.voucher.manage.daoModel.invoice.RedBill;
 import com.voucher.manage.daoModelJoin.RoomChangeHireLog_RoomChartLog;
 import com.voucher.manage.daoModelJoin.RoomInfo_Neaten_Join;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
@@ -1015,6 +1018,134 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		roomInfo.setWhere(where);		
 		
 		return (RoomInfo) SelectExe.get(this.getJdbcTemplate(), roomInfo).get(0);
+	}
+
+	@Override
+	public ChartInfo queryEin(String guid) {
+		
+		ChartInfo chartInfo = new ChartInfo();
+		chartInfo.setLimit(10);
+		chartInfo.setOffset(0);
+		chartInfo.setNotIn("GUID");
+		chartInfo.setSort("GUID asc");
+		
+		String[] where={"GUID=",guid};
+		chartInfo.setWhere(where);
+		List list = SelectExe.get(this.getJdbcTemplate(), chartInfo);
+		if (list.size()>0) {
+			chartInfo = (ChartInfo) list.get(0);
+		}
+			
+		return  chartInfo;
+	}
+
+	@Override
+	public Integer updateEinByGUID(ChartInfo chartInfo) {
+		String[] where = {"GUID = ",chartInfo.getGUID()};
+		chartInfo.setWhere(where);
+		
+		return UpdateExe.get(this.getJdbcTemplate(), chartInfo);
+	}
+
+	@Override
+	public List getAllBill(Integer limit, String order, String sort, Map search) {
+		Bill bill = new Bill();
+		bill.setOffset(0);
+		bill.setLimit(limit);
+		bill.setNotIn("BillId");
+		bill.setSort(sort);
+		bill.setOrder(order);
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    bill.setWhereTerm("AND ");
+		    bill.setWhere(where);
+		}
+		return SelectExe.get(getJdbcTemplate(), bill);
+	}
+
+	@Override
+	public int getAllBillTotal(Integer limit, String order, String sort, Map search) {
+		Bill bill = new Bill();
+		bill.setOffset(0);
+		bill.setLimit(limit);
+		bill.setNotIn("BillId");
+		bill.setSort(sort);
+		bill.setOrder(order);
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    bill.setWhere(where);
+		}
+		
+		Map map = new HashMap();
+		
+		try {
+			map = SelectSQL.getCount(bill);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String sql="";
+		
+		sql=(String) map.get("sql");
+		System.out.println(sql);
+		List params=(List) map.get("params");
+		map=this.getJdbcTemplate().queryForMap(sql,params.toArray());
+		Integer count = (Integer) map.get("");
+		
+		return count;
+	}
+
+	@Override
+	public List getAllRedBill(Integer limit, String order, String sort, Map search,Integer campusId) {
+		
+		RedBill bill = new RedBill();
+		bill.setOffset(0);
+		bill.setLimit(limit);
+		bill.setNotIn("RedBillId");
+		bill.setSort(sort);
+		bill.setOrder(order);
+		
+		if(!search.isEmpty()){
+			String[] where = TransMapToString.get(search);
+		    bill.setWhereTerm("AND ");
+		    bill.setWhere(where);
+		}
+		
+		return SelectExe.get(getJdbcTemplate(), bill);
+	}
+
+	@Override
+	public int getAllRedBillTotal(Integer limit, String order, String sort, Map search,Integer campusId) {
+		RedBill bill = new RedBill();
+		bill.setOffset(0);
+		bill.setLimit(limit);
+		bill.setNotIn("RedBillId");
+		bill.setSort(sort);
+		bill.setOrder(order);
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    bill.setWhere(where);
+		}
+		
+		Map map = new HashMap();
+		
+		try {
+			map = SelectSQL.getCount(bill);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String sql="";
+		
+		sql=(String) map.get("sql");
+		System.out.println(sql);
+		List params=(List) map.get("params");
+		map=this.getJdbcTemplate().queryForMap(sql,params.toArray());
+		Integer count = (Integer) map.get("");
+		
+		return count;
 	}
 
 }

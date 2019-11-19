@@ -5,6 +5,6 @@ import com.voucher.manage.model.Notice;
 
 public interface NoticeService {
 
-	Notice getTemplateIdByTitle(String string);
+	Notice getTemplateIdByTitle(Notice notice);
 
 }

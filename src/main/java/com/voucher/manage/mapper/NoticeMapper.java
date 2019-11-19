@@ -6,7 +6,7 @@ import com.voucher.manage.model.Notice;
 
 public interface NoticeMapper {
 	
-	List<Notice> getNoticeList();
+	List<Notice> getNoticeList(Integer campusId);
 	
 	Integer insertNotice(Notice notice);
 	
@@ -14,6 +14,6 @@ public interface NoticeMapper {
 
 	Integer deleteNotice(Notice notice);
 	
-	Notice selectTemplate(String title);
+	Notice selectTemplate(Notice notice);
 
 }

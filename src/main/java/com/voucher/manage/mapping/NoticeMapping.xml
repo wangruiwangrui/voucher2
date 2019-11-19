@@ -6,30 +6,28 @@
         <id column="id" property="id" jdbcType="INTEGER" />
 		<result column="title" property="title" jdbcType="VARCHAR" />
 		<result column="template_Id" property="templateId" jdbcType="VARCHAR" />
-		
+		<result column="campus_Id" property="campusId" jdbcType="INTEGER"/>
 		<!--<result column="location_x" property="locationX" jdbcType="DOUBLE" 
 			/> <result column="location_y" property="locationY" jdbcType="DOUBLE" /> -->
 	</resultMap>
    
-   
     <select id="getNoticeList" resultMap="BaseResultMap">
-		select id,title,template_Id from notice
+		select id,campus_Id,title,template_Id from notice where campus_Id = #{campusId,jdbcType=INTEGER}
 	</select>
 	
-	
 	<insert id="insertNotice" parameterType="com.voucher.manage.model.Notice">
-		insert into notice (title,template_Id) VALUES (#{title},#{templateId})
+		insert into notice (campus_Id,title,template_Id) VALUES (#{campusId},#{title},#{templateId})
 	</insert>
  	
  	<update id="updateNotice" parameterType="com.voucher.manage.model.Notice">
- 		update notice set title=#{title},template_Id=#{templateId} where id =#{id};
+ 		update notice set title=#{title},template_Id=#{templateId} where id =#{id} and campus_Id = #{campusId};
  	</update>
 	
  	<delete id="deleteNotice" parameterType="com.voucher.manage.model.Notice">
- 		DELETE FROM notice WHERE id = #{id};
+ 		DELETE FROM notice WHERE id = #{id} and campus_Id = #{campusId};
  	</delete>
  	
- 	<select id="selectTemplate" resultMap="BaseResultMap">
-		select id,title,template_Id from notice where title = #{title,jdbcType=VARCHAR}
+ 	<select id="selectTemplate" parameterType="com.voucher.manage.model.Notice" resultMap="BaseResultMap">
+		select id,title,template_Id from notice where campus_Id = #{campusId,jdbcType=INTEGER} and title = #{title,jdbcType=VARCHAR} 
 	</select>
 </mapper>

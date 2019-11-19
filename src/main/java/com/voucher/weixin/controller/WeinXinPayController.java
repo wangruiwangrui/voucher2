@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.FinanceDAO;
 import com.voucher.manage.daoModel.TTT.Payment_Info;
+import com.voucher.manage.daoModel.invoice.BusinessResult;
 import com.voucher.manage.model.Notice;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.model.WeiXin;
@@ -36,6 +38,7 @@ import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.Md5;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
+import com.voucher.weixin.util.BillAccessTokenUtil;
 import com.voucher.weixin.util.HttpUtils;
 import com.voucher.weixin.util.OrderNum;
 import com.voucher.weixin.wxpay.sdk.WXConstant;
@@ -58,6 +61,9 @@ public class WeinXinPayController {
 	
 	private NoticeService noticeService;
 
+	@Value("${spbill_create_ip}")
+	private String spbill_create_ip;
+	
 	@Autowired
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -83,8 +89,6 @@ public class WeinXinPayController {
 		
 		String homeUrl=request.getHeader("Host")+request.getContextPath();
 
-		String spbill_create_ip = WXConstant.spbill_create_ip;
-
 		WeiXin weixin = weixinService.getCampusById(campusId);
 		
 		String notify_url = weixin.getUrl()+WXConstant.notify_url;
@@ -96,8 +100,6 @@ public class WeinXinPayController {
 		String[] guidsString = guids.split(",");
 
 		String openId = (String) request.getSession().getAttribute("openId");
-
-		System.out.println("openId=" + openId);
 
 		String appId = weixin.getAppId();
 
@@ -124,7 +126,6 @@ public class WeinXinPayController {
 		map.put("trade_type", WXConstant.trade_type);
 		map.put("notify_url", notify_url);
 		
-		
 		String sign = WXPayUtil.generateSignature(map, weixin.getApi());
 
 		map.put("sign", sign);
@@ -150,7 +151,7 @@ public class WeinXinPayController {
 			String result_code = returnMap.get("result_code");
 
 			if (result_code.equals("SUCCESS")) {
-
+				
 				Map<String, String> payMap = new HashMap<String, String>();
 				
 				payMap.put("appId", appId);
@@ -177,8 +178,6 @@ public class WeinXinPayController {
 				
 				payMap.put("out_trade_no", out_trade_no);
 				
-				MyTestUtil.print(payMap);
-				
 				result.add("SUCCESS");
 				
 				result.add(payMap);
@@ -192,6 +191,8 @@ public class WeinXinPayController {
 				tradeMap.put("startTime", new Date());
 				
 				tradeMap.put("map", map);
+				tradeMap.put("total_fee", total_fee);
+				tradeMap.put("campusId", campusId);
 				
 				registerMap.put("tradeMap", tradeMap);
 								
@@ -214,9 +215,7 @@ public class WeinXinPayController {
 				result.add(payMap);
 
 				return result;
-				
 			}
-
 		} else if (return_code.equals("FAIL")) {
 
 			Map<String, String> payMap = new HashMap<String, String>();
@@ -230,15 +229,10 @@ public class WeinXinPayController {
 			result.add(payMap);
 
 			return result;
-
 		}
-		
 		return result;
-
-		
 	}
 
-	
 	@RequestMapping("/get")
 	public void  get(@RequestParam String out_trade_no) {
 		
@@ -247,14 +241,11 @@ public class WeinXinPayController {
 		
 		Map tradeMap=registerMap.get(out_trade_no);
 		
-		MyTestUtil.print(tradeMap);
-		
 	}
 	
 	//微信支付回调函数
 	@RequestMapping("/callback")
 	public String callback(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		logger.info("+++++++++++++++++++++++++++++++++++++++++++++++++++============");
 		
 		BufferedReader reader = null;
 		String xmlString = null;
@@ -290,9 +281,9 @@ public class WeinXinPayController {
 			
 			Map tradeMap=registerMap.get("tradeMap");
 			
-			if(tradeMap.get("guids")==null)
+			if(tradeMap.get("guids")==null) {
 				return WXConstant.FAIL;
-			
+			}
 			if(tradeMap.get("guids")!=null&&!tradeMap.get("guids").equals("")){
 				
 				String guids=(String) tradeMap.get("guids");
@@ -320,23 +311,32 @@ public class WeinXinPayController {
 				
 				String name=users.getName();
 				
-				int total_fee = (int) map.get("total_fee");
-				logger.info("+++++++++++++++++++++++++++++++++++=========================", list);
+				int total_fee = (int) tradeMap.get("total_fee");
+				
+				//通过campusId查询公众号支付成功提醒消息
+				int campusId = (int) tradeMap.get("campusId");
 				
 				map.put("openId",openId);
-				map.put("total_fee",total_fee);
 				map.put("name", name);
+				map.put("campusId", campusId);
+				map.put("total_fee", total_fee);
 				int i=financeDAO.updateHireSetHireListWinXinPay(map,list);
 				
 				if(i>0){
-										
+					
 					WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
 					
-					Notice notice = noticeService.getTemplateIdByTitle("支付成功提醒");
+					Notice notice = new Notice();
+					notice.setTitle("支付成功提醒");
+					notice.setCampusId(campusId);
+					
+					notice = noticeService.getTemplateIdByTitle(notice);
+					
+					Float totalfee = Float.parseFloat(String.valueOf(total_fee));
 					
 					wechatSendMessageController.sendMessage(openId, notice.getTemplateId(),
 							"支付成功提醒", "", 
-							name+"你好，你已支付成功", String.valueOf(total_fee), "微信支付", "房屋租金",out_trade_no,
+							name+"你好，你已支付成功", totalfee/100+"元", "微信支付", "房屋租金",out_trade_no,
 							"", "感谢你的使用");					
 
 					return WXConstant.SUCCESS;

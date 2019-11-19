@@ -54,10 +54,6 @@ $('#setting').click(function(){
 	   $('#content').load('pages/setting.html');
 	   $('#content').attr('src','pages/setting.html');
 	 });
-$('#WXnotice').click(function(){
-	   $('#content').load('pages/WXnotice.html');
-	   $('#content').attr('src','pages/WXnotice.html');
-	 });
 
 $('#qrCode').click(function(){
 	   $('#content').load('pages/qrCode.html');
@@ -68,11 +64,20 @@ $('#patrol').click(function(){
 	   $('#content').load('pages/patrol.html');
 	   $('#content').attr('src','pages/patrol.html');
 	 });
+
+$('#WXnotice').click(function(){
+	   $('#content').load('pages/WXnotice.html');
+	   $('#content').attr('src','pages/WXnotice.html');
+	 });
+
 $('#WXbill').click(function(){
 	   $('#content').load('pages/WXbill.html');
 	   $('#content').attr('src','pages/WXbill.html');
 	 });
-
+$('#redBill').click(function(){
+	   $('#content').load('pages/redBill.html');
+	   $('#content').attr('src','pages/redBill.html');
+	 });
 
 if(getCookie("type")==0)
  $('#brand').text("用户 : "+getCookie("campusAdmin")+" (管理员)");
@@ -117,15 +122,13 @@ $(function(){
 	 	   $('#content').attr('src','pages/food.html');
         }
         
-		console.log('campsidgetcampusebyid==='+getCookie('campusId'));
-		console.log("campusId",campusId)
 		if(campusId!=null&&typeof(campusId)!="undefined"){
 			$.post('/voucher/campus/getCampusById.do', {
 				campusId : getCookie("campusId")
 			},function(data){
 				console.log(data)
 			   $("#dropdownMenu1").html('<i class="result-icon result-fail"></i>'+
-					   data.campus.campusName+'<span class="caret"></span>');	
+					   data.campus.campusName+'<span class="caret"></span>');
 			},"json");
 		}
 
@@ -163,6 +166,7 @@ $(function(){
 				if(pages!=0){
 				 $('#content').load(pages);
 				}
+				location.reload();
 			});
 			
 		});

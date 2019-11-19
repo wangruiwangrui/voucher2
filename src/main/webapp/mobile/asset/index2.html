@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css">
+.container img {
+	width: 65%;
+	margin-bottom: 12px;
+}
+
+p {
+	letter-spacing: 0.7em;
+	padding-left: 1.5em;
+	color: white;
+}
+
+.col-xs-4 {
+	padding: 10px
+}
+
+.weui-btn {
+	margin: 0px 10px 50px 10px;
+}
+
+.hd {
+	margin: 50px 0px 50px 0px;
+}
+
+.page_title {
+	text-align: center;
+	font-family: "微软雅黑";
+	color: #3eb94e;
+}
+
+.swiper-slide img {
+	width: 100%;
+}
+</style>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<head>
+<meta charset="utf-8">
+
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet"
+	href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script
+	src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	crossorigin="anonymous"></script>
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet">
+
+<title>资产管理助手</title>
+<link rel="icon" href="../../img/xl.ico" type="image/x-icon">
+<!-- Buttons 库的核心文件 -->
+<link rel="stylesheet" href="css/buttons.css">
+<link rel="stylesheet" href="css/weui.css" />
+<link rel="stylesheet" href="css/jquery-weui.css">
+<link rel="stylesheet" href="css/buttons.css">
+</head>
+<body>
+
+	<div
+		class="swiper-container swiper-container-horizontal swiper-container-android">
+		<!-- Additional required wrapper -->
+		<div class="swiper-wrapper"
+			style="transform: translate3d(-1800px, 0px, 0px); transition-duration: 0ms;">
+			<div class="swiper-slide swiper-slide-duplicate swiper-slide-next"
+				data-swiper-slide-index="2" style="width: 100%;"></div>
+			<div class="swiper-slide">
+				<img src="../../img/gtimgs/1.jpg" alt="" style="width: 100%">
+			</div>
+			<div class="swiper-slide">
+				<img src="../../img/gtimgs/2.jpg" alt="" style="width: 100%">
+			</div>
+			<div class="swiper-slide">
+				<img src="../../img/gtimgs/3.jpg" alt="" style="width: 100%">
+			</div>
+		</div>
+		<div class="swiper-pagination swiper-pagination-bullets">
+			<span class="swiper-pagination-bullet"></span><span
+				class="swiper-pagination-bullet"></span><span
+				class="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="container">
+				<div class="row">
+
+					<!--  
+        <div class="col-xs-4 col-sm-3" 
+        style="text-align:center;">
+          <button id="alreadyHire" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-institution"></i></button>
+          <div><span>已出租</span></div>
+        </div>
+      -->
+
+					<div class="col-xs-4 col-sm-3" style="text-align: center;"
+						id="notHire">
+						<img alt="" src="../../img/gtimgs/imgs5/19.png">
+						<div>
+							<span>可出租房屋</span>
+						</div>
+
+					</div>
+
+					<div class="col-xs-4 col-sm-3" style="text-align: center;"
+						id="hire">
+						<img alt="" src="../../img/gtimgs/imgs5/18.png">
+						<div>
+							<span>查看房租</span>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="row">
+
+					<div class="col-xs-4 col-sm-3" style="text-align: center;"
+						id="userSetting">
+						<img alt="" src="../../img/gtimgs/imgs5/20.png">
+						<div>
+							<span>用户设置</span>
+						</div>
+
+					</div>
+
+
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="row"></div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			var campusId = 2;
+			var progress = "/voucher";
+		</script>
+		<script type="text/javascript" src="../singleton.js"></script>
+		<script>
+			var redirectUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+					+ APPID
+					+ "&redirect_uri="
+					+ DOMAIN
+					+ "/voucher/mobile/asset/index2.html&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+		</script>
+		<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<script type='text/javascript' src='js/fastclick.js' charset='utf-8'></script>
+		<script type='text/javascript' src='js/swiper.js' charset='utf-8'></script>
+
+		<script>
+			$(function() {
+				FastClick.attach(document.body);
+			});
+
+			function getQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if (r != null)
+					return unescape(r[2]);
+				return null;
+			}
+
+			var code = getQueryString("code");
+			var state = getQueryString("state");
+
+			$.get("/voucher/oauth/test.do", {
+				campusId : campusId
+			}, function(data) {
+				//alert("data="+data);
+				if (data == "false") {
+					// alert("false");
+					if (code != null) {
+						$.get("/voucher/oauth/getUserInfo.do", {
+							code : code,
+							state : state,
+							campusId : campusId
+						}, function(text) {
+							var obj = $.parseJSON(text);
+							$("#brand").html(obj.campusName);
+							$(".headimgUrl").attr("src", obj.headimgUrl);
+							$(".nickName").html(obj.nickName);
+
+							url = document.location.toString();
+
+							$.ajax({
+								url : "../../wechat/sign.do",
+								data : {
+									campusId : campusId,
+									url : url
+								},
+								async : false,
+								type : "GET",
+								success : function(data) {
+									var ticket = JSON.parse(data);
+									wx.config({
+										debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+										appId : ticket.appId,
+										timestamp : ticket.timestamp,
+										nonceStr : ticket.nonceStr,
+										signature : ticket.signature,
+										jsApiList : [ 'checkJsApi',
+												'onMenuShareTimeline',
+												'onMenuShareAppMessage',
+												'onMenuShareQQ',
+												'onMenuShareWeibo',
+												'hideMenuItems',
+												'showMenuItems',
+												'hideAllNonBaseMenuItem',
+												'showAllNonBaseMenuItem',
+												'translateVoice',
+												'startRecord', 'stopRecord',
+												'onRecordEnd', 'playVoice',
+												'pauseVoice', 'stopVoice',
+												'uploadVoice', 'downloadVoice',
+												'chooseImage', 'previewImage',
+												'uploadImage', 'downloadImage',
+												'getNetworkType',
+												'openLocation', 'getLocation',
+												'hideOptionMenu',
+												'showOptionMenu',
+												'closeWindow', 'scanQRCode',
+												'chooseWXPay',
+												'openProductSpecificView',
+												'addCard', 'chooseCard',
+												'openCard' ]
+									});
+								}
+							});
+
+						});
+					} else {
+						location.href = redirectUrl;
+					}
+				} else {
+					$.get("/voucher/oauth/getUserInfoByOpenId.do", {
+						campusId : campusId
+					}, function(text) {
+						var obj = $.parseJSON(text);
+
+						$("#brand").html(obj.campusName);
+						$(".headimgUrl").attr("src", obj.headimgUrl);
+						$(".nickName").html(obj.nickName);
+
+						url = document.location.toString();
+
+						$.ajax({
+							url : "../../wechat/sign.do",
+							data : {
+								campusId : campusId,
+								url : url
+							},
+							async : false,
+							type : "GET",
+							success : function(data) {
+								var ticket = JSON.parse(data);
+								wx
+										.config({
+											debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+											appId : ticket.appId,
+											timestamp : ticket.timestamp,
+											nonceStr : ticket.nonceStr,
+											signature : ticket.signature,
+											jsApiList : [ 'checkJsApi',
+													'onMenuShareTimeline',
+													'onMenuShareAppMessage',
+													'onMenuShareQQ',
+													'onMenuShareWeibo',
+													'hideMenuItems',
+													'showMenuItems',
+													'hideAllNonBaseMenuItem',
+													'showAllNonBaseMenuItem',
+													'translateVoice',
+													'startRecord',
+													'stopRecord',
+													'onRecordEnd', 'playVoice',
+													'pauseVoice', 'stopVoice',
+													'uploadVoice',
+													'downloadVoice',
+													'chooseImage',
+													'previewImage',
+													'uploadImage',
+													'downloadImage',
+													'getNetworkType',
+													'openLocation',
+													'getLocation',
+													'hideOptionMenu',
+													'showOptionMenu',
+													'closeWindow',
+													'scanQRCode',
+													'chooseWXPay',
+													'openProductSpecificView',
+													'addCard', 'chooseCard',
+													'openCard' ]
+										});
+							}
+						});
+					});
+				}
+			});
+
+			wx.ready(function() {
+
+				document.querySelector('#notHire').onclick = function() {
+					wx.getLocation({
+						success : function(res) {
+							// alert(JSON.stringify(res));
+							var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+							// $("#latitude").val(latitude);
+							var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+							// $("#longitude").val(longitude);
+							var speed = res.speed; // 速度，以米/每秒计
+							// $("#speed").val(speed);
+							var accuracy = res.accuracy; // 位置精度
+							// $("#accuracy").val(accuracy);
+
+							$.get("/voucher/mobile/map/baiduSwitch.do", { //微信地理位置坐标转换成百度地图坐标
+								longitude : longitude,
+								latitude : latitude
+							}, function(text) {
+								var obj = $.parseJSON(text);
+								var result = obj.result;
+								var lat = result[0].y;
+								var lng = result[0].x;
+								location.href = "notHire.html?campusId="+campusId+"latitude=" + lat
+										+ "&longitude=" + lng;
+							});
+
+						},
+						cancel : function(res) {
+							alert('用户拒绝授权获取地理位置');
+						}
+					});
+				}
+
+				document.querySelector('#hire').onclick = function() {
+					location.href = "hire/chart.html?campusId="+campusId;
+				}
+
+				document.querySelector('#userSetting').onclick = function() {
+					location.href = "userassetset.html?campusId="+campusId;
+				}
+
+			}); //wx.ready
+		</script>
+		<script type='text/javascript' src='../../js/jquery-weui.js'></script>
+		<script type="text/javascript" src="js/accessStat.js"></script>
+		<script>
+			$(".swiper-container").swiper({
+				loop : true,
+				autoplay : 3000
+			});
+		</script>
+</body>
+</html>
