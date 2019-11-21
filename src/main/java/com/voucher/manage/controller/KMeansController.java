@@ -36,6 +36,7 @@ import com.voucher.manage.redis.JedisUtil1;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.KMeans.BisectingKMeans2;
+import com.voucher.manage.tools.KMeans.Grid;
 import com.voucher.sqlserver.context.Connect;
 import com.voucher.weixin.controller.HiddenController;
 
@@ -57,7 +58,7 @@ public class KMeansController {
 	
 	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
 	
-	@RequestMapping("/getAll")
+	//@RequestMapping("/getAll")
 	public @ResponseBody Map getAll(String id) {		
 		
 		BisectingKMeans2 bisectingKMeans2=new BisectingKMeans2();
@@ -115,6 +116,70 @@ public class KMeansController {
 		}
 				
 		return map;
+	}
+	
+	@RequestMapping("/getAll")
+	public @ResponseBody List getAll2(String id) {		
+
+		BisectingKMeans2 bisectingKMeans2=new BisectingKMeans2();
+		
+		List list=new ArrayList<>(); 
+		
+		if(id==null||id.equals("")){
+			id = "assetMap";
+			if (JedisUtil1.exist(id)) {
+				list = JedisUtil1.getObject(id);
+			} else {
+				Map  map0= kMeansDao.findPosition2();
+				Map map4=new Grid().get(map0);
+				
+				list=(List) map4.get("list");
+				
+				JedisUtil1.setObject(id, list);
+				
+				Map<Integer,List> map2=(Map) map4.get("map2");
+
+				for (Map.Entry<Integer,List> entry : map2.entrySet()) {
+					List clist= entry.getValue();
+					String lowerCentroid = entry.getKey().toString();
+					JedisUtil1.deleteData(lowerCentroid);
+					JedisUtil1.setObject(lowerCentroid, clist);
+	
+				}
+
+			}
+		}else{
+			
+			if(JedisUtil1.exist(id)){
+				list=JedisUtil1.getObject(id);
+			}else{
+				if(JedisUtil1.exist("assetMap")){
+					list=JedisUtil1.getObject("assetMap");
+				}else{
+					Map  map0= kMeansDao.findPosition2();
+					Map map4=new Grid().get(map0);
+					
+					list=(List) map4.get("list");
+					
+					JedisUtil1.setObject(id, list);
+					
+					Map<Integer,List> map2=(Map) map4.get("map2");
+
+					for (Map.Entry<Integer,List> entry : map2.entrySet()) {
+						List clist= entry.getValue();
+						String lowerCentroid = entry.getKey().toString();
+						JedisUtil1.deleteData(lowerCentroid);
+						JedisUtil1.setObject(lowerCentroid, clist);
+		
+					}
+				}
+			}
+			
+		}
+				
+		//MyTestUtil.print(map);
+		
+		return list;
 	}
 	
 //	@CrossOrigin

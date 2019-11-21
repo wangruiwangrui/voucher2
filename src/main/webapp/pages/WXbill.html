@@ -6,24 +6,34 @@
 <head>
 <meta charset="utf-8">
 <title>用户管理</title>
-
+<link rel="stylesheet" type="text/css" href="date/css/pikaday.css" />
 <link rel="stylesheet" href="assets/bootstrap-table/bootstrap-table.css">
-<link rel="stylesheet" href="assets/bootstrap-table/bootstrap-editable.css">
+<link rel="stylesheet"
+	href="assets/bootstrap-table/bootstrap-editable.css">
 <link
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
 	rel="stylesheet">
 <style>
+.ml10 {
+	margin-left: 10px;
+}
+
 #operate-success {
 	font-size: 16px;
 	background-color: #8AC007;
 	color: #FBFBFB;
 	visibility: hidden
 }
- 
-.choose{
-    margin-top: 3%;
+
+.bttn{
+	height: 34px;
 }
 
+.in{
+	width: 90px; 
+	padding: 0 5px 0 5px;
+	line-height: 17px;
+}
 </style>
 </head>
 <body>
@@ -35,7 +45,7 @@
 			<span id="operate-success">设置成功</span>
 		</div>
 
-		<div class="choose dropup" id="maintable">
+		<div id="toolbar" class="btn-group">
 			<button class="btn btn-default dropdown-toggle " type="button"
 				data-toggle="dropdown">
 				选择日期<span class="caret"></span>
@@ -49,28 +59,29 @@
 						tabindex="-1" href="#">一月内</a></li>
 				</ul>
 			</button>
-			
-
-
-			<button id="query" type="button" class="btn btn-default">查询</button>
+			<button type="button" class="btn btn-default bttn">
+				<input type="text" id="datepicker" class="in" placeholder="开始日期">
+				<i id="removestart" class="glyphicon glyphicon-remove"></i>
+			</button>
+			<button type="button" class="btn btn-default bttn">
+				<input type="text" id="datepicker2" class="in" placeholder="结束日期">
+				<i id="revoveend" class="glyphicon glyphicon-remove"></i>
+			</button>
+			<button id="query" type="button" class="btn btn-default">查询
+			</button>
 		</div>
-		
-		<div style="float: left;line-height: 30px;color: red;">活动开始时间：</div>
-			<div class="input-append date form_datetime" style="float: left; padding-right:20px">
-				<input id = "startTime" name="startTime" size="16"type="text" value="${obj.startTimeStr}" readonly>
-				<span class="add-on"><i class="icon-remove"></i></span>
-				<span class="add-on"><i class="icon-th"></i></span>
-			</div>
+
 		<div>
 			<table id="table" data-toggle="table" data-show-export="false"
-				data-toolbar="#toolbar" data-search="true"
-				data-show-refresh="true" data-show-toggle="true"
-				data-side-pagination="server" data-pagination="true"
-				data-show-columns="true" data-sort-order="desc">
+				data-toolbar="#toolbar" data-search="true" data-show-refresh="true"
+				data-show-toggle="true" data-side-pagination="server"
+				data-pagination="true" data-show-columns="true"
+				data-sort-order="desc">
 				<thead>
 					<tr>
 						<th data-field="state" data-checkbox="true"></th>
-						<th class="ID" data-align="left" data-field="billId" data-visible="false">ID</th>
+						<th class="ID" data-align="left" data-field="billId"
+							data-visible="false">ID</th>
 						<th data-align="center" data-field="gmf_mc">购买方名称</th>
 						<th data-align="center" data-field="gmf_nsrsbh">购买方纳税人识别号</th>
 						<th data-align="center" data-field="hjje">合计金额</th>
@@ -84,36 +95,37 @@
 
 						<th data-align="center" data-formatter="actionTime"
 							data-field="kprq" data-sortable="true">开票日期</th>
-						<th data-align="center" data-field="action" 
+						<th data-align="center" data-field="action"
 							data-formatter="actionReport">开红票</th>
-						<th data-align="center" data-field="action" 
+						<th data-align="center" data-field="action"
 							data-formatter="actionhelp">操作</th>
 					</tr>
 				</thead>
 			</table>
 		</div>
-		
-<!-- 		<table data-toggle="table" id="list">
+
+		<!-- 		<table data-toggle="table" id="list">
 			<thead>
 			</thead>
 		</table> -->
 	</div>
-	
-<script src="assets/bootstrap-table/jquery.min.js"></script>
-<script src="assets/bootstrap-table/bootstrap.min.js"></script>
-<script src="assets/bootstrap-table/bootstrap-table.js"></script>
-<script src="assets/bootstrap-table/bootstrap-table-export.js"></script>
-<script src="assets/bootstrap-table/tableExport.js"></script>
-<script src="assets/bootstrap-table/bootstrap-table-editable.js"></script>
-<script src="assets/bootstrap-table/bootstrap-editable.js"></script>
-<script src="js/bootstrap-table-zh-CN.min.js"></script>
 
+	<script src="assets/bootstrap-table/jquery.min.js"></script>
+	<script src="assets/bootstrap-table/bootstrap.min.js"></script>
+	<script src="assets/bootstrap-table/bootstrap-table.js"></script>
+	<script src="assets/bootstrap-table/bootstrap-table-export.js"></script>
+	<script src="assets/bootstrap-table/tableExport.js"></script>
+	<script src="assets/bootstrap-table/bootstrap-table-editable.js"></script>
+	<script src="assets/bootstrap-table/bootstrap-editable.js"></script>
+	<script src="js/bootstrap-table-zh-CN.min.js"></script>
+	<script type="text/javascript"
+		src="bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="date/js/pikaday.min.js"></script>
 	<script type="text/javascript">
-	
 		var campusId = campusId;
 
 		var url = "roominfo/getBlueBill.do?campusId=" + campusId + "&State="
-				+ 1;
+				+ 1 + "&datepicker="  + "&datepicker2=" ;
 		$("#table").bootstrapTable({
 			url : url
 		});
@@ -125,7 +137,7 @@
 			return result;
 
 		}
-		
+
 		function actionhelp(value, row, index) {
 			var id = index;
 			var result = "";
@@ -138,7 +150,7 @@
 			var row = $("#table").bootstrapTable('getSelections');
 			console.log(row)
 		})
-
+		//发票冲红
 		function redBill(temp) {
 			var hang = $(temp.parentNode).parent().prevAll().length + 1;
 			var out_trade_no = document.getElementById("table").rows[hang].cells[5].innerHTML;
@@ -146,80 +158,177 @@
 				out_trade_no : out_trade_no
 			}, function(data) {
 				data = JSON.parse(data);
-				if(data.result=="SUCCESS"){
+				if (data.result == "SUCCESS") {
 					setSuccess("发票冲红成功。");
 					$('#table').bootstrapTable('refresh');
-				}else{
+				} else {
 					setSuccess("发票冲红失败。");
 					$('#table').bootstrapTable('refresh');
 				}
 			});
 		}
-		
-		function printBill(temp) {
-			var hang = $(temp.parentNode).parent().prevAll().length + 1;
-			var out_trade_no = document.getElementById("table").rows[hang].cells[5].innerHTML;
-			
-			$.post("../../voucher/mobile/bill/getBillPDFPrint.do", {
-				out_trade_no : out_trade_no
-			}, function(data) {
-				data = JSON.parse(data);
-				if(data=="false"){
-	        		$("#ptBill").html("发票pdf加载失败！");
-	        	}else{
-	        		var url = "/voucher/img/"+data.result;
-					window.open(url);
-	        	}
-				
-			});
-		}
-		
+		//发票下载
 		function downBill(temp) {
 			var hang = $(temp.parentNode).parent().prevAll().length + 1;
 			var out_trade_no = document.getElementById("table").rows[hang].cells[5].innerHTML;
-			
+
 			$.post("../../voucher/mobile/bill/getBillOriginalPDF.do", {
 				out_trade_no : out_trade_no
 			}, function(data) {
-				
+
 				data = JSON.parse(data);
-				if(data.result=="false"){
+				if (data.result == "false") {
 					setSuccess("发票下载失败");
 					$('#table').bootstrapTable('refresh');
-				}else{
-					
+				} else {
+
 					/* var url = "/voucher/img/"+data.result; */
-					var url = "/voucher/"+data.result;
+					var url = "/voucher/" + data.result;
 					window.open(url);
 					$('#table').bootstrapTable('refresh');
 				}
 			});
 		}
 
-		function actionTime(value, row, index) {
-		    var date = new Date(value);
-		    Y = date.getFullYear() + '-';
-		    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-		    D = date.getDate() + ' ';
-		    h = date.getHours() + ':';
-		    m = date.getMinutes() + ':';
-		    s = date.getSeconds();
-		    return Y+M+D+h+m+s;
-		}
-		$("#query").click(function() {
-			$('.dropdown-toggle').dropdown();
-		})
-		
-		$(document).ready(function () {
- 
-	        $(".form_datetime").datetimepicker({
-	        format: "yyyy-mm-dd hh:ii:ss",
-	        linkField: "mirror_field",
-	        linkFormat: "yyyy-mm-dd hh:ii"
-	        });
- 
+		var picker = new Pikaday({
+			field : document.getElementById('datepicker')
 		});
- 
+		var picker2 = new Pikaday({
+			field : document.getElementById('datepicker2')
+		});
+
+		$("#removestart").on("click", function() {
+			$("#datepicker").val("");
+		});
+		$("#revoveend").on("click", function() {
+			$("#datepicker2").val("");
+		});
+
+		$("#today").on(
+				"click",
+				function() {
+					var Today = new Date();
+
+					var datepicker = Today.getFullYear() + "-"
+							+ (Today.getMonth() + 1) + "-" + Today.getDate()
+
+					$("#datepicker").val(datepicker);
+					$("#datepicker2").val(datepicker);
+
+					var url = "roominfo/getBlueBill.do?campusId=" + campusId
+							+ "&State=" + 1 + "&datepicker=" + datepicker
+							+ "&datepicker2=" + datepicker;
+					$(" #table").bootstrapTable('refresh', {
+						url : url
+					});
+				});
+
+		$("#week").on(
+				"click",
+				function() {
+					var Week = new Date();
+
+					var datepicker = Week.getFullYear() + "-"
+							+ (Week.getMonth() + 1) + "-"
+							+ (Week.getDate() - 7);
+					var datepicker2 = Week.getFullYear() + "-"
+							+ (Week.getMonth() + 1) + "-" + (Week.getDate());
+
+					$("#datepicker").val(datepicker);
+					$("#datepicker2").val(datepicker2);
+					var url = "roominfo/getBlueBill.do?campusId=" + campusId
+							+ "&State=" + 1 + "&datepicker=" + datepicker
+							+ "&datepicker2=" + datepicker2;
+					$(" #table").bootstrapTable('refresh', {
+						url : url
+					});
+
+				});
+
+		$("#month").on(
+				"click",
+				function() {
+					var Month = new Date();
+
+					var datepicker = Month.getFullYear() + "-"
+							+ (Month.getMonth()) + "-" + (Month.getDate());
+					var datepicker2 = Month.getFullYear() + "-"
+							+ (Month.getMonth() + 1) + "-" + (Month.getDate());
+
+					$("#datepicker").val(datepicker);
+					$("#datepicker2").val(datepicker2);
+					var url = "roominfo/getBlueBill.do?campusId=" + campusId
+							+ "&State=" + 1 + "&datepicker=" + datepicker
+							+ "&datepicker2=" + datepicker2;
+					$(" #table").bootstrapTable('refresh', {
+						url : url
+					});
+				});
+
+		function actionTime(value, row, index) {
+			var date = new Date(value);
+			Y = date.getFullYear() + '-';
+			M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date
+					.getMonth() + 1)
+					+ '-';
+			D = date.getDate() + ' ';
+			h = date.getHours() + ':';
+			m = date.getMinutes() + ':';
+			s = date.getSeconds();
+			return Y + M + D + h + m + s;
+		}
+		$("#query").click(
+				function() {
+					var datepicker = $("#datepicker").val();
+					var datepicker2 = $("#datepicker2").val();
+					var url = "roominfo/getBlueBill.do?campusId=" + campusId
+							+ "&State=" + 1 + "&datepicker=" + datepicker
+							+ "&datepicker2=" + datepicker2;
+					$(" #table").bootstrapTable('refresh', {
+						url : url
+					});
+				})
+
+		$(document).ready(function() {
+
+			$(".form_datetime").datetimepicker({
+				format : "yyyy-mm-dd hh:ii:ss",
+				linkField : "mirror_field",
+				linkFormat : "yyyy-mm-dd hh:ii"
+			});
+
+		});
+		$('.form_datetime').datetimepicker({
+			//language:  'fr',
+			weekStart : 1,
+			todayBtn : 1,
+			autoclose : 1,
+			todayHighlight : 1,
+			startView : 2,
+			forceParse : 0,
+			showMeridian : 1
+		});
+		$('.form_date').datetimepicker({
+			language : 'fr',
+			weekStart : 1,
+			todayBtn : 1,
+			autoclose : 1,
+			todayHighlight : 1,
+			startView : 2,
+			minView : 2,
+			forceParse : 0
+		});
+		$('.form_time').datetimepicker({
+			language : 'fr',
+			weekStart : 1,
+			todayBtn : 1,
+			autoclose : 1,
+			todayHighlight : 1,
+			startView : 1,
+			minView : 0,
+			maxView : 1,
+			forceParse : 0
+		});
 	</script>
 
 </body>

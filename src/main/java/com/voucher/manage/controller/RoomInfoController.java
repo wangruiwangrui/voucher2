@@ -1,5 +1,10 @@
 package com.voucher.manage.controller;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -161,25 +166,13 @@ public class RoomInfoController {
 	
 	@RequestMapping("/getBlueBill")
 	@ResponseBody
-	public  Map getBlueBill(@RequestParam Integer campusId,@RequestParam String State, Integer limit, Integer offset, String sort,String order,
+	public  Map getBlueBill(@RequestParam Integer campusId,@RequestParam String State,@RequestParam String datepicker,@RequestParam String datepicker2, Integer limit, Integer offset, String sort,String order,
 			String search,HttpServletRequest request) {
 		
 		if(order!=null&&order.equals("asc")){
 			order="asc";
 		}
-		
-		Map where=new HashMap<>();
-		
-		if(search!=null&&!search.trim().equals("")){
-			search="%"+search+"%";  
-			where.put("gmf_mc like ", search);
-			where.put("State=", State);
-			where.put("campusId= ", campusId.toString());
-		}else {
-			where.put("State= ", State);
-			where.put("campusId= ", campusId.toString());
-		}
-		
+				
 		if(sort!=null&&sort.equals("kprq")){
 			sort="kprq";
 		}
@@ -191,6 +184,48 @@ public class RoomInfoController {
 			sort="BillId";
 			order="desc";
 		}
+		
+		Calendar calendar; 
+		
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+		
+		String startTime = null;
+		String endTime = null;
+		
+		Date sTime = null;
+		Date eTime = null;
+		
+		try {
+			if(datepicker!=null&&!datepicker.equals("")){
+				sTime=sdf.parse(datepicker);
+				startTime=sdf.format(sTime);
+			}
+			if(datepicker2!=null&&!datepicker2.equals("")){
+				eTime=sdf.parse(datepicker2);	
+				calendar=Calendar.getInstance();
+				calendar.setTime(eTime);
+				calendar.add(Calendar.DATE, 1);
+				endTime=sdf.format(calendar.getTime());	
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Map where=new HashMap<>();
+		
+		if(search!=null&&!search.trim().equals("")){
+			search="%"+search+"%";  
+			where.put("gmf_mc like ", search);
+		}
+		if (startTime!=null&&!startTime.equals("")) {
+			where.put("kprq > ", startTime);
+		}
+		if (endTime!=null&&!endTime.equals("")) {
+			where.put("kprq < ", endTime);
+		}
+		where.put("State=", State);
+		where.put("campusId= ", campusId.toString());
+		
 		List list = roomInfoDao.getAllBill(limit,order,sort,where);
 		int count = roomInfoDao.getAllBillTotal(limit,order,sort,where);
 		
@@ -203,10 +238,37 @@ public class RoomInfoController {
 	
 	@RequestMapping("/getRedBill")
 	@ResponseBody
-	public  Map getRedBill(@RequestParam Integer campusId, @RequestParam String state, Integer limit, Integer offset, String sort,String order,
+	public  Map getRedBill(@RequestParam Integer campusId, @RequestParam String state,@RequestParam String datepicker,@RequestParam String datepicker2, Integer limit, Integer offset, String sort,String order,
 			 String search,HttpServletRequest request) {
 		if(order!=null&&order.equals("asc")){
 			order="asc";
+		}
+		
+		Calendar calendar; 
+		
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+		
+		String startTime = null;
+		String endTime = null;
+		
+		Date sTime = null;
+		Date eTime = null;
+		
+		try {
+			if(datepicker!=null&&!datepicker.equals("")){
+				sTime=sdf.parse(datepicker);
+				startTime=sdf.format(sTime);
+			}
+			if(datepicker2!=null&&!datepicker2.equals("")){
+				eTime=sdf.parse(datepicker2);	
+				calendar=Calendar.getInstance();
+				calendar.setTime(eTime);
+				calendar.add(Calendar.DATE, 1);
+				endTime=sdf.format(calendar.getTime());	
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		Map where=new HashMap<>();
@@ -214,12 +276,15 @@ public class RoomInfoController {
 		if(search!=null&&!search.trim().equals("")){
 			search="%"+search+"%";  
 			where.put("gmf_mc like ", search);
-			where.put("state=", state);
-			where.put("campusId=", String.valueOf(campusId));
-		}else {
-			where.put("state =", state);
-			where.put("campusId=", String.valueOf(campusId));
 		}
+		if (startTime!=null&&!startTime.equals("")) {
+			where.put("kprq > ", startTime);
+		}
+		if (endTime!=null&&!endTime.equals("")) {
+			where.put("kprq < ", endTime);
+		}
+		where.put("state=", state);
+		where.put("campusId= ", campusId.toString());
 		
 		if(sort!=null&&sort.equals("kprq")){
 			sort="kprq";

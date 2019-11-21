@@ -589,4 +589,55 @@ public class KMeansDAOImpl extends JdbcDaoSupport implements KMeansDao{
 		return hCheck;
 	}
 
+	@Override
+	public Map findPosition2() {
+		// TODO Auto-generated method stub
+		CopyOnWriteArrayList<ArrayList<Double>> cList = new CopyOnWriteArrayList<ArrayList<Double>>();
+		
+		double latmax = 0;
+		double latmin = 1000000;
+		double lngmax = 0;
+		double lngmin = 1000000;
+		
+		String sql="select lng,lat from Position where is_roomInfo=1";
+		try {
+			Statement sta =this.getConnection().createStatement();
+			ResultSet rs = sta.executeQuery(sql.toString());
+			while(rs.next()){  
+                ArrayList<Double> a=new ArrayList<>();
+                double lng=rs.getDouble("lng");
+                double lat=rs.getDouble("lat");
+                a.add(lng);  
+                a.add(lat);
+                cList.add(a);
+                if (lng > lngmax)
+					lngmax = lng;
+				if (lng < lngmin)
+					lngmin = lng;
+				if (lat > latmax)
+					latmax = lat;
+				if (lat < latmin)
+					latmin = lat;
+            }  
+		} catch (CannotGetJdbcConnectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		Map map = new HashMap<>();
+
+		map.put("names", cList);
+		map.put("latmax", latmax);
+		map.put("latmin", latmin);
+		map.put("lngmax", lngmax);
+		map.put("lngmin", lngmin);
+		
+		return map;
+		
+	}
+
+	
 }

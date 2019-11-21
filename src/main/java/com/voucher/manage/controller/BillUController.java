@@ -253,8 +253,6 @@ public class BillUController {
 		RedBusinessData data = new RedBusinessData();
 		data.setData_resources(billServerinfo.getData_Resources());
 		
-		
-		
 		int i = (int)(Math.random()*900 + 100);
 		String myStr = Integer.toString(i);
 		data.setOrder_num(out_trade_no_new + myStr);
@@ -273,8 +271,6 @@ public class BillUController {
 		JSONObject jsonObject = JSONObject.parseObject(returnString);
 		RedBusinessResult result = JSON.toJavaObject(jsonObject, RedBusinessResult.class);
 		Map map = new HashMap();
-		System.out.println("---------------");
-		MyTestUtil.print(result);
 		if (result.getResult().equals("SUCCESS")) {
 
 			Integer re = billDAO.InsertRedBill(result,bill.getCampusId());

@@ -30,4 +30,6 @@ public interface KMeansDao {
 	public Map queryAssetByHiddenGuid(Map where, String term);
 
 	public Hidden_Check selectHiddenStateByGuid(String guid);
+
+	public Map findPosition2();
 }

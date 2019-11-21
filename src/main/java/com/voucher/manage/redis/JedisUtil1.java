@@ -344,8 +344,8 @@ public class JedisUtil1 {
 			ShardedJedis shardedJedis = getShardedJedis();
 			try {
 				if (shardedJedis != null) {
-					System.out.println("key======"+key.getBytes());
-					MyTestUtil.print(object);
+					//System.out.println("key======"+key.getBytes());
+					//MyTestUtil.print(object);
 					shardedJedis.set(key.getBytes(), ObjectUtils.serialize(object));
 				}
 			} catch (Exception e) {

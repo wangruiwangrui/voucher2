@@ -34,8 +34,10 @@ public class RedisJava {
         	/*if(key.equals("[item_room]_columnName")){
         		jedis.del(key);
         	}*/
-        	//jedis.del(key);
-        	System.out.print(JedisUtil1.getObject(key).toString());
+        	jedis.del(key);
+        	
+        	//MyTestUtil.print(jedis.get(key.getBytes()));
+
         }
 
     }

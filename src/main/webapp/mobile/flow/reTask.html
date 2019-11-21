@@ -4,7 +4,7 @@
 <title>资产管理助手</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport"
-	content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <meta name="format-detection" content="telephone=no" />
@@ -201,7 +201,7 @@ body, html, #allmap {
 		<div id="img" class="weui-panel__bd"></div>
 	</div>
 
-<!-- 	<div class="weui-panel weui-panel_access">
+	<!-- 	<div class="weui-panel weui-panel_access">
 		<div class="weui-uploader__input-box" id="showPicker"></div>
 	</div> -->
 
@@ -283,311 +283,309 @@ body, html, #allmap {
      	   var obj=text.neaten;
      	   
      	   console.log(obj);
-             	 guid=obj.guid;
-             	  	  
-             	  var name=document.createElement("span");
-                  name.innerHTML=obj.name;
-                  $("#name").append(name);                 
-             	   
-             	  var neaten_name=obj.neaten_name;
-                  $("#neaten_name").val(neaten_name);                  
-				
-                var item=obj.neaten_item;
-				$("#item").append("<font color='#3366FF'>"+item+"</font>");
-				
-				 var time=actionTime(obj.happen_time);
-				 console.log(time);
-				 $("#happenTime").val(time);
-                  
-                  var time=actionTime(obj.date);
-                  var date=document.createElement("span");
-                  date.innerHTML=time;
-                  $("#date").append(date);
-                  
-                  var remark=obj.remark;
-                  $("#remark").val(remark);
-                  
-                  var principal=obj.principal;
-                  $("#principal").val(principal);
-                  
-                  var username=document.createElement("span");
-       		   	  username.innerHTML=obj.user_name;
-                  $("#userName").append(username);
-                  
-                  var neaten_instance=obj.neaten_instance;
-                  $("#neaten_instance").val(neaten_instance);
-                      
-                  var area=obj.area;
-                  $("#area").val(area);
-                  
-                  var amount=obj.amount;
-                  $("#amount").val(amount);
-                  /*
-                  var amountTotal=obj.amountTotal;
-                  $("#amountTotal").val(amountTotal);
-                  
-                  var auditingAmount=obj.auditingAmount;
-                  $("#auditingAmount").val(auditingAmount);
-                  */
-                  var availabeLength=obj.availabeLength;
-                  $("#availabeLength").val(availabeLength);
-                  
-                  var workUnit=obj.workUnit;
-                  $("#workUnit").val(workUnit);
-                  
-                  var principal=obj.principal;
-                  $("#principal").val(principal);
-       
-                  var type=obj.type;
-                  var select2 = document.createElement("select");
-              	select2.setAttribute("id","select2");
-              	select2.setAttribute("onchange","gradeChange2()");
+        	 guid=obj.guid;
+        	  	  
+        	 var name=document.createElement("span");
+            name.innerHTML=obj.name;
+            $("#name").append(name);                 
+        	   
+        	 var neaten_name=obj.neaten_name;
+            $("#neaten_name").val(neaten_name);                  
 
-              	var option2 = document.createElement("option");
-              	option2.innerHTML="排危工程";
-              	if(type=="排危工程"){
-              		option2.setAttribute("selected","selected");
-              	}
-              	option2.setAttribute("value",0);
-              	select2.appendChild(option2);		
-              	
-              	var option2 = document.createElement("option");
-              	option2.innerHTML="小修";
-              	option2.setAttribute("value",1);
-              	if(type=="小修"){
-              		option2.setAttribute("selected","selected");
-              	}
-              	select2.appendChild(option2);	
+            var item=obj.neaten_item;
+			$("#item").append("<font color='#3366FF'>"+item+"</font>");
 
-              	var option2 = document.createElement("option");
-              	option2.innerHTML="大中修";
-              	option2.setAttribute("value",2);
-              	if(type=="大中修"){
-              		option2.setAttribute("selected","selected");
-              	}
-              	select2.appendChild(option2);
-              	
-              	var option2 = document.createElement("option");
-              	option2.innerHTML="其他";
-              	option2.setAttribute("value",3);
-              	if(type=="其他"){
-              		option2.setAttribute("selected","selected");
-              	}
-              	select2.appendChild(option2);
-              	
-              	select2.setAttribute("class","weui-input");
-              	$("#type").append(select2);	
-                
-             	 var flowData=text.flowData;
-                 var deliverans=flowData.deliverans;
-                 console.log(flowData);
-                 for(var i=0;i<deliverans.length;i++){
-                 	addDiv(deliverans[i].name,deliverans[i].content,deliverans[i].userName,deliverans[i].result,deliverans[i].date);
-                 }
-              	
-                 var imgs=flowData.imageDataList;
+			var time=actionTime(obj.happen_time);
+			console.log(time);
+			$("#happenTime").val(time);
+             
+            var time=actionTime(obj.date);
+            var date=document.createElement("span");
+            date.innerHTML=time;
+            $("#date").append(date);
+             
+            var remark=obj.remark;
+            $("#remark").val(remark);
+             
+            var principal=obj.principal;
+            $("#principal").val(principal);
+             
+            var username=document.createElement("span");
+  		   	 username.innerHTML=obj.user_name;
+            $("#userName").append(username);
+             
+            var neaten_instance=obj.neaten_instance;
+            $("#neaten_instance").val(neaten_instance);
                  
-                 console.log(imgs);
-                 
-                 $("#img0").children('div').remove();
-	 		    	if(imgs!=null){
-	                  	   var i = 0;
-	                         for(; i < imgs.length; i++){
-	                      	   
-	                      	  var data=imgs[i];
-	                      	  var name=data.name;
-	                      	  var uri=data.uri;
-	                      	  var date=actionTime(data.date);
-	                      	  var panel=document.createElement("div");
-	                      	  panel.setAttribute("class","weui-panel__bd");
-	                        	   var a=document.createElement("a");
-	                       	   a.setAttribute("class","weui_grid");
-	                       	   var a=document.createElement("a");
-	                       	  a.setAttribute("href","javascript:void(0);");
-	                       	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
-	                       	   var div=document.createElement("div");
-	                       	  	div.setAttribute("class","weui-media-box__hd");
-	                       	  
-	                  	   	 	 src="/voucher/Desktop/pasoft/photo/"+uri;
-	                  	  	  	var img=document.createElement("img");
-	                  	  	  	img.setAttribute("class","weui-media-box__thumb");
-	                            	img.setAttribute("src",src);
-	                          
-	                         	  	div.appendChild(img);
-	                         	   		
-	                         	  	div2=document.createElement("div");
-	                         	  		div2.setAttribute("class","weui-media-box__bd");
-	                         	 		h4=document.createElement("h4");
-	                         	 		h4.setAttribute("class","weui-media-box__title");
-	                         	 	 	h4.innerHTML=name;
-	                         	  	 	p=document.createElement("p");
-	                         	  	 	p.setAttribute("class","weui-media-box__desc");
-	                         	  	 	p.innerHTML=date;
-	                         	     div2.appendChild(h4);
-	                         	     div2.appendChild(p);
-	                         	   a.appendChild(div);
-	                         	   //a.appendChild(div2);
-	                         	   panel.appendChild(a);
-	                  	      	  $("#img0").append(panel);
-	                         }
-	          		   
-	          	   		}
-                 
-                guid=obj.guid;
+            var area=obj.area;
+            $("#area").val(area);
+             
+            var amount=obj.amount;
+            $("#amount").val(amount);
+            /*
+            var amountTotal=obj.amountTotal;
+            $("#amountTotal").val(amountTotal);
+             
+            var auditingAmount=obj.auditingAmount;
+            $("#auditingAmount").val(auditingAmount);
+            */
+            var availabeLength=obj.availabeLength;
+            $("#availabeLength").val(availabeLength);
+             
+            var workUnit=obj.workUnit;
+            $("#workUnit").val(workUnit);
+             
+            var principal=obj.principal;
+            $("#principal").val(principal);
+  
+            var type=obj.type;
+            var select2 = document.createElement("select");
+			select2.setAttribute("id","select2");
+			select2.setAttribute("onchange","gradeChange2()");
+			
+			var option2 = document.createElement("option");
+			option2.innerHTML="排危工程";
+			if(type=="排危工程"){
+			option2.setAttribute("selected","selected");
+			}
+			option2.setAttribute("value",0);
+			select2.appendChild(option2);		
+			
+			var option2 = document.createElement("option");
+			option2.innerHTML="小修";
+			option2.setAttribute("value",1);
+			if(type=="小修"){
+			option2.setAttribute("selected","selected");
+			}
+			select2.appendChild(option2);	
+			
+			var option2 = document.createElement("option");
+			option2.innerHTML="大中修";
+			option2.setAttribute("value",2);
+			if(type=="大中修"){
+			option2.setAttribute("selected","selected");
+			}
+			select2.appendChild(option2);
+         	
+         	var option2 = document.createElement("option");
+         	option2.innerHTML="其他";
+         	option2.setAttribute("value",3);
+         	if(type=="其他"){
+         		option2.setAttribute("selected","selected");
+         	}
+         	select2.appendChild(option2);
+         	
+         	select2.setAttribute("class","weui-input");
+         	$("#type").append(select2);	
+           
+        	var flowData=text.flowData;
+            var deliverans=flowData.deliverans;
+            console.log(flowData);
+            for(var i=0;i<deliverans.length;i++){
+            	addDiv(deliverans[i].name,deliverans[i].content,deliverans[i].userName,deliverans[i].result,deliverans[i].date);
+            }
+              	
+	        var imgs=flowData.imageDataList;
+	        
+	        console.log(imgs);
+	        
+	        $("#img0").children('div').remove();
+			if(imgs!=null){
+				var i = 0;
+   				for(; i < imgs.length; i++){
+	   
+					var data=imgs[i];
+					var name=data.name;
+					var uri=data.uri;
+					var date=actionTime(data.date);
+					var panel=document.createElement("div");
+					panel.setAttribute("class","weui-panel__bd");
+					var a=document.createElement("a");
+					a.setAttribute("class","weui_grid");
+					var a=document.createElement("a");
+					a.setAttribute("href","javascript:void(0);");
+					a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+					var div=document.createElement("div");
+					div.setAttribute("class","weui-media-box__hd");
+					 
+					src="/voucher/Desktop/pasoft/photo/"+uri;
+					var img=document.createElement("img");
+					img.setAttribute("class","weui-media-box__thumb");
+					img.setAttribute("src",src);
+    
+					div.appendChild(img);
+   	   		
+					div2=document.createElement("div");
+					div2.setAttribute("class","weui-media-box__bd");
+					h4=document.createElement("h4");
+					h4.setAttribute("class","weui-media-box__title");
+					h4.innerHTML=name;
+					p=document.createElement("p");
+					p.setAttribute("class","weui-media-box__desc");
+					p.innerHTML=date;
+					div2.appendChild(h4);
+					div2.appendChild(p);
+					a.appendChild(div);
+					//a.appendChild(div2);
+					panel.appendChild(a);
+					$("#img0").append(panel);
+					}
+				
+				}
+				guid=obj.guid;
                   
-              	$.ajax({
-                    type: "POST",
-                    url: "/voucher/mobile/asset/getRoomInfoByGUID.do",
-                    data: { "guid":guid},
-                    dataType: "json",
-                    error: function (request){
-                 	   console.log(request);
-                    },
+				$.ajax({
+					type: "POST",
+					url: "/voucher/mobile/asset/getRoomInfoByGUID.do",
+					data: { "guid":guid},
+					dataType: "json",
+					error: function (request){
+						console.log(request);
+					},
                     success: function (text) {              	   
-                    	console.log(text);
-                  	   var obj=text.roomInfo;
-                  	   var imgs=text.fileBytes;
+                   		console.log(text);
+						var obj=text.roomInfo;
+						var imgs=text.fileBytes;
                
-                          	   var guid=obj.guid;
+						var guid=obj.guid;
                          	  
-                          	 var address=document.createElement("span");
-                            	  address.innerHTML=obj.address;
-                               $("#address").append(address);
+						var address=document.createElement("span");
+						address.innerHTML=obj.address;
+						$("#address").append(address);
                               
-                              var num=document.createElement("span");
-                              num.innerHTML=obj.num;
-                              $("#num").append(num);
+						var num=document.createElement("span");
+						num.innerHTML=obj.num;
+						$("#num").append(num);
                               
-                               var region=document.createElement("span");
-                               region.innerHTML=obj.region;
-                               $("#region").append(region);
+						var region=document.createElement("span");
+						region.innerHTML=obj.region;
+						$("#region").append(region);
                                
                                
-                               var fareItem=document.createElement("span");
-                               fareItem.innerHTML=obj.fareItem;
-                               $("#fareItem").append(fareItem);
+						var fareItem=document.createElement("span");
+						fareItem.innerHTML=obj.fareItem;
+						$("#fareItem").append(fareItem);
 
-                               if(imgs!=null){
-        	                  	   var i = 0;
-        	                         for(; i < imgs.length; i++){
-        	                      	   
-        	                      	  var data=imgs[i];
-        	                      	  var name=data.name;
-        	                      	  var uri=data.compressUri;
-        	                      	  var date=data.date;
-        	                      	  var panel=document.createElement("div");
-        	                      	  panel.setAttribute("class","weui-panel__bd");
-        	                        	   var a=document.createElement("a");
-        	                       	   a.setAttribute("class","weui_grid");
-        	                       	   var a=document.createElement("a");
-        	                       	  a.setAttribute("href","javascript:void(0);");
-        	                       	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
-        	                       	   var div=document.createElement("div");
-        	                       	  	div.setAttribute("class","weui-media-box__hd");
-        	                       	  
-        	                  	   	 	 src="/voucher/"+uri;
-        	                  	  	  	var img=document.createElement("img");
-        	                  	  	  	img.setAttribute("class","weui-media-box__thumb");
-        	                            	img.setAttribute("src",src);
-        	                          
-        	                         	  	div.appendChild(img);
-        	                         	   		
-        	                         	  	div2=document.createElement("div");
-        	                         	  		div2.setAttribute("class","weui-media-box__bd");
-        	                         	 		h4=document.createElement("h4");
-        	                         	 		h4.setAttribute("class","weui-media-box__title");
-        	                         	 	 	h4.innerHTML=name;
-        	                         	  	 	p=document.createElement("p");
-        	                         	  	 	p.setAttribute("class","weui-media-box__desc");
-        	                         	  	 	p.innerHTML=date;
-        	                         	     //div2.appendChild(h4);
-        	                         	     //div2.appendChild(p);
-        	                         	   a.appendChild(div);
-        	                         	   //a.appendChild(div2);
-        	                         	   panel.appendChild(a);
-        	                  	      	  $("#img").append(panel);
-        	                         }
-        	          		   
-        	          	   		}
-                    	}
-                });
-        }
-    });
+						if(imgs!=null){
+							var i = 0;
+							for(; i < imgs.length; i++){
+							   
+								var data=imgs[i];
+								var name=data.name;
+								var uri=data.compressUri;
+								var date=data.date;
+								var panel=document.createElement("div");
+								panel.setAttribute("class","weui-panel__bd");
+								var a=document.createElement("a");
+								a.setAttribute("class","weui_grid");
+								var a=document.createElement("a");
+								a.setAttribute("href","javascript:void(0);");
+								a.setAttribute("class","weui-media-box weui-media-box_appmsg");
+								var div=document.createElement("div");
+						 	  	div.setAttribute("class","weui-media-box__hd");
+						 	  
+								src="/voucher/"+uri;
+								var img=document.createElement("img");
+								img.setAttribute("class","weui-media-box__thumb");
+								img.setAttribute("src",src);
+						    
+								div.appendChild(img);
+						   	   		
+								div2=document.createElement("div");
+								div2.setAttribute("class","weui-media-box__bd");
+								h4=document.createElement("h4");
+								h4.setAttribute("class","weui-media-box__title");
+								h4.innerHTML=name;
+								p=document.createElement("p");
+								p.setAttribute("class","weui-media-box__desc");
+								p.innerHTML=date;
+								//div2.appendChild(h4);
+								//div2.appendChild(p);
+								a.appendChild(div);
+								//a.appendChild(div2);
+								panel.appendChild(a);
+								$("#img").append(panel);
+							}
+						        	          		   
+						}
+					}
+				});
+			}
+		});
 
 	
-    function addDiv(name,content,userName,result,date){
-    	  var label=document.createElement("div");
-    	  label.setAttribute("class","weui-cells");
-    	  var div_0=document.createElement("div");
-    	  div_0.setAttribute("class","weui-cells__title");
-    	  var p=document.createElement("p");
-    	  p.setAttribute("class","weui-cell__bd");
-    	  p.innerHTML="流程名称:"+name;
-    	  div_0.appendChild(p);
-    	  var div_1=document.createElement("div");
-    	  div_1.setAttribute("class","weui-cells__title");
-    	  var p=document.createElement("p");
-    	  p.setAttribute("class","weui-cell__bd");
-    	  p.innerHTML="审批意见:"+content;
-    	  if(content!=null&&content!="")
-    	  	div_1.appendChild(p);
-    	  var div_2=document.createElement("div");
-    	  div_2.setAttribute("class","weui-cells__title");
-    	  var p=document.createElement("p");
-    	  p.setAttribute("class","weui-cell__bd");
-    	  p.innerHTML="执行人:"+userName;
-    	  div_2.appendChild(p);
-    	  var div_3=document.createElement("div");
-    	  div_3.setAttribute("class","weui-cells__title");
-    	  var p=document.createElement("p");
-    	  p.setAttribute("class","weui-cell__bd");
-    	  var course;
-    	  if(result==1){
-    		  course="同意";
-    	  }else if(result==2){
-    		  course="退回";
-    	  }else if(result==3){
-    		  course="重新提交";
-    	  }else if(result==0){
-    		  course="拒绝";
-    	  }else{
-    		  course="拒绝";
-    	  }
-    	  p.innerHTML="结果:"+course;
-    	  if(result!=null&&result!=""&&result!=3)
-  	  		div_3.appendChild(p);
-    	  var div_4=document.createElement("div");
-    	  div_4.setAttribute("class","weui-cells__title");
-    	  var p=document.createElement("p");
-    	  p.setAttribute("class","weui-cell__bd");
-    	  p.innerHTML="时间:"+actionTime(date);
-    	  div_4.appendChild(p);
-    	  
-    	  label.appendChild(div_0);
-    	  label.appendChild(div_1);
-    	  label.appendChild(div_3);
-    	  label.appendChild(div_2);   	  
-    	  label.appendChild(div_4);
-    	  
-    	  $("#deliverans").append(label);
-      } 
+		function addDiv(name,content,userName,result,date){
+			var label=document.createElement("div");
+			label.setAttribute("class","weui-cells");
+			var div_0=document.createElement("div");
+			div_0.setAttribute("class","weui-cells__title");
+			var p=document.createElement("p");
+			p.setAttribute("class","weui-cell__bd");
+			p.innerHTML="流程名称:"+name;
+			div_0.appendChild(p);
+			var div_1=document.createElement("div");
+			div_1.setAttribute("class","weui-cells__title");
+			var p=document.createElement("p");
+			p.setAttribute("class","weui-cell__bd");
+			p.innerHTML="审批意见:"+content;
+			if(content!=null&&content!="")
+				div_1.appendChild(p);
+			var div_2=document.createElement("div");
+			div_2.setAttribute("class","weui-cells__title");
+			var p=document.createElement("p");
+			p.setAttribute("class","weui-cell__bd");
+			p.innerHTML="执行人:"+userName;
+			div_2.appendChild(p);
+			var div_3=document.createElement("div");
+			div_3.setAttribute("class","weui-cells__title");
+			var p=document.createElement("p");
+			p.setAttribute("class","weui-cell__bd");
+			var course;
+			if(result==1){
+				course="同意";
+			}else if(result==2){
+				course="退回";
+			}else if(result==3){
+				course="重新提交";
+			}else if(result==0){
+				course="拒绝";
+			}else{
+				course="拒绝";
+			}
+			p.innerHTML="结果:"+course;
+			if(result!=null&&result!=""&&result!=3)
+				div_3.appendChild(p);
+			var div_4=document.createElement("div");
+			div_4.setAttribute("class","weui-cells__title");
+			var p=document.createElement("p");
+			p.setAttribute("class","weui-cell__bd");
+			p.innerHTML="时间:"+actionTime(date);
+			div_4.appendChild(p);
+			
+			label.appendChild(div_0);
+			label.appendChild(div_1);
+			label.appendChild(div_3);
+			label.appendChild(div_2);   	  
+			label.appendChild(div_4);
+			
+			$("#deliverans").append(label);
+		} 
     
     
-	function actionTime(value){
-  	    var date = new Date(value); 
-  	    Y = date.getFullYear() + '-';
-  	    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-  	  	D = date.getDate()<10?'0'+date.getDate():date.getDate();
-  	    h = date.getHours() + ':';
-  	    m = date.getMinutes() + ':';
-  	    s = date.getSeconds(); 
-  		return Y+M+D;
-  	}
+		function actionTime(value){
+			var date = new Date(value); 
+			Y = date.getFullYear() + '-';
+			M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+			D = date.getDate()<10?'0'+date.getDate():date.getDate();
+			h = date.getHours() + ':';
+			m = date.getMinutes() + ':';
+			s = date.getSeconds(); 
+			return Y+M+D;
+		}
 
         
-  //happenTime设置为当前时间
+	//happenTime设置为当前时间
 	var timestamp=actionTime(Date.parse(new Date()));
-    console.log(timestamp);
     $("#happenTime").val(timestamp); 
   
     var id=Math.random().toString(36).substr(2);

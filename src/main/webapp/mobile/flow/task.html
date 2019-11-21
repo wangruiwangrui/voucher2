@@ -4,7 +4,7 @@
 <title>资产管理助手</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport"
-	content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <meta name="format-detection" content="telephone=no" />
@@ -375,7 +375,6 @@ body, html, #allmap {
               		select2.appendChild(option2);
               	}
               		
-
               	var option2 = document.createElement("option");
               	option2.innerHTML="大中修";
               	option2.setAttribute("value",2);
@@ -383,7 +382,6 @@ body, html, #allmap {
               		option2.setAttribute("selected","selected");
               		select2.appendChild(option2);
               	}
-              	
               	
               	var option2 = document.createElement("option");
               	option2.innerHTML="其他";
@@ -626,33 +624,32 @@ body, html, #allmap {
         	var workUnit=$("#workUnit").val();
         	var content=$("#content").val();
 
-        		var error="";
-				if(area==null||area==""){
-        			error="面积不能为空!";
-        		}else if(amount==null||amount==""){
-        			error="送审金额不能为空!";
-        		}
-        		/*
-        		else if(amountTotal==null||amountTotal==""){
-        			error="审减金额不能为空!";
-        		}else if(auditingAmount==null||auditingAmount==""){
-        			error="审定金额不能为空!";
-        		}
-        		*/
-        		else if(availabeLength==null||availabeLength==""){
-        			error="质保期不能为空!";
-        		}else if(neaten_instance==null||neaten_instance==""){    				
-        			error="请填写整改详情说明!";
-    			}
-            	
-        		
-        		if(error!=""){
-        			
-        			$.alert(error);
-        			
-        			return false;
-        		}
-        		        		
+       		var error="";
+			if(area==null||area==""){
+       			error="面积不能为空!";
+       		}else if(amount==null||amount==""){
+       			error="送审金额不能为空!";
+       		}
+       		/*
+       		else if(amountTotal==null||amountTotal==""){
+       			error="审减金额不能为空!";
+       		}else if(auditingAmount==null||auditingAmount==""){
+       			error="审定金额不能为空!";
+       		}
+       		*/
+       		else if(availabeLength==null||availabeLength==""){
+       			error="质保期不能为空!";
+       		}else if(neaten_instance==null||neaten_instance==""){    				
+       			error="请填写整改详情说明!";
+   			}
+           	
+       		
+       		if(error!=""){
+       			
+       			$.alert(error);
+       			
+       			return false;
+       		}
         	
         	console.log(item);
         	
@@ -702,14 +699,13 @@ body, html, #allmap {
                     } else {
        
                     	$.hideLoading();
-                   		 $.toast("提交成功");
-                           history.go(-1);
-                        	
+                   		$.toast("提交成功");
+                   		window.location.href=document.referrer;
                     	}
                 },
                 error:function (XMLHttpRequest, textStatus, errorThrown) { 
                 	$.hideLoading();
-              		 $.toast("提交错误", "forbidden");
+       		 		$.toast("提交错误", "forbidden");
                       return false;
                 }
             });
