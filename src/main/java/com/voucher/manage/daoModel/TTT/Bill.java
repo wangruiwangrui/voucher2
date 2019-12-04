@@ -1,16 +1,16 @@
 package com.voucher.manage.daoModel.TTT;
 
-import java.io.Serializable;
 import java.util.Date;
+
+import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[bill]")
+@DBTable(name="[Bill]")
 public class Bill implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
-    @SQLInteger(name="BillId")
 	private Integer BillId;
 
     @SQLString(name="msg")
@@ -23,7 +23,7 @@ public class Bill implements Serializable{
 	private String xsf_mc;
 
     @SQLString(name="yfp_hm")
-	private String yfp_hm ;
+	private String yfp_hm;
 
     @SQLString(name="bz")
 	private String bz;
@@ -111,19 +111,79 @@ public class Bill implements Serializable{
 
     @SQLString(name="EXT_CODE")
 	private String EXT_CODE;
-    
-    @SQLInteger(name="State")
-    private Integer State;
 
-    @SQLString(name = "imgUrl")
-    private String imgUrl;
-    
-    @SQLInteger(name = "campusId")
-    private Integer campusId;
-    
-    @SQLString(name = "oldorder_num")
-    private String oldorder_num;
-    
+    @SQLInteger(name="State")
+	private Integer State;
+
+    @SQLString(name="imgUrl")
+	private String imgUrl;
+
+    @SQLInteger(name="campusId")
+	private Integer campusId;
+
+    @SQLString(name="oldorder_num")
+	private String oldorder_num;
+
+    @SQLInteger(name="preState")
+	private Integer preState;
+
+    @SQLString(name="data_resources")
+	private String data_resources;
+
+    @SQLString(name="nsrsbh")
+	private String nsrsbh;
+
+    @SQLString(name="bmb_bbh")
+	private String bmb_bbh;
+
+    @SQLString(name="tspz")
+	private String tspz;
+
+    @SQLString(name="kpzdbs")
+	private String kpzdbs;
+
+    @SQLString(name="fphxz")
+	private String fphxz;
+
+    @SQLString(name="spbm")
+	private String spbm;
+
+    @SQLString(name="zxbm")
+	private String zxbm;
+
+    @SQLString(name="yhzcbs")
+	private String yhzcbs;
+
+    @SQLString(name="lslbs")
+	private String lslbs;
+
+    @SQLString(name="zzstsgl")
+	private String zzstsgl;
+
+    @SQLString(name="xmmc")
+	private String xmmc;
+
+    @SQLString(name="ggxh")
+	private String ggxh;
+
+    @SQLString(name="dw")
+	private String dw;
+
+    @SQLString(name="xmsl")
+	private String xmsl;
+
+    @SQLString(name="xmdj")
+	private String xmdj;
+
+    @SQLString(name="xmje")
+	private String xmje;
+
+    @SQLString(name="sl")
+	private String sl;
+
+    @SQLString(name="se")
+	private String se;
+
 	public void setBillId(Integer BillId){
 		this.BillId = BillId;
 	}
@@ -156,12 +216,12 @@ public class Bill implements Serializable{
 		return xsf_mc;
 	}
 
-	public void setYfp_hm (String yfp_hm ){
-		this.yfp_hm  = yfp_hm ;
+	public void setYfp_hm(String yfp_hm){
+		this.yfp_hm = yfp_hm;
 	}
 
-	public String getYfp_hm (){
-		return yfp_hm ;
+	public String getYfp_hm(){
+		return yfp_hm;
 	}
 
 	public void setBz(String bz){
@@ -396,21 +456,201 @@ public class Bill implements Serializable{
 		return EXT_CODE;
 	}
 
-	public String getImgUrl() {
-		return imgUrl;
+	public void setState(Integer State){
+		this.State = State;
 	}
 
-	public void setImgUrl(String imgUrl) {
+	public Integer getState(){
+		return State;
+	}
+
+	public void setImgUrl(String imgUrl){
 		this.imgUrl = imgUrl;
 	}
 
-	public Integer getCampusId() {
+	public String getImgUrl(){
+		return imgUrl;
+	}
+
+	public void setCampusId(Integer campusId){
+		this.campusId = campusId;
+	}
+
+	public Integer getCampusId(){
 		return campusId;
 	}
 
-	public void setCampusId(Integer campusId) {
-		this.campusId = campusId;
+	public void setOldorder_num(String oldorder_num){
+		this.oldorder_num = oldorder_num;
 	}
+
+	public String getOldorder_num(){
+		return oldorder_num;
+	}
+
+	public Integer getPreState() {
+		return preState;
+	}
+
+	public void setPreState(Integer preState) {
+		this.preState = preState;
+	}
+
+	public void setData_resources(String data_resources){
+		this.data_resources = data_resources;
+	}
+
+	public String getData_resources(){
+		return data_resources;
+	}
+
+	public void setNsrsbh(String nsrsbh){
+		this.nsrsbh = nsrsbh;
+	}
+
+	public String getNsrsbh(){
+		return nsrsbh;
+	}
+
+	public void setBmb_bbh(String bmb_bbh){
+		this.bmb_bbh = bmb_bbh;
+	}
+
+	public String getBmb_bbh(){
+		return bmb_bbh;
+	}
+
+	public void setTspz(String tspz){
+		this.tspz = tspz;
+	}
+
+	public String getTspz(){
+		return tspz;
+	}
+
+	public void setKpzdbs(String kpzdbs){
+		this.kpzdbs = kpzdbs;
+	}
+
+	public String getKpzdbs(){
+		return kpzdbs;
+	}
+
+	public void setFphxz(String fphxz){
+		this.fphxz = fphxz;
+	}
+
+	public String getFphxz(){
+		return fphxz;
+	}
+
+	public void setSpbm(String spbm){
+		this.spbm = spbm;
+	}
+
+	public String getSpbm(){
+		return spbm;
+	}
+
+	public void setZxbm(String zxbm){
+		this.zxbm = zxbm;
+	}
+
+	public String getZxbm(){
+		return zxbm;
+	}
+
+	public void setYhzcbs(String yhzcbs){
+		this.yhzcbs = yhzcbs;
+	}
+
+	public String getYhzcbs(){
+		return yhzcbs;
+	}
+
+	public void setLslbs(String lslbs){
+		this.lslbs = lslbs;
+	}
+
+	public String getLslbs(){
+		return lslbs;
+	}
+
+	public void setZzstsgl(String zzstsgl){
+		this.zzstsgl = zzstsgl;
+	}
+
+	public String getZzstsgl(){
+		return zzstsgl;
+	}
+
+	public void setXmmc(String xmmc){
+		this.xmmc = xmmc;
+	}
+
+	public String getXmmc(){
+		return xmmc;
+	}
+
+	public void setGgxh(String ggxh){
+		this.ggxh = ggxh;
+	}
+
+	public String getGgxh(){
+		return ggxh;
+	}
+
+	public void setDw(String dw){
+		this.dw = dw;
+	}
+
+	public String getDw(){
+		return dw;
+	}
+
+	public void setXmsl(String xmsl){
+		this.xmsl = xmsl;
+	}
+
+	public String getXmsl(){
+		return xmsl;
+	}
+
+	public void setXmdj(String xmdj){
+		this.xmdj = xmdj;
+	}
+
+	public String getXmdj(){
+		return xmdj;
+	}
+
+	public void setXmje(String xmje){
+		this.xmje = xmje;
+	}
+
+	public String getXmje(){
+		return xmje;
+	}
+
+	public void setSl(String sl){
+		this.sl = sl;
+	}
+
+	public String getSl(){
+		return sl;
+	}
+
+	public void setSe(String se){
+		this.se = se;
+	}
+
+	public String getSe(){
+		return se;
+	}
+
+
+
+
 /*
 *数据库查询参数
 */
@@ -486,20 +726,5 @@ public class Bill implements Serializable{
 		return whereTerm;
 	}
 
-	public Integer getState() {
-		return State;
-	}
-
-	public void setState(Integer state) {
-		State = state;
-	}
-	
-	public String getOldorder_num() {
-		return oldorder_num;
-	}
-
-	public void setOldorder_num(String oldorder_num) {
-		this.oldorder_num = oldorder_num;
-	}
 }
 

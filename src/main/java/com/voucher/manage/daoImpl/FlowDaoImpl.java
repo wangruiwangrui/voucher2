@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.alibaba.fastjson.JSONObject;
 import com.rmi.server.Server;
 import com.voucher.manage.dao.FlowDao;
 import com.voucher.manage.daoModel.RoomInfo;
@@ -51,12 +52,19 @@ public class FlowDaoImpl extends JdbcDaoSupport implements FlowDao{
 		}
 
 		Map map = new HashMap<>();
-
+		
+		String imageDataString=null;
+		
+		if(imageDataList.size()>0) {
+			JSONObject jObject =  new JSONObject();
+			imageDataString =  jObject.toJSONString(imageDataList);
+		}
+		
 		if(i>0){
 			
 			try{
 				System.out.println("processDefinitionKey==========="+processDefinitionKey+"userId++++++++"+userId+"variableData==============="+variableData+"imageDataList================="+imageDataList+"className========="+className);
-				map=server.startProcessInstance(processDefinitionKey, userId, variableData, imageDataList,className);
+				map=server.startProcessInstance(processDefinitionKey, userId, variableData, imageDataString,className);
 				
 				if(map.get("state").equals("流程启动失败"))
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

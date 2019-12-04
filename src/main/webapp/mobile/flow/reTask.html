@@ -389,12 +389,28 @@ body, html, #allmap {
 	        
 	        console.log(imgs);
 	        
-	        $("#img0").children('div').remove();
-			if(imgs!=null){
-				var i = 0;
-   				for(; i < imgs.length; i++){
+	        $("#img1").children('div').remove();
+            $("#img1").empty();
+		    	if(imgs!=null){
+                 	   var i = 0;
+                        for(; i < imgs.length; i++){
+                     	  console.log("----",imgs[0].uRI);
+                       	 src="/voucher/Desktop/pasoft/photo/"+imgs[i].uRI;
+                       	 var html = '<div class="weui-cell weui-cell_swiped" id="chilePhoto">' +
+								'<div class="weui-cell__bd">' +
+								'<div class="weui-cell">' +
+								'<div class="weui-cell__hd"><img src="' + src + '" alt="" style="width:60px;height:60px;margin-right:5px;display:block"></div>' +
+								'<div class="weui-cell__bd"><p></p></div>' +
+								/* '<div class="weui-cell__ft">向左滑动删除</div>' + */
+								'</div>' +
+								'</div>' +
+								'<div class="weui-cell__ft">' +
+								/* '<a id="' + imgs[i].uRI + '" class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" href="javascript:">删除图片</a>' + */
+								'</div>' +
+								'</div>'
+							$("#img").append(html);
 	   
-					var data=imgs[i];
+					/* var data=imgs[i];
 					var name=data.name;
 					var uri=data.uri;
 					var date=actionTime(data.date);
@@ -428,7 +444,7 @@ body, html, #allmap {
 					a.appendChild(div);
 					//a.appendChild(div2);
 					panel.appendChild(a);
-					$("#img0").append(panel);
+					$("#img0").append(panel); */
 					}
 				
 				}
@@ -466,7 +482,7 @@ body, html, #allmap {
 						fareItem.innerHTML=obj.fareItem;
 						$("#fareItem").append(fareItem);
 
-						if(imgs!=null){
+/* 						if(imgs!=null){
 							var i = 0;
 							for(; i < imgs.length; i++){
 							   
@@ -507,7 +523,7 @@ body, html, #allmap {
 								$("#img").append(panel);
 							}
 						        	          		   
-						}
+						} */
 					}
 				});
 			}

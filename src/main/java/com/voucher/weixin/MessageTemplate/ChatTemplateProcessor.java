@@ -35,9 +35,7 @@ public class ChatTemplateProcessor {
 		System.out.println("templatemessage="+jsonString);
 		String requestUrl = SEND_TEMPLAYE_MESSAGE_URL.replace("ACCESS_TOKEN", accessToken);	
 		JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "POST", jsonString);
-		System.out.println("=====================");
-		MyTestUtil.print(jsonObject);
-		System.out.println("jsonObject="+jsonObject);	
+	
 		if (null != jsonObject) {
 			int errorCode = jsonObject.getInteger("errcode");		
 			if (0 == errorCode) {
@@ -55,26 +53,25 @@ public class ChatTemplateProcessor {
        		    Map<String, Object> paramMap=new HashMap<>();  
        		    paramMap.put("accessToken", accessToken);
       		    paramMap.put("campusId", campusId);
-      		    paramMap.put("campusId", campusId);
       		    Date date=new Date();
       		    paramMap.put("createTime", date);
-      		    System.out.println("errorcode="+errorCode+"   accessToken="+accessToken);
+      		    
       		    weiXinMapper.updateCampus(paramMap);
       		    requestUrl = SEND_TEMPLAYE_MESSAGE_URL.replace("ACCESS_TOKEN", accessToken);
       		    jsonObject = CommonUtil.httpsRequest(requestUrl, "POST", jsonString);
-      			System.out.println("jsonObject="+jsonObject);
+      			
       			errorCode = jsonObject.getInteger("errcode");		
     			if (0 == errorCode) {
-    				System.out.println("消息发送成功");
+    				
     				return "消息发送成功";
     			}else{
     				String errorMsg = jsonObject.getString("errmsg");
-    				System.out.println("消息发送失败,错误是 "+errorCode+",错误信息是"+ errorMsg);
+    				
     			    return "消息发送失败,错误是 "+errorCode+",错误信息是"+ errorMsg;
     			}
        		  }else{
 				String errorMsg = jsonObject.getString("errmsg");
-				System.out.println("消息发送失败,错误是 "+errorCode+",错误信息是"+ errorMsg);
+				
 			    return "消息发送失败,错误是 "+errorCode+",错误信息是"+ errorMsg;
 			}
 		}else{

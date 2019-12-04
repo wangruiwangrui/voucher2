@@ -78,6 +78,11 @@ $('#redBill').click(function(){
 	   $('#content').load('pages/redBill.html');
 	   $('#content').attr('src','pages/redBill.html');
 	 });
+$('#payment').click(function(){
+	   $('#content').load('pages/payment.html');
+	   $('#content').attr('src','pages/payment.html');
+	 });
+
 
 if(getCookie("type")==0)
  $('#brand').text("用户 : "+getCookie("campusAdmin")+" (管理员)");

@@ -31,6 +31,7 @@ import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.PreMessage;
+import com.voucher.manage.daoModel.TTT.SendMessage;
 import com.voucher.manage.mapper.MessageListMapper;
 import com.voucher.manage.mapper.NoticeMapper;
 import com.voucher.manage.mapper.UsersMapper;
@@ -603,10 +604,10 @@ public class WechatSendMessageController {
 
 		WeiXin weixin = weiXinMapper.getWeiXinByCampusId(campusId);
 		
-		PreMessage preMessage = new PreMessage();
+		SendMessage sendMessage = new SendMessage();
 
-		preMessage.setOptAdd(users.getName());
-		preMessage.setMessage(Message);
+		sendMessage.setOperator(users.getName());
+		sendMessage.setMessage(Message);
 
 		HttpClient httpClient = new HttpClient();
 
@@ -621,22 +622,22 @@ public class WechatSendMessageController {
 
 		String GUID = UUID.randomUUID().toString();
 
-		preMessage.setGUID(GUID);
-		preMessage.setPhone(phone);
-		preMessage.setOptDate(new Date());
+		sendMessage.setPhone(phone);
+		Date date = new Date();
+		sendMessage.setSendDate(date.toString());
 		
 		if(charter!=null&&!charter.equals(""))
-			preMessage.setPhoneWho(charter);
+			sendMessage.setSendWho(charter);
 		
 		int i=Integer.parseInt(r);
 		
 		if(i>0){
-			  preMessage.setState("发送成功");
+			sendMessage.setState("发送成功");
 		  }else{
-			  preMessage.setState("发送失败");
+			  sendMessage.setState("发送失败");
 		  }
 		
-		roomInfoDao.insertPreMessage(preMessage);
+		roomInfoDao.insertSendMessage(sendMessage);
 
 		return i;
 	}

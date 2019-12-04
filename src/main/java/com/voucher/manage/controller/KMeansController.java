@@ -7,33 +7,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import javax.security.auth.kerberos.KerberosKey;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.KMeansDao;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
-import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.mapper.UsersMapper;
 import com.voucher.manage.redis.JedisUtil1;
-import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.KMeans.BisectingKMeans2;
 import com.voucher.manage.tools.KMeans.Grid;
@@ -182,8 +176,127 @@ public class KMeansController {
 		return list;
 	}
 	
-//	@CrossOrigin
 	@RequestMapping("/getAllRoom")
+	public @ResponseBody Map<String, Object> getAllRoom2(@RequestParam Integer page,String id,
+			HttpServletRequest request) {
+		
+		Map searchMap=new HashMap<>();
+		
+		Map resultMap=new HashMap<>();
+		
+		List<RoomInfo_Position> roomInfo_Positions=new ArrayList<>();
+		
+		CopyOnWriteArrayList<ArrayList<Double>> points=null;
+		System.out.print("id="+id);
+		if(id!=null&&!id.equals("")&&JedisUtil1.exist(id)){
+			List<ArrayList<Double>> list= JedisUtil1.getObject(id);
+			CopyOnWriteArrayList<ArrayList<Double>> copyOnWriteArrayList = new CopyOnWriteArrayList<ArrayList<Double>>();
+			copyOnWriteArrayList.addAll(list);
+			points = copyOnWriteArrayList;
+			MyTestUtil.print(list);			
+			resultMap=kMeansDao.findAssetByLngLat(points, page,null, searchMap);
+			MyTestUtil.print(resultMap);
+			List<Map> roominfos=null;
+			
+			if(resultMap!=null)
+				roominfos= (List) resultMap.get("rows");
+			else
+				return null;
+			
+			Iterator<Map> iterator=roominfos.iterator();
+			
+			while (iterator.hasNext()) {
+				RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+				Map map2=(Map) iterator.next();
+				String GUID=(String) map2.get("GUID");
+				roomInfo_Position.setGUID(GUID);
+				roomInfo_Positions.add(roomInfo_Position);
+			}
+			
+			Map<String, Object> fileBytes = mobileDao.roomInfo_PositionImageQuery(request, roomInfo_Positions);
+			
+			List rows=(List) resultMap.get("rows");
+			
+			for (Map.Entry<String, Object> entry : fileBytes.entrySet()) {
+			
+				Iterator<Map> iterator2=rows.iterator();
+				int i=0;
+				while(iterator2.hasNext()) {
+					Map m=iterator2.next();
+					String guid=(String) m.get("GUID");
+					if(guid.equals(entry.getKey())) {
+						m.put("url", entry.getValue());
+						rows.set(i, m);
+						continue;
+					}
+					i++;
+				}
+		
+			}
+			
+			resultMap.put("rows",rows);
+			
+		}else{
+		
+			int offset=(page-1)*10;
+			
+			int limit=10;
+			
+			resultMap=assetsDAO.findAllRoomInfo_Position(limit, offset, "Num", "asc", "or", searchMap);
+			
+			roomInfo_Positions=(List) resultMap.get("rows");
+			
+			Map<String, Object> fileBytes = mobileDao.roomInfo_PositionImageQuery(request, roomInfo_Positions);
+			
+			List rows=(List) resultMap.get("rows");
+			
+			List rows2=new ArrayList();
+			
+			Iterator<Map> iterator2=rows.iterator();
+			
+			while(iterator2.hasNext()) {
+				RoomInfo_Position roomInfo_Position=(RoomInfo_Position) iterator2.next();
+				String guid=(String) roomInfo_Position.getGUID();
+				
+					Map map2=new HashMap();
+					map2.put("GUID", guid);
+					map2.put("address", roomInfo_Position.getAddress());
+					map2.put("num", roomInfo_Position.getNum());
+					map2.put("region", roomInfo_Position.getRegion());
+					map2.put("roomProperty", roomInfo_Position.getRoomProperty());
+					map2.put("state", roomInfo_Position.getState());
+					map2.put("buildArea", roomInfo_Position.getBuildArea());
+					map2.put("lng", roomInfo_Position.getLng());
+					map2.put("lat", roomInfo_Position.getLat());
+					
+										
+					for (Map.Entry<String, Object> entry : fileBytes.entrySet()) {
+						
+						if(guid.equals(entry.getKey())) {
+							map2.put("url", entry.getValue());
+							continue;
+						}
+			
+				
+					}
+					rows2.add(map2);
+					
+				}
+
+		
+			resultMap.put("rows",rows2);
+		}
+		
+		
+		resultMap.put("points", points);
+		
+		
+		return resultMap;
+	}
+
+	
+//	@CrossOrigin
+	//@RequestMapping("/getAllRoom")
 	public @ResponseBody Map<String, Object> getAllRoom(@RequestParam Integer page,String id,
 			HttpServletRequest request,HttpServletResponse resp) {
 		
@@ -303,6 +416,8 @@ public class KMeansController {
 		
 		return resultMap;
 	}
+	
+	
 	
 	@RequestMapping("/getRoomByPoint")
 	public @ResponseBody Map<String, Object> getRoomByPoint(Double lng,Double lat,

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.PreMessage;
+import com.voucher.manage.daoModel.TTT.SendMessage;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 
 public interface RoomInfoDao {
@@ -75,7 +76,7 @@ public interface RoomInfoDao {
 	public Map<String, Object> findAllPreMessage(Integer limit, Integer offset, String sort,
 			String order,Map search);
 	
-	public Integer insertPreMessage(PreMessage preMessage);
+	public Integer insertSendMessage(SendMessage sendMessage);
 	
 	public List getAllChartInfo();
 	
@@ -85,12 +86,14 @@ public interface RoomInfoDao {
 
 	public Integer updateEinByGUID(ChartInfo chartInfo);
 
-	public List getAllBill(Integer limit, String order, String sort, Map where);
+	public List getAllBill(Integer limit, Integer offset, String order, String sort, Map where);
 
 	public int getAllBillTotal(Integer limit, String order, String sort, Map where);
 
-	public List getAllRedBill(Integer limit, String order, String sort, Map where,Integer campusId);
+	public List getAllRedBill(Integer limit, Integer offset, String order, String sort, Map where,Integer campusId);
 
 	public int getAllRedBillTotal(Integer limit, String order, String sort, Map where,Integer campusId);
+
+	public Map getAllErrBill(Integer limit , Integer offset, String order, String sort, Map where, Integer campusId);
 
 }

@@ -241,6 +241,8 @@ $.get("/voucher/oauth/test.do", {
    	 				top.location.href="index.html";
    	 			}else if(campusId == 2){
    	 				top.location.href="index2.html";
+   	 			}else if(campusId == 3){
+   	 				top.location.href="index3.html";
    	 			}
    	 			
    	 			

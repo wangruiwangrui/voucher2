@@ -5,10 +5,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.jdbc.core.RowMapper;
@@ -19,7 +17,6 @@ import com.voucher.manage.daoModel.Floor;
 import com.voucher.manage.daoModel.RoomChangeHireLog;
 import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.RoomInfoRowMapper;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.Bill;
@@ -28,27 +25,24 @@ import com.voucher.manage.daoModel.TTT.FileSelfBelong;
 import com.voucher.manage.daoModel.TTT.HireList;
 import com.voucher.manage.daoModel.TTT.Payment_Info;
 import com.voucher.manage.daoModel.TTT.PreMessage;
-import com.voucher.manage.daoModel.TTT.RoomRepairLog;
+import com.voucher.manage.daoModel.TTT.SendMessage;
+import com.voucher.manage.daoModel.TTT.PreBill;
 import com.voucher.manage.daoModel.invoice.RedBill;
+import com.voucher.manage.daoModelJoin.Payment_ErrBill_Join;
 import com.voucher.manage.daoModelJoin.RoomChangeHireLog_RoomChartLog;
 import com.voucher.manage.daoModelJoin.RoomInfo_Neaten_Join;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoRowMapper.RowMappers;
-import com.voucher.manage.daoRowMapper.RowMappersJoin;
 import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.SelectSQL;
-import com.voucher.manage.daoSQL.SelectSQLJoin;
 import com.voucher.manage.daoSQL.SelectSqlJoinExe;
 import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
-
-
-import com.voucher.manage.singleton.Singleton;
 
 public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	
@@ -978,9 +972,9 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	}
 
 	@Override
-	public Integer insertPreMessage(PreMessage preMessage) {
+	public Integer insertSendMessage(SendMessage sendMessage) {
 		// TODO Auto-generated method stub
-		return InsertExe.get(this.getJdbcTemplate(), preMessage);
+		return InsertExe.get(this.getJdbcTemplate(), sendMessage);
 	}
 
 	@Override
@@ -1048,13 +1042,14 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	}
 
 	@Override
-	public List getAllBill(Integer limit, String order, String sort, Map search) {
+	public List getAllBill(Integer limit,Integer offset, String order, String sort, Map search) {
 		Bill bill = new Bill();
 		bill.setOffset(0);
 		bill.setLimit(limit);
 		bill.setNotIn("BillId");
 		bill.setSort(sort);
 		bill.setOrder(order);
+		bill.setOffset(offset);
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    bill.setWhereTerm("AND ");
@@ -1097,15 +1092,14 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	}
 
 	@Override
-	public List getAllRedBill(Integer limit, String order, String sort, Map search,Integer campusId) {
+	public List getAllRedBill(Integer limit, Integer offset,String order, String sort, Map search,Integer campusId) {
 		
-		RedBill bill = new RedBill();
-		bill.setOffset(0);
+		Bill bill = new Bill();
 		bill.setLimit(limit);
-		bill.setNotIn("RedBillId");
+		bill.setNotIn("BillId");
 		bill.setSort(sort);
 		bill.setOrder(order);
-		
+		bill.setOffset(offset);
 		if(!search.isEmpty()){
 			String[] where = TransMapToString.get(search);
 		    bill.setWhereTerm("AND ");
@@ -1117,10 +1111,10 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 
 	@Override
 	public int getAllRedBillTotal(Integer limit, String order, String sort, Map search,Integer campusId) {
-		RedBill bill = new RedBill();
+		Bill bill = new Bill();
 		bill.setOffset(0);
 		bill.setLimit(limit);
-		bill.setNotIn("RedBillId");
+		bill.setNotIn("BillId");
 		bill.setSort(sort);
 		bill.setOrder(order);
 		if(!search.isEmpty()){
@@ -1146,6 +1140,33 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		Integer count = (Integer) map.get("");
 		
 		return count;
+	}
+
+	@Override
+	public Map getAllErrBill(Integer limit , Integer offset, String order, String sort, Map search, Integer campusId) {
+		
+		Bill bill = new Bill();
+		bill.setLimit(limit);
+		bill.setNotIn("BillId");
+		bill.setSort(sort);
+		bill.setOrder(order);
+		bill.setOffset(offset);
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    bill.setWhere(where);
+		}
+		
+		List list = SelectExe.get(getJdbcTemplate(), bill);
+		Map countMap = SelectExe.getCount(getJdbcTemplate(), bill);
+		
+		int count =(int) countMap.get("");
+		
+		Map map = new HashMap();
+		
+		map.put("rows", list);
+		map.put("total", count);
+		
+		return map;
 	}
 
 }

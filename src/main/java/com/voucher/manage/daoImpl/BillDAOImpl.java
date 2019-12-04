@@ -7,19 +7,24 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.voucher.manage.dao.BillDAO;
 import com.voucher.manage.daoModel.TTT.Bill;
 import com.voucher.manage.daoModel.TTT.BillServerInfo;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.CompanyMsg;
 import com.voucher.manage.daoModel.TTT.Payment_Info;
+import com.voucher.manage.daoModel.TTT.PreBill;
 import com.voucher.manage.daoModel.invoice.BillImg;
+import com.voucher.manage.daoModel.invoice.BusinessData;
 import com.voucher.manage.daoModel.invoice.BusinessResult;
 import com.voucher.manage.daoModel.invoice.BusinessRows;
 import com.voucher.manage.daoModel.invoice.Common_Fpkj_Xmxx;
+import com.voucher.manage.daoModel.invoice.ErrBill;
 import com.voucher.manage.daoModel.invoice.RedBill;
 import com.voucher.manage.daoModel.invoice.RedBusinessResult;
 import com.voucher.manage.daoModel.invoice.RedBusinessRows;
@@ -148,7 +153,14 @@ public class BillDAOImpl extends JdbcDaoSupport implements BillDAO {
 
 
 	@Override
-	public Integer InsertBillFirst(BusinessResult result, Integer campusId) {
+	public Integer InsertBillFirst(String out_trade_no, BusinessResult result, Integer campusId) {
+		
+		PreBill pInfo = new PreBill();
+		String[] where2 = {"out_trade_no=",out_trade_no}; 
+		pInfo.setState(1);
+		pInfo.setWhere(where2);
+		UpdateExe.get(getJdbcTemplate(), pInfo);
+		
 		Bill bill = new Bill();
 		BusinessRows rows = (BusinessRows) result.getRows().get(0);
 		//Common_Fpkj_Xmxx common = (Common_Fpkj_Xmxx) rows.getCommon_fpkj_xmxx();
@@ -443,5 +455,172 @@ public class BillDAOImpl extends JdbcDaoSupport implements BillDAO {
  		return UpdateExe.get(getJdbcTemplate(), redBill);
 	}
 
+	@Override
+	public Integer InserIntoPreBill(BusinessData bData, Integer campusId) {
+		PreBill preBill = new PreBill();
+		BeanUtils.copyProperties(bData, preBill);
+		
+		preBill.setOut_trade_no(bData.getOrder_num());
+		preBill.setCampusId(campusId);
+		preBill.setState(0);
+		return InsertExe.get(getJdbcTemplate(), preBill);
+	}
 
+	@Override
+	public Integer updateErrMsg(String out_trade_no,String result) {
+		PreBill preBill = new PreBill();
+		preBill.setErr(result);
+		String[] where = {"out_trade_no = ",out_trade_no};
+		preBill.setWhere(where);
+		return UpdateExe.get(getJdbcTemplate(), preBill);
+	}
+
+	@Override
+	public PreBill selectPreBill(String out_trade_no) {
+		PreBill preBill = new PreBill();
+		String[] where = {"out_trade_no=",out_trade_no};
+		preBill.setWhere(where);
+		preBill.setLimit(10);
+		preBill.setOffset(0);
+		preBill.setNotIn("ID");
+		preBill.setSort("ID asc");
+		List list = SelectExe.get(getJdbcTemplate(), preBill);
+		if(list.size()>0) {
+			preBill = (PreBill) list.get(0);
+		}
+		return preBill;
+	}
+
+	@Override
+	public Integer InserIntoBill(BusinessData bData, Integer campusId) {
+		Bill bill = new Bill();
+		BeanUtils.copyProperties(bData, bill);
+		BeanUtils.copyProperties(bData.getCommon_fpkj_xmxx().get(0), bill);
+		bill.setCampusId(campusId);
+		bill.setPreState(0);
+		return InsertExe.get(getJdbcTemplate(), bill);
+	}
+
+	@Override
+	public Integer updatePreBill(String out_trade_no, BusinessResult result) {
+		Bill bill = new Bill();
+		BusinessRows rows = (BusinessRows) result.getRows().get(0);
+		BeanUtils.copyProperties(rows, bill);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		String year = rows.getKprq().substring(0, 4);
+		String month = rows.getKprq().substring(4, 6);
+		String day = rows.getKprq().substring(6, 8);
+		String hour = rows.getKprq().substring(8, 10);
+		String minute = rows.getKprq().substring(10, 12);
+		String ss = rows.getKprq().substring(12,14);
+		String time = year+"-"+month+"-"+day+" "+hour+":"+minute+":"+ss;
+		Date dat=null;
+		try {
+			dat = sdf.parse(time);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		bill.setKprq(dat);
+		
+		String[] where = {"order_num=",out_trade_no};
+		bill.setWhere(where);
+		//设置预开票状态
+		bill.setPreState(1);
+		//设置开票状态
+		bill.setState(1);
+		bill.setMsg(result.getMsg());
+		BeanUtils.copyProperties(rows.getCommon_fpkj_xmxx().get(0), bill);
+		return UpdateExe.get(getJdbcTemplate(), bill);
+	}
+
+	@Override
+	public Integer updatePreBillMsg(String out_trade_no, BusinessResult result) {
+		Bill bill = new Bill();
+		String[] where = {"order_num=",out_trade_no};
+		bill.setWhere(where);
+		bill.setPreState(2);
+		bill.setMsg(result.getMsg());
+		return UpdateExe.get(getJdbcTemplate(), bill);
+	}
+
+	@Override
+	public Bill selectBillByOrderNum(String out_trade_no) {
+		Bill bill = new Bill();
+		String[] where = {"order_num = ",out_trade_no};
+		bill.setWhere(where);
+		bill.setLimit(10);
+		bill.setOffset(0);
+		bill.setNotIn("BillId");
+		bill.setSort("BillId asc");
+		List list = SelectExe.get(this.getJdbcTemplate(), bill);
+		if (list.size()>0) {
+			bill = (Bill) list.get(0);
+		}
+		return bill;
+	}
+
+	@Override
+	public Integer updateToRed(RedBusinessResult result, String out_trade_no) {
+		Bill bill = new Bill();
+		String[] where = {"order_num= ",out_trade_no};
+		bill.setWhere(where);
+		bill.setOrder_num(result.getRows().get(0).getOrder_num());
+		bill.setOldorder_num(out_trade_no);
+		bill.setState(2);
+		BeanUtils.copyProperties(result.getRows().get(0).getCommon_fpkj_xmxx().get(0), bill);
+		return UpdateExe.get(getJdbcTemplate(), bill);
+	}
+
+	@Override
+	public Integer updateRedBillMsg(String out_trade_no, RedBusinessResult result) {
+		Bill bill = new Bill();
+		String[] where = {"order_num= ",out_trade_no};
+		bill.setWhere(where);
+		bill.setMsg(result.getMsg());
+		return UpdateExe.get(getJdbcTemplate(), bill);
+	}
+
+	@Override
+	public Integer updateToBlue(BusinessResult result,String out_trade_noRed) {
+		Bill bill = new Bill();
+		bill.setOrder_num(result.getRows().get(0).getOrder_num());
+		String[] where = {"order_num= ",out_trade_noRed};
+		bill.setWhere(where);
+		bill.setState(1);
+		bill.setPreState(1);
+		BeanUtils.copyProperties(result,bill);
+		BeanUtils.copyProperties(result.getRows().get(0),bill);
+		BeanUtils.copyProperties(result.getRows().get(0).getCommon_fpkj_xmxx().get(0), bill);
+		
+		return UpdateExe.get(getJdbcTemplate(), bill);
+	}
+
+	@Override
+	public Integer updateBillMsg(String out_trade_noRed, BusinessResult result) {
+		Bill bill = new Bill();
+		String[] where = {"order_num= ",out_trade_noRed};
+		bill.setWhere(where);
+		bill.setMsg(result.getMsg());
+		return UpdateExe.get(getJdbcTemplate(), bill);
+	}
+
+	@Override
+	public Payment_Info getPaymenInfo(String out_trade_no_new) {
+		Payment_Info pInfo = new Payment_Info();
+		String[] where = {"out_trade_no=",out_trade_no_new};
+		pInfo.setWhere(where);
+		pInfo.setLimit(10);
+		pInfo.setOffset(0);
+		pInfo.setNotIn("PaymentId");
+		pInfo.setSort("PaymentId asc");
+		List list = SelectExe.get(getJdbcTemplate(), pInfo);
+		
+		if (list.size()>0) {
+			pInfo = (Payment_Info) list.get(0);
+		}
+	
+		return pInfo;
+	}
 }

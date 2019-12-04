@@ -16,107 +16,81 @@ public class BusinessData implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
     //固定参数"API"(必填)
-    
     private String data_resources="" ;
     
     //销售方纳税人识别号(必填)
-    
     private String nsrsbh="" ;
     
     //业务单据号；必须是唯一的(必填)
-    
     private String order_num="" ;
     
     //税收编码版本号，参数“13.0”，具体值请询问提供商(必填)
-    
     private String bmb_bbh="" ;
     
     //征税方式 0：普通征税 1: 减按计增 2：差额征税(必填)
-    
     private String zsfs="" ;
     
     //特殊票种标识:“00”=正常票种,“01”=农产品销售,“02”=农产品收购(非必填)
-    
     private String tspz="" ;
     
     //销售方纳税人识别号(必填)
-    
     private String xsf_nsrsbh="" ;
     
     //销售方名称(必填)
-    
     private String xsf_mc="" ;
     
     //销售方地址、电话(必填)
-    
     private String xsf_dzdh="" ;
     
     //销售方开户行名称与银行账号(非必填)
-    
     private String xsf_yhzh="" ;
     
     //购买方纳税人识别号(税务总局规定企业用户为必填项)
-    
     private String gmf_nsrsbh="" ;
     
     //购买方名称(必填)
-    
     private String gmf_mc="" ;
     
     //购买方地址、电话(非必填)
-    
     private String gmf_dzdh="" ;
     
     //购买方开户行名称与银行账号(非必填)
-    
     private String gmf_yhzh="" ;
     
     //开票人(必填)
-    
     private String kpr="" ;
     
     //收款人(非必填)
-    
     private String skr="" ;
     
     //复核人(非必填)
-    
     private String fhr="" ;
     
     //原发票代码(非必填)
-    
     private String yfp_dm="" ;
-    
+
     //原发票号码(非必填)
-    
     private String yfp_hm="" ;
     
     //价税合计;单位：元（2位小数） 价税合计=合计金额(不含税)+合计税额 注意：不能使用商品的单价、数量、税率、税额来进行累加，最后四舍五入，只能是总合计金额+合计税额(必填)
-    
     private String jshj="" ;
     
     //合计金额 注意：不含税，单位：元（2位小数）(必填)
-    
     private String hjje="" ;
     
     //合计税额单位：元（2位小数）(必填)
-    
     private String hjse="" ;
     
     //扣除额小数点后2位，当ZSFS为2时扣除额为必填项
-    
     private String kce="" ;
     
     //备注 (长度100字符)(非必填)
-    
     private String bz="" ;
     
     //开票终端标示(开票点代码,通常不用传；如需要按照开票点固定开票则传入此值)(非必填)
-    
     private String kpzdbs="" ;
     
     //商品明细
-    
     private List<Common_Fpkj_Xmxx> common_fpkj_xmxx ;
 
 	public String getData_resources() {

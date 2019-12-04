@@ -1,9 +1,7 @@
 package com.voucher.manage.filter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -18,21 +16,15 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.voucher.manage.dao.AssetsDAO;
-import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.mapper.UsersMapper;
-import com.voucher.manage.mapper.WeiXinMapper;
 import com.voucher.manage.model.Users;
-import com.voucher.manage.model.WeiXin;
-import com.voucher.manage.service.UserService;
 import com.voucher.manage.service.WeiXinService;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
@@ -122,7 +114,7 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        			
 		        			/**
 		        			 * 通过所关注微信公众号判断是否是当前合同公司对应公众号
-		        			 		       			
+		        			*		       			
 		        			WeiXin campus = weixinService.getWeiXinByCampusId(campusId);
 		        			String campusName = campus.getCampusName();
 		        			String manageItem = "";

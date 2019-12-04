@@ -137,7 +137,8 @@ span {
   	</script>
 	<script type="text/javascript" src="../../singleton.js"></script>
 	<script>
-    axios.defaults.baseURL = DOMAIN+'/manage';
+    //axios.defaults.baseURL = DOMAIN+'/manage';
+    axios.defaults.baseURL = 'http://192.168.100.185:8080/manage';
     var app = new Vue({
       el: '#app',
       filters: {

@@ -1,8 +1,6 @@
 package com.voucher.manage.filter;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,15 +11,8 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.log4j.Logger;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.alibaba.fastjson.JSON;
-import com.voucher.manage.tools.Constants;
-import com.voucher.manage.tools.Sign;
 
 /**
  * 鐎圭偠顢戠�佃甯撮崣锝堢箻鐞涘瞼顒烽崥锟�

@@ -4,35 +4,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
-import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.voucher.manage.dao.KMeansDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.Assets.RoomInfo_Hidden_Item;
-import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
-import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoSQL.SelectExe;
-import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.SelectSqlJoinExe;
-import com.voucher.manage.mapper.UsersMapper;
 import com.voucher.manage.singleton.Singleton;
-import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
 
 public class KMeansDAOImpl extends JdbcDaoSupport implements KMeansDao{
@@ -84,14 +74,14 @@ public class KMeansDAOImpl extends JdbcDaoSupport implements KMeansDao{
 		int end=page*limit;
 		
 		int max=points.size();
-		
+		/*
 		if(max<page*limit)
 			return null;
-		
+		*/
 		if(max<end)
 			end=max;
 		
-		String sql=" select RoomInfo.GUID,Address,Num,Region,RoomProperty,State,BuildArea,lng,lat from RoomInfo "
+		String sql=" select top "+limit+" *from (select ROW_NUMBER() OVER (ORDER BY Position.id) AS rows , RoomInfo.GUID,Address,Num,Region,RoomProperty,State,BuildArea,lng,lat from RoomInfo "
 				+ " left join Position on RoomInfo.GUID=Position.GUID ";
 		
 		String sql2=" select count(*) from RoomInfo "
@@ -101,7 +91,7 @@ public class KMeansDAOImpl extends JdbcDaoSupport implements KMeansDao{
 		
 		String sql1="";
 		
-		for(int start=(page-1)*limit;start<end;start++){
+		for(int start=0;start<end;start++){
 			ArrayList<Double> arrayList=points.get(start);
 			double lng=arrayList.get(0);
 			double lat=arrayList.get(1);
@@ -115,7 +105,7 @@ public class KMeansDAOImpl extends JdbcDaoSupport implements KMeansDao{
 		
 		sql1=sql1.substring(0,sql1.length()-1);
 		
-		sql=sql+"where lng in ("+sql0+") and lat in ("+sql1+")";
+		sql=sql+"where (lng in ("+sql0+") and lat in ("+sql1+")))as t1  where rows >"+(page-1)*limit;
 		
 		sql2=sql2+"where lng in ("+sql0+") and lat in ("+sql1+")";
 		

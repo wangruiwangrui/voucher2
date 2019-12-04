@@ -168,7 +168,7 @@ public class RoomInfoController {
 	@ResponseBody
 	public  Map getBlueBill(@RequestParam Integer campusId,@RequestParam String State,@RequestParam String datepicker,@RequestParam String datepicker2, Integer limit, Integer offset, String sort,String order,
 			String search,HttpServletRequest request) {
-		
+		Integer preState = 1;
 		if(order!=null&&order.equals("asc")){
 			order="asc";
 		}
@@ -224,9 +224,10 @@ public class RoomInfoController {
 			where.put("kprq < ", endTime);
 		}
 		where.put("State=", State);
+		where.put("preState=", preState.toString());
 		where.put("campusId= ", campusId.toString());
 		
-		List list = roomInfoDao.getAllBill(limit,order,sort,where);
+		List list = roomInfoDao.getAllBill(limit,offset,order,sort,where);
 		int count = roomInfoDao.getAllBillTotal(limit,order,sort,where);
 		
 		Map map=new HashMap<>();
@@ -238,7 +239,7 @@ public class RoomInfoController {
 	
 	@RequestMapping("/getRedBill")
 	@ResponseBody
-	public  Map getRedBill(@RequestParam Integer campusId, @RequestParam String state,@RequestParam String datepicker,@RequestParam String datepicker2, Integer limit, Integer offset, String sort,String order,
+	public  Map getRedBill(@RequestParam Integer campusId, @RequestParam String State,@RequestParam String datepicker,@RequestParam String datepicker2, Integer limit, Integer offset, String sort,String order,
 			 String search,HttpServletRequest request) {
 		if(order!=null&&order.equals("asc")){
 			order="asc";
@@ -283,7 +284,9 @@ public class RoomInfoController {
 		if (endTime!=null&&!endTime.equals("")) {
 			where.put("kprq < ", endTime);
 		}
-		where.put("state=", state);
+		Integer preState = 1;
+		where.put("preState=", preState.toString());
+		where.put("State=", State);
 		where.put("campusId= ", campusId.toString());
 		
 		if(sort!=null&&sort.equals("kprq")){
@@ -294,16 +297,81 @@ public class RoomInfoController {
 		 * 默认按id降序排列
 		 */
 		if(sort==null){
-			sort="RedBillId";
+			sort="BillId";
 			order="desc";
 		}
-		List list = roomInfoDao.getAllRedBill(limit,order,sort,where,campusId);
+		List list = roomInfoDao.getAllRedBill(limit,offset,order,sort,where,campusId);
 		int count = roomInfoDao.getAllRedBillTotal(limit,order,sort,where,campusId);
 		
 		Map map=new HashMap<>();
 		
 		map.put("rows", list);
 		map.put("total", count);	
+		return map;
+	}
+	
+	@RequestMapping("/payment")
+	@ResponseBody
+	public  Map payment(@RequestParam Integer campusId,@RequestParam String datepicker,@RequestParam String datepicker2, 
+			Integer limit, Integer offset, String sort,String order,String search,HttpServletRequest request) {
+		if(order!=null&&order.equals("asc")){
+			order="BillId asc";
+		}
+		
+		Calendar calendar; 
+		
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+		
+		String startTime = null;
+		String endTime = null;
+		
+		Date sTime = null;
+		Date eTime = null;
+		
+		try {
+			if(datepicker!=null&&!datepicker.equals("")){
+				sTime=sdf.parse(datepicker);
+				startTime=sdf.format(sTime);
+			}
+			if(datepicker2!=null&&!datepicker2.equals("")){
+				eTime=sdf.parse(datepicker2);	
+				calendar=Calendar.getInstance();
+				calendar.setTime(eTime);
+				calendar.add(Calendar.DATE, 1);
+				endTime=sdf.format(calendar.getTime());	
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Map where=new HashMap<>();
+		
+		if(search!=null&&!search.trim().equals("")){
+			search="%"+search+"%";  
+			where.put("gmf_mc like ", search);
+		}
+		if (startTime!=null&&!startTime.equals("")) {
+			where.put("createTime > ", startTime);
+		}
+		if (endTime!=null&&!endTime.equals("")) {
+			where.put("createTime < ", endTime);
+		}
+
+		where.put("campusId= ", campusId.toString());
+		where.put("preState != ", "1");
+		if(sort!=null&&sort.equals("createTime")){
+			sort="createTime";
+		}
+		/*
+		 * 前端的user表与其它表不一样，必须指定查询参数，否则抛出sql异常
+		 * 默认按id降序排列
+		 */
+		if(sort==null){
+			sort="BillId";
+			order="desc";
+		}
+		Map map = roomInfoDao.getAllErrBill(limit,offset,order,sort,where,campusId);
 		return map;
 	}
 }

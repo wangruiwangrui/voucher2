@@ -15,7 +15,7 @@ public interface Server {
 
 	public Map startProcessInstance(@RequestParam String processDefinitionKey,
 			@RequestParam String userId,@RequestParam String variableData,
-			@RequestParam List imageDataList,@RequestParam String className) throws Exception;
+			@RequestParam String imageDataList,@RequestParam String className) throws Exception;
 	
 	public Map findMyPersonalTask(@RequestParam String assignee,@RequestParam Integer limit,@RequestParam Integer offset);
 	

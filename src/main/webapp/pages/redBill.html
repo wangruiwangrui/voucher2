@@ -28,7 +28,7 @@
 }
 
 .in{
-	width: 90px; 
+	
 	padding: 0 5px 0 5px;
 	line-height: 17px;
 }
@@ -109,7 +109,7 @@
 	</div>
 
 		<!-- 添加商品Modal start -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+	<div class="modal fade" id="myModal" tabindex="1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content" style="margin-top: 10em;">
@@ -169,7 +169,7 @@
 	<script type="text/javascript">
 		var campusId = campusId;
 
-		var url = "roominfo/getRedBill.do?campusId=" + campusId+"&state="+1 + "&datepicker=" 
+		var url = "roominfo/getRedBill.do?campusId=" + campusId+"&State="+2 + "&datepicker=" 
 		+ "&datepicker2=" ;
 		$("#table").bootstrapTable({
 			url : url
@@ -203,17 +203,20 @@
 				alert("请填写购买方名称");
 			}else{
 				
-				$.post("../../voucher/mobile/bill/getNewBill.do", {
+				$.post("../../voucher/mobile/bill/getRetNewBill.do", {
 					out_trade_noRed : out_trade_no,
 					purchaser :gmf_mc,
 					ein : gmf_nsrsbh
 				}, function(data) {
 					data = JSON.parse(data);
 					if(data.result=="SUCCESS"){
+						$("#myModal").modal('hide');
 						setSuccess("发票开取成功！");
 						$('#table').bootstrapTable('refresh');
 					}else{
+						$("#myModal").modal('hide');
 						setSuccess("发票开取失败！");
+						$('#table').bootstrapTable('refresh');
 					}
 				}); 
 			}
@@ -255,7 +258,7 @@
 					$("#datepicker").val(datepicker);
 					$("#datepicker2").val(datepicker);
 
-					var url = "roominfo/getRedBill.do?campusId=" + campusId+"&state="+1+ "&datepicker=" + datepicker
+					var url = "roominfo/getRedBill.do?campusId=" + campusId+"&State="+2+ "&datepicker=" + datepicker
 							+ "&datepicker2=" + datepicker;
 					$(" #table").bootstrapTable('refresh', {
 						url : url
@@ -275,7 +278,7 @@
 
 					$("#datepicker").val(datepicker);
 					$("#datepicker2").val(datepicker2);
-					var url = "roominfo/getRedBill.do?campusId=" + campusId+"&state="+1 + "&datepicker=" + datepicker
+					var url = "roominfo/getRedBill.do?campusId=" + campusId+"&State="+2 + "&datepicker=" + datepicker
 							+ "&datepicker2=" + datepicker2;
 					$(" #table").bootstrapTable('refresh', {
 						url : url
@@ -295,7 +298,7 @@
 
 					$("#datepicker").val(datepicker);
 					$("#datepicker2").val(datepicker2);
-					var url = "roominfo/getRedBill.do?campusId=" + campusId+"&state="+1 + "&datepicker=" + datepicker
+					var url = "roominfo/getRedBill.do?campusId=" + campusId+"&State="+2 + "&datepicker=" + datepicker
 							+ "&datepicker2=" + datepicker2;
 					$(" #table").bootstrapTable('refresh', {
 						url : url
@@ -306,7 +309,7 @@
 				function() {
 					var datepicker = $("#datepicker").val();
 					var datepicker2 = $("#datepicker2").val();
-					var url = "roominfo/getRedBill.do?campusId=" + campusId+"&state="+1 + "&datepicker=" + datepicker
+					var url = "roominfo/getRedBill.do?campusId=" + campusId+"&State="+2 + "&datepicker=" + datepicker
 							+ "&datepicker2=" + datepicker2;
 					$(" #table").bootstrapTable('refresh', {
 						url : url

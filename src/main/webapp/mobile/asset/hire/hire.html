@@ -493,8 +493,8 @@
 		   				}
 		   			}
 		      		 //支付成功后跳转的页面
-		      		 location.href="seccess.html?out_trade_no="+out_trade_no+"&purchaser="+purchaser+"&ein="+ein+"&campusId="+campusId+"&hireGUID="+hireGUID+"&guid="+chartGuid;
-		      		//$('#table').bootstrapTable('refresh');
+		      		 //location.href="seccess.html?out_trade_no="+out_trade_no+"&purchaser="+purchaser+"&ein="+ein+"&campusId="+campusId+"&hireGUID="+hireGUID+"&guid="+chartGuid;
+		      		$('#table').bootstrapTable('refresh');
 		             }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
 		            	 alert("支付取消")
 		          	   console.log('支付取消');

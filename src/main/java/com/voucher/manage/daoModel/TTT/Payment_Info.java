@@ -1,6 +1,5 @@
 package com.voucher.manage.daoModel.TTT;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import com.voucher.manage.daoSQL.annotations.DBTable;
@@ -54,6 +53,9 @@ public class Payment_Info {
 	
 	@SQLInteger(name = "campusId")
 	private Integer campusId;
+	
+	@SQLInteger(name = "billState")
+	private Integer billState;
 
 	public Integer getPaymentId() {
 		return PaymentId;
@@ -149,6 +151,14 @@ public class Payment_Info {
 
 	public void setCampusId(Integer campusId) {
 		this.campusId = campusId;
+	}
+	
+	public Integer getBillState() {
+		return billState;
+	}
+
+	public void setBillState(Integer billState) {
+		this.billState = billState;
 	}
 	
 /*

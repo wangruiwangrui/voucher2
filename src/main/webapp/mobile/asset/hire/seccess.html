@@ -94,9 +94,9 @@ img {
 
 	        dataType: "json",
 	        success: function (data){
-	        	
+	        	data = JSON.parse(data);
 				if(data.result=="SUCCESS"){
-					getImage();
+					$("#ptBill").html("发票开取成功！");
 				}else{
 					$("#ptBill").html("发票开取失败！");
 				}

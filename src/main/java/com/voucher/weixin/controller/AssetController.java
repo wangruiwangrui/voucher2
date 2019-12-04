@@ -542,7 +542,7 @@ public class AssetController {
 		if(campusName.equals("泸州市工业投资集团有限公司")) {
 			searchMap.put("ChartInfo.ManageRegion like ", "%工投委托%");
 			return roomInfoDao.getChartInfoByGUID(limit, offset, sort, order, searchMap);
-		}else if(campusName.equals("泸州国有资产经营有限公司")) {
+		}else if(campusName.equals("泸州国盛资产经营有限公司")) {
 			searchMap.put("ChartInfo.ManageRegion like ", "%国资委托%");
 			Map map3=roomInfoDao.getChartInfoByGUID(limit, offset, sort, order, searchMap);
 			List list4=new ArrayList();

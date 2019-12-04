@@ -117,7 +117,7 @@
 					}
 					offset = offset + i;
 				} else {
-					//location.reload();
+					$("#ul").children('li').remove();
 					html = "<li><div class=\"weui-cells__title\" >已无更多数据</div></li>";
 					$("#ul").append(html);
 					loading = true;

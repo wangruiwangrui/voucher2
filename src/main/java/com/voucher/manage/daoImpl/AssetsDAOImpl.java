@@ -1085,37 +1085,37 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"[Position].lng,"+
 					"[Position].lat,"+
 					"[Position].date,"+
-					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddress,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Region,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Segment,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Useful,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Floor,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Structure,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildArea,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomType,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsCity,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Manager,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManagerPhone,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsStreet,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FitMent,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BeFrom,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].InDate,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightNo,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightArea,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DesignUseful,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildYear,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightUnit,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
-				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit "+				   
-					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
-					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+					"[RoomInfo].GUID,"+
+					"[RoomInfo].Num,"+
+					"[RoomInfo].OriginalNum,"+
+					"[RoomInfo].Address,"+
+					"[RoomInfo].OriginalAddress,"+
+					"[RoomInfo].Region,"+
+					"[RoomInfo].Segment,"+
+					"[RoomInfo].ManageRegion,"+
+					"[RoomInfo].RoomProperty,"+
+					"[RoomInfo].Useful,"+
+					"[RoomInfo].Floor,"+
+					"[RoomInfo].State,"+
+					"[RoomInfo].Structure,"+
+					"[RoomInfo].BuildArea,"+
+					"[RoomInfo].RoomType,"+
+					"[RoomInfo].IsCity,"+
+					"[RoomInfo].Manager,"+
+					"[RoomInfo].ManagerPhone,"+
+					"[RoomInfo].IsStreet,"+
+					"[RoomInfo].FitMent,"+
+					"[RoomInfo].BeFrom,"+
+					"[RoomInfo].InDate,"+
+					"[RoomInfo].PropertyRightNo,"+
+					"[RoomInfo].PropertyRightArea,"+
+					"[RoomInfo].DesignUseful,"+
+					"[RoomInfo].BuildYear,"+
+					"[RoomInfo].PropertyRightUnit,"+
+					"[RoomInfo].RealPropertyRightUnit,"+
+					"[RoomInfo].PropertyCardUnit "+				   
+					"FROM [RoomInfo] left join  [Position]"+
+					"on [RoomInfo].GUID = [Position].GUID "+
 					"WHERE ";
 
 		String sql1="geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
@@ -1125,9 +1125,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		String sql10=" ORDER BY   "+
 					"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";		
 		
-		String sql01="AND "+
-				Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
-				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID WHERE " ;
+		String sql01="AND [RoomInfo].GUID not in( select top "+offset+" [RoomInfo].GUID from [RoomInfo] left join  [Position]"+
+				"on [RoomInfo].GUID = [Position].GUID WHERE " ;
 		
 		String sql02="geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
 				"+ cast([lat] as varchar(20)) +')', 4326).STDistance(  "+
@@ -1136,16 +1135,16 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		String sql;
 		
 		String sql2="SELECT COUNT(*) "+
-				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
-				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+				"FROM [RoomInfo] left join  [Position]"+
+				"on [RoomInfo].GUID = [Position].GUID "+
 				"WHERE ";
 		
 		if(search==null||search.equals("")){
 			sql=sql0+sql1+sql01+sql1+sql10+")"+sql10;
 			sql2=sql2+sql02;
 		}else{
-			sql=sql0+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "+" AND "+sql1;
-			sql2=sql2+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "+" AND "+sql02;
+			sql=sql0+"[RoomInfo].Address like '%"+search+"%' "+" AND "+sql1;
+			sql2=sql2+"[RoomInfo].Address like '%"+search+"%' "+" AND "+sql02;
 		}
 		
 		System.out.println("sql="+sql);
