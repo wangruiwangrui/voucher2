@@ -77,10 +77,12 @@ public class KMeansController {
 					map2.put("id", lowerCentroid);
 					JedisUtil1.deleteData(lowerCentroid);
 					JedisUtil1.setObject(lowerCentroid, map2);
+					JedisUtil1.setEx(lowerCentroid, 3600*24);
 					mapCopy.put(String.valueOf(entry.getKey()), map2);
 					i++;
 				}
 				JedisUtil1.setObject(id, mapCopy);
+				JedisUtil1.setEx(id, 3600*24);
 			}
 		}else{
 			
@@ -93,6 +95,7 @@ public class KMeansController {
 					CopyOnWriteArrayList<ArrayList<Double>> cList=kMeansDao.findPosition();
 					map=bisectingKMeans2.get(cList);
 					JedisUtil1.setObject("assetMap", map);
+					JedisUtil1.setEx("assetMap", 3600*24);
 				}
 			}
 			
@@ -105,6 +108,7 @@ public class KMeansController {
 				map2.put("id", lowerCentroid);
 				JedisUtil1.deleteData(lowerCentroid);
 				JedisUtil1.setObject(lowerCentroid, map2);
+				JedisUtil1.setEx(lowerCentroid, 3600*24);
 				i++;				
 			}
 		}
@@ -129,7 +133,8 @@ public class KMeansController {
 				
 				list=(List) map4.get("list");
 				
-				JedisUtil1.setObject(id, list);
+				JedisUtil1.setObject("assetMap", list);
+				JedisUtil1.setEx("assetMap", 3600*24);
 				
 				Map<Integer,List> map2=(Map) map4.get("map2");
 
@@ -138,7 +143,7 @@ public class KMeansController {
 					String lowerCentroid = entry.getKey().toString();
 					JedisUtil1.deleteData(lowerCentroid);
 					JedisUtil1.setObject(lowerCentroid, clist);
-	
+					JedisUtil1.setEx(lowerCentroid, 3600*24);
 				}
 
 			}
@@ -155,7 +160,8 @@ public class KMeansController {
 					
 					list=(List) map4.get("list");
 					
-					JedisUtil1.setObject(id, list);
+					JedisUtil1.setObject("assetMap", list);
+					JedisUtil1.setEx("assetMap", 3600*24);
 					
 					Map<Integer,List> map2=(Map) map4.get("map2");
 
@@ -164,8 +170,10 @@ public class KMeansController {
 						String lowerCentroid = entry.getKey().toString();
 						JedisUtil1.deleteData(lowerCentroid);
 						JedisUtil1.setObject(lowerCentroid, clist);
+						JedisUtil1.setEx(lowerCentroid, 3600*24);
 		
 					}
+	
 				}
 			}
 			
@@ -533,8 +541,10 @@ public class KMeansController {
 						}
 					}else if (object.equals("address")) {
 						String rString = (String) rObject.get(object);
-						rString = "%" + rString +"%";
-						where.put("["+key+"]."+"Address like", rString);
+						if (rString != null && !rString.equals("")) {
+							rString = "%" + rString + "%";
+							where.put("[" + key + "]." + "Address like", rString);
+						}
 					}else {
 						where.put("["+key+"]."+object+"=", rObject.get(object));
 					}
@@ -640,8 +650,10 @@ public class KMeansController {
 						}
 					}else if (object.equals("address")) {
 						String rString = (String) rObject.get(object);
-						rString = "%" + rString +"%";
-						where.put("["+key+"]."+"Address like", rString);
+						if (rString != null && !rString.equals("")) {
+							rString = "%" + rString + "%";
+							where.put("[" + key + "]." + "Address like", rString);
+						}
 					}else {
 						where.put("["+key+"]."+object+"=", rObject.get(object)); 
 					}
@@ -689,7 +701,7 @@ public class KMeansController {
 		}
 		
 		Map reMap = assetsDAO.findAllRoomInfo_Position(limit, offset, null, null,term,where);
-		
+				
 		List roomInfo_Positions=(List) reMap.get("rows");
 		
 		Map<String, Object> fileBytes = mobileDao.roomInfo_PositionImageQuery(request, roomInfo_Positions);
@@ -698,33 +710,33 @@ public class KMeansController {
 		
 		List rows2=new ArrayList();
 		
-		for (Map.Entry<String, Object> entry : fileBytes.entrySet()) {
+		Iterator<Map> iterator2 = rows.iterator();
 		
-			Iterator<Map> iterator2=rows.iterator();
-			int i=0;
-			Map map2=new HashMap();
-			while(iterator2.hasNext()) {
-				RoomInfo_Position roomInfo_Position=(RoomInfo_Position) iterator2.next();
-				String guid=(String) roomInfo_Position.getGUID();
-				if(guid.equals(entry.getKey())) {
-					map2.put("GUID", guid);
-					map2.put("address", roomInfo_Position.getAddress());
-					map2.put("num", roomInfo_Position.getNum());
-					map2.put("region", roomInfo_Position.getRegion());
-					map2.put("roomProperty", roomInfo_Position.getRoomProperty());
-					map2.put("state", roomInfo_Position.getState());
-					map2.put("buildArea", roomInfo_Position.getBuildArea());
-					map2.put("lng", roomInfo_Position.getLng());
-					map2.put("lat", roomInfo_Position.getLat());
+		while (iterator2.hasNext()) {
+			RoomInfo_Position roomInfo_Position = (RoomInfo_Position) iterator2.next();
+			String guid = (String) roomInfo_Position.getGUID();
+			Map map2 = new HashMap();
+			map2.put("GUID", guid);
+			map2.put("address", roomInfo_Position.getAddress());
+			map2.put("num", roomInfo_Position.getNum());
+			map2.put("region", roomInfo_Position.getRegion());
+			map2.put("roomProperty", roomInfo_Position.getRoomProperty());
+			map2.put("state", roomInfo_Position.getState());
+			map2.put("buildArea", roomInfo_Position.getBuildArea());
+			map2.put("lng", roomInfo_Position.getLng());
+			map2.put("lat", roomInfo_Position.getLat());
+
+			for (Map.Entry<String, Object> entry : fileBytes.entrySet()) {
+				if (guid.equals(entry.getKey())) {					
 					map2.put("url", entry.getValue());
-					rows2.add(map2);
 					continue;
 				}
-				i++;
+
 			}
-	
+			
+			rows2.add(map2);
 		}
-		
+					
 		reMap.put("rows",rows2);
 
 		return reMap;
@@ -933,7 +945,7 @@ public class KMeansController {
 			Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
 			hidden_Check_Join.setGUID(guid);
 			list.add(hidden_Check_Join);
-			Map fileBytes = mobileDao.checkImageQuery(request, list);
+			Map fileBytes = mobileDao.allHiddenImageByGUID(request, list);
 			map2.put("fileBytes", fileBytes);
 			map2.put("state",state);
 			map2.put("address", address);

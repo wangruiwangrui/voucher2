@@ -163,19 +163,14 @@ public class AssetUserRegisterController {
 		Map<String, Object> map = new HashMap<>();
 
 		if (telephone.equals("")) {
-			map.put("data", "手机号码不能空");
-			return map;
-		}
-
-		if (!isPhone(telephone)) {
-			map.put("data", "请输入正确的手机号码");
+			map.put("data", "电话号码不能空");
 			return map;
 		}else {
-			Integer count = assetsDAO.selectUserPhone(name,telephone);
-			if (count>0) {
+			Boolean bool = assetsDAO.selectUserPhone(name,telephone);
+			if (bool) {
 				map.put("data", "succeed");
 			}else {
-				map.put("data", "请输入正确的手机号码");
+				map.put("data", "请输入正确的电话号码");
 			}
 		}
 		return map;

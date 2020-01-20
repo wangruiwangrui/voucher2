@@ -1,21 +1,46 @@
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/*.xml"})
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = {"classpath:/*.xml"})
 public class Stringtest {
 	
 	public static void main(String[] args){
-		int count = 0;
-		for (int i = 0; i < 10; i++) {
-			if (count ==4) {
-				System.out.println("i="+i);
-				continue;
+		String string="abcd123456中文_$,@";
+		string.replaceAll("[^\\u4e00-\\u9fa5]", "");
+		//System.out.println(string.replaceAll("[^\\u4e00-\\u9fa5]", ""));
+		
+		List<String> list = new ArrayList<String>();
+		
+		String s = "2294290";
+        String str="13183606610/2294290";
+        String strss="131836066102294290";
+        list.add(str);
+        list.add(strss);
+        Boolean flag = false;
+        for (String ss : list) {
+			if (ss.contains("/")) {
+				String[] strs = str.split("/");
+	        	for (String string2 : strs) {
+	    			if (s.equals(string2)) {
+	    				flag=true;
+						break;
+					}
+	    		}
+			}else {
+				if (ss.equals(s)) {
+					flag=true;
+					break;
+				}
 			}
-			count++;
 		}
-		System.out.println(count);
+       
+        System.out.println("111111111111111"+flag);
 	}
 	
 }

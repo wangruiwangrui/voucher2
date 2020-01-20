@@ -108,6 +108,9 @@ http://www.springframework.org/schema/context
         <property name="jdbcTemplate" ref="jdbcTemplate"></property>
     </bean>
    
+   <bean id="fuzzyQueryDao" class="com.voucher.manage.daoImpl.FuzzyQueryDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
    <!-- 配置事务管理器 -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

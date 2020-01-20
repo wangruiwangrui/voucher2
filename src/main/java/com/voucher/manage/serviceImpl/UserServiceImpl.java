@@ -11,6 +11,7 @@ import com.voucher.manage.mapper.AccessMapper;
 import com.voucher.manage.mapper.User_AssetMapper;
 import com.voucher.manage.mapper.UsersMapper;
 import com.voucher.manage.model.Access;
+import com.voucher.manage.model.Campus;
 import com.voucher.manage.model.User_Asset;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
@@ -228,6 +229,13 @@ public class UserServiceImpl implements UserService {
 		
 		return usersMapper.getUserByAssetCharter(charter, phone);
 		
+	}
+
+	@Override
+	public Integer getCampusByOpenId(String openId) {
+		Campus campus = usersMapper.getCampusByOpenId(openId);
+		
+		return campus.getCampusId();
 	}
 
 

@@ -130,5 +130,5 @@ public interface AssetsDAO {
 
 	public Integer selectUserName(String name);
 
-	public Integer selectUserPhone(String name, String telephone);
+	public Boolean selectUserPhone(String name, String telephone);
 }

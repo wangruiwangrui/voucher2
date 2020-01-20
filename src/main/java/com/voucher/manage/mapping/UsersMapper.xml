@@ -586,5 +586,8 @@
 			user_asset.hire_phone=#{phone,jdbcType=VARCHAR}
 		</where>
 	</select>
+	<select id="getCampusByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from users where open_id=#{openId,jdbcType=VARCHAR}
+	</select>
 
 </mapper>

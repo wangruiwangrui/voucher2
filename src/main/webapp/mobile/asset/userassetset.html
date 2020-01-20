@@ -74,7 +74,7 @@
 		</div>
 		<div class="weui_cell " id="w2">
 			<div class="weui_cell_hd">
-				<label class="weui_label">手机号</label>
+				<label class="weui_label">电话</label>
 			</div>
 			<div class="weui_cell_bd weui_cell_primary phone">
 				<input class="weui_input" id="phone" type="number" pattern="[0-9]*"
@@ -173,7 +173,7 @@
 
 			if (isClick) {
 				isClick = false; //不能点击此按钮 
-				if (name == null || name == "") {
+/* 				if (name == null || name == "") {
 					$("#dialog2").attr("style", "display:block");
 					$(".weui_dialog_title").html("请输入姓名");
 					isClick = true; //返回后能够重新点击发送的按钮 
@@ -185,7 +185,7 @@
 					$(".weui_dialog_title").html("请输入手机号");
 					isClick = true; //返回后能够重新点击发送的按钮 
 					return false;
-				}
+				} */
 
 				var xhm = new XMLHttpRequest();
 				xhm.open("GET",

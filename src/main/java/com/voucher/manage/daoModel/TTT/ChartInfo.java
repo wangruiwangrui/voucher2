@@ -6,617 +6,619 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[ChartInfo]")
-public class ChartInfo implements Serializable{
+@DBTable(name = "[ChartInfo]")
+public class ChartInfo implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @SQLString(name="GUID")
+	@SQLString(name = "GUID")
 	private String GUID;
 
-    @SQLString(name="HireGUID")
+	@SQLString(name = "HireGUID")
 	private String HireGUID;
 
-    @SQLString(name="RoomAddress")
+	@SQLString(name = "RoomAddress")
 	private String RoomAddress;
 
-    @SQLString(name="Charter")
+	@SQLString(name = "Charter")
 	private String Charter;
 
-    @SQLString(name="ChartType")
+	@SQLString(name = "ChartType")
 	private String ChartType;
 
-    @SQLString(name="CharterProperty")
+	@SQLString(name = "CharterProperty")
 	private String CharterProperty;
 
-    @SQLString(name="Sex")
+	@SQLString(name = "Sex")
 	private String Sex;
 
-    @SQLString(name="CardType")
+	@SQLString(name = "CardType")
 	private String CardType;
 
-    @SQLString(name="IDNo")
+	@SQLString(name = "IDNo")
 	private String IDNo;
 
-    @SQLString(name="Corporation")
+	@SQLString(name = "Corporation")
 	private String Corporation;
 
-    @SQLString(name="Phone")
+	@SQLString(name = "Phone")
 	private String Phone;
 
-    @SQLString(name="HomeAddress")
+	@SQLString(name = "HomeAddress")
 	private String HomeAddress;
 
-    @SQLString(name="ChartProperty")
+	@SQLString(name = "ChartProperty")
 	private String ChartProperty;
 
-    @SQLString(name="ContractNo")
+	@SQLString(name = "ContractNo")
 	private String ContractNo;
 
-    @SQLDateTime(name="ConcludeDate")
+	@SQLDateTime(name = "ConcludeDate")
 	private Date ConcludeDate;
 
-    @SQLDateTime(name="ChartBeginDate")
+	@SQLDateTime(name = "ChartBeginDate")
 	private Date ChartBeginDate;
 
-    @SQLDateTime(name="ChartEndDate")
+	@SQLDateTime(name = "ChartEndDate")
 	private Date ChartEndDate;
 
-    @SQLFloat(name="AssureAmount")
+	@SQLFloat(name = "AssureAmount")
 	private Float AssureAmount;
 
-    @SQLFloat(name="Hire")
+	@SQLFloat(name = "Hire")
 	private Float Hire;
 
-    @SQLFloat(name="ChartCriterion")
+	@SQLFloat(name = "ChartCriterion")
 	private Float ChartCriterion;
 
-    @SQLFloat(name="Area")
+	@SQLFloat(name = "Area")
 	private Float Area;
 
-    @SQLFloat(name="TotalHire")
+	@SQLFloat(name = "TotalHire")
 	private Float TotalHire;
 
-    @SQLFloat(name="AddRate")
+	@SQLFloat(name = "AddRate")
 	private Float AddRate;
 
-    @SQLString(name="AddType")
+	@SQLString(name = "AddType")
 	private String AddType;
 
-    @SQLString(name="BeginAddDate")
+	@SQLString(name = "BeginAddDate")
 	private String BeginAddDate;
 
-    @SQLDateTime(name="HireEndDate")
+	@SQLDateTime(name = "HireEndDate")
 	private Date HireEndDate;
 
-    @SQLFloat(name="AccountBalance")
+	@SQLFloat(name = "AccountBalance")
 	private Float AccountBalance;
 
-    @SQLString(name="OweHireResion")
+	@SQLString(name = "OweHireResion")
 	private String OweHireResion;
 
-    @SQLString(name="CreditRating")
+	@SQLString(name = "CreditRating")
 	private String CreditRating;
 
-    @SQLString(name="FareItem")
+	@SQLString(name = "FareItem")
 	private String FareItem;
 
-    @SQLString(name="ShopName")
+	@SQLString(name = "ShopName")
 	private String ShopName;
 
-    @SQLString(name="LowProtect")
+	@SQLString(name = "LowProtect")
 	private String LowProtect;
 
-    @SQLString(name="CharterCode")
+	@SQLString(name = "CharterCode")
 	private String CharterCode;
 
-    @SQLInteger(name="CalculateHireDay")
+	@SQLInteger(name = "CalculateHireDay")
 	private Integer CalculateHireDay;
 
-    @SQLString(name="Memo")
+	@SQLString(name = "Memo")
 	private String Memo;
 
-    @SQLBoolean(name="IsHistory")
+	@SQLBoolean(name = "IsHistory")
 	private Boolean IsHistory;
 
-    @SQLString(name="Region")
+	@SQLString(name = "Region")
 	private String Region;
 
-    @SQLString(name="ManageRegion")
+	@SQLString(name = "ManageRegion")
 	private String ManageRegion;
 
-    @SQLString(name="RoomProperty")
+	@SQLString(name = "RoomProperty")
 	private String RoomProperty;
 
-    @SQLString(name="Useful")
+	@SQLString(name = "Useful")
 	private String Useful;
 
-    @SQLString(name="OriginalUnit")
+	@SQLString(name = "OriginalUnit")
 	private String OriginalUnit;
 
-    @SQLString(name="Segment")
+	@SQLString(name = "Segment")
 	private String Segment;
 
-    @SQLString(name="BelongUnit")
+	@SQLString(name = "BelongUnit")
 	private String BelongUnit;
 
-    @SQLString(name="Operator")
+	@SQLString(name = "Operator")
 	private String Operator;
 
-    @SQLInteger(name="AgeLimite")
+	@SQLInteger(name = "AgeLimite")
 	private Integer AgeLimite;
 
-    @SQLBoolean(name="IsStopHireIn")
+	@SQLBoolean(name = "IsStopHireIn")
 	private Boolean IsStopHireIn;
 
-    @SQLString(name="StopHireInResion")
+	@SQLString(name = "StopHireInResion")
 	private String StopHireInResion;
 
-    @SQLString(name="Manager")
+	@SQLString(name = "Manager")
 	private String Manager;
 
-    @SQLString(name="DangerClassification")
+	@SQLString(name = "DangerClassification")
 	private String DangerClassification;
 
-    @SQLString(name="NSRSBH")
+	@SQLString(name = "NSRSBH")
 	private String NSRSBH;
 
-    @SQLString(name="KHH")
+	@SQLString(name = "KHH")
 	private String KHH;
 
-    @SQLString(name="AddFashion")
+	@SQLString(name = "AddFashion")
 	private String AddFashion;
 
-    @SQLFloat(name="PlacementFees")
+	@SQLFloat(name = "PlacementFees")
 	private Float PlacementFees;
 
-    @SQLFloat(name="GasInstallationFees")
+	@SQLFloat(name = "GasInstallationFees")
 	private Float GasInstallationFees;
 
-    @SQLString(name="Ein")
+	@SQLString(name = "Ein")
 	private String Ein;
-    
-    @SQLString(name = "company")
-    private String company;
-    
-    
-	public void setGUID(String GUID){
+
+	@SQLString(name = "company")
+	private String company;
+
+	@SQLInteger(name = "HireWXType")
+	private Integer HireWXType;
+
+	public void setGUID(String GUID) {
 		this.GUID = GUID;
 	}
 
-	public String getGUID(){
+	public String getGUID() {
 		return GUID;
 	}
 
-	public void setHireGUID(String HireGUID){
+	public void setHireGUID(String HireGUID) {
 		this.HireGUID = HireGUID;
 	}
 
-	public String getHireGUID(){
+	public String getHireGUID() {
 		return HireGUID;
 	}
 
-	public void setRoomAddress(String RoomAddress){
+	public void setRoomAddress(String RoomAddress) {
 		this.RoomAddress = RoomAddress;
 	}
 
-	public String getRoomAddress(){
+	public String getRoomAddress() {
 		return RoomAddress;
 	}
 
-	public void setCharter(String Charter){
+	public void setCharter(String Charter) {
 		this.Charter = Charter;
 	}
 
-	public String getCharter(){
+	public String getCharter() {
 		return Charter;
 	}
 
-	public void setChartType(String ChartType){
+	public void setChartType(String ChartType) {
 		this.ChartType = ChartType;
 	}
 
-	public String getChartType(){
+	public String getChartType() {
 		return ChartType;
 	}
 
-	public void setCharterProperty(String CharterProperty){
+	public void setCharterProperty(String CharterProperty) {
 		this.CharterProperty = CharterProperty;
 	}
 
-	public String getCharterProperty(){
+	public String getCharterProperty() {
 		return CharterProperty;
 	}
 
-	public void setSex(String Sex){
+	public void setSex(String Sex) {
 		this.Sex = Sex;
 	}
 
-	public String getSex(){
+	public String getSex() {
 		return Sex;
 	}
 
-	public void setCardType(String CardType){
+	public void setCardType(String CardType) {
 		this.CardType = CardType;
 	}
 
-	public String getCardType(){
+	public String getCardType() {
 		return CardType;
 	}
 
-	public void setIDNo(String IDNo){
+	public void setIDNo(String IDNo) {
 		this.IDNo = IDNo;
 	}
 
-	public String getIDNo(){
+	public String getIDNo() {
 		return IDNo;
 	}
 
-	public void setCorporation(String Corporation){
+	public void setCorporation(String Corporation) {
 		this.Corporation = Corporation;
 	}
 
-	public String getCorporation(){
+	public String getCorporation() {
 		return Corporation;
 	}
 
-	public void setPhone(String Phone){
+	public void setPhone(String Phone) {
 		this.Phone = Phone;
 	}
 
-	public String getPhone(){
+	public String getPhone() {
 		return Phone;
 	}
 
-	public void setHomeAddress(String HomeAddress){
+	public void setHomeAddress(String HomeAddress) {
 		this.HomeAddress = HomeAddress;
 	}
 
-	public String getHomeAddress(){
+	public String getHomeAddress() {
 		return HomeAddress;
 	}
 
-	public void setChartProperty(String ChartProperty){
+	public void setChartProperty(String ChartProperty) {
 		this.ChartProperty = ChartProperty;
 	}
 
-	public String getChartProperty(){
+	public String getChartProperty() {
 		return ChartProperty;
 	}
 
-	public void setContractNo(String ContractNo){
+	public void setContractNo(String ContractNo) {
 		this.ContractNo = ContractNo;
 	}
 
-	public String getContractNo(){
+	public String getContractNo() {
 		return ContractNo;
 	}
 
-	public void setConcludeDate(Date ConcludeDate){
+	public void setConcludeDate(Date ConcludeDate) {
 		this.ConcludeDate = ConcludeDate;
 	}
 
-	public Date getConcludeDate(){
+	public Date getConcludeDate() {
 		return ConcludeDate;
 	}
 
-	public void setChartBeginDate(Date ChartBeginDate){
+	public void setChartBeginDate(Date ChartBeginDate) {
 		this.ChartBeginDate = ChartBeginDate;
 	}
 
-	public Date getChartBeginDate(){
+	public Date getChartBeginDate() {
 		return ChartBeginDate;
 	}
 
-	public void setChartEndDate(Date ChartEndDate){
+	public void setChartEndDate(Date ChartEndDate) {
 		this.ChartEndDate = ChartEndDate;
 	}
 
-	public Date getChartEndDate(){
+	public Date getChartEndDate() {
 		return ChartEndDate;
 	}
 
-	public void setAssureAmount(Float AssureAmount){
+	public void setAssureAmount(Float AssureAmount) {
 		this.AssureAmount = AssureAmount;
 	}
 
-	public Float getAssureAmount(){
+	public Float getAssureAmount() {
 		return AssureAmount;
 	}
 
-	public void setHire(Float Hire){
+	public void setHire(Float Hire) {
 		this.Hire = Hire;
 	}
 
-	public Float getHire(){
+	public Float getHire() {
 		return Hire;
 	}
 
-	public void setChartCriterion(Float ChartCriterion){
+	public void setChartCriterion(Float ChartCriterion) {
 		this.ChartCriterion = ChartCriterion;
 	}
 
-	public Float getChartCriterion(){
+	public Float getChartCriterion() {
 		return ChartCriterion;
 	}
 
-	public void setArea(Float Area){
+	public void setArea(Float Area) {
 		this.Area = Area;
 	}
 
-	public Float getArea(){
+	public Float getArea() {
 		return Area;
 	}
 
-	public void setTotalHire(Float TotalHire){
+	public void setTotalHire(Float TotalHire) {
 		this.TotalHire = TotalHire;
 	}
 
-	public Float getTotalHire(){
+	public Float getTotalHire() {
 		return TotalHire;
 	}
 
-	public void setAddRate(Float AddRate){
+	public void setAddRate(Float AddRate) {
 		this.AddRate = AddRate;
 	}
 
-	public Float getAddRate(){
+	public Float getAddRate() {
 		return AddRate;
 	}
 
-	public void setAddType(String AddType){
+	public void setAddType(String AddType) {
 		this.AddType = AddType;
 	}
 
-	public String getAddType(){
+	public String getAddType() {
 		return AddType;
 	}
 
-	public void setBeginAddDate(String BeginAddDate){
+	public void setBeginAddDate(String BeginAddDate) {
 		this.BeginAddDate = BeginAddDate;
 	}
 
-	public String getBeginAddDate(){
+	public String getBeginAddDate() {
 		return BeginAddDate;
 	}
 
-	public void setHireEndDate(Date HireEndDate){
+	public void setHireEndDate(Date HireEndDate) {
 		this.HireEndDate = HireEndDate;
 	}
 
-	public Date getHireEndDate(){
+	public Date getHireEndDate() {
 		return HireEndDate;
 	}
 
-	public void setAccountBalance(Float AccountBalance){
+	public void setAccountBalance(Float AccountBalance) {
 		this.AccountBalance = AccountBalance;
 	}
 
-	public Float getAccountBalance(){
+	public Float getAccountBalance() {
 		return AccountBalance;
 	}
 
-	public void setOweHireResion(String OweHireResion){
+	public void setOweHireResion(String OweHireResion) {
 		this.OweHireResion = OweHireResion;
 	}
 
-	public String getOweHireResion(){
+	public String getOweHireResion() {
 		return OweHireResion;
 	}
 
-	public void setCreditRating(String CreditRating){
+	public void setCreditRating(String CreditRating) {
 		this.CreditRating = CreditRating;
 	}
 
-	public String getCreditRating(){
+	public String getCreditRating() {
 		return CreditRating;
 	}
 
-	public void setFareItem(String FareItem){
+	public void setFareItem(String FareItem) {
 		this.FareItem = FareItem;
 	}
 
-	public String getFareItem(){
+	public String getFareItem() {
 		return FareItem;
 	}
 
-	public void setShopName(String ShopName){
+	public void setShopName(String ShopName) {
 		this.ShopName = ShopName;
 	}
 
-	public String getShopName(){
+	public String getShopName() {
 		return ShopName;
 	}
 
-	public void setLowProtect(String LowProtect){
+	public void setLowProtect(String LowProtect) {
 		this.LowProtect = LowProtect;
 	}
 
-	public String getLowProtect(){
+	public String getLowProtect() {
 		return LowProtect;
 	}
 
-	public void setCharterCode(String CharterCode){
+	public void setCharterCode(String CharterCode) {
 		this.CharterCode = CharterCode;
 	}
 
-	public String getCharterCode(){
+	public String getCharterCode() {
 		return CharterCode;
 	}
 
-	public void setCalculateHireDay(Integer CalculateHireDay){
+	public void setCalculateHireDay(Integer CalculateHireDay) {
 		this.CalculateHireDay = CalculateHireDay;
 	}
 
-	public Integer getCalculateHireDay(){
+	public Integer getCalculateHireDay() {
 		return CalculateHireDay;
 	}
 
-	public void setMemo(String Memo){
+	public void setMemo(String Memo) {
 		this.Memo = Memo;
 	}
 
-	public String getMemo(){
+	public String getMemo() {
 		return Memo;
 	}
 
-	public void setIsHistory(Boolean IsHistory){
+	public void setIsHistory(Boolean IsHistory) {
 		this.IsHistory = IsHistory;
 	}
 
-	public Boolean getIsHistory(){
+	public Boolean getIsHistory() {
 		return IsHistory;
 	}
 
-	public void setRegion(String Region){
+	public void setRegion(String Region) {
 		this.Region = Region;
 	}
 
-	public String getRegion(){
+	public String getRegion() {
 		return Region;
 	}
 
-	public void setManageRegion(String ManageRegion){
+	public void setManageRegion(String ManageRegion) {
 		this.ManageRegion = ManageRegion;
 	}
 
-	public String getManageRegion(){
+	public String getManageRegion() {
 		return ManageRegion;
 	}
 
-	public void setRoomProperty(String RoomProperty){
+	public void setRoomProperty(String RoomProperty) {
 		this.RoomProperty = RoomProperty;
 	}
 
-	public String getRoomProperty(){
+	public String getRoomProperty() {
 		return RoomProperty;
 	}
 
-	public void setUseful(String Useful){
+	public void setUseful(String Useful) {
 		this.Useful = Useful;
 	}
 
-	public String getUseful(){
+	public String getUseful() {
 		return Useful;
 	}
 
-	public void setOriginalUnit(String OriginalUnit){
+	public void setOriginalUnit(String OriginalUnit) {
 		this.OriginalUnit = OriginalUnit;
 	}
 
-	public String getOriginalUnit(){
+	public String getOriginalUnit() {
 		return OriginalUnit;
 	}
 
-	public void setSegment(String Segment){
+	public void setSegment(String Segment) {
 		this.Segment = Segment;
 	}
 
-	public String getSegment(){
+	public String getSegment() {
 		return Segment;
 	}
 
-	public void setBelongUnit(String BelongUnit){
+	public void setBelongUnit(String BelongUnit) {
 		this.BelongUnit = BelongUnit;
 	}
 
-	public String getBelongUnit(){
+	public String getBelongUnit() {
 		return BelongUnit;
 	}
 
-	public void setOperator(String Operator){
+	public void setOperator(String Operator) {
 		this.Operator = Operator;
 	}
 
-	public String getOperator(){
+	public String getOperator() {
 		return Operator;
 	}
 
-	public void setAgeLimite(Integer AgeLimite){
+	public void setAgeLimite(Integer AgeLimite) {
 		this.AgeLimite = AgeLimite;
 	}
 
-	public Integer getAgeLimite(){
+	public Integer getAgeLimite() {
 		return AgeLimite;
 	}
 
-	public void setIsStopHireIn(Boolean IsStopHireIn){
+	public void setIsStopHireIn(Boolean IsStopHireIn) {
 		this.IsStopHireIn = IsStopHireIn;
 	}
 
-	public Boolean getIsStopHireIn(){
+	public Boolean getIsStopHireIn() {
 		return IsStopHireIn;
 	}
 
-	public void setStopHireInResion(String StopHireInResion){
+	public void setStopHireInResion(String StopHireInResion) {
 		this.StopHireInResion = StopHireInResion;
 	}
 
-	public String getStopHireInResion(){
+	public String getStopHireInResion() {
 		return StopHireInResion;
 	}
 
-	public void setManager(String Manager){
+	public void setManager(String Manager) {
 		this.Manager = Manager;
 	}
 
-	public String getManager(){
+	public String getManager() {
 		return Manager;
 	}
 
-	public void setDangerClassification(String DangerClassification){
+	public void setDangerClassification(String DangerClassification) {
 		this.DangerClassification = DangerClassification;
 	}
 
-	public String getDangerClassification(){
+	public String getDangerClassification() {
 		return DangerClassification;
 	}
 
-	public void setNSRSBH(String NSRSBH){
+	public void setNSRSBH(String NSRSBH) {
 		this.NSRSBH = NSRSBH;
 	}
 
-	public String getNSRSBH(){
+	public String getNSRSBH() {
 		return NSRSBH;
 	}
 
-	public void setKHH(String KHH){
+	public void setKHH(String KHH) {
 		this.KHH = KHH;
 	}
 
-	public String getKHH(){
+	public String getKHH() {
 		return KHH;
 	}
 
-	public void setAddFashion(String AddFashion){
+	public void setAddFashion(String AddFashion) {
 		this.AddFashion = AddFashion;
 	}
 
-	public String getAddFashion(){
+	public String getAddFashion() {
 		return AddFashion;
 	}
 
-	public void setPlacementFees(Float PlacementFees){
+	public void setPlacementFees(Float PlacementFees) {
 		this.PlacementFees = PlacementFees;
 	}
 
-	public Float getPlacementFees(){
+	public Float getPlacementFees() {
 		return PlacementFees;
 	}
 
-	public void setGasInstallationFees(Float GasInstallationFees){
+	public void setGasInstallationFees(Float GasInstallationFees) {
 		this.GasInstallationFees = GasInstallationFees;
 	}
 
-	public Float getGasInstallationFees(){
+	public Float getGasInstallationFees() {
 		return GasInstallationFees;
 	}
 
-	public void setEin(String Ein){
+	public void setEin(String Ein) {
 		this.Ein = Ein;
 	}
 
-	public String getEin(){
+	public String getEin() {
 		return Ein;
 	}
 
@@ -628,81 +630,86 @@ public class ChartInfo implements Serializable{
 		this.company = company;
 	}
 
+	public Integer getHireWXType() {
+		return HireWXType;
+	}
 
-/*
-*数据库查询参数
-*/
-    @QualifiLimit(name="limit")
-    private Integer limit;
-    @QualifiOffset(name="offset")
-    private Integer offset;
-    @QualifiNotIn(name="notIn")
-    private String notIn;
-    @QualifiSort(name="sort")
-    private String sort;
-    @QualifiOrder(name="order")
-    private String order;
-    @QualifiWhere(name="where")
-    private String[] where;
-    @QualifiWhereTerm(name="whereTerm")
-    private String whereTerm;
+	public void setHireWXType(Integer hireWXType) {
+		HireWXType = hireWXType;
+	}
 
+	/*
+	 * 数据库查询参数
+	 */
+	@QualifiLimit(name = "limit")
+	private Integer limit;
+	@QualifiOffset(name = "offset")
+	private Integer offset;
+	@QualifiNotIn(name = "notIn")
+	private String notIn;
+	@QualifiSort(name = "sort")
+	private String sort;
+	@QualifiOrder(name = "order")
+	private String order;
+	@QualifiWhere(name = "where")
+	private String[] where;
+	@QualifiWhereTerm(name = "whereTerm")
+	private String whereTerm;
 
-	public void setLimit(Integer limit){
+	public void setLimit(Integer limit) {
 		this.limit = limit;
 	}
 
-	public Integer getLimit(){
+	public Integer getLimit() {
 		return limit;
 	}
 
-	public void setOffset(Integer offset){
+	public void setOffset(Integer offset) {
 		this.offset = offset;
 	}
 
-	public Integer getOffset(){
+	public Integer getOffset() {
 		return offset;
 	}
 
-	public void setNotIn(String notIn){
+	public void setNotIn(String notIn) {
 		this.notIn = notIn;
 	}
 
-	public String getNotIn(){
+	public String getNotIn() {
 		return notIn;
 	}
 
-	public void setSort(String sort){
+	public void setSort(String sort) {
 		this.sort = sort;
 	}
 
-	public String getSort(){
+	public String getSort() {
 		return sort;
 	}
 
-	public void setOrder(String order){
+	public void setOrder(String order) {
 		this.order = order;
 	}
 
-	public String getOrder(){
+	public String getOrder() {
 		return order;
 	}
 
-	public void setWhere(String[] where){
+	public void setWhere(String[] where) {
 		this.where = where;
 	}
 
-	public String[] getWhere(){
+	public String[] getWhere() {
 		return where;
 	}
 
-	public void setWhereTerm(String whereTerm){
+	public void setWhereTerm(String whereTerm) {
 		this.whereTerm = whereTerm;
 	}
 
-	public String getWhereTerm(){
+	public String getWhereTerm() {
 		return whereTerm;
 	}
 
 }
-

@@ -82,7 +82,7 @@ public interface RoomInfoDao {
 	
 	public RoomInfo findRoomInfoByChartGUID(String chartGUID);
 
-	public ChartInfo queryEin(String guid);
+	public Map queryEin(String guid);
 
 	public Integer updateEinByGUID(ChartInfo chartInfo);
 

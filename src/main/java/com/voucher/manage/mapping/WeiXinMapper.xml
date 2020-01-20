@@ -52,7 +52,6 @@
      <select id="getCampus" resultMap="BaseResultMap">
      select
         *
-        
       from
       campus
       where

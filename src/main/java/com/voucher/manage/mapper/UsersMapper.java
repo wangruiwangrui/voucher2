@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.voucher.manage.model.Campus;
 import com.voucher.manage.model.Users;
 import com.voucher.weixin.base.SNSUserInfo;
 
@@ -96,6 +97,8 @@ public interface UsersMapper {
     List<String> getUserByType(Map<String, Object> paramMap);
 
     Users getUserByAssetCharter(@Param(value="charter")String charter, @Param(value="phone")String phone);
+
+	Campus getCampusByOpenId(String openId);
 
 
 }

@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,7 +39,6 @@ import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.Md5;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
-import com.voucher.weixin.util.BillAccessTokenUtil;
 import com.voucher.weixin.util.HttpUtils;
 import com.voucher.weixin.util.OrderNum;
 import com.voucher.weixin.wxpay.sdk.WXConstant;
@@ -80,12 +80,11 @@ public class WeinXinPayController {
 	}
 
 	@RequestMapping("/getHire")
-	public @ResponseBody List getHire(String value, HttpServletRequest request, HttpServletResponse response)
+	public @ResponseBody List getHire(@RequestBody JSONObject value, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-
-		JSONObject json = JSONObject.parseObject(value);
-
-		Integer campusId = json.getInteger("campusId");
+		Map valueMap = (Map) value.get("value");
+		
+		Integer campusId = Integer.valueOf(valueMap.get("campusId").toString());
 		
 		String homeUrl=request.getHeader("Host")+request.getContextPath();
 
@@ -93,9 +92,8 @@ public class WeinXinPayController {
 		
 		String notify_url = weixin.getUrl()+WXConstant.notify_url;
 		
-		String text = json.getString("text");
-		String guids = json.getString("guid");
-		int hire = (int) (json.getFloat("hire")* 100);
+		String guids = (String) valueMap.get("guid");
+		int hire = (int) ((Float.valueOf(valueMap.get("hire").toString()))* 100);
 
 		String[] guidsString = guids.split(",");
 
@@ -315,11 +313,12 @@ public class WeinXinPayController {
 				
 				//通过campusId查询公众号支付成功提醒消息
 				int campusId = (int) tradeMap.get("campusId");
-				
+				String chartGuid = (String) tradeMap.get("chartGuid");
 				map.put("openId",openId);
 				map.put("name", name);
 				map.put("campusId", campusId);
 				map.put("total_fee", total_fee);
+				
 				int i=financeDAO.updateHireSetHireListWinXinPay(map,list);
 				
 				if(i>0){

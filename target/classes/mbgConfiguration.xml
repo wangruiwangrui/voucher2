@@ -5,12 +5,12 @@
 
 <generatorConfiguration>
 
-  <!-- 配置mysql 驱动jar包路径.用了绝对路径 -->
+  <!-- 配置mysql 驱动jar包路径.用了绝对路径
   <classPathEntry location="C:\Users\WangJing\Desktop\JAVA\javanet\bin\jdbc\mysql-connector-java-5.1.38-bin.jar" />
-   
-   <!--  
-   <classPathEntry location="C:\Users\Administrator\.m2\repository\mysql\mysql-connector-java\5.1.21"/>
-	-->
+    -->
+     
+   <classPathEntry location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.35\mysql-connector-java-5.1.35.jar"/>
+	
 	
   <context id="yihaomen_mysql_tables" targetRuntime="MyBatis3">
 
@@ -23,9 +23,9 @@
 
     <!-- 数据库连接 -->
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-        connectionURL="jdbc:mysql://127.0.0.1:3306/voucher?characterEncoding=utf8"
+        connectionURL="jdbc:mysql://127.0.0.1:3306/mylocal?characterEncoding=utf8"
         userId="root"
-        password="123">
+        password="">
     </jdbcConnection>
 
     <javaTypeResolver >
@@ -39,17 +39,17 @@
     </javaModelGenerator>
 
     <!-- sql mapper 隐射配置文件 -->
-    <sqlMapGenerator targetPackage="com.voucher.manage.mapping"  targetProject="target">
+    <sqlMapGenerator targetPackage="com.voucher.manage.model"  targetProject="target">
       <property name="enableSubPackages" value="true" />
     </sqlMapGenerator>
 
     <!-- 在ibatis2 中是dao层，但在mybatis3中，其实就是mapper接口 -->
-    <javaClientGenerator type="XMLMAPPER" targetPackage="com.voucher.manage.mapper"  targetProject="target">
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.voucher.manage.model"  targetProject="target">
       <property name="enableSubPackages" value="true" />
     </javaClientGenerator>
 
     <!-- 要对那些数据表进行生成操作，必须要有一个. -->
-    <table  tableName="message_list" domainObjectName="MessageList" 
+    <table  tableName="art" domainObjectName="Art" 
         enableCountByExample="false" enableUpdateByExample="false"
         enableDeleteByExample="false" enableSelectByExample="false"
         selectByExampleQueryId="false">     

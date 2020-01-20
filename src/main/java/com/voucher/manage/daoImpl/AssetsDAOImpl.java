@@ -908,7 +908,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					startTime=sdf.format(cal.getTime());
 					
 					sql02=" convert(varchar(11),"+Singleton.ROOMDATABASE+
-							".[dbo].[RoomInfo].hidden_check_date ,120 )< '"+startTime+"' "+
+							".[dbo].[RoomInfo].hidden_check_date ,120 )<= '"+startTime+"' "+
 							" OR ([Position].lng is not null AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' )"
 							+ " AND [RoomInfo]."+checkName+" is null )";
 					
@@ -951,7 +951,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					startTime=sdf.format(cal.getTime());
 					
 					sql02=" convert(varchar(11),"+Singleton.ROOMDATABASE+
-							".[dbo].[RoomInfo].hidden_check_date ,120 )> '"+startTime+"' ";
+							".[dbo].[RoomInfo].hidden_check_date ,120 )>= '"+startTime+"' ";
 					
 					sql01=sql01+sql02;
 					
@@ -1984,46 +1984,13 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 			String term,Map search) {
 		// TODO Auto-generated method stub
 				String sql0="SELECT TOP "+limit+" "+
-						"[Position].province,"+
-						"[Position].city,"+
-						"[Position].district,"+
-						"[Position].street,"+
-						"[Position].street_number,"+
 						"[Position].lng,"+
 						"[Position].lat,"+
 						"[Position].wgs84_lng,"+
 						"[Position].wgs84_lat,"+
-						"[Position].date,"+
 						Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
 					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddress,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Region,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Segment,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Useful,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Floor,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Structure,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildArea,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomType,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsCity,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Manager,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManagerPhone,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsStreet,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FitMent,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BeFrom,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].InDate,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightNo,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightArea,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DesignUseful,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildYear,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightUnit,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit ,"+	
-					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DangerClassification ,"+
+					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+					  
 					    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID ,"+
 					    Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire ,"+
 					    Singleton.ROOMDATABASE+".[dbo].[ChartInfo].FareItem ,"+
@@ -2035,13 +2002,13 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID = "
 						+Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID "+
 						"WHERE "+
-						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
+						"([RoomInfo].State = '已出租' or [RoomInfo].State like '不可出租%' or [RoomInfo].State = '空置' ) ";
 						
 			    String sql01="AND "+
 						Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 						"WHERE "+ 
-						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
+						"([RoomInfo].State = '已出租' or [RoomInfo].State like '不可出租%' or [RoomInfo].State = '空置' ) ";
 			
 				String sql1="ORDER BY  "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num ";
 			
@@ -2054,11 +2021,11 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID = "+
 						Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID "+
 						"WHERE "+
-						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
+						"([RoomInfo].State = '已出租' or [RoomInfo].State like '不可出租%' or [RoomInfo].State = '空置' ) ";
 				
-				System.out.println("search="+search);
+				//System.out.println("search="+search);
 				
-				System.out.println("trem="+term);
+				//System.out.println("trem="+term);
 				
 				if(search.equals("")||search.isEmpty()){
 					sql=sql0+sql01+sql1+")"+sql1;
@@ -2485,16 +2452,36 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 
 	@Override
-	public Integer selectUserPhone(String name, String telephone) {
+	public Boolean selectUserPhone(String name, String telephone) {
 		// TODO Auto-generated method stub
-		
 		ChartInfo chartInfo = new ChartInfo();
-		chartInfo.setPhone(telephone);
-		chartInfo.setCharter(name);
-		String[] where = {"Charter=",name,"Phone=",telephone};
+		String[] where = {"Charter=",name};
 		chartInfo.setWhere(where);
 		Integer count = (Integer) SelectExe.getCount(this.getJdbcTemplate(), chartInfo).get("");
-		return count;
+		chartInfo.setOffset(0);
+		chartInfo.setLimit(count);
+		chartInfo.setNotIn("GUID");
+		
+		List<ChartInfo> list = SelectExe.get(getJdbcTemplate(), chartInfo);
+		Boolean flag=false;
+		for (ChartInfo chartInfo2 : list) {
+			String phoness = chartInfo2.getPhone();
+			if(phoness.contains("/")) {
+				String[] phones = phoness.split("/");
+				for (String phone : phones) {
+					if(telephone.equals(phone)) {
+						flag=true;
+						break;
+					}
+				}
+			}else {
+				if(phoness.equals(telephone)){
+					flag=true;
+					break;
+				}
+			}
+		}
+		return flag;
 	}
 	
 }

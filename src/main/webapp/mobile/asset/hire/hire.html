@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- 承租人交租金界面 -->
@@ -17,6 +16,9 @@
 	href="../../../assets/bootstrap-table/bootstrap-table.css">
 <link rel="stylesheet"
 	href="../../../assets/bootstrap-table/bootstrap-editable.css">
+<link rel="stylesheet" href="../css/jquery-weui.css">
+<link rel="stylesheet" href="../css/weui.css" />
+ 
 <script src="../../../assets/bootstrap-table/jquery.min.js"></script>
 <script src="../../../assets/bootstrap-table/bootstrap.min.js"></script>
 <script src="../../../assets/bootstrap-table/bootstrap-table.js"></script>
@@ -28,12 +30,8 @@
 	src="../../../assets/bootstrap-table/bootstrap-table-editable.js"></script>
 <script src="../../../assets/bootstrap-table/bootstrap-editable.js"></script>
 <script src="../../../js/bootstrap-table-zh-CN.min.js"></script>
-
 <script type="text/javascript"
 	src="../../../bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-
-<link rel="stylesheet" href="../css/jquery-weui.css">
-<link rel="stylesheet" href="../css/weui.css" />
 <script src="../../../js/jquery-weui.js"></script>
 </head>
 <style>
@@ -132,7 +130,9 @@
 			</div>
 		</div>
 	</div>
-
+	<p id="ptBill" class="weui-msg__desc">
+		<a href="javascript:void(0);"></a>
+	</p>
 	<!--支付完成弹出框 -->
 	<!--  -->
 	<div class="modal fade" id="alertdialog" tabindex="-1" role="dialog"
@@ -238,31 +238,11 @@
 			})
 		}
 		
-		$("#iiii").click(function() {
-			var out_trade_no="11111111111111111";
-			 /*购买方 */
-   			var purchaser ='' ;
-   			var sele = $("#sel").val();
-   			if(sele==1){
-   				purchaser = charter;
-   				ein="";
-   			}else{
-   				if(company==null){
-   					purchaser = charter;
-   				}else{
-   					purchaser = company;
-   				}
-   			}
-      		 //支付成功后跳转的页面
-      		 location.href="seccess.html?out_trade_no="+out_trade_no+"&guid="+chartGuid+"&purchaser="+purchaser+"&ein="+ein;
-		})
-		
-
 		$("#table")
 				.bootstrapTable(
 						{
 							url : "/voucher/mobile/asset/getHireListByGUID.do?hireGUID="
-									+ hireGUID + "&sort=&order="
+									+ hireGUID
 						});
 		
 		function actionReport(value, row, index) {
@@ -292,7 +272,6 @@
 	        value.hire=hire;
 	        
 	        var sel = $("#sel").val();
-	        console.log("sel====",sel);
 	        if(sel==2){
 	        	$("#mymodal").modal();
 	        	
@@ -418,7 +397,7 @@
                url: "/voucher/mobile/weinXinPay/getHire.do",
                data: { 
             	   "value": JSON.stringify(value)
-                       },
+               },
                dataType: "json",
                error: function (request){
             	   console.log(request);
@@ -494,7 +473,8 @@
 		   			}
 		      		 //支付成功后跳转的页面
 		      		 //location.href="seccess.html?out_trade_no="+out_trade_no+"&purchaser="+purchaser+"&ein="+ein+"&campusId="+campusId+"&hireGUID="+hireGUID+"&guid="+chartGuid;
-		      		$('#table').bootstrapTable('refresh');
+	      			 getBill(out_trade_no,purchaser,ein);
+		      		 $('#table').bootstrapTable('refresh');
 		             }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
 		            	 alert("支付取消")
 		          	   console.log('支付取消');
@@ -533,6 +513,23 @@
 			}
 		});
 		
+		function getBill(out_trade_no,purchaser,ein) {
+			$.ajax({
+		        type: "POST",
+		        url: "/voucher/mobile/bill/getNBill.do?out_trade_no="+out_trade_no+"&purchaser="+purchaser+"&ein="+ein,
+
+		        dataType: "json",
+		        success: function (data){
+		        	data = JSON.parse(data);
+					if(data.result=="SUCCESS"){
+						$("#ptBill").html("发票开取成功！");
+					}else{
+						$("#ptBill").html("发票开取失败！");
+					}
+		        }
+			})
+		}
+		
 		function invoice(guids) {
 			$.ajax({
 	               type: "POST",
@@ -549,39 +546,6 @@
 			}) 
 		}
 		
-		$("#iiii").click(function() {
-			$("#commitFoodDataButton").click(function() {
-				var out_trade_no = $("#alertchar3").text();
-				$.ajax({
-		               type: "POST",
-		               url: "/voucher/mobile/bill/getTicket.do",
-		               data: { 
-		            	   out_trade_no:"20191015164611997"
-		                       },
-		               dataType: "json",
-		               success: function (result) {
-		            	   console.log("result====",result)
-		            	   if(result.errmsg=="ok"){
-		            		   var auth_url = result.auth_url;
-		            		   location.href=auth_url;
-		            		   /* wx.navigateToMiniProgram({
-			            		    path: auth_url,
-			            		    success(res) {
-			            		        console.log('navigateToMiniProgram success:', res)
-			            		    },
-			            		    fail(error){
-			            		        console.log('navigateToMiniProgram fail:', error)
-			            		    },
-			            		    complete(res){
-			            		        console.log('navigateToMiniProgram complete:', res)
-			            		    }
-			            		}) */
-		            	   }
-            		}
-				}) 
-			})
-		})
-			   
 		function checkFormatter(value, row, index) {
 
 			var state = (row.state);

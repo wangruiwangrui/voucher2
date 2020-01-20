@@ -2,17 +2,22 @@ package com.voucher.manage.daoImpl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.RoomInfoDao;
+import com.voucher.manage.daoImpl.KMeansDAOImpl.roomInfo;
 import com.voucher.manage.daoModel.Floor;
 import com.voucher.manage.daoModel.RoomChangeHireLog;
 import com.voucher.manage.daoModel.RoomChartLog;
@@ -32,6 +37,7 @@ import com.voucher.manage.daoModelJoin.Payment_ErrBill_Join;
 import com.voucher.manage.daoModelJoin.RoomChangeHireLog_RoomChartLog;
 import com.voucher.manage.daoModelJoin.RoomInfo_Neaten_Join;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
+import com.voucher.manage.daoModelJoin.TTT.ChartInfo_roomInfo_Join;
 import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
@@ -403,16 +409,16 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		hireList.setOffset(offset);		
 		hireList.setNotIn("GUID");
 		
-		if(sort==null){
-			sort="State";
+		if(sort==null || sort.equals("")){
+			sort="State ,HireDate";
 		}
 		
-		if(order==null){
-			order="desc";
+		if(order==null || order.equals("")){
+			order="asc";
 		}
 		
 		hireList.setSort(sort);
-		hireList.setOffset(offset);
+		hireList.setOrder(order);
 		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
@@ -634,19 +640,19 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 					"WHERE " ;
 					
     String sql02= "[Position].lng is null AND [Position].lat is  null "+  
-					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State like '不可出租%' or [RoomInfo].State = '空置' ) "+
 					"AND "+
 					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position] "+
 					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 					"WHERE [Position].lng is null AND [Position].lat is null "+ 
-					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) )";
+					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State like '不可出租%' or [RoomInfo].State = '空置' ) )";
 		
 		
 		String sql1="SELECT count(*) "+
 				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position] "+
 				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 				"WHERE [Position].lng is null AND [Position].lat is  null "+  
-				"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";		
+				"AND ([RoomInfo].State = '已出租' or [RoomInfo].State like '不可出租%' or [RoomInfo].State = '空置' ) ";		
 		
 		String sql;
 		
@@ -1015,22 +1021,65 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	}
 
 	@Override
-	public ChartInfo queryEin(String guid) {
+	public Map queryEin(String guid) {
+		/*
+		 * String sql =
+		 * "SELECT * FROM RoomInfo LEFT JOIN ChartInfo on RoomInfo.ChartGUID=ChartInfo.GUID WHERE ChartInfo.GUID='"
+		 * +guid+"'"; ChartInfo_roomInfo_Join cInfo_Join = new
+		 * ChartInfo_roomInfo_Join(); ChartInfo chartInfo = new ChartInfo(); RoomInfo
+		 * roomInfo = new RoomInfo(); Object[] objects={roomInfo,chartInfo}; List
+		 * list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,cInfo_Join);
+		 */
 		
-		ChartInfo chartInfo = new ChartInfo();
-		chartInfo.setLimit(10);
+		ChartInfo chartInfo = new ChartInfo(); 
+		chartInfo.setLimit(1);
 		chartInfo.setOffset(0);
-		chartInfo.setNotIn("GUID");
-		chartInfo.setSort("GUID asc");
-		
-		String[] where={"GUID=",guid};
+		String[] where = {"GUID=",guid};
 		chartInfo.setWhere(where);
-		List list = SelectExe.get(this.getJdbcTemplate(), chartInfo);
-		if (list.size()>0) {
-			chartInfo = (ChartInfo) list.get(0);
+		List list = SelectExe.get(getJdbcTemplate(), chartInfo);
+		chartInfo = (ChartInfo) list.get(0);
+		
+		//税率区分时间
+		String startDate = "2016-4-30 00:00:00";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date dateD=null;
+		try {
+			dateD = sdf.parse(startDate);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-			
-		return  chartInfo;
+		String sl = "";
+		RoomInfo roomInfo = new RoomInfo();
+		String[] where2 = {"ChartGUID=",guid};
+		roomInfo.setLimit(1);
+		roomInfo.setOffset(0);
+		roomInfo.setWhere(where2);
+		List list2 = SelectExe.get(getJdbcTemplate(), roomInfo);
+		roomInfo = (RoomInfo) list2.get(0);
+		String manageRegion = roomInfo.getManageRegion();
+		if(manageRegion.equals("国资委托")) {
+			sl="0.09";
+		}else if(manageRegion.equals("火炬资产")) {
+			sl="0.05";
+		}else if(manageRegion.equals("国资财委")) {
+			sl="0.05";
+		}else {
+			Date getDate = roomInfo.getInDate();
+			if(getDate.getTime()>=dateD.getTime()) {
+				sl="0.09";
+			}else {
+				sl="0.05";
+			}
+		}
+		Map map = new HashMap();
+		map.put("ein", chartInfo.getEin());
+		map.put("charter", chartInfo.getCharter());
+		map.put("company", chartInfo.getCompany());
+		map.put("hireWXType", chartInfo.getHireWXType());
+		map.put("sl",sl);
+		
+		return  map;
 	}
 
 	@Override

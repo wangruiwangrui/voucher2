@@ -14,6 +14,8 @@ public interface MobileDAO {
 
 	public Map<String, Object> checkImageQuery(HttpServletRequest request,List guidLits);
 	
+	public Map<String, Object> allHiddenImageByGUID(HttpServletRequest request,List guidLits);
+	
 	public Map<String, Object> assetCheckImageQuery(HttpServletRequest request,List guidLits);
 	
 	public List allCheckImageByGUID(HttpServletRequest request,Hidden_Check_Join hidden_Check_Join);

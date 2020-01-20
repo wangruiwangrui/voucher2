@@ -85,6 +85,62 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 			// TODO: handle exception
 				//e.printStackTrace();
 			}
+		}
+		MyTestUtil.print(fileBytes);
+		
+		return fileBytes;
+	}
+	
+	@Override
+	public Map<String, Object> allHiddenImageByGUID(HttpServletRequest request,List guidLits) {
+		// TODO Auto-generated method stub
+	
+		String pathRoot = System.getProperty("user.home");
+	
+		String filePath=pathRoot+Singleton.filePath;
+        
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
+		
+		//List<byte[]> fileBytes=new ArrayList<byte[]>();
+		
+		Map fileBytes=new HashMap<>();
+		
+		Iterator<Hidden_Check_Join> iterator=guidLits.iterator();
+	
+		while(iterator.hasNext()){			
+		
+			Hidden_Check_Join hidden_Check_Join = iterator.next();
+		
+			String guid=hidden_Check_Join.getGUID();
+		
+			String sql="SELECT top 1 "+    
+				"[Hidden_Check_Date].Check_id, "+
+			    "[Hidden_Check_Date].URI, "+
+				"[Hidden_Check_Date].date, "+
+			    "[Hidden_Check_Date].NAME "+
+				"FROM "+
+				"[Hidden_Check_Date] left join [Hidden_Check] on [Hidden_Check_Date].Check_id=[Hidden_Check].Check_id "+  
+				"where [Hidden_Check].GUID='"+guid+"'  "+
+				"AND ([Hidden_Check_Date].TYPE ='png ' OR [Hidden_Check_Date].TYPE ='jpg ' OR [Hidden_Check_Date].TYPE ='jpeg ' OR [Hidden_Check_Date].TYPE ='gif ' ) "+
+				"order by [Hidden_Check_Date].date desc ";
+		
+			List hidden_Data_Joins=this.getJdbcTemplate().query(sql,new checkImageQueryRowMapper());
+		
+			try{
+				Hidden_Check_Date hidden_Check_Date=(Hidden_Check_Date) hidden_Data_Joins.get(0);
+							
+				//String fileByte=Base64Test.getImageStr(filePath+"\\"+hidden_Data_Join.getURI());
+				
+				String oldFile=filePath+"\\"+hidden_Check_Date.getURI();
+				
+				CopyFile.set(imgPath, oldFile, hidden_Check_Date.getURI());
+				
+				fileBytes.put(guid, Singleton.filePath+"\\compressFile\\"+hidden_Check_Date.getURI());
+		
+			}catch (Exception e) {
+			// TODO: handle exception
+				//e.printStackTrace();
+			}
 		
 		}
 	
@@ -210,7 +266,6 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 		return fileBytes;
 	
 	}
-	
 	
 	@Override
 	public List allRoomHiddenCheckImageByGUID(HttpServletRequest request, String guid) {

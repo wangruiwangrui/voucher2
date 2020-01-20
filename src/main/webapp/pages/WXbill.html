@@ -13,6 +13,13 @@
 <link
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
 	rel="stylesheet">
+
+<link href="https://cdn.bootcss.com/jquery-confirm/3.2.3/jquery-confirm.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+
+<script src="https://cdn.bootcss.com/jquery-confirm/3.2.3/jquery-confirm.min.js "></script>
+<script src="https://cdn.bootcss.com/jquery.form/4.2.1/jquery.form.js"></script>
+
 <style>
 .ml10 {
 	margin-left: 10px;
@@ -121,9 +128,9 @@
 	<script type="text/javascript"
 		src="bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="date/js/pikaday.min.js"></script>
-	<script type="text/javascript">
-		var campusId = campusId;
-
+	
+<script type="text/javascript">
+	
 		var url = "roominfo/getBlueBill.do?campusId=" + campusId + "&State="
 				+ 1 + "&datepicker="  + "&datepicker2=" ;
 		$("#table").bootstrapTable({
@@ -133,7 +140,7 @@
 		function actionReport(value, row, index) {
 			var id = index;
 			var result = "";
-			result += "<button type='button' title='开发票' onclick='redBill(this);' class='btn btn-danger'>发票冲红</button>";
+			result += "<button type='button' title='开发票' onclick='redBill(this);' id='ceshi' class='btn btn-danger'>发票冲红</button>";
 			return result;
 
 		}
@@ -150,22 +157,34 @@
 			var row = $("#table").bootstrapTable('getSelections');
 			console.log(row)
 		})
+		
+	    function confirm_alert(msg) {
+	        $.alert({
+	            title: 'Alert!',
+	            content: msg
+	        });
+     	} 
+		
 		//发票冲红
 		function redBill(temp) {
 			var hang = $(temp.parentNode).parent().prevAll().length + 1;
 			var out_trade_no = document.getElementById("table").rows[hang].cells[5].innerHTML;
-			$.post("../../voucher/mobile/bill/getRedTicket.do", {
-				out_trade_no : out_trade_no
-			}, function(data) {
-				data = JSON.parse(data);
-				if (data.result == "SUCCESS") {
-					setSuccess("发票冲红成功。");
-					$('#table').bootstrapTable('refresh');
-				} else {
-					setSuccess("发票冲红失败。");
-					$('#table').bootstrapTable('refresh');
-				}
-			});
+			
+			var mes = confirm("确认将"+out_trade_no+"冲红！");
+			if(mes==true){
+				$.post("../../voucher/mobile/bill/getNRed.do", {
+					out_trade_no : out_trade_no
+				}, function(data) {
+					data = JSON.parse(data);
+					if (data.result == "SUCCESS") {
+						setSuccess("发票冲红成功！");
+						$('#table').bootstrapTable('refresh');
+					} else {
+						setSuccess("发票冲红失败！"+data.msg);
+						$('#table').bootstrapTable('refresh');
+					}
+				}); 
+			}
 		}
 		//发票下载
 		function downBill(temp) {

@@ -15,7 +15,7 @@ public class RedisJava {
     public static void main(String[] args) {
         //���ӱ��ص� Redis ����
     	JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        JedisPool jedisPool = new JedisPool(jedisPoolConfig, "192.168.100.110", 6379, 10000, "redis",1);
+        JedisPool jedisPool = new JedisPool(jedisPoolConfig, "127.0.0.1", 6379, 10000, "redis",1);
 
         Jedis jedis;
         jedis= jedisPool.getResource();

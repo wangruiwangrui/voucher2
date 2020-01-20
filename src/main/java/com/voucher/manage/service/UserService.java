@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.voucher.manage.model.Access;
+import com.voucher.manage.model.Campus;
 import com.voucher.manage.model.User_Asset;
 import com.voucher.manage.model.Users;
 import com.voucher.weixin.base.SNSUserInfo;
@@ -66,6 +67,8 @@ public interface UserService {
     Map selectAllAccess(Integer campusId,Integer limit, Integer offset, String sort,String order,String search,String page);
     
     Users getUserByAssetCharter(String charter, String phone);
+
+	Integer getCampusByOpenId(String openId);
 
 	
 }

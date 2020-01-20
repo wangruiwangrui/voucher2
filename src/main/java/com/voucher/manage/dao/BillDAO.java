@@ -17,7 +17,7 @@ import com.voucher.manage.daoModel.invoice.RedBusinessResult;
 
 public interface BillDAO {
 
-	BillServerInfo getBillInfo(String out_trade_no);
+	BillServerInfo getBillInfo(String out_trade_no,String sl);
 	
 	Integer updateBillServerInfo(BillServerInfo billServerinfo);
 
@@ -27,11 +27,7 @@ public interface BillDAO {
 
 	CompanyMsg queryCompanyMsg(String out_trade_no);
 
-	Integer InsertBill(BusinessResult result,Integer campusId, String out_trade_no);
-
 	Bill queryBillByOrderNum(Bill bill);
-
-	Integer InsertRedBill(RedBusinessResult result,Integer campusId);
 
 	Integer updateBillImage(String nameStr,String out_trade_no);
 
@@ -42,8 +38,6 @@ public interface BillDAO {
 	Integer insertBillImage(String orderNum ,String imgUrl);
 	
 	String queryBillImgByOrderNum(String orderNum,HttpServletRequest request);
-
-	Integer InsertBillFirst(String out_trade_no, BusinessResult result, Integer campusId);
 
 	Integer updateRedBill(String out_trade_noRed);
 
@@ -70,4 +64,5 @@ public interface BillDAO {
 	Integer updateBillMsg(String out_trade_noRed, BusinessResult result);
 
 	Payment_Info getPaymenInfo(String out_trade_no_new);
+
 }

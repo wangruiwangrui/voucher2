@@ -16,6 +16,7 @@ import com.voucher.manage.daoModel.TTT.DataDictionary;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.UpdateExe;
+import com.voucher.manage.tools.MyTestUtil;
 
 public class FlowDaoImpl extends JdbcDaoSupport implements FlowDao{
 
@@ -45,6 +46,8 @@ public class FlowDaoImpl extends JdbcDaoSupport implements FlowDao{
 		roomInfo.setWhere(where);
 		
 		int i=0;
+		
+		MyTestUtil.print(where);
 		
 		if(guid!=null&&!guid.equals("")){
 			

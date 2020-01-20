@@ -75,20 +75,8 @@ public class BillServerInfo implements Serializable{
 	@SQLString(name="Dw")
 	private String Dw;
 	
-	@SQLFloat(name="Sl")
-	private Float Sl;
-	
-	@SQLString(name="Ticket_URL")
-	private String Ticket_URL;
-	
-	@SQLString(name="Ticket")
-	private String Ticket;
-	
-	@SQLDateTime(name="Ticket_Time")
-	private Date Ticket_Time;
-
-	@SQLString(name="s_pappid")
-	private String s_pappid;
+	@SQLString(name="Sl")
+	private String Sl;
 	
 	@SQLInteger(name = "campusId")
 	private Integer campusId;
@@ -221,46 +209,14 @@ public class BillServerInfo implements Serializable{
 		Dw = dw;
 	}
 
-	public Float getSl() {
+	public String getSl() {
 		return Sl;
 	}
 
-	public void setSl(Float sl) {
+	public void setSl(String sl) {
 		Sl = sl;
 	}
 
-	public String getTicket_URL() {
-		return Ticket_URL;
-	}
-
-	public void setTicket_URL(String ticket_URL) {
-		Ticket_URL = ticket_URL;
-	}
-
-	public String getTicket() {
-		return Ticket;
-	}
-
-	public void setTicket(String ticket) {
-		Ticket = ticket;
-	}
-
-	public Date getTicket_Time() {
-		return Ticket_Time;
-	}
-
-	public void setTicket_Time(Date ticket_Time) {
-		Ticket_Time = ticket_Time;
-	}
-	
-	public String getS_pappid() {
-		return s_pappid;
-	}
-
-	public void setS_pappid(String s_pappid) {
-		this.s_pappid = s_pappid;
-	}
-	
 	public Integer getCampusId() {
 		return campusId;
 	}

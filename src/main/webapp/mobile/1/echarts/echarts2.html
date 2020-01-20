@@ -3,9 +3,8 @@
       content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
 <meta charset="utf-8">
 <html>
-<!-- 引入样式 -->
-<link rel="stylesheet"
-      href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<!-- 引入样式 -->
+	<link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.12.0/theme-chalk/index.css">
 <style>
     .title {
         margin-bottom: 10px;
@@ -73,21 +72,33 @@
         background: url("./deepblue.png");
         height: 100px;
     }
-
-    .el-card {
-        border: 0px;
-        margin-bottom: 10px;
-    }
+	
+	.main{
+	    margin-top: 450px;
+	}
+	
+	.main1{
+		margin-top:30px;
+	}
+	
+	.main2{
+		margin-top:30px;
+	}
+	
+	.main3{
+		margin-top:60px;
+	}
 </style>
 
 <head>
     <title>资产管理助手</title>
-    <script src="https://unpkg.com/vue"></script>
+	
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
     <script
             src="https://cdn.bootcss.com/echarts/4.3.0-rc.2/echarts-en.common.min.js"></script>
     <script src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
     <!-- 引入组件库 -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/element-ui/2.12.0/index.js"></script>
     <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 </head>
 
@@ -123,23 +134,12 @@
                 <div class="title_5">{{total4|format}}万元</div>
             </el-card>
         </el-col>
-        <!-- <el-col :xs="24" :sm="24" :lg="5"> <el-card
-            class="card-title4">
-        <div class="title_1">危房处数</div>
-        <div class="title_5">{{total5|format}}处</div>
-        </el-card> </el-col> </el-row> -->
-        <el-card>
-            <div id="main" style="width: 100%; height: 300px;"></div>
-        </el-card>
-        <el-card>
-            <div id="main1" style="width: 100%; height: 300px;"></div>
-        </el-card>
-        <el-card>
-            <div id="main2" style="width: 100%; height: 300px;"></div>
-        </el-card>
-        <el-card>
-            <div id="main3" style="width: 100%; height: 300px;"></div>
-        </el-card>
+
+       	<div id="main" class=" main" style="width: 100%; height: 300px;"></div>
+        <div id="main1" class="main1" style="width: 100%; height: 300px;"></div>
+        <div id="main2" class="main2" style="width: 100%; height: 300px;"></div>
+        <div id="main3" class="main3" style="width: 100%; height: 300px;"></div>
+        <div id="main4" class="main2" style="width: 100%; height: 300px;"></div>
 </div>
 
 <script type="text/javascript">
@@ -153,6 +153,7 @@
     var campusId = getQueryString("campusId");
 </script>
 <script type="text/javascript" src="../../singleton.js"></script>
+<script type="text/javascript" src="../../../js/echarts.js"></script>
 <script>
     //axios.defaults.baseURL = DOMAIN+'/manage';
     axios.defaults.baseURL = 'http://192.168.100.185:8080/manage';
@@ -164,6 +165,7 @@
                 return (num + "").replace(reg, "$&,");
             }
         },
+        
         data: {
             pieOption: {
                 pieOption1: {},
@@ -213,9 +215,6 @@
             this.getHidDanger();
             this.getAba();
             this.getNoAba();
-            this.getDgRoom();
-            this.getHidRate();
-            this.getDgRoomRate();
         },
         methods: {
             getPatrol() {
@@ -237,327 +236,351 @@
                 axios.get('/assetsCon/earnings.do').then(res => {
                     this.total4 = res.data.count;
             })
-            },
-            getDgRoom() {
-                axios.get('/assetsCon/roomProperty.do').then(res => {
-                    var myChart = echarts.init(document.getElementById('main'));
-                const option = {
-                    color: ["#ffdb5c", "#37a2da", "#67e0e3", "#ff9f7f", "#e062ae"],
-                    title: {
-                        backgroundColor: "#849fe2",
-                        textStyle: {
-                            color: "#fff",
-                            fontSize: 16
-                        }
-                    },
-                    tooltip: {
-                        trigger: "item",
-                        formatter: "{a} <br/>{b}: {c} ({d}%)",
-                        position: ["25%", "25%"]
-                    },
-                    legend: {
-                        x: "center",
-                        bottom: "10"
-                    },
-                    series: [
-                        {
-                            name: '资产数量',
-                            data: res.data,
-                            type: "pie",
-                            radius: ["50%", "70%"],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: "center"
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: "30",
-                                        fontWeight: "bold"
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            }
-                        },
-                        {
-                            type: "pie",
-                            radius: ["50%", "70%"],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: "center"
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: "30",
-                                        fontWeight: "bold"
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            }
-                        },
-                        {
-                            type: "pie",
-                            radius: ["50%", "70%"],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: "center"
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: "30",
-                                        fontWeight: "bold"
-                                    }
-                                }
-                            }
-                        }]
-                }
-                myChart.setOption(option);
-            })
-            },
-            getHidRate() {
-                axios.get('/assetsCon/roomArea.do').then(res => {}
-            )
-            },
-            getAbaRate() {
-                axios.get('/assetsCon/dictionary.do').then(res => {}
-            )
-            },
-            getDgRoomRate() {
-                axios.get('/assetsCon/structure.do').then(res => {}
-            )
-            },
-            initData() {
-                let _this = this;
-                axios.all([this.getPatrol(), this.getHidDanger(), this.getAba(), this.getNoAba(),
-                    this.getDgRoom(), this.getHidRate(), this.getAbaRate(), this.getDgRoomRate()])   //两个请求放到数组中传递给all()
-                    .then(axios.spread(function (total1, total2, total3, total4, total5, pie1, pie2, pie3) {   //多个请求都发送完毕，拿到返回的数据
-                        var myChart = echarts.init(document.getElementById('main'));
-                        var myChart1 = echarts.init(document.getElementById('main1'));
-                        var myChart2 = echarts.init(document.getElementById('main2'));
-                        _this.total1 = total1.data.count;
-                        _this.total2 = total2.data.隐患处数;
-                        _this.total3 = total3.data.整改处数;
-                        _this.total4 = total4.data.未整改处数;
-                        _this.total5 = total5.data.危房处数;
-                        let pieOption1 = {
-                            title: {
-                                text: "隐患率",
-                                backgroundColor: "#849fe2",
-                                textStyle: {
-                                    // color: "#fff",
-                                    fontSize: 16
-                                }
-                            },
-                            rich: {},
-                            legend: {
-                                data: ["隐患率"],
-                            },
-                            series: [
-                                {
-                                    name: "Line 1",
-                                    type: "pie",
-                                    clockWise: true,
-                                    radius: ["50%", "66%"],
-                                    hoverAnimation: false,
-                                    data: [
-                                        {
-                                            value: pie1.data.隐患率,
-                                            name: "隐患率",
-                                            label: {
-                                                normal: {
-                                                    formatter: function (params) {
-                                                        return params.value + "%";
-                                                    },
-                                                    position: "center",
-                                                    show: true,
-                                                    textStyle: {
-                                                        fontSize: "25",
-                                                        fontWeight: "bold",
-                                                        color: "#fed4b7"
-                                                    }
-                                                }
-                                            },
-                                            itemStyle: {
-                                                normal: {
-                                                    color: "#fed4b7",
-                                                    label: {
-                                                        show: false
-                                                    },
-                                                    labelLine: {
-                                                        show: false
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        {
-                                            name: "所有资产",
-                                            value: 100 - pie1.data.隐患率,
-                                            itemStyle: {
-                                                normal: {
-                                                    color: "#e6e6e6",
-                                                    label: {
-                                                        show: false
-                                                    },
-                                                    labelLine: {
-                                                        show: false
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    ]
-                                }
-                            ]
-                        };
-                        let pieOption2 = {
-                            title: {
-                                text: "整改率"
-                            },
-                            legend: {
-                                data: ["整改率"]
-                            },
-                            series: [
-                                {
-                                    name: "Line 1",
-                                    type: "pie",
-                                    clockWise: true,
-                                    radius: ["50%", "66%"],
-                                    hoverAnimation: false,
-                                    data: [
-                                        {
-                                            value: pie2.data.整改率,
-                                            name: "整改率",
-                                            label: {
-                                                normal: {
-                                                    formatter: function (params) {
-                                                        return params.value + "%";
-                                                    },
-                                                    position: "center",
-                                                    show: true,
-                                                    textStyle: {
-                                                        fontSize: "25",
-                                                        fontWeight: "bold",
-                                                        color: "#34cdec"
-                                                    }
-                                                }
-                                            },
-                                            itemStyle: {
-                                                normal: {
-                                                    color: "#34cdec",
-                                                    label: {
-                                                        show: false
-                                                    },
-                                                    labelLine: {
-                                                        show: false
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        {
-                                            name: "所有资产",
-                                            value: 100 - pie2.data.整改率,
-                                            itemStyle: {
-                                                normal: {
-                                                    color: "#e6e6e6",
-                                                    label: {
-                                                        show: false
-                                                    },
-                                                    labelLine: {
-                                                        show: false
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    ]
-                                }
-                            ]
-                        };
-                        let pieOption3 = {
-                            title: {
-                                text: "危房率"
-                            },
-                            legend: {
-                                data: ["危房率"]
-                            },
-                            series: [
-                                {
-                                    name: "Line 1",
-                                    type: "pie",
-                                    clockWise: true,
-                                    radius: ["50%", "66%"],
-                                    hoverAnimation: false,
-                                    data: [
-                                        {
-                                            value: pie3.data.危房率,
-                                            name: "危房率",
-                                            label: {
-                                                normal: {
-                                                    formatter: function (params) {
-                                                        return params.value + "%";
-                                                    },
-                                                    position: "center",
-                                                    show: true,
-                                                    textStyle: {
-                                                        fontSize: "25",
-                                                        fontWeight: "bold",
-                                                        color: "#c886e4"
-                                                    }
-                                                }
-                                            },
-                                            itemStyle: {
-                                                normal: {
-                                                    color: "#c886e4",
-                                                    label: {
-                                                        show: false
-                                                    },
-                                                    labelLine: {
-                                                        show: false
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        {
-                                            name: "所有资产",
-                                            value: 100 - pie3.data.危房率,
-                                            itemStyle: {
-                                                normal: {
-                                                    color: "#e6e6e6",
-                                                    label: {
-                                                        show: false
-                                                    },
-                                                    labelLine: {
-                                                        show: false
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    ]
-                                }
-                            ]
-                        };
-                        myChart.setOption(pieOption1);
-                        myChart1.setOption(pieOption2);
-                        myChart2.setOption(pieOption3);
-
-                    }));
             }
         }
     })
+    window.onload =function(){
+		$.ajax({
+			type: "get",
+			url: axios.defaults.baseURL+"/assetsCon/roomProperty.do",
+			async: true,
+			success: function(returnData) {
+				var list = new Array();
+				var list2 = new Array();
+				for(var i = 0;i<returnData.length;i++){
+					if(returnData[i] != null) {
+						var tit = new Object();
+						tit.value = returnData[i].value;
+						tit.name = returnData[i].name;
+						list2.push(tit);
+						list.push(returnData[i].name)
+					}
+				}
+				var option = {
+					title: {
+						text: '资产数量',
+						left:10
+					},
+					tooltip: {
+						// trigger 设置触发类型，默认数据触发，可选值：'item' ¦ 'axis'
+			            trigger: 'item',
+			            showDelay: 20,   // 显示延迟，添加显示延迟可以避免频繁切换，单位ms
+			            hideDelay: 20,   // 隐藏延迟，单位ms
+			            backgroundColor: 'rgba(255,0,0,0.7)',  // 提示框背景颜色
+			            textStyle: {
+			              fontSize: '16px',
+			              color: '#000'  // 设置文本颜色 默认#FFF
+			            },
+			            // formatter设置提示框显示内容
+			            // {a}指series.name  {b}指series.data的name
+			            // {c}指series.data的value  {d}%指这一部分占总数的百分比
+			            formatter: '{a} <br/>{b} : {c} 处 ({d}%)'
+				    },
+					legend: {
+				    	type: 'plain',
+			        	orient: 'horizontal',
+			        	left: 'center',
+			        	bottom: -5,
+			        	data: list
+				    },
+					series: [{
+						name: '资产数量',
+						type: 'pie',
+						radius: ['30%', '60%'],
+						center: ['50%', '50%'],
+						data: list2,
+						//roseType: 'angle',
+						itemStyle: {
+							//emphasis鼠标覆盖显示的状态
+							emphasis: {
+								shadowBlur: 10,
+		                  		shadowOffsetX: 0,
+			                  	shadowColor: 'rgba(30, 144, 255，0.5)'
+							}
+						},
+						// 设置值域的那指向线
+			              labelLine: {
+			                normal: {
+			                  show: false   // show设置线是否显示，默认为true，可选值：true ¦ false
+			                }
+			              },
+			           // 设置值域的标签
+			              label: {
+			                normal: {
+			                  position: 'inner',  // 设置标签位置，默认在饼状图外 可选值：'outer' ¦ 'inner（饼状图上）'
+			                  // formatter: '{a} {b} : {c}个 ({d}%)'   设置标签显示内容 ，默认显示{b}
+			                  // {a}指series.name  {b}指series.data的name
+			                  // {c}指series.data的value  {d}%指这一部分占总数的百分比
+			                  formatter: '{b}'
+			                }
+			              },
+		              	backgroundColor: 'pink',
+		               	color: ["#ffdb5c", "#37a2da", "#67e0e3", "#ff9f7f", "#e062ae"]
+					}]
+				}
+				var myChart = echarts.init(document.getElementById('main'));
+				myChart.setOption(option);
+			}
+		});
+		
+		$.ajax({
+			type: "get",
+			url: axios.defaults.baseURL+"/assetsCon/roomArea.do",
+			async: true,
+			success: function(returnData) {
+				var list = new Array();
+				var list2 = new Array();
+				for(var i = 0;i<returnData.length;i++){
+					if(returnData[i] != null) {
+						var tit = new Object();
+						tit.value = returnData[i].value;
+						tit.name = returnData[i].name;
+						list2.push(tit);
+						list.push(returnData[i].name)
+					}
+				}
+				
+				var option = {
+						title: {
+							text: '资产面积',
+							left:10
+						},
+						tooltip: {
+							// trigger 设置触发类型，默认数据触发，可选值：'item' ¦ 'axis'
+				            trigger: 'item',
+				            showDelay: 20,   // 显示延迟，添加显示延迟可以避免频繁切换，单位ms
+				            hideDelay: 20,   // 隐藏延迟，单位ms
+				            backgroundColor: 'rgba(255,0,0,0.7)',  // 提示框背景颜色
+				            textStyle: {
+				              fontSize: '16px',
+				              color: '#000'  // 设置文本颜色 默认#FFF
+				            },
+				            // formatter设置提示框显示内容
+				            // {a}指series.name  {b}指series.data的name
+				            // {c}指series.data的value  {d}%指这一部分占总数的百分比
+				            formatter: '{a} <br/>{b} : {c} ㎡ ({d}%)'
+					    },
+						legend: {
+					    	type: 'plain',
+				        	orient: 'horizontal',
+				        	left: 'center',
+				        	bottom: -5,
+				        	data: list
+					    },
+						series: [{
+							name: '资产面积',
+							type: 'pie',
+							radius: ['30%', '60%'],
+							center: ['50%', '50%'],
+							data: list2,
+							//roseType: 'angle',
+							itemStyle: {
+								//emphasis鼠标覆盖显示的状态
+								emphasis: {
+									shadowBlur: 10,
+			                  		shadowOffsetX: 0,
+				                  	shadowColor: 'rgba(30, 144, 255，0.5)'
+								}
+							},
+							// 设置值域的那指向线
+				              labelLine: {
+				                normal: {
+				                  show: false   // show设置线是否显示，默认为true，可选值：true ¦ false
+				                }
+				              },
+				           // 设置值域的标签
+				              label: {
+				                normal: {
+				                  position: 'inner',  // 设置标签位置，默认在饼状图外 可选值：'outer' ¦ 'inner（饼状图上）'
+				                  // formatter: '{a} {b} : {c}个 ({d}%)'   设置标签显示内容 ，默认显示{b}
+				                  // {a}指series.name  {b}指series.data的name
+				                  // {c}指series.data的value  {d}%指这一部分占总数的百分比
+				                  formatter: '{b}'
+				                }
+				              },
+			              	backgroundColor: 'pink',
+			               	color: ["#ffdb5c", "#37a2da", "#67e0e3", "#ff9f7f", "#e062ae"]
+						}]
+					}
+				var myChart = echarts.init(document.getElementById('main1'));
+				myChart.setOption(option);
+			}
+		});
+		
+		$.ajax({
+			type: "get",
+			url: axios.defaults.baseURL+"/assetsCon/structure.do",
+			async: true,
+			success: function(returnData) {
+				var list = new Array();
+				var list2 = new Array();
+				for(var i = 0;i<returnData.length;i++){
+					if(returnData[i] != null) {
+						var tit = new Object();
+						tit.value = returnData[i].value;
+						tit.name = returnData[i].name;
+						list2.push(tit);
+						list.push(returnData[i].name)
+					}
+				}
+				var option = {
+						title: {
+							text: '资产结构',
+							left:10
+						},
+						tooltip: {
+							// trigger 设置触发类型，默认数据触发，可选值：'item' ¦ 'axis'
+				            trigger: 'item',
+				            showDelay: 20,   // 显示延迟，添加显示延迟可以避免频繁切换，单位ms
+				            hideDelay: 20,   // 隐藏延迟，单位ms
+				            backgroundColor: 'rgba(255,0,0,0.7)',  // 提示框背景颜色
+				            textStyle: {
+				              fontSize: '16px',
+				              color: '#000'  // 设置文本颜色 默认#FFF
+				            },
+				            // formatter设置提示框显示内容
+				            // {a}指series.name  {b}指series.data的name
+				            // {c}指series.data的value  {d}%指这一部分占总数的百分比
+				            formatter: '{a} <br/>{b} : {c} 处 ({d}%)'
+					    },
+						legend: {
+					    	type: 'plain',
+				        	orient: 'horizontal',
+				        	left: 'center',
+				        	bottom: -5,
+				        	data: list
+					    },
+						series: [{
+							name: '资产结构',
+							type: 'pie',
+							radius: ['30%', '60%'],
+							center: ['50%', '50%'],
+							data: list2,
+							//roseType: 'angle',
+							itemStyle: {
+								//emphasis鼠标覆盖显示的状态
+								emphasis: {
+									shadowBlur: 10,
+			                  		shadowOffsetX: 0,
+				                  	shadowColor: 'rgba(30, 144, 255，0.5)'
+								}
+							},
+							// 设置值域的那指向线
+				              labelLine: {
+				                normal: {
+				                  show: false   // show设置线是否显示，默认为true，可选值：true ¦ false
+				                }
+				              },
+				           // 设置值域的标签
+				              label: {
+				                normal: {
+				                  position: 'inner',  // 设置标签位置，默认在饼状图外 可选值：'outer' ¦ 'inner（饼状图上）'
+				                  // formatter: '{a} {b} : {c}个 ({d}%)'   设置标签显示内容 ，默认显示{b}
+				                  // {a}指series.name  {b}指series.data的name
+				                  // {c}指series.data的value  {d}%指这一部分占总数的百分比
+				                  formatter: '{b}'
+				                }
+				              },
+			              	backgroundColor: 'pink',
+			               	color: ["#ffdb5c", "#37a2da", "#67e0e3", "#ff9f7f", "#e062ae"]
+						}]
+					}
+				var myChart = echarts.init(document.getElementById('main2'));
+				myChart.setOption(option);
+			}
+		});
+	}
+</script>
+<script type="text/javascript">
+	radar();
+	function radar() {
+		$.ajax({
+			type: "get",
+			url: axios.defaults.baseURL+"/assetsCon/dictionary.do",
+			async: true,
+			success: function(returnData) {
+				var list = new Array();
+				var list2 = new Array();
+				var lineCol = new Array();
+				for(var i = 0; i < returnData.length; i++) {
+					var titl = new Object();
+					list.push(returnData[i].value);
+					titl.name = returnData[i].name;
+					titl.max = 8000;
+					list2.push(titl);
+					var str = '#000000';
+					lineCol.push(str);
+				}
+				var dataBJ = [
+					list
+				];
+				var lineStyle = {
+					normal: {
+						width: 1,
+						opacity: 0.5
+					}
+				};
+				option = {
+					//backgroundColor: '#161627',
+					title: {
+						text: '资产结构',
+						left: 10,
+						textStyle: {
+							color: '#000000'
+						}
+					},
+					tooltip: {
+						//鼠标点击之后显示详细数据
+				        show: true
+				    },
+					radar: {
+						indicator: list2,
+						shape: 'rect',
+						splitNumber: 4,
+						name: {
+							textStyle: {
+								color: '#000000'
+							}
+						},
+						splitLine: {
+							lineStyle: {
+								color: lineCol.reverse()
+							}
+						},
+						splitArea: {
+							show: false
+						},
+						axisLine: {
+							lineStyle: {
+								color: 'green'
+							}
+						}
+					},
+					series: [{
+						name: '资产结构',
+						type: 'radar',
+						lineStyle: lineStyle,
+						data: dataBJ,
+						symbol: 'none',
+						itemStyle: {
+							normal: {
+								color: 'red'
+							}
+						},
+						areaStyle: {
+							normal: {
+								opacity: 0.1
+							}
+						}
+					}]
+				};
+				
+				var myChart = echarts.init(document.getElementById('main3'));
+				myChart.setOption(option);
+			}
+		})
+	}
+
 </script>
 </body>
 

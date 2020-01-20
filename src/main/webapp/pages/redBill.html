@@ -215,7 +215,7 @@
 						$('#table').bootstrapTable('refresh');
 					}else{
 						$("#myModal").modal('hide');
-						setSuccess("发票开取失败！");
+						setSuccess("发票开取失败！"+data.msg);
 						$('#table').bootstrapTable('refresh');
 					}
 				}); 

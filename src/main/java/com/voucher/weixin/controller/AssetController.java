@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,6 +35,7 @@ import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.User_AccessTime;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.model.Access;
+import com.voucher.manage.model.Campus;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.CampusService;
@@ -525,7 +527,7 @@ public class AssetController {
 		
 		/**
 		 * 通过所关注微信公众号判断是否是当前合同公司对应公众号
-		 *
+		 */
 		
 		Map map=assetsDAO.getAllChartInfo(1, 0, null, null, searchMap);
 		
@@ -611,15 +613,15 @@ public class AssetController {
 	@RequestMapping("/getHireListByGUID")
 	public @ResponseBody Map getHireListByGUID(@RequestParam Integer limit, @RequestParam Integer offset,
 			@RequestParam String hireGUID, String sort, String order, String search, HttpServletRequest request) {
-		if (sort == "" || sort.equals("")) {
+		/*if (sort == "" || sort.equals("")) {
 			sort = "HireDate";
 		}
 
 		if (order == "" || order.equals("")) {
 			order = "asc";
-		}
-		sort = sort.replaceAll("^,*|,*$", "");
-		order = order.replaceAll("^,*|,*$", "");
+		}*/
+		//sort = sort.replaceAll("^,*|,*$", "");
+		//order = order.replaceAll("^,*|,*$", "");
 		System.out.println("sort ="+sort+"       order="+order);
 		
 		Map searchMap = new HashMap<>();
@@ -1021,6 +1023,21 @@ public class AssetController {
 		return roomInfoDao.findAllRoomRepairLog(limit, offset, sort, order, where);
 	}
 
+	//查询是否填写短信的uid和key
+	@RequestMapping("/getMesUidAndKey")
+	@ResponseBody
+	public Map getMesUidAndKey(@RequestParam Integer campusId ,HttpServletRequest request) {
+		Map<String, String> map = new HashMap<String, String>();
+		WeiXin weiXin = weixinService.getWeiXinByCampusId(campusId);
+		if (weiXin.getUid().equals("")||weiXin.getUid()==null||weiXin.getUidKey().equals("")||weiXin.getUidKey()==null) {
+			map.put("res", "短信uid或key错误！！");
+		}
+		else {
+			map.put("res", "success");
+		}
+		return map;
+	}
+	
 	@RequestMapping("/getMessageNumber")
 	public @ResponseBody Integer getMessageNumber() {
 
@@ -1315,10 +1332,11 @@ public class AssetController {
 	 */
 	@RequestMapping(value = "/getEin")
 	@ResponseBody
-	public ChartInfo getEin(@RequestParam String guid) {
+	public Map getEin(@RequestParam String guid) {
 		
-		ChartInfo list = roomInfoDao.queryEin(guid);
-		return list;
+		Map map = roomInfoDao.queryEin(guid);
+
+		return map;
 	}
 	
 	/**
@@ -1329,12 +1347,11 @@ public class AssetController {
 	 */
 	@RequestMapping("/updateEin")
 	@ResponseBody
-	public Integer updateEin(@RequestParam String guid,String chart) {
-		
-		JSONObject jsonObject = JSONObject.parseObject(chart);
-		String GUID = guid;
-		String company = jsonObject.getString("company");
-		String ein = jsonObject.getString("ein");
+	public Integer updateEin(@RequestBody JSONObject chart) {
+		Map map = (Map) chart.get("chart");
+		String GUID = (String) map.get("chartGuid");
+		String company = (String) map.get("company");
+		String ein = (String) map.get("ein");
 		
 		ChartInfo chartInfo = new ChartInfo();
 		chartInfo.setGUID(GUID);

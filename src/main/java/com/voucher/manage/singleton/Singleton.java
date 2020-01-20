@@ -1,5 +1,6 @@
 package com.voucher.manage.singleton;
 
+import java.io.File;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,20 +12,18 @@ import com.voucher.manage.tools.MyTestUtil;
 public class Singleton {
 	private static Singleton instance = new Singleton();
 	
-//	public static final String URL = "http://www.gulinguozi.com/";
-	
 	public final static String ROOMDATABASE="[RoomManage]";
 	
 	//本地文件目录
-	public final static String filePath="\\Desktop\\pasoft\\photo";
+	public final static String filePath= File.separator+"Desktop"+File.separator+"pasoft"+File.separator+"photo";
 	
 	//资产管理系统图片目录
-	public static final String ROOMINFOIMGPATH	="D:\\PIC\\";
+	public static final String ROOMINFOIMGPATH	="D:"+File.separator+"PIC"+File.separator;
 	
 	//资产管理系统图片目录2
-	public static final String ROOMINFOIMGPATH2	="D:\\PIC\\pasoft";
+	public static final String ROOMINFOIMGPATH2	="D:"+File.separator+"PIC"+File.separator+"pasoft";
 	
-	
+
 	private LinkedHashMap<String,Map<String, Object>> registerMap;
 	
 	private LinkedHashMap<String, List<ImageData>> imageDataMap;

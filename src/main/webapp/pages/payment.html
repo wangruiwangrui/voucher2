@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<head>
+<meta charset="utf-8">
+<title>用户管理</title>
+<link rel="stylesheet" type="text/css" href="date/css/pikaday.css" />
+<link rel="stylesheet" href="assets/bootstrap-table/bootstrap-table.css">
+<link rel="stylesheet"
+	href="assets/bootstrap-table/bootstrap-editable.css">
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet">
+<style>
+.ml10 {
+	margin-left: 10px;
+}
+
+#operate-success {
+	font-size: 16px;
+	background-color: #8AC007;
+	color: #FBFBFB;
+	visibility: hidden
+}
+
+.bttn{
+	height: 34px;
+}
+
+.in{
+	padding: 0 5px 0 5px;
+	line-height: 17px;
+}
+</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="page-header">
+			<h1>蓝字发票&nbsp;&nbsp;</h1>
+		</div>
+		<div style="text-align: center;">
+			<span id="operate-success">设置成功</span>
+		</div>
+
+		<div id="toolbar" class="btn-group">
+			<button class="btn btn-default dropdown-toggle " type="button"
+				data-toggle="dropdown">
+				选择日期<span class="caret"></span>
+				<ul class="dropdown-menu ul" role="menu"
+					aria-labelledby="dropdownMenu1">
+					<li role="presentation"><a role="menuitem" id="today"
+						tabindex="-1" href="#">今天</a></li>
+					<li role="presentation"><a role="menuitem" id="week"
+						tabindex="-1" href="#">一周内</a></li>
+					<li role="presentation"><a role="menuitem" id="month"
+						tabindex="-1" href="#">一月内</a></li>
+				</ul>
+			</button>
+			<button type="button" class="btn btn-default bttn">
+				<input type="text" id="datepicker" class="in" placeholder="开始日期">
+				<i id="removestart" class="glyphicon glyphicon-remove"></i>
+			</button>
+			<button type="button" class="btn btn-default bttn">
+				<input type="text" id="datepicker2" class="in" placeholder="结束日期">
+				<i id="revoveend" class="glyphicon glyphicon-remove"></i>
+			</button>
+			<button id="query" type="button" class="btn btn-default">查询
+			</button>
+		</div>
+
+		<div>
+			<table id="table" data-toggle="table" data-show-export="false"
+				data-toolbar="#toolbar" data-search="true" data-show-refresh="true"
+				data-show-toggle="true" data-side-pagination="server"
+				data-pagination="true" data-show-columns="true"
+				data-sort-order="desc" data-click-to-select="true">
+				<thead>
+					<tr>
+						<th data-field="state" data-checkbox="true"></th>
+						<th class="ID" data-align="left" data-field="billId"
+							data-visible="false">ID</th>
+						<th data-align="center" data-field="order_num">支付编码</th>
+						<th data-align="center" data-field="jshj">总金额(元)</th>
+						<th data-align="center" data-field="hjje">合计金额(元)</th>
+						<th data-align="center" data-field="hjse">合计税额(元)</th>
+						<th data-align="center" data-field="xsf_dzdh">销售方地址电话</th>
+						<th data-align="center" data-field="xsf_mc">销售方名称</th>
+						<th data-align="center" data-field="xsf_nsrsbh">销售方纳税人识别号</th>
+						<th data-align="center" data-field="xsf_yhzh">销售方银行账号</th>
+						<!-- <th data-align="center" data-field="createTime" data-formatter="actionTime">支付时间</th> -->
+						<th data-align="center" data-field="gmf_mc">购买方</th>
+						<th data-align="center" data-field="gmf_nsrsbh">购买方纳税人识别号</th>
+						<th data-align="center" data-field="msg">开票失败原因</th>
+						
+						<th data-align="center" data-field="action"
+							data-formatter="actionReport">新开发票</th>
+						
+					</tr>
+				</thead>
+			</table>
+		</div>
+
+	
+	<!-- 警告对话框 -->
+	<div class="modal fade" id="alertdialog" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header blue">
+					<div>
+						<strong id="alertchar" style="font-size: 20px"></strong>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" id="commitFoodDataButton"
+							class="btn btn-primary">确定</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 添加商品Modal start -->
+	<div class="modal fade" id="myModal" tabindex="1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content" style="margin-top: 10em;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h3 class="modal-title" id="myModalLabel">填写发票信息</h3>
+				</div>
+				<form id="dataCommit" class="form-horizontal" method="post"
+					enctype="multipart/form-data" action="service/updateFoods.do">
+					<div class="modal-body">
+						<div class="form-group none">
+							<label for="campus_id_add_count" class="control-label col-md-4">ID</label>
+							<div class="col-md-8">
+								<input type="text" class="form-control" id="id2" name="id"
+									readonly>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4" for="title">购买方名称：</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="gmf_mc2" name="title"
+									placeholder="必填">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4" for="templateId2">购买方纳税人识别号：</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="gmf_nsrsbh2"
+									name="customService" placeholder="">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4" for="title">订单编号：</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="out_trade_no2" name="out_trade_no"
+									readonly="readonly">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4" for="title">总金额(元)：</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="total_fee2" name="out_trade_no"
+									readonly="readonly">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary"
+							onclick="commitFoodDataButton();">提交更改</button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<script src="assets/bootstrap-table/jquery.min.js"></script>
+	<script src="assets/bootstrap-table/bootstrap.min.js"></script>
+	<script src="assets/bootstrap-table/bootstrap-table.js"></script>
+	<script src="assets/bootstrap-table/bootstrap-table-export.js"></script>
+	<script src="assets/bootstrap-table/tableExport.js"></script>
+	<script src="assets/bootstrap-table/bootstrap-table-editable.js"></script>
+	<script src="assets/bootstrap-table/bootstrap-editable.js"></script>
+	<script src="js/bootstrap-table-zh-CN.min.js"></script>
+	<script type="text/javascript"
+		src="bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="date/js/pikaday.min.js"></script>
+	<script type="text/javascript">
+		var campusId = campusId;
+
+		var url = "roominfo/payment.do?campusId=" + campusId + "&datepicker="  + "&datepicker2=" ;
+		$("#table").bootstrapTable({
+			url : url
+		});
+
+		function actionReport(value, row, index) {
+			var err = row.err;
+			if(err != null){
+				var li = err.substring(err.length-3,err.length-1);
+			}
+			
+			var result = "";
+			result += "<button type='button' title='新开发票' onclick='getRetNewBill(this);' class='btn btn-success'>开发票</button>";
+			return result;
+
+		}
+		
+		function getRetNewBill(value) {
+			var array = $('#table').bootstrapTable('getSelections');
+			tag = 1;
+			if (array.length > 1) {
+				$('#alertchar').text('编辑操作不能同时选中多条记录！');
+				$('#commitFoodDataButton').hide();
+				$('#alertdialog').modal("show");
+			} else if (array.length == 0) {
+				$('#alertchar').text('请先选中某条记录！');
+				$('#commitFoodDataButton').hide();
+				$('#alertdialog').modal("show");
+			} else {
+
+				$("#myModalLabel").text("填写发票信息");
+				$("#myModal").modal('show');
+
+				var out_trade_no = $("#out_trade_no2").val(array[0].order_num);
+				var gmf_mc = $("#gmf_mc2").val(array[0].gmf_mc);
+				var gmf_nsrsbh = $("#gmf_nsrsbh2").val(array[0].gmf_nsrsbh);
+				var total_fee2 = $("#total_fee2").val(array[0].jshj);
+			}
+		}
+		
+		function commitFoodDataButton() {
+			var out_trade_noRed = $("#out_trade_no2").val();
+			var gmf_mc = $("#gmf_mc2").val();
+			var gmf_nsrsbh = $("#gmf_nsrsbh2").val(); 
+			if(gmf_mc == ""|| gmf_mc==null){
+				alert("请填写购买方名称");
+			}else{
+				
+				$.post("../../voucher/mobile/bill/getRetNewBill.do", {
+					out_trade_noRed : out_trade_noRed,
+					purchaser :gmf_mc,
+					ein : gmf_nsrsbh
+				}, function(data) {
+					data = JSON.parse(data);
+					if(data.result=="SUCCESS"){
+						$("#myModal").modal('hide');
+						setSuccess("发票开取成功！");
+						$('#table').bootstrapTable('refresh');
+					}else{
+						$("#myModal").modal('hide');
+						setSuccess("发票开取失败！");
+						$('#table').bootstrapTable('refresh');
+					}
+				}); 
+			}
+		}
+		
+		var picker = new Pikaday({
+			field : document.getElementById('datepicker')
+		});
+		var picker2 = new Pikaday({
+			field : document.getElementById('datepicker2')
+		});
+
+		$("#removestart").on("click", function() {
+			$("#datepicker").val("");
+		});
+		$("#revoveend").on("click", function() {
+			$("#datepicker2").val("");
+		});
+
+		$("#today").on(
+				"click",
+				function() {
+					var Today = new Date();
+
+					var datepicker = Today.getFullYear() + "-"
+							+ (Today.getMonth() + 1) + "-" + Today.getDate()
+
+					$("#datepicker").val(datepicker);
+					$("#datepicker2").val(datepicker);
+
+					var url = "roominfo/payment.do?campusId=" + campusId
+							+ "&datepicker=" + datepicker
+							+ "&datepicker2=" + datepicker;
+					$(" #table").bootstrapTable('refresh', {
+						url : url
+					});
+				});
+
+		$("#week").on(
+				"click",
+				function() {
+					var Week = new Date();
+
+					var datepicker = Week.getFullYear() + "-"
+							+ (Week.getMonth() + 1) + "-"
+							+ (Week.getDate() - 7);
+					var datepicker2 = Week.getFullYear() + "-"
+							+ (Week.getMonth() + 1) + "-" + (Week.getDate());
+
+					$("#datepicker").val(datepicker);
+					$("#datepicker2").val(datepicker2);
+					var url = "roominfo/payment.do?campusId=" + campusId
+							+ "&datepicker=" + datepicker
+							+ "&datepicker2=" + datepicker2;
+					$(" #table").bootstrapTable('refresh', {
+						url : url
+					});
+
+				});
+
+		$("#month").on(
+				"click",
+				function() {
+					var Month = new Date();
+
+					var datepicker = Month.getFullYear() + "-"
+							+ (Month.getMonth()) + "-" + (Month.getDate());
+					var datepicker2 = Month.getFullYear() + "-"
+							+ (Month.getMonth() + 1) + "-" + (Month.getDate());
+
+					$("#datepicker").val(datepicker);
+					$("#datepicker2").val(datepicker2);
+					var url = "roominfo/payment.do?campusId=" + campusId
+							+ "&datepicker=" + datepicker
+							+ "&datepicker2=" + datepicker2;
+					$(" #table").bootstrapTable('refresh', {
+						url : url
+					});
+				});
+
+		function actionTime(value, row, index) {
+			console.log("value====",value)
+			var date = new Date(value);
+			Y = date.getFullYear() + '-';
+			M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date
+					.getMonth() + 1)
+					+ '-';
+			D = date.getDate() + ' ';
+			h = date.getHours() + ':';
+			m = date.getMinutes() + ':';
+			s = date.getSeconds();
+			return Y + M + D + h + m + s;
+		}
+		$("#query").click(
+				function() {
+					var datepicker = $("#datepicker").val();
+					var datepicker2 = $("#datepicker2").val();
+					var url = "roominfo/payment.do?campusId=" + campusId
+							+ "&datepicker=" + datepicker
+							+ "&datepicker2=" + datepicker2;
+					$(" #table").bootstrapTable('refresh', {
+						url : url
+					});
+				})
+
+		$(document).ready(function() {
+
+			$(".form_datetime").datetimepicker({
+				format : "yyyy-mm-dd hh:ii:ss",
+				linkField : "mirror_field",
+				linkFormat : "yyyy-mm-dd hh:ii"
+			});
+
+		});
+		$('.form_datetime').datetimepicker({
+			//language:  'fr',
+			weekStart : 1,
+			todayBtn : 1,
+			autoclose : 1,
+			todayHighlight : 1,
+			startView : 2,
+			forceParse : 0,
+			showMeridian : 1
+		});
+		$('.form_date').datetimepicker({
+			language : 'fr',
+			weekStart : 1,
+			todayBtn : 1,
+			autoclose : 1,
+			todayHighlight : 1,
+			startView : 2,
+			minView : 2,
+			forceParse : 0
+		});
+		$('.form_time').datetimepicker({
+			language : 'fr',
+			weekStart : 1,
+			todayBtn : 1,
+			autoclose : 1,
+			todayHighlight : 1,
+			startView : 1,
+			minView : 0,
+			maxView : 1,
+			forceParse : 0
+		});
+	</script>
+
+</body>
+</html>
