@@ -28,6 +28,6 @@
  	</delete>
  	
  	<select id="selectTemplate" parameterType="com.voucher.manage.model.Notice" resultMap="BaseResultMap">
-		select id,title,template_Id from notice where campus_Id = #{campusId,jdbcType=INTEGER} and title = #{title,jdbcType=VARCHAR} 
+		select * from notice where campus_Id = #{campusId,jdbcType=INTEGER} and title = #{title,jdbcType=VARCHAR} 
 	</select>
 </mapper>

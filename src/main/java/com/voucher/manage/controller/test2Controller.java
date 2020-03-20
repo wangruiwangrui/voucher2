@@ -35,8 +35,6 @@ import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.ConnectRMI;
 
-import voucher.Mybatis;
-
 @Controller
 @RequestMapping("/test2")
 public class test2Controller {

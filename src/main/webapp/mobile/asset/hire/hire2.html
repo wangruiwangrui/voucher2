@@ -412,7 +412,7 @@
 									title: '提示',
 									message: err_code
 								}).then(() => {
-									// on close
+									this.initdata();
 								});
 
 							} else {
@@ -421,7 +421,7 @@
 									title: '提示',
 									message: return_msg
 								}).then(() => {
-									// on close
+									this.initdata();
 								});
 							}
 						})
@@ -478,6 +478,7 @@
 						}
 						axios.get('/voucher/mobile/bill/getNBill.do', {
 							params: {
+								campusId :this.campusId,
 								out_trade_no: this.out_trade_no,
 								purchaser: this.purchaser,
 								ein: this.ein,

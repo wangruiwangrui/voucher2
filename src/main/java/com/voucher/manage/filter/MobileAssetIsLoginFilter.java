@@ -116,7 +116,7 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        			
 		        			/**
 		        			 * 通过所关注微信公众号判断是否是当前合同公司对应公众号
-		        			*/		       			
+		        			*			
 		        			WeiXin campus = weixinService.getWeiXinByCampusId(campusId);
 		        			String campusName = campus.getCampusName();
 		        			String manageItem = "";
@@ -132,7 +132,7 @@ public class MobileAssetIsLoginFilter implements Filter{
 			        					ischar=true;
 			        					break;
 			        				}
-			        			}else if(campusName.equals("泸州国有资产经营有限公司")) {
+			        			}else if(campusName.equals("泸州国盛资产经营有限公司")) {
 			        				searchMap.put("ChartInfo.ManageRegion like ", "%国资委托%");
 			        				map=assetsDAO.getAllChartInfo(1, 0, null, null, searchMap);
 			        				if(map!=null) {

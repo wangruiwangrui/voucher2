@@ -1,11 +1,10 @@
 package com.voucher.manage.controller;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.bouncycastle.jce.provider.JCEMac.MD5;
+import com.voucher.manage.tools.Md5;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.voucher.manage.dao.IUserDAO;
 import com.voucher.manage.daoModel.Users;
-import com.voucher.manage.tools.Md5;
 
 @Controller
 @RequestMapping("/houses")
@@ -46,7 +44,7 @@ public class SqlServerController {
         
         for(;i<100;i++){
         users.setId(i);
-        String a=Md5.GetMD5Code(String.valueOf(Math.random()*1000));
+        String a= Md5.GetMD5Code(String.valueOf(Math.random()*1000));
         users.setPassword(a);
         String b=Md5.GetMD5Code(String.valueOf(Math.random()*1000));
         users.setUsername(b);

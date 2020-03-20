@@ -1,12 +1,10 @@
 package com.voucher.weixin.insweptcontroller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.activemq.filter.function.makeListFunction;
-import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -28,17 +24,10 @@ import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.PreMessage;
-import com.voucher.manage.model.Sellers;
 import com.voucher.manage.model.User_Asset;
-import com.voucher.manage.model.Users;
 
-import com.voucher.manage.service.SellerService;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.singleton.Singleton;
-import com.voucher.manage.tools.Constants;
-import com.voucher.manage.tools.IdcardUtil;
-import com.voucher.manage.tools.Md5;
-import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.verifycode.Captcha;
 import com.voucher.manage.tools.verifycode.SpecCaptcha;
 import com.voucher.sqlserver.context.Connect;

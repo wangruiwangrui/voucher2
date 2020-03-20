@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.xalan.xsltc.compiler.sym;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -171,10 +172,11 @@ public class BillUController {
 	 */
 	@RequestMapping("/getNBill")
 	@ResponseBody
-	public BusinessResult getBill(String out_trade_no, String purchaser, String ein, String sl,HttpServletRequest request,
+	public BusinessResult getBill(Integer campusId,String out_trade_no, String purchaser, String ein, String sl,HttpServletRequest request,
 			HttpServletResponse response) {
 		System.out.println("------------------------------------");
 		System.out.println("out_trade_no="+out_trade_no+"              "+"purchaser="+purchaser+"               "+"ein="+ein+"           sl="+sl);
+		
 		WechatSendMessageController wechatSendMessageController = new WechatSendMessageController();
 
 		Payment_Info pInfo = billDAO.selectPayment_Info(out_trade_no); // 通过交易单号查询交易详情
@@ -253,6 +255,8 @@ public class BillUController {
 				// 设置开票状态
 				Integer re = billDAO.updatePreBill(out_trade_no, result);
 				Map map = getBillOriginalPDF(out_trade_no, request, response);
+				System.out.println("222-----------22");
+				MyTestUtil.print(map);
 				char a = DOMAIN.charAt(4);
 				String imgUrl = "";
 				if (a==':') {
@@ -277,9 +281,11 @@ public class BillUController {
 
 				WeiXin weiXin = weixinMapper.getCampus(billServerinfo.getCampusId());
 				String campany = weiXin.getCampusName();
-				wechatSendMessageController.sendMessage(pInfo.getOpenid(), notice.getTemplateId(), "您的电子发票已开具成功",
-						imgUrl, "您的电子发票已开具成功", campany, dat, result.getRows().get(0).getFp_dm(),
+				int ress = wechatSendMessageController.sendMessage2(pInfo.getCampusId(),pInfo.getOpenid(), notice.getTemplateId(), "电子发票开具通知",
+						imgUrl, "您的电子发票已开具", campany, dat, result.getRows().get(0).getFp_dm(),
 						result.getRows().get(0).getGmf_mc(), result.getRows().get(0).getJshj() + "元", "依法纳税，你我有责。");
+				System.out.println("11111111111===============");
+				System.out.println(ress);
 				break;
 			} else {
 
@@ -406,7 +412,7 @@ public class BillUController {
 				String campany = weiXin.getCampusName();
 				
 				//推送消息
-				wechatSendMessageController.sendMessage(pInfo.getOpenid(), notice.getTemplateId(), "您的电子发票已开具成功",
+				wechatSendMessageController.sendMessage2(pInfo.getCampusId(),pInfo.getOpenid(), notice.getTemplateId(), "您的电子发票已开具成功",
 						imgUrl, "您的电子发票已开具成功", campany, dat, result.getRows().get(0).getFp_dm(),
 						result.getRows().get(0).getGmf_mc(), result.getRows().get(0).getJshj() + "元", "依法纳税，你我有责。");
 				

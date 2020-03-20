@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.voucher.manage.tools.Md5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,6 @@ import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.model.Sellers;
 import com.voucher.manage.service.SellerService;
 import com.voucher.manage.tools.Constants;
-import com.voucher.manage.tools.Md5;
 import com.voucher.sqlserver.context.Connect;
 
 @Controller

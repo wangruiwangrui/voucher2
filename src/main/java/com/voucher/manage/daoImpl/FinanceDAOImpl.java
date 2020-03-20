@@ -3,6 +3,7 @@ package com.voucher.manage.daoImpl;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -643,6 +644,8 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO {
 		Date date = new Date();
 
 		float amount = 0;
+		
+		float  f1 = 0;
 
 		String printMemo = "";
 
@@ -664,7 +667,9 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO {
 
 					String[] where = { "GUID=", guid };
 
-					date = new Date();
+					String string = new SimpleDateFormat("yyyy-MM-dd 00:00:00.000").format(new Date()).toString();
+					DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd 00:00:00.000");
+					date = format1.parse(string);
 
 					HireList hireList = new HireList();
 					hireList.setState("已交");
@@ -699,6 +704,8 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO {
 					HireList hireList2 = (HireList) SelectExe.get(this.getJdbcTemplate(), hireList).get(0);
 
 					amount = amount + hireList2.getHire();
+					BigDecimal  b  =  new  BigDecimal(amount);  
+					f1  =  b.setScale(2,  BigDecimal.ROUND_HALF_UP).floatValue(); 
 					if (i == (files.size() - 1)) {
 						printMemo = printMemo + hireList2.getHireDate();
 					} else {
@@ -713,7 +720,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO {
 				HirePay hirePay = new HirePay();
 
 				hirePay.setGUID(payGUID);
-				hirePay.setAmount(amount);
+				hirePay.setAmount(f1);
 				hirePay.setOperator("微信支付");
 				hirePay.setPrintMemo(printMemo);
 				hirePay.setChartGUID(chartGUID);
@@ -730,6 +737,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO {
 					return 0;
 				}
 
+				Date data2 = new Date();
 				// 支付成功生成支付记录
 				Payment_Info payment = new Payment_Info();
 				payment.setOpenid((String) map.get("openId"));
@@ -737,9 +745,10 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO {
 				Integer total_fee1 = (Integer) map.get("total_fee");
 				String total_fee2 = String.valueOf(total_fee1);
 				
-				Float total_fee = Float.parseFloat(total_fee2)/100;
-				payment.setTotal_fee(total_fee);
-				payment.setCreateTime(date);
+				BigDecimal  b  =  new  BigDecimal(Float.parseFloat(total_fee2)/100);  
+				float  total_fee =  b.setScale(2,  BigDecimal.ROUND_HALF_UP).floatValue(); 
+				payment.setTotal_fee(amount);
+				payment.setCreateTime(data2);
 				payment.setUnit("元");
 				payment.setName((String) map.get("name"));
 				payment.setNonceStr((String) map.get("nonce_str"));

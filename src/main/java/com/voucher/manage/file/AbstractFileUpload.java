@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.voucher.manage.tools.Md5;
 import org.springframework.context.ApplicationContext;
 
 import com.rmi.server.entity.ImageData;
@@ -18,7 +19,6 @@ import com.voucher.manage.dao.AssetCheckDAO;
 import com.voucher.manage.dao.BillDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
-import com.voucher.manage.daoImpl.MobileDAOImpl;
 import com.voucher.manage.daoModel.Assets.Assets_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
@@ -27,8 +27,6 @@ import com.voucher.manage.daoModel.invoice.BillImg;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.CopyFile;
 import com.voucher.manage.tools.FileTypeTest;
-import com.voucher.manage.tools.Md5;
-import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 
 public abstract class AbstractFileUpload {
@@ -99,7 +97,7 @@ public abstract class AbstractFileUpload {
      		UUID uuid=UUID.randomUUID();		
      		Date date=new Date();
      		
-     		String fileName=Md5.GetMD5Code(uuid.toString())+date.getTime();
+     		String fileName= Md5.GetMD5Code(uuid.toString())+date.getTime();
          
             File newFile2 = new File(savePath+"\\"+fileName+"."+mimeType); 
             System.out.println("newFile="+newFile.getName());

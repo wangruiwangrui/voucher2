@@ -1,31 +1,18 @@
 package com.voucher.manage.daoImpl;
 
 
-import com.alibaba.fastjson.JSONArray;
 import com.voucher.manage.dao.CurrentDao;
 
-import com.voucher.manage.daoModel.TTT.ChartInfo;
-import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoRowMapper.RowMappersTableJoin;
 import com.voucher.manage.daoRowMapper.RowMappersTableJoin2;
 import com.voucher.manage.daoSQL.*;
 import com.voucher.manage.daoSQL.annotations.DBTable;
-import com.voucher.manage.tools.Md5;
 import com.voucher.manage.tools.MyTestUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CurrentDaoImpl extends JdbcDaoSupport implements CurrentDao {
 

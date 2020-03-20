@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,17 +26,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.FinanceDAO;
-import com.voucher.manage.daoModel.TTT.Payment_Info;
-import com.voucher.manage.daoModel.invoice.BusinessResult;
 import com.voucher.manage.model.Notice;
-import com.voucher.manage.model.Users;
+import com.voucher.manage.model.User_Asset;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.NoticeService;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.service.WeiXinService;
 import com.voucher.manage.singleton.Singleton;
-import com.voucher.manage.tools.Md5;
-import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 import com.voucher.weixin.util.HttpUtils;
 import com.voucher.weixin.util.OrderNum;
@@ -305,9 +300,10 @@ public class WeinXinPayController {
 				
 				String time=sdf.format(date);
 				
-				Users users=userService.getUserByOnlyOpenId(openId);
+				User_Asset user_Asset = userService.getUserAssetByOnlyOpenId(openId);
+				//Users users=userService.getUserByOnlyOpenId(openId);
 				
-				String name=users.getName();
+				String name=user_Asset.getCharter();
 				
 				int total_fee = (int) tradeMap.get("total_fee");
 				
@@ -333,7 +329,7 @@ public class WeinXinPayController {
 					
 					Float totalfee = Float.parseFloat(String.valueOf(total_fee));
 					
-					wechatSendMessageController.sendMessage(openId, notice.getTemplateId(),
+					wechatSendMessageController.sendMessage2(campusId,openId, notice.getTemplateId(),
 							"支付成功提醒", "", 
 							name+"你好，你已支付成功", totalfee/100+"元", "微信支付", "房屋租金",out_trade_no,
 							"", "感谢你的使用");					

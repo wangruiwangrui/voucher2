@@ -70,5 +70,7 @@ public interface UserService {
 
 	Integer getCampusByOpenId(String openId);
 
+	User_Asset getUserAssetByOnlyOpenId(String openId);
+
 	
 }

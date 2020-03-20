@@ -16,4 +16,6 @@ public interface User_AssetMapper {
     int updateByPrimaryKey(User_Asset record);
     
     int getCountUser_AssetByOpenId(String openId);
+
+	User_Asset getUserAssetByOnlyOpenId(String openId);
 }

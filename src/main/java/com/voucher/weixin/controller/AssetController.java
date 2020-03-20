@@ -15,6 +15,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.voucher.manage.service.CampusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -35,10 +36,8 @@ import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.User_AccessTime;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.model.Access;
-import com.voucher.manage.model.Campus;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.model.WeiXin;
-import com.voucher.manage.service.CampusService;
 import com.voucher.manage.service.PhotoService;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.service.WeiXinService;
@@ -527,7 +526,7 @@ public class AssetController {
 		
 		/**
 		 * 通过所关注微信公众号判断是否是当前合同公司对应公众号
-		 */
+		 *
 		
 		Map map=assetsDAO.getAllChartInfo(1, 0, null, null, searchMap);
 		

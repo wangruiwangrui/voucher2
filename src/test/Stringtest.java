@@ -11,6 +11,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class Stringtest {
 	
 	public static void main(String[] args){
+		String string1 = "20200302165732961803";
+		String g = string1.substring(0, 17);
+		System.out.println(g);
 		String string="abcd123456中文_$,@";
 		string.replaceAll("[^\\u4e00-\\u9fa5]", "");
 		//System.out.println(string.replaceAll("[^\\u4e00-\\u9fa5]", ""));

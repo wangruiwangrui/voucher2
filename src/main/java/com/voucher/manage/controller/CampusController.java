@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.voucher.manage.service.CampusService;
+import com.voucher.manage.tools.Md5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +19,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.voucher.manage.model.Campus;
 import com.voucher.manage.model.CampusAdmin;
-import com.voucher.manage.service.CampusService;
 import com.voucher.manage.tools.Constants;
-import com.voucher.manage.tools.Md5;
 
 @Controller
 @RequestMapping("/campus")

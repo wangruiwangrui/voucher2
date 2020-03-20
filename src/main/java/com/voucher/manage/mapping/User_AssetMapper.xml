@@ -95,4 +95,7 @@
     where open_id = #{openId,jdbcType=VARCHAR}
   </update>
 
+	<select id="getUserAssetByOnlyOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from user_asset where open_id=#{openId,jdbcType=VARCHAR}
+	</select>
 </mapper>
