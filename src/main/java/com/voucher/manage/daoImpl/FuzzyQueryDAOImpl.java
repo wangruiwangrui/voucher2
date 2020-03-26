@@ -31,14 +31,14 @@ public class FuzzyQueryDAOImpl extends JdbcDaoSupport implements FuzzyQueryDao {
         		"b.Charter," + 
         		"b.TotalHire," + 
         		"b.Phone " + 
-        		"FROM RoomInfo a " + 
+        		"FROM  RoomInfo a " + 
         		"INNER JOIN ChartInfo b ON a.ChartGUID = b.GUID WHERE " + 
         		"a.Address LIKE '%"+Address+"%'" + 
-        		"OR a.Num LIKE '%"+Num+"%'" + 
-        		"OR a.RoomProperty LIKE '%"+RoomProperty+"%'" + 
-        		"OR b.Charter LIKE '%"+Charter+"%'" + 
-        		"OR b.Phone LIKE '%"+Phone+"%'" + 
-        		"OR b.ContractNo LIKE '%"+ContractNo+"%'"+") temp_row WHERE rownumber > ("+page+"-1)*10";
+        		" OR a.Num LIKE '%"+Num+"%'" +  
+        		" OR a.RoomProperty LIKE '%"+RoomProperty+"%'" + 
+        		" OR b.Charter LIKE '%"+Charter+"%'" + 
+        		" OR b.Phone LIKE '%"+Phone+"%'" + 
+        		" OR b.ContractNo LIKE '%"+ContractNo+"%'"+") temp_row WHERE rownumber > ("+page+"-1)*10";
         
         String sql2 ="SELECT " + 
         		"count(0) " + 
