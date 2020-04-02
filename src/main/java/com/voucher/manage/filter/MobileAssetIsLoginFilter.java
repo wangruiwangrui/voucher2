@@ -116,7 +116,7 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        			
 		        			/**
 		        			 * 通过所关注微信公众号判断是否是当前合同公司对应公众号
-		        			*			
+		        			*/			
 		        			WeiXin campus = weixinService.getWeiXinByCampusId(campusId);
 		        			String campusName = campus.getCampusName();
 		        			String manageItem = "";

@@ -526,7 +526,7 @@ public class AssetController {
 		
 		/**
 		 * 通过所关注微信公众号判断是否是当前合同公司对应公众号
-		 *
+		 */
 		
 		Map map=assetsDAO.getAllChartInfo(1, 0, null, null, searchMap);
 		

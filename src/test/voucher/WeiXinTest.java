@@ -73,11 +73,16 @@ public class WeiXinTest {
 		System.out.println(requestUrl);
 		*/
 
-		int i = 1;
-		String ii = String.valueOf(i);
-		Float f = Float.parseFloat(ii);
-		System.out.println(f/100);
+		List<String> list = new ArrayList<String>();
+		list.add("sfdsfedsf");
+		list.add("ooooooo");
+		System.out.println(list.toString());
 		
+//		int i = 1;
+//		String ii = String.valueOf(i);
+//		Float f = Float.parseFloat(ii);
+//		System.out.println(f/100);
+//		
 	}
 
 }

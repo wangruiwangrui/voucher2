@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.FinanceDAO;
+import com.voucher.manage.daoModel.TTT.HirePayInfo;
 import com.voucher.manage.model.Notice;
 import com.voucher.manage.model.User_Asset;
 import com.voucher.manage.model.WeiXin;
@@ -93,6 +94,19 @@ public class WeinXinPayController {
 		String[] guidsString = guids.split(",");
 
 		String openId = (String) request.getSession().getAttribute("openId");
+		//获取所有支付信息（合同信息，月租金信息）
+		HirePayInfo hirePayInfo = new HirePayInfo();	
+		
+		hirePayInfo.setChartGUID(valueMap.get("chartGUID").toString());
+		hirePayInfo.setHireCount(Integer.valueOf((valueMap.get("count")).toString()));
+		hirePayInfo.setHire(Float.valueOf(hire)/100);
+		hirePayInfo.setHireListGUID(guids);
+		hirePayInfo.setGuidsCount(guidsString.length);
+		hirePayInfo.setOpenId(openId);
+		Date date = new Date();
+		hirePayInfo.setPaytime(date);
+		
+		int i = financeDAO.insertHirePayInfo(hirePayInfo);
 
 		String appId = weixin.getAppId();
 
@@ -320,18 +334,20 @@ public class WeinXinPayController {
 				if(i>0){
 					
 					WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
-					
+					//获取支付模板
 					Notice notice = new Notice();
 					notice.setTitle("支付成功提醒");
 					notice.setCampusId(campusId);
-					
 					notice = noticeService.getTemplateIdByTitle(notice);
+					//获取交易详情(所有的所属日期)
+					List hireDates = financeDAO.queryHireDate(list);
+					
 					
 					Float totalfee = Float.parseFloat(String.valueOf(total_fee));
 					
 					wechatSendMessageController.sendMessage2(campusId,openId, notice.getTemplateId(),
 							"支付成功提醒", "", 
-							name+"你好，你已支付成功", totalfee/100+"元", "微信支付", "房屋租金",out_trade_no,
+							name+"你好，你已支付成功", totalfee/100+"元", "微信支付 ", hireDates.toString()+"月房屋租金",out_trade_no,
 							"", "感谢你的使用");					
 
 					return WXConstant.SUCCESS;

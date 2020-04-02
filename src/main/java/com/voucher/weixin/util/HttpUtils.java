@@ -119,30 +119,35 @@ public class HttpUtils {
      */
     public String doPost2(String url,String params){
         String result="";
-        HttpEntity entity = null;
-        HttpResponse response=null;
-        HttpClient httpClient = new DefaultHttpClient();
-
-        // 设置超时时间
-        httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 5000);
-        httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 5000);
-        HttpPost httpPost=new HttpPost(url);
-        httpPost.addHeader("Content-Type", "application/json");
-        httpPost.addHeader("User-Agent", "wxpay sdk java v1.0 ");
-        try{
-            if(params != null && !params.isEmpty()){
-            	StringEntity stringEntity = new StringEntity(params, "UTF-8");
-            	httpPost.setEntity(stringEntity);
-            }
-            
-            response=httpClient.execute(httpPost);
-            if(response.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
-                entity=response.getEntity();
-                result=EntityUtils.toString(entity,"UTF-8");
-            }
-        }catch (Exception ex){
-            throw new RuntimeException(ex);
-        }
+		HttpPost post = new HttpPost(url);
+		try{
+			CloseableHttpClient httpClient = HttpClients.createDefault();
+        
+			post.setHeader("Content-Type","application/json;charset=utf-8");
+			post.addHeader("Authorization", "Basic YWRtaW46");
+			StringEntity postingString = new StringEntity(params.toString(),"utf-8");
+			post.setEntity(postingString);
+			HttpResponse response = httpClient.execute(post);
+			
+			InputStream in = response.getEntity().getContent();
+			BufferedReader br = new BufferedReader(new InputStreamReader(in, "utf-8"));
+			StringBuilder strber= new StringBuilder();
+			String line = null;
+			while((line = br.readLine())!=null){
+				strber.append(line+'\n');
+			}
+			br.close();
+			in.close();
+			result = strber.toString();
+			if(response.getStatusLine().getStatusCode()!=HttpStatus.SC_OK){
+				result = "服务器异常";
+			}
+		} catch (Exception e){
+			System.out.println("请求异常");
+			throw new RuntimeException(e);
+		} finally{
+			post.abort();
+		}
         return result;
     }
 	    

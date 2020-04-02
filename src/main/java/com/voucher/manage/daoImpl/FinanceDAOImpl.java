@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import com.voucher.manage.dao.FinanceDAO;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.HireList;
 import com.voucher.manage.daoModel.TTT.HirePay;
+import com.voucher.manage.daoModel.TTT.HirePayInfo;
 import com.voucher.manage.daoModel.TTT.Payment_Info;
 import com.voucher.manage.daoModel.TTT.User_AccessTime;
 import com.voucher.manage.daoModelJoin.Finance.HireList_ChartInfo_Join;
@@ -747,7 +749,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO {
 				
 				BigDecimal  b  =  new  BigDecimal(Float.parseFloat(total_fee2)/100);  
 				float  total_fee =  b.setScale(2,  BigDecimal.ROUND_HALF_UP).floatValue(); 
-				payment.setTotal_fee(amount);
+				payment.setTotal_fee(total_fee);
 				payment.setCreateTime(data2);
 				payment.setUnit("元");
 				payment.setName((String) map.get("name"));
@@ -778,6 +780,28 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO {
 	@Override
 	public Integer insertPaymentInfo(Payment_Info payment) {
 		return InsertExe.get(this.getJdbcTemplate(), payment);
+	}
+
+	@Override
+	public int insertHirePayInfo(HirePayInfo hirePayInfo) {
+		
+		return InsertExe.get(this.getJdbcTemplate(), hirePayInfo);
+	}
+
+	@Override
+	public List queryHireDate(ArrayList<String> list) {
+		List hireDates = new ArrayList();
+		for (String guid : list) {
+			HireList hireList = new HireList();
+			String[] where = {"GUID= ", guid};
+			hireList.setWhere(where);
+			hireList.setLimit(10);
+			hireList.setOffset(0);
+			hireList.setNotIn("GUID");
+			hireList = (HireList) SelectExe.get(getJdbcTemplate(), hireList).get(0);
+			hireDates.add(hireList.getHireDate());
+		}
+		return hireDates;
 	}
 
 }

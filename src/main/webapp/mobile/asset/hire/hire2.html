@@ -89,6 +89,22 @@
 .van-ellipsis {
 	font-size: 16px;
 }
+
+.van-checkbox__label{
+    width: 90% !important;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.block {
+  width: 120px;
+  height: 120px;
+}
 </style>
 
 	<body>
@@ -146,17 +162,24 @@
 						<van-list v-model="loading" :finished="finished" finished-text="没有更多了" :error.sync="error" error-text="请求失败，点击重新加载">
 							<div class="li">
 								<div v-for="(item,index) in listData" :key="index">
-									<template v-if="item.state==='已交'">
+									<div v-if="item.state==='已交'">
 										<van-checkbox disabled checked-color="#5F5F5F" class="checkedBox" />
 										<van-card style="background-color: #CFCFCF;" num="1" :price="formatPrice(item.hire)" :desc="item.state"
 										 :title="item.hireDate" :thumb="item.imgUrl" />
-										</van-card> </template>
+										</van-card> </div>
 								</div>
 							</div>
 						</van-list>
 					</van-pull-refresh>
 				</van-tab>
 			</van-tabs>
+			<van-overlay :show="show3" @click="show = false">
+			  <div class="wrapper" @click.stop>
+			    <div class="block" >
+			    <van-loading type="spinner"  color="#1989fa" size="124px" vertical>加载中...</van-loading>
+			    </div>
+			  </div>
+			</van-overlay>
 		</div>
 		<script src="../../../assets/bootstrap-table/jquery.min.js"></script>
 		<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
@@ -221,6 +244,7 @@
 					show: false,
 					show1: false,
 					show2: false,
+					show3: false,
 					sel: 0,
 					value: 1,
 					appId: '',
@@ -239,7 +263,8 @@
 					value3:'',
 					text3:'',
 					text: '',
-					listData: []
+					listData: [],
+					count:0
 				},
 				created() {
 					this.campusId = this.getQueryString("campusId");
@@ -375,13 +400,15 @@
 								count++;
 							}
 						}
+						this.count = count;
 						this.guid = this.guid.substring(0, this.guid.length - 1);
 						this.totalval.guid = this.guid;
 						this.totalval.hire = this.totalMoney / 100;
 						this.totalval.campusId = this.campusId;
-
-						var value = this.totalval
-						console.log(value)
+						this.totalval.chartGUID = this.hireGUID;
+						this.totalval.count = this.count;
+						var value = this.totalval;
+						this.show3 = true;
 						axios.post('/voucher/mobile/weinXinPay/getHire.do', {
 							value: value
 						}).then(result => {
@@ -494,6 +521,7 @@
 								}).then(() => {
 									// on close
 								});
+								this.show3=false;
 							} else {
 								vant.Dialog.alert({
 									title: '提示',
@@ -501,6 +529,7 @@
 								}).then(() => {
 									// on close
 								});
+								this.show3=false;
 							}
 						})
 					},
