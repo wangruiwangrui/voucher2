@@ -1,632 +1,703 @@
 <!DOCTYPE html>
 <html>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
-	<!-- 引入样式文件 -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.2/lib/index.css">
-	<!-- 引入样式文件 -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.2/lib/index.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<!-- 引入样式文件 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.2/lib/index.css">
+<!-- 引入样式文件 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.2/lib/index.css">
 
 
-	<head>
-		<title>详情列表</title>
-		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
-		<script src="https://cdn.bootcss.com/axios/0.19.0/axios.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
-		<!-- 引入 Vue 和 Vant 的 JS 文件 -->
-		<script src="https://cdn.jsdelivr.net/npm/vant@2.2/lib/vant.min.js"></script>
-		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
-	</head>
-	<style>
-		body {
-	margin: 0;
-	padding: 0;
-	background-color: #EDEDED;
-}
+<head>
+    <title>详情列表</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.0/axios.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+    <!-- 引入 Vue 和 Vant 的 JS 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/vant@2.2/lib/vant.min.js"></script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #EDEDED;
+    }
 
-.content {
-	background-color: #fff;
-	/* height: 200px; */
-	margin: 10px;
-	border: 5px solid #fff;
-	border-radius: 12px;
-	display: flex;
-	justify-content: space-between;
-}
+    .content {
+        background-color: #fff;
+        /* height: 200px; */
+        margin: 10px;
+        border: 5px solid #fff;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+    }
 
-.van-card {
-	border: 5px solid #fff;
-	border-radius: 12px;
-	margin: 10px;
-}
+    .van-card {
+        border: 5px solid #fff;
+        border-radius: 12px;
+        margin: 10px;
+    }
 
-.ckall {
-	margin-left: 10px;
-}
+    .ckall {
+        margin-left: 10px;
+    }
 
-.checkedBox {
-	padding-left: 5px;
-}
+    .checkedBox {
+        padding-left: 5px;
+    }
 
-.van-card__content {
-	min-height: auto;
-	width: 250px;
-}
+    .van-card__content {
+        min-height: auto;
+        width: 250px;
+    }
 
-.van-cell__title {
-	font-size: 16px;
-}
+    .van-cell__title {
+        font-size: 16px;
+    }
 
-.van-card__title {
-	font-size: 16px;
-}
+    .van-card__title {
+        font-size: 16px;
+    }
 
-.van-dropdown-menu__title>.van-ellipsis {
-	height: 100%;
-	line-height: 30px;
-	font-size: 20px;
-}
+    .van-dropdown-menu__title > .van-ellipsis {
+        height: 100%;
+        line-height: 30px;
+        font-size: 20px;
+    }
 
-.van-button--normal {
-	width: 60%;
-	margin-left: 20%;
-}
+    .van-button--normal {
+        width: 60%;
+        margin-left: 20%;
+    }
 
-.van-button--normal>.van-button__text {
-	font-size: 25px;
-	letter-spacing: 10px;
-}
+    .van-button--normal > .van-button__text {
+        font-size: 25px;
+        letter-spacing: 10px;
+    }
 
-.van-panel__header {
-	background-color: #C4C4C4;
-}
+    .van-panel__header {
+        background-color: #C4C4C4;
+    }
 
-.van-dropdown-menu__title>.van-ellipsis {
-	font-size: 16px;
-}
+    .van-dropdown-menu__title > .van-ellipsis {
+        font-size: 16px;
+    }
 
-.van-ellipsis {
-	font-size: 16px;
-}
+    .van-ellipsis {
+        font-size: 16px;
+    }
 
-.van-checkbox__label{
-    width: 90% !important;
-}
+    .van-checkbox__label {
+        width: 90% !important;
+    }
 
-.wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
+    .wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
 
-.block {
-  width: 120px;
-  height: 120px;
-}
+    .block {
+        width: 120px;
+        height: 120px;
+    }
 </style>
 
-	<body>
-		<div id="app">
-			<van-tabs background="#969696" title-active-color="#CD0000" title-inactive-color="#141414" line-height="50px" type="active">
-				<van-tab title="未交租金">
-					<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-						<div>
-							<van-panel class="header" :title="'合同编号:'+contractNo">
-								<div style="display: flex; justify-content: space-between; padding-left: 10px" slot="default"></div>
-								<van-dropdown-menu style="width: 48%;float: left;">
-									<van-dropdown-item v-model="value3" :title="'发票类型:'+text3" :options="option2" @change="setBillInfo()" />
-								</van-dropdown-menu>
-								<van-dropdown-menu style="width: 48%;">
-									<van-dropdown-item v-model="value" :title="'开票类型:'+text" :options="option" @change="getInfo()" />
-								</van-dropdown-menu>
-							</van-panel>
-						</div>
-						<van-list v-model="loading" :finished="finished" finished-text="没有更多了" :error.sync="error" error-text="请求失败，点击重新加载">
-							<div class="li">
-								<div v-for="(item,index) in listData" :key="index">
-									<template v-if="item.state==='未交'">
-										<van-checkbox v-model="item.ck" checked-color="#458B00" class="checkedBox" @change="singleChecked(item.ck,index)" />
-										<van-card num="1" :price="formatPrice(item.hire)" :desc="item.state" :title="item.hireDate" :thumb="item.imgUrl" />
-										</van-card> </template>
+<body>
+<div id="app">
+    <van-tabs background="#969696" title-active-color="#CD0000" title-inactive-color="#141414" line-height="50px"
+              type="active">
+        <van-tab title="未交租金">
+            <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+                <div>
+                    <van-panel class="header" :title="'合同编号:'+contractNo">
+                        <div style="display: flex; justify-content: space-between; padding-left: 10px"
+                             slot="default"></div>
+                        <van-dropdown-menu style="width: 48%;float: left;">
+                            <van-dropdown-item v-model="value3" :title="'发票类型:'+text3" :options="option2"
+                                               @change="setBillInfo()"/>
+                        </van-dropdown-menu>
+                        <van-dropdown-menu style="width: 48%;">
+                            <van-dropdown-item v-model="value" :title="'开票类型:'+text" :options="option"
+                                               @change="getInfo()"/>
+                        </van-dropdown-menu>
+                    </van-panel>
+                </div>
+                <van-list v-model="loading" :finished="finished" finished-text="没有更多了" :error.sync="error"
+                          error-text="请求失败，点击重新加载">
+                    <div class="li">
+                        <div v-for="(item,index) in listData" :key="index">
+                            <template v-if="item.state==='未交'">
+                                <van-checkbox v-model="item.ck" checked-color="#458B00" class="checkedBox"
+                                              @click="singleChecked(item.ck,index)"/>
+                                <van-card num="1" :price="formatPrice(item.hire)" :desc="item.state"
+                                          :title="item.hireDate" :thumb="item.imgUrl"/>
+                                </van-card> </template>
 
-								</div>
-							</div>
-						</van-list>
-						<van-dialog v-model="show1" title="发票信息" show-cancel-button @confirm="billsubmit()">
-							<van-cell-group>
-								<van-field v-model="company" required clearable label="公司名" placeholder="请输入公司名" />
-							</van-cell-group>
-							<van-cell-group>
-								<van-field v-model="ein" required clearable label="发票抬头" placeholder="请输入发票抬头" />
-							</van-cell-group>
-						</van-dialog>
-						<van-dialog v-model="show2" title="发票信息" show-cancel-button @confirm="">
-							<van-cell-group>
-								<van-field v-model="charter" required clearable label="购买方名称" placeholder="请输入姓名" />
-							</van-cell-group>
-						</van-dialog>
-					</van-pull-refresh>
-					<van-submit-bar :price="totalMoney" button-text="去支付" @submit="showPopup()">
-						<van-checkbox class="ckall" checked-color="#ee0a24" @change="ckall" v-model="checked">全选</van-checkbox>
-					</van-submit-bar>
-				</van-tab>
-				<van-tab title="已交租金">
-					<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-						<div>
-							<van-panel class="header" :title="'合同编号:'+contractNo">
-								<div style="display: flex; justify-content: space-between; padding-left: 10px" slot="default"></div>
-							</van-panel>
-						</div>
-						<van-list v-model="loading" :finished="finished" finished-text="没有更多了" :error.sync="error" error-text="请求失败，点击重新加载">
-							<div class="li">
-								<div v-for="(item,index) in listData" :key="index">
-									<div v-if="item.state==='已交'">
-										<van-checkbox disabled checked-color="#5F5F5F" class="checkedBox" />
-										<van-card style="background-color: #CFCFCF;" num="1" :price="formatPrice(item.hire)" :desc="item.state"
-										 :title="item.hireDate" :thumb="item.imgUrl" />
-										</van-card> </div>
-								</div>
-							</div>
-						</van-list>
-					</van-pull-refresh>
-				</van-tab>
-			</van-tabs>
-			<van-overlay :show="show3" @click="show = false">
-			  <div class="wrapper" @click.stop>
-			    <div class="block" >
-			    <van-loading type="spinner"  color="#1989fa" size="124px" vertical>加载中...</van-loading>
-			    </div>
-			  </div>
-			</van-overlay>
-		</div>
-		<script src="../../../assets/bootstrap-table/jquery.min.js"></script>
-		<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-		<script>
-			function getQueryString(key) {
-				var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
-				var result = window.location.search.substr(1).match(reg);
-				return result ? decodeURIComponent(result[2]) : null;
-			}
-			var campusId = getQueryString("campusId");
-			var chartGuid = encodeURI(getQueryString("guid"));
-			var hireGUID = encodeURI(getQueryString("hireGUID"));
-			url = document.location.toString();
-			$.ajax({
-				url: "../../../wechat/sign.do",
-				data: {
-					campusId: campusId,
-					url: url
-				},
-				async: false,
-				type: "GET",
-				success: function(data) {
-					var ticket = JSON.parse(data);
-					/*
-					 * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
-					 */
+                        </div>
+                    </div>
+                </van-list>
+                <van-dialog v-model="show1" title="发票信息" show-cancel-button @confirm="billsubmit()">
+                    <van-cell-group>
+                        <van-field v-model="company" required clearable label="公司名" placeholder="请输入公司名"/>
+                    </van-cell-group>
+                    <van-cell-group>
+                        <van-field v-model="ein" required clearable label="发票抬头" placeholder="请输入发票抬头"/>
+                    </van-cell-group>
+                </van-dialog>
+                <van-dialog v-model="show2" title="发票信息" show-cancel-button @confirm="">
+                    <van-cell-group>
+                        <van-field v-model="charter" required clearable label="购买方名称" placeholder="请输入姓名"/>
+                    </van-cell-group>
+                </van-dialog>
+            </van-pull-refresh>
+            <van-submit-bar :disabled="disabledBtn" :price="totalMoney" button-text="去支付" @submit="showPopup()">
+                <van-checkbox class="ckall" checked-color="#ee0a24" @change="ckall" v-model="checked">全选</van-checkbox>
+            </van-submit-bar>
+        </van-tab>
+        <van-tab title="已交租金">
+            <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+                <div>
+                    <van-panel class="header" :title="'合同编号:'+contractNo">
+                        <div style="display: flex; justify-content: space-between; padding-left: 10px"
+                             slot="default"></div>
+                    </van-panel>
+                </div>
+                <van-list v-model="loading" :finished="finished" finished-text="没有更多了" :error.sync="error"
+                          error-text="请求失败，点击重新加载">
+                    <div class="li">
+                        <div v-for="(item,index) in listData" :key="index">
+                            <div v-if="item.state==='已交'">
+                                <van-checkbox disabled checked-color="#5F5F5F" class="checkedBox"/>
+                                <van-card style="background-color: #CFCFCF;" num="1" :price="formatPrice(item.hire)"
+                                          :desc="item.state"
+                                          :title="item.hireDate" :thumb="item.imgUrl"/>
+                                </van-card> </div>
+                        </div>
+                    </div>
+                </van-list>
+            </van-pull-refresh>
+        </van-tab>
+    </van-tabs>
+    <van-overlay :show="show3" @click="show = false">
+        <div class="wrapper" @click.stop>
+            <div class="block">
+                <van-loading type="spinner" color="#1989fa" size="124px" vertical>加载中...</van-loading>
+            </div>
+        </div>
+    </van-overlay>
+</div>
+<script src="../../../assets/bootstrap-table/jquery.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+    function getQueryString(key) {
+        var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+        var result = window.location.search.substr(1).match(reg);
+        return result ? decodeURIComponent(result[2]) : null;
+    }
 
-					wx.config({
-						debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-						appId: ticket.appId,
-						timestamp: ticket.timestamp,
-						nonceStr: ticket.nonceStr,
-						signature: ticket.signature,
-						jsApiList: ["navigateToMiniProgram"]
-					});
+    var campusId = getQueryString("campusId");
+    var chartGuid = encodeURI(getQueryString("guid"));
+    var hireGUID = encodeURI(getQueryString("hireGUID"));
+    url = document.location.toString();
+    $.ajax({
+        url: "../../../wechat/sign.do",
+        data: {
+            campusId: campusId,
+            url: url
+        },
+        async: false,
+        type: "GET",
+        success: function (data) {
+            var ticket = JSON.parse(data);
+            /*
+             * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
+             */
 
-				}
-			});
-			var app = new Vue({
-				el: '#app',
-				data: {
-					active: 2,
-					page: 0,
-					campusId: 0,
-					chartGuid: '',
-					hireGUID: '',
-					contractNo: '',
-					edit_text: '编辑',
-					checked: false,
-					loading: false,
-					isLoading: false,
-					finished: true,
-					totalMoney: 0,
-					guid: '',
-					error: false,
-					ein: '',
-					company: '',
-					charter: '',
-					purchaser: '',
-					sl: '',
-					totalval: {},
-					show: false,
-					show1: false,
-					show2: false,
-					show3: false,
-					sel: 0,
-					value: 1,
-					appId: '',
-					timeStamp: '',
-					nonceStr: '',
-					package: '',
-					signType: '',
-					paySign: '',
-					total_fee: '',
-					guids: '',
-					hireWXType: '',
-					out_trade_no: '',
-					url: '',
-					option: [],
-					option2:[],
-					value3:'',
-					text3:'',
-					text: '',
-					listData: [],
-					count:0
-				},
-				created() {
-					this.campusId = this.getQueryString("campusId");
-					this.chartGuid = this.getQueryString("guid");
-					this.hireGUID = this.getQueryString("hireGUID");
-					this.contractNo = this.getQueryString("contractNo");
-					this.url = document.location.toString();
-					this.initdata();
-					this.listData.forEach(item => {
-						this.$set(item, "ck", false);
-					});
-				},
-				mounted() {},
-				methods: {
-					initdata: function() {
-						axios.get('/voucher/mobile/asset/getHireListByGUID.do', {
-								params: {
-									hireGUID: this.hireGUID,
-									limit: 10000,
-									offset: this.page
-								}
-							}).then(res => {
-								this.listData = res.data.rows;
-							}),
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: ticket.appId,
+                timestamp: ticket.timestamp,
+                nonceStr: ticket.nonceStr,
+                signature: ticket.signature,
+                jsApiList: ["navigateToMiniProgram"]
+            });
 
-							//获取发票信息必填项
-							axios.get('/voucher/mobile/asset/getEin.do', {
-								params: {
-									guid: this.chartGuid,
-								}
-							}).then(res => {
-								this.ein = res.data.ein;
-								this.charter = res.data.charter;
-								this.company = res.data.company;
-								this.hireWXType = res.data.hireWXType;
-								this.sl = res.data.sl;
-								if(this.sl==="0.05"){
-									this.option2=[{
-										text:'普通发票',
-										value:1
-									}]
-									this.value3=1;
-									this.text3='普通发票';
-								}else{
-									this.option2=[{
-										text:'普通发票',
-										value:1
-									},{
-										text:'增值税发票',
-										value:2
-									}]
-									this.value3=1;
-									this.text3='普通发票';
-								}
-								if (this.company == "" || this.company == null) {
-									this.company = this.charter;
-								}
+        }
+    });
+    var app = new Vue({
+        el: '#app',
+        data: {
+            result: [],
+            active: 2,
+            page: 0,
+            campusId: 0,
+            chartGuid: '',
+            //hireGUID: '',
+            contractNo: '',
+            edit_text: '编辑',
+            checked: false,
+            loading: false,
+            isLoading: false,
+            finished: true,
+            totalMoney: 0,
+            guid: [],
+            error: false,
+            ein: '',
+            company: '',
+            charter: '',
+            purchaser: '',
+            sl: '',
+            totalval: {},
+            show: false,
+            show1: false,
+            show2: false,
+            show3: false,
+            sel: 0,
+            value: 1,
+            appId: '',
+            timeStamp: '',
+            nonceStr: '',
+            package: '',
+            signType: '',
+            paySign: '',
+            total_fee: '',
+            guids: '',
+            hireWXType: '',
+            out_trade_no: '',
+            url: '',
+            option: [],
+            option2: [],
+            value3: '',
+            text3: '',
+            text: '',
+            listData: [],
+            count: 0,
+            disabledBtn: false
+        },
+        created() {
+            this.campusId = this.getQueryString("campusId");
+            this.chartGuid = this.getQueryString("guid");
+            //this.hireGUID = this.getQueryString("hireGUID");
+            this.contractNo = this.getQueryString("contractNo");
+            this.url = document.location.toString();
+            this.initdata();
+        },
+        mounted() {
+        },
+        methods: {
+            initdata: function () {
+                axios.get('/voucher/mobile/asset/getHireListByGUID.do', {
+                    params: {
+                        hireGUID: this.chartGuid,
+                        limit: 10000,
+                        offset: this.page
+                    }
+                }).then(res => {
+                    this.listData = res.data.rows;
+                    for (var i = 0; i < this.listData.length; i++) {
+                        if (this.listData[i].state === '未交') {
+                            this.$set(this.listData[i], "ck", false);
+                        }
+                    }
+                    console.log("this.listData===", this.listData)
+                }),
 
-								if (this.ein != "" && this.ein != null) {
-									this.option = [{
-											text: '公司',
-											value: 3
-										},
-										{
-											text: '个人',
-											value: 1
-										}
-									];
-									this.value = 3;
-									this.text = '公司';
-								} else {
-									this.option = [{
-											text: '个人',
-											value: 1
-										},
-										{
-											text: '公司',
-											value: 2
-										}
-									];
-									this.value = 1;
-									this.text = '个人';
-								}
-							})
-					},
-					getInfo() {
-						console.log(this.value);
-						if (this.value === 1) {
-							this.text = '个人';
-							this.show2 = true;
-						} else {
-							this.text = '公司';
-							this.show1 = true;
+                    //获取发票信息必填项
+                    axios.get('/voucher/mobile/asset/getEin.do', {
+                        params: {
+                            guid: this.chartGuid,
+                        }
+                    }).then(res => {
+                        this.ein = res.data.ein;
+                        this.charter = res.data.charter;
+                        this.company = res.data.company;
+                        this.hireWXType = res.data.hireWXType;
+                        this.sl = res.data.sl;
+                        if (this.sl === "0.05") {
+                            this.option2 = [{
+                                text: '普通发票',
+                                value: 1
+                            }]
+                            this.value3 = 1;
+                            this.text3 = '普通发票';
+                        } else {
+                            this.option2 = [{
+                                text: '普通发票',
+                                value: 1
+                            }, {
+                                text: '增值税发票',
+                                value: 2
+                            }]
+                            this.value3 = 1;
+                            this.text3 = '普通发票';
+                        }
+                        if (this.company == "" || this.company == null) {
+                            this.company = this.charter;
+                        }
+
+                        if (this.ein != "" && this.ein != null) {
+                            this.option = [{
+                                text: '公司',
+                                value: 3
+                            },
+                                {
+                                    text: '个人',
+                                    value: 1
+                                }
+                            ];
+                            this.value = 3;
+                            this.text = '公司';
+                        } else {
+                            this.option = [{
+                                text: '个人',
+                                value: 1
+                            },
+                                {
+                                    text: '公司',
+                                    value: 2
+                                }
+                            ];
+                            this.value = 1;
+                            this.text = '个人';
+                        }
+                    })
+            },
+            getInfo() {
+                console.log(this.value);
+                if (this.value === 1) {
+                    this.text = '个人';
+                    this.show2 = true;
+                } else {
+                    this.text = '公司';
+                    this.show1 = true;
+                }
+
+            },
+            //点击去支付按钮操作
+            showPopup() {
+                //当未选择租金时
+                if (this.totalMoney === 0) {
+                    vant.Dialog.alert({
+                        title: '错误',
+                        message: '请选择需要支付的月租金'
+                    }).then(() => {
+                        // on close
+                    });
+                } else {
+                    this.repayment();
+                }
+
+            },
+
+            //修改发票信息
+            billsubmit() {
+                var chart = new Object();
+                chart.chartGuid = this.chartGuid;
+                chart.company = this.company;
+                //if(this.ein)
+                chart.ein = this.ein;
+
+                axios.post('/voucher/mobile/asset/updateEin.do', {
+                    chart: chart
+                }).then(result => {
+                })
+
+            },
+            //开启支付
+            repayment() {
+                // this.guid = '';
+                var count = 0;
+                this.count = this.guid.length;
+                // this.guid = this.guid.substring(0, this.guid.length - 1);
+                this.totalval.guid = this.guid.join(',');
+                this.totalval.hire = this.totalMoney / 100;
+                this.totalval.campusId = this.campusId;
+                this.totalval.chartGUID = this.chartGuid;
+                this.totalval.count = this.count;
+
+                /*购买方 */
+                if (this.text == '个人') {
+                    this.purchaser = this.charter;
+                    this.ein = '';
+                } else {
+                    this.purchaser = this.company;
+                }
+                this.totalval.purchaser = this.purchaser;
+                this.totalval.ein = this.ein;
+                this.totalval.sl = this.sl;
+
+
+                var value = this.totalval;
+                this.show3 = true;
+                this.disabledBtn = true;
+                axios.post('/voucher/mobile/weinXinPay/getHire.do', {
+                    value: value
+                }).then(result => {
+
+                    var mes = result.data[0];
+
+                    var payMap = result.data[1];
+
+                    if (mes == "SUCCESS") {
+                        this.appId = payMap.appId;
+                        this.timeStamp = payMap.timeStamp;
+                        this.nonceStr = payMap.nonceStr;
+                        this.package = payMap.package;
+                        this.signType = payMap.signType;
+                        this.paySign = payMap.paySign;
+                        this.total_fee = payMap.total_fee;
+                        this.guids = payMap.guids;
+                        this.out_trade_no = payMap.out_trade_no;
+
+                        this.onBridgeReady();
+
+                    } else if (mes == "ERR") {
+
+                        var err_code = payMap.err_code;
+                        var err_code_des = payMap.err_code_des;
+
+                        vant.Dialog.alert({
+                            title: '提示',
+                            message: err_code
+                        }).then(() => {
+                            this.initdata();
+                        });
+
+                    } else {
+                        var return_msg = payMap.return_msg;
+                        vant.Dialog.alert({
+                            title: '提示',
+                            message: return_msg
+                        }).then(() => {
+                            this.initdata();
+                        });
+                    }
+                })
+            },
+            setBillInfo() {
+                if (this.value3 == 2) {
+                    this.text3 = "增值税发票";
+                    vant.Dialog.alert({
+                        title: '提示',
+                        message: '增值税发票请到柜台办理!'
+                    }).then(() => {
+                        // on close
+                    });
+                }
+            },
+            onBridgeReady: function () {
+                var value3 = this.value3;
+                var _this = this;
+                WeixinJSBridge.invoke('getBrandWCPayRequest', {
+                        "appId": this.appId, //公众号名称,由商户传入
+                        "timeStamp": this.timeStamp, //时间戳,自1970年以来的秒数
+                        "nonceStr": this.nonceStr, //随机串
+                        "package": this.package,
+                        "signType": this.signType, //微信签名方式：
+                        "paySign": this.paySign //微信签名
+                    },
+                    function (res) {
+
+                        if (res.err_msg === "get_brand_wcpay_request:ok") {
+                            vant.Dialog.alert({
+                                title: '提示',
+                                message: '发票开取成功'
+                            }).then(() => {
+                                // on close
+                            });
+                            //_this.initdata();
+                            _this.disabledBtn = false;
+                            _this.show3 = false;
+                            location.reload();
+
+                            //支付成功后跳转的页面
+                            /* 									if(value3!=2){
+                                                                    _this.getBillInfo();
+                                                                } */
+
+                        } else if (res.err_msg === "get_brand_wcpay_request:cancel") {
+                            alert("支付取消")
+                            console.log('支付取消');
+                        } else if (res.err_msg === "get_brand_wcpay_request:fail") {
+                            alert("支付失败")
+                            console.log('支付失败');
+                            WeixinJSBridge.call('closeWindow');
+                        } //使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok,但并不保证它绝对可靠。 */
+                    });
+            },
+
+            //开发票
+            getBillInfo() {
+                console.log(this.text)
+                /*购买方 */
+                if (this.text == '个人') {
+                    this.purchaser = this.charter;
+                    this.ein = '';
+                } else {
+                    this.purchaser = this.company;
+                }
+                axios.get('/voucher/mobile/bill/getNBill.do', {
+                    params: {
+                        campusId: this.campusId,
+                        out_trade_no: this.out_trade_no,
+                        purchaser: this.purchaser,
+                        ein: this.ein,
+                        sl: this.sl
+                    }
+
+                }).then(result => {
+                    this.disabledBtn = false;
+                    if (result.data.result == "SUCCESS") {
+                        vant.Dialog.alert({
+                            title: '提示',
+                            message: '发票开取成功'
+                        }).then(() => {
+                            // on close
+                        });
+                        this.show3 = false;
+                    } else {
+                        vant.Dialog.alert({
+                            title: '提示',
+                            message: '发票开取失败'
+                        }).then(() => {
+                            // on close
+                        });
+                        this.show3 = false;
+                    }
+                })
+            },
+            //下拉加载
+            onLoad() {
+                setTimeout(() => {
+                    this.$toast('刷新成功');
+                    this.finished = true;
+                }, 1000);
+            },
+            onRefresh() {
+                this.isLoading = false;
+                setTimeout(() => {
+                    this.$toast('刷新成功');
+                    this.isLoading = false;
+                }, 1000);
+            },
+
+            ckall(isCheck) {
+                if (isCheck) {
+                    for (var i = 0; i < this.listData.length; i++) {
+                        if (this.listData[i].state === '未交') {
+                            this.$set(this.listData[i], "ck", true);
+                        }
+                    }
+                } else {
+                    for (var i = 0; i < this.listData.length; i++) {
+                        this.$set(this.listData[i], "ck", false);
+                    }
+                }
+
+            },
+            getQueryString(key) {
+                var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+                var result = window.location.search.substr(1).match(reg);
+                return result ? decodeURIComponent(result[2]) : null;
+            },
+            singleChecked(ck, index) {
+                this.totalMoney = 0;
+                this.guid = [];
+                console.log("index===", index);
+
+                if (this.hireWXType === 3) {
+                    if (this.listData.length <= 3) {
+                        this.listData.forEach(item => {
+                            item.ck = !item.ck
+                        });
+                    } else {
+                        if (index >= 0 && index < 3) {
+                            this.listData[0].ck = !this.listData[0].ck;
+                            this.listData[1].ck = !this.listData[1].ck;
+                            this.listData[2].ck = !this.listData[2].ck;
+                        }else{
+							this.listData[index].ck = !this.listData[index].ck;
 						}
+                    }
+                }
 
-					},
-					//点击去支付按钮操作
-					showPopup() {
-						//当未选择租金时
-						if (this.totalMoney === 0) {
-							vant.Dialog.alert({
-								title: '错误',
-								message: '请选择需要支付的月租金'
-							}).then(() => {
-								// on close
-							});
-						} else {
-							this.repayment();
-						}
 
-					},
+                /*                if (index >= 0 && index < 3) {
+                                    console.log("1111")
+                                    this.listData[0].ck = !this.listData[0].ck;
+                                    this.listData[1].ck = !this.listData[1].ck;
+                                    this.listData[2].ck = !this.listData[2].ck;
+                                } else {
 
-					//修改发票信息
-					billsubmit() {
-						var chart = new Object();
-						chart.chartGuid = this.chartGuid;
-						chart.company = this.company;
-						//if(this.ein)
-						chart.ein = this.ein;
-						
-						axios.post('/voucher/mobile/asset/updateEin.do', {
-							chart: chart
-						}).then(result => {})
+                                    if (this.listData[index - 1].ck == true && this.listData[index + 1].ck == false) {
+                                        if (index >= 3) {
+                                            this.listData[index].ck = !this.listData[index].ck
+                                        }
+                                    } else if (this.listData[index - 1].ck == true && this.listData[index + 1].ck == true) {
+                                        if (index >= 3) {
+                                            this.listData[index].ck = true
+                                        }
+                                    } else {
 
-					},
-					//开启支付					
-					repayment() {
-						this.guid = '';
-						var count = 0;
-						for (var j = 0; j < this.listData.length; j++) {
-							if (this.listData[j].ck) {
-								this.guid += this.listData[j].guid + ',';
-								count++;
-							}
-						}
-						this.count = count;
-						this.guid = this.guid.substring(0, this.guid.length - 1);
-						this.totalval.guid = this.guid;
-						this.totalval.hire = this.totalMoney / 100;
-						this.totalval.campusId = this.campusId;
-						this.totalval.chartGUID = this.hireGUID;
-						this.totalval.count = this.count;
-						var value = this.totalval;
-						this.show3 = true;
-						axios.post('/voucher/mobile/weinXinPay/getHire.do', {
-							value: value
-						}).then(result => {
-
-							var mes = result.data[0];
-
-							var payMap = result.data[1];
-
-							if (mes == "SUCCESS") {
-								this.appId = payMap.appId;
-								this.timeStamp = payMap.timeStamp;
-								this.nonceStr = payMap.nonceStr;
-								this.package = payMap.package;
-								this.signType = payMap.signType;
-								this.paySign = payMap.paySign;
-								this.total_fee = payMap.total_fee;
-								this.guids = payMap.guids;
-								this.out_trade_no = payMap.out_trade_no;
-
-								this.onBridgeReady();
-
-							} else if (mes == "ERR") {
-
-								var err_code = payMap.err_code;
-								var err_code_des = payMap.err_code_des;
-
-								vant.Dialog.alert({
-									title: '提示',
-									message: err_code
-								}).then(() => {
-									this.initdata();
-								});
-
-							} else {
-								var return_msg = payMap.return_msg;
-								vant.Dialog.alert({
-									title: '提示',
-									message: return_msg
-								}).then(() => {
-									this.initdata();
-								});
-							}
-						})
-					},
-					setBillInfo(){
-						if(this.value3==2){
-							this.text3 = "增值税发票";
-							vant.Dialog.alert({
-								title: '提示',
-								message: '增值税发票请到柜台办理!'
-							}).then(() => {
-								// on close
-							});
-						}
-					},
-					onBridgeReady: function() {
-						var value3 = this.value3; 
-						var _this = this;
-						WeixinJSBridge.invoke('getBrandWCPayRequest', {
-								"appId": this.appId, //公众号名称,由商户传入     
-								"timeStamp": this.timeStamp, //时间戳,自1970年以来的秒数     
-								"nonceStr": this.nonceStr, //随机串     
-								"package": this.package,
-								"signType": this.signType, //微信签名方式：     
-								"paySign": this.paySign //微信签名 
-							},
-							function(res) {
-
-								if (res.err_msg === "get_brand_wcpay_request:ok") {
-									//支付成功后跳转的页面
-									if(value3!=2){
-										_this.getBillInfo();
-									}
-									_this.initdata();
-								} else if (res.err_msg === "get_brand_wcpay_request:cancel") {
-									alert("支付取消")
-									console.log('支付取消');
-								} else if (res.err_msg === "get_brand_wcpay_request:fail") {
-									alert("支付失败")
-									console.log('支付失败');
-									WeixinJSBridge.call('closeWindow');
-								} //使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok,但并不保证它绝对可靠。 */
-							});
-					},
-					//开发票
-					getBillInfo() {
-						console.log(this.text)
-						/*购买方 */
-						if (this.text == '个人') {
-							this.purchaser = this.charter;
-							this.ein = '';
-						} else {
-							this.purchaser = this.company;
-						}
-						axios.get('/voucher/mobile/bill/getNBill.do', {
-							params: {
-								campusId :this.campusId,
-								out_trade_no: this.out_trade_no,
-								purchaser: this.purchaser,
-								ein: this.ein,
-								sl: this.sl
-							}
-
-						}).then(result => {
-
-							if (result.data.result == "SUCCESS") {
-								vant.Dialog.alert({
-									title: '提示',
-									message: '发票开取成功'
-								}).then(() => {
-									// on close
-								});
-								this.show3=false;
-							} else {
-								vant.Dialog.alert({
-									title: '提示',
-									message: '发票开取失败'
-								}).then(() => {
-									// on close
-								});
-								this.show3=false;
-							}
-						})
-					},
-					//下拉加载
-					onLoad() {
-						setTimeout(() => {
-							this.$toast('刷新成功');
-							this.finished = true;
-						}, 1000);
-					},
-					onRefresh() {
-						this.isLoading = false;
-						setTimeout(() => {
-							this.$toast('刷新成功');
-							this.isLoading = false;
-						}, 1000);
-					},
-					ckall(isCheck) {
-						if (isCheck) {
-							for (var i = 0; i < this.listData.length; i++) {
-								if (this.listData[i].state === '未交') {
-									this.$set(this.listData[i], "ck", true);
-								}
-							}
-						} else {
-							for (var i = 0; i < this.listData.length; i++) {
-								this.$set(this.listData[i], "ck", false);
-							}
-						}
-
-					},
-					getQueryString(key) {
-						var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
-						var result = window.location.search.substr(1).match(reg);
-						return result ? decodeURIComponent(result[2]) : null;
-					},
-					singleChecked(ck, index) {
-						if (this.hireWXType == 3) {
-							if (index >= 0 && index < 3) {
-								this.listData[0].ck = true;
-								this.listData[1].ck = true;
-								this.listData[2].ck = true;
-							} else {
-								if (this.listData[index - 1].ck == true && this.listData[index + 1].ck != true) {
-									if (index >= 3) {
-										this.listData[index].ck = this.listData[index].ck
-									}
-								} else if (this.listData[index - 1].ck == true && this.listData[index + 1].ck == true) {
-									if (index >= 3) {
-										this.listData[index].ck = true
-									}
-								} else {
-									this.listData[index].ck = false
-									vant.Dialog.alert({
-										title: '提示',
-										message: '请选择连续月份'
-									}).then(() => {
-										// on close
-									});
-								}
-							}
-						} else {
-							if (index >= 0 && index < 1) {
-								this.listData[0].ck = true;
-							} else {
-								if (this.listData[index - 1].ck == true && this.listData[index + 1].ck != true) {
-									if (index >= 1) {
-										this.listData[index].ck = this.listData[index].ck
-									}
-								} else if (this.listData[index - 1].ck == true && this.listData[index + 1].ck == true) {
-									if (index >= 1) {
-										this.listData[index].ck = true
-									}
-								} else {
-									this.listData[index].ck = false
-									vant.Dialog.alert({
-										title: '错误',
-										message: '请选择连续月份'
-									}).then(() => {
-										// on close
-									});
-								}
-							}
-						}
-
-						if (ck) {
-							this.totalMoney += this.listData[index].hire * 100
-						} else {
-							this.totalMoney -= this.listData[index].hire * 100
-						}
-					},
-					formatPrice(price) {
-						return price;
-					}
-				}
-			})
-		</script>
-	</body>
+                                        vant.Dialog.alert({
+                                            title: '提示',
+                                            message: '请选择连续月份'
+                                        }).then(() => {
+                                            this.listData[index].ck = false;
+                                        });
+                                    }
+                                }
+                            } else {
+                                console.log("3333")
+                                if(index >= 0 && index < 1)
+                    {
+                        this.listData[0].ck = true;
+                    }
+                    else
+                    {
+                        if (this.listData[index - 1].ck == true && this.listData[index + 1].ck != true) {
+                            if (index >= 1) {
+                                this.listData[index].ck = this.listData[index].ck
+                            }
+                        } else if (this.listData[index - 1].ck == true && this.listData[index + 1].ck == true) {
+                            if (index >= 1) {
+                                this.listData[index].ck = true
+                            }
+                        } else {
+                            this.listData[index].ck = false
+                            vant.Dialog.alert({
+                                title: '错误',
+                                message: '请选择连续月份'
+                            }).then(() => {
+                                // on close
+                            });
+                        }
+                    }
+                    }
+                */
+                // if (ck) {
+                //     this.totalMoney += this.listData[index].hire * 100
+                // } else {
+                //     this.totalMoney -= this.listData[index].hire * 100
+                // }
+                this.listData.forEach(item => {
+                    if (item.ck) {
+                        this.guid.push(item.guid);
+                        this.totalMoney += item.hire * 100
+                    }
+                })
+            },
+            formatPrice(price) {
+                return price;
+            }
+        }
+    })
+</script>
+</body>
 
 </html>

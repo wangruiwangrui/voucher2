@@ -5,7 +5,7 @@
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <head>
 <meta charset="utf-8">
-<title>用户管理</title>
+<title>开票失败</title>
 <link rel="stylesheet" type="text/css" href="date/css/pikaday.css" />
 <link rel="stylesheet" href="assets/bootstrap-table/bootstrap-table.css">
 <link rel="stylesheet"
@@ -174,7 +174,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-						<button type="button" class="btn btn-primary"
+						<button id="btnsubmit" type="button" class="btn btn-primary"
 							onclick="commitFoodDataButton();">提交更改</button>
 					</div>
 				</form>
@@ -239,6 +239,8 @@
 		}
 		
 		function commitFoodDataButton() {
+			$('#btnsubmit').text('提交中');
+			$('#btnsubmit').attr('disabled','disabled');
 			var out_trade_noRed = $("#out_trade_no2").val();
 			var gmf_mc = $("#gmf_mc2").val();
 			var gmf_nsrsbh = $("#gmf_nsrsbh2").val(); 
@@ -251,6 +253,8 @@
 					purchaser :gmf_mc,
 					ein : gmf_nsrsbh
 				}, function(data) {
+					$('#btnsubmit').text('提交更改');
+					$('#btnsubmit').attr('disabled',false);
 					data = JSON.parse(data);
 					if(data.result=="SUCCESS"){
 						$("#myModal").modal('hide');

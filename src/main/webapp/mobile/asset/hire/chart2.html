@@ -207,9 +207,10 @@
 							return result ? decodeURIComponent(result[2]) : null;
 						},
 						goHire(value) {
+							console.log(value)
 				        	var guid = encodeURI(value.guid);
 				        	var hireGUID =encodeURI(value.hireGUID);
-							window.location.href = "hire2.html?campusId="+this.campusId+"&hireGUID="+hireGUID+"&guid="+guid+"&contractNo="+value.contractNo;
+							window.location.href = "hire2.html?campusId="+this.campusId+"&guid="+guid+"&contractNo="+value.contractNo;
 						},
 						actionTime(value) {
 							var date = new Date(value);

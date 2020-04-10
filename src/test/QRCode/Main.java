@@ -3,7 +3,7 @@ package QRCode;
 import java.io.File;
 import java.util.Hashtable;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -14,18 +14,18 @@ public class Main {
 	
 	@Test
     public void aaa() throws Exception {  
-        String text = "NiuYueYue I Love You£¡"; // ¶þÎ¬ÂëÄÚÈÝ  
-        int width = 430; // ¶þÎ¬ÂëÍ¼Æ¬¿í¶È  
-        int height = 430; // ¶þÎ¬ÂëÍ¼Æ¬¸ß¶È  
-        String format = "jpg";// ¶þÎ¬ÂëµÄÍ¼Æ¬¸ñÊ½          
+        String text = "NiuYueYue I Love Youï¿½ï¿½"; // ï¿½ï¿½Î¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
+        int width = 430; // ï¿½ï¿½Î¬ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½  
+        int height = 430; // ï¿½ï¿½Î¬ï¿½ï¿½Í¼Æ¬ï¿½ß¶ï¿½  
+        String format = "jpg";// ï¿½ï¿½Î¬ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½Ê½          
         
         File outputFile = new File("d:" + File.separator + "new.jpg");  
         System.out.println(outputFile);
         
         if(!outputFile.exists()){
           Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();  
-          hints.put(EncodeHintType.CHARACTER_SET, "utf-8");   // ÄÚÈÝËùÊ¹ÓÃ×Ö·û¼¯±àÂë  
-          // Éú³É¶þÎ¬Âë  
+          hints.put(EncodeHintType.CHARACTER_SET, "utf-8");   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
+          // ï¿½ï¿½ï¿½É¶ï¿½Î¬ï¿½ï¿½  
           BitMatrix bitMatrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, width, height, hints);        
           MatrixToImageWriter.writeToFile(bitMatrix, format, outputFile);
         }else{

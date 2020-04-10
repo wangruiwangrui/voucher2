@@ -174,8 +174,6 @@ public class BillUController {
 	@ResponseBody
 	public BusinessResult getBill(Integer campusId,String out_trade_no, String purchaser, String ein, String sl,HttpServletRequest request,
 			HttpServletResponse response) {
-		System.out.println("------------------------------------");
-		System.out.println("out_trade_no="+out_trade_no+"              "+"purchaser="+purchaser+"               "+"ein="+ein+"           sl="+sl);
 		
 		WechatSendMessageController wechatSendMessageController = new WechatSendMessageController();
 
@@ -248,15 +246,10 @@ public class BillUController {
 			returnString = ut.doPost2(url, param.toString());
 			JSONObject jsonObject = JSONObject.parseObject(returnString);
 			result = JSON.toJavaObject(jsonObject, BusinessResult.class);
-			System.out.println("---------------");
-			MyTestUtil.print(common_fpkj_xmxx);
-			MyTestUtil.print(result);
 			if (result.getResult().equals("SUCCESS")) {
 				// 设置开票状态
 				Integer re = billDAO.updatePreBill(out_trade_no, result);
 				Map map = getBillOriginalPDF(out_trade_no, request, response);
-				System.out.println("222-----------22");
-				MyTestUtil.print(map);
 				char a = DOMAIN.charAt(4);
 				String imgUrl = "";
 				if (a==':') {
@@ -266,9 +259,6 @@ public class BillUController {
 				}
 				imgUrl = imgUrl.replaceAll("\\\\", "/");
 				
-				System.out.println("----------------------------------------------");
-				System.out.println((String) map.get("result"));
-				System.out.println(imgUrl);
 				Notice notice = new Notice();
 				notice.setTitle("电子发票开具通知");
 				notice.setCampusId(pInfo.getCampusId());
@@ -284,8 +274,6 @@ public class BillUController {
 				int ress = wechatSendMessageController.sendMessage2(pInfo.getCampusId(),pInfo.getOpenid(), notice.getTemplateId(), "电子发票开具通知",
 						imgUrl, "您的电子发票已开具", campany, dat, result.getRows().get(0).getFp_dm(),
 						result.getRows().get(0).getGmf_mc(), result.getRows().get(0).getJshj() + "元", "依法纳税，你我有责。");
-				System.out.println("11111111111===============");
-				System.out.println(ress);
 				break;
 			} else {
 
@@ -470,8 +458,7 @@ public class BillUController {
 			returnString = ut.doPost2(url, param.toString());
 			JSONObject jsonObject = JSONObject.parseObject(returnString);
 			result = JSON.toJavaObject(jsonObject, RedBusinessResult.class);
-			System.out.println("---------------");
-			MyTestUtil.print(result);
+			
 			if (result.getResult().equals("SUCCESS")) {
 
 				Integer re = billDAO.updateToRed(result, out_trade_no);

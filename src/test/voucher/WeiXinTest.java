@@ -2,6 +2,7 @@ package voucher;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
@@ -13,6 +14,7 @@ import com.voucher.manage.model.Notice;
 import com.voucher.manage.model.WeiXin;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
@@ -73,16 +75,7 @@ public class WeiXinTest {
 		System.out.println(requestUrl);
 		*/
 
-		List<String> list = new ArrayList<String>();
-		list.add("sfdsfedsf");
-		list.add("ooooooo");
-		System.out.println(list.toString());
-		
-//		int i = 1;
-//		String ii = String.valueOf(i);
-//		Float f = Float.parseFloat(ii);
-//		System.out.println(f/100);
-//		
+		LinkedHashMap<String, Map<String, Object>> registerMap = Singleton.getInstance().getRegisterMap();
 	}
 
 }

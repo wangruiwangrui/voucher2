@@ -625,7 +625,7 @@ public class AssetController {
 		
 		Map searchMap = new HashMap<>();
 
-		searchMap.put("[HireList].HireGUID=", hireGUID);
+		searchMap.put("[HireList].ChartGUID=", hireGUID);
 
 		Map map = roomInfoDao.getHireListByGUID(limit, offset, sort, order, searchMap);
 

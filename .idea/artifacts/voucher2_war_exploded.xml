@@ -113,6 +113,14 @@
           <element id="library" level="project" name="Maven: com.jacob:jacob:1.10" />
           <element id="library" level="project" name="Maven: org.jfree:jfreechart:1.5.0" />
           <element id="library" level="project" name="Maven: cn.hutool:hutool-all:4.5.6" />
+          <element id="library" level="project" name="Maven: org.junit.jupiter:junit-jupiter:5.6.1" />
+          <element id="library" level="project" name="Maven: org.junit.jupiter:junit-jupiter-api:5.6.1" />
+          <element id="library" level="project" name="Maven: org.apiguardian:apiguardian-api:1.1.0" />
+          <element id="library" level="project" name="Maven: org.opentest4j:opentest4j:1.2.0" />
+          <element id="library" level="project" name="Maven: org.junit.platform:junit-platform-commons:1.6.1" />
+          <element id="library" level="project" name="Maven: org.junit.jupiter:junit-jupiter-params:5.6.1" />
+          <element id="library" level="project" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.6.1" />
+          <element id="library" level="project" name="Maven: org.junit.platform:junit-platform-engine:1.6.1" />
         </element>
       </element>
       <element id="directory" name="META-INF">

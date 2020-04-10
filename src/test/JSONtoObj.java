@@ -1,18 +1,18 @@
+
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-
 public class JSONtoObj {
 
  
   @Test
   public void bbb() {
 	
-	 String text = "{'name':'老张头', 'age':66}" ; 
+	 String text = "{'name':'?????', 'age':66}" ; 
 	  
      
-     /** 将JSON字符串转换为JSON对象 **/  
+     /** ??JSON?????????JSON???? **/  
      JSONObject json = JSON.parseObject(text) ; 
      System.out.println("aaa"+json);
 
